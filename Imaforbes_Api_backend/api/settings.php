@@ -69,6 +69,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Determine request method early (used for auth gating)
+$method = $_SERVER['REQUEST_METHOD'];
+
 // Check multiple session variables for backward compatibility
 $isAuthenticated = (
     isset($_SESSION['admin_user_id']) ||
@@ -76,15 +79,11 @@ $isAuthenticated = (
     isset($_SESSION['admin_username'])
 );
 
-error_log("Settings API - Authentication result: " . ($isAuthenticated ? 'AUTHENTICATED' : 'NOT AUTHENTICATED'));
-
-if (!$isAuthenticated) {
-    error_log("Settings API - Authentication failed, returning 401");
-    error_log("Settings API - Available session keys: " . implode(', ', array_keys($_SESSION ?? [])));
+// Allow public GET requests (site reads settings on load).
+// Keep authentication required for any write operations.
+if ($method !== 'GET' && !$isAuthenticated) {
     ApiResponse::unauthorized('Authentication required');
 }
-
-$method = $_SERVER['REQUEST_METHOD'];
 
 // Debug logging
 error_log("Settings API - Request Method: " . $method);

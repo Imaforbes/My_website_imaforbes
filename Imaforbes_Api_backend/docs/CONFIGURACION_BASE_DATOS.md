@@ -18,21 +18,21 @@ Copia el contenido de `.env.example` y actualiza con tus credenciales de Hosting
 # Database Configuration
 DB_HOST=localhost
 DB_PORT=3306
-DB_USER=u179926833_imanol
-DB_PASS=q9*zb8hDXe3_5HN
-DB_NAME=u179926833_portfolio
+DB_USER=your_db_user
+DB_PASS=your_db_password
+DB_NAME=your_db_name
 
 # Email Configuration (SMTP)
 SMTP_HOST=smtp.hostinger.com
 SMTP_PORT=587
-SMTP_USERNAME=imanol@imaforbes.com
-SMTP_PASSWORD=q9*zb8hDXe3_5HN
+SMTP_USERNAME=your_email@your-domain.com
+SMTP_PASSWORD=your_email_password
 SMTP_SECURE=tls
 
 # Email Settings
-FROM_EMAIL=imanol@imaforbes.com
+FROM_EMAIL=your_email@your-domain.com
 FROM_NAME=IMAFORBES Portfolio
-REPLY_TO_EMAIL=imanol@imaforbes.com
+REPLY_TO_EMAIL=your_email@your-domain.com
 ```
 
 ### 3. Verificar que el archivo esté protegido
