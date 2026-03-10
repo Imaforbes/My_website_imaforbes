@@ -1,0 +1,4 @@
+# Prevent direct access to storage files
+Order Deny,Allow
+Deny from all
+

@@ -1,0 +1,35 @@
+# CORS Headers - Backup if PHP headers fail
+# DEVELOPMENT: Commented out - CORS is handled by PHP for local development
+# PRODUCTION: Uncomment these lines if needed for Hostinger
+#
+# <IfModule mod_headers.c>
+#     # Allow from imaforbes.com domains (PRODUCTION)
+#     SetEnvIf Origin "^https?://(www\.)?imaforbes\.com$" AccessControlAllowOrigin=$0
+#     Header always set Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+#     
+#     # Allow from localhost (DEVELOPMENT)
+#     SetEnvIf Origin "^http://localhost:\d+$" AccessControlAllowOrigin=$0
+#     Header always set Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+#     
+#     SetEnvIf Origin "^http://127\.0\.0\.1:\d+$" AccessControlAllowOrigin=$0
+#     Header always set Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+#     
+#     Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+#     Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+#     Header always set Access-Control-Allow-Credentials "true"
+#     Header always set Access-Control-Max-Age "86400"
+#     
+#     # Handle preflight OPTIONS requests
+#     RewriteEngine On
+#     RewriteCond %{REQUEST_METHOD} OPTIONS
+#     RewriteRule ^(.*)$ $1 [R=200,L]
+# </IfModule>
+
+# PHP Settings
+# DEVELOPMENT: Enable output buffering to prevent header issues
+# <IfModule mod_php7.c>
+#     php_flag output_buffering Off
+# </IfModule>
+# 
+# # Prevent output before headers
+# php_value output_buffering Off

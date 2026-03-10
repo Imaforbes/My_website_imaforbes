@@ -1,0 +1,21 @@
+# Browsers that we support
+# This file is used by Autoprefixer and other tools to determine browser support
+
+# Modern browsers with > 0.5% market share
+> 0.5%
+
+# Last 2 versions of major browsers
+last 2 versions
+
+# Firefox ESR (Extended Support Release)
+Firefox ESR
+
+# Not dead browsers (browsers without official support or updates)
+not dead
+
+# Explicitly exclude Internet Explorer
+not IE 11
+
+# Explicitly exclude Opera Mini (limited JavaScript support)
+not op_mini all
+

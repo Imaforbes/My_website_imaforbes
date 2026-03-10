@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/public/img/icono.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portfolio profesional de Imaforbes - Desarrollo web y diseño"
+    />
+    <title>Imaforbes</title>
+
+    <!-- Preconnect to external domains for faster resource loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    
+    <!-- Preload critical resources (only in production) -->
+    <!-- In development, Vite handles these automatically -->
+    <!-- These will be added by Vite during build for production -->
+    <script>
+      // Apply theme immediately to prevent flash
+      (function () {
+        // Safe localStorage access
+        let theme = "dark";
+        try {
+          theme = localStorage.getItem("app_theme") || "dark";
+        } catch (e) {
+          // localStorage not available, use default
+        }
+
+        const root = document.documentElement;
+        if (theme === "auto") {
+          // Safe matchMedia access with fallback
+          let prefersDark = false;
+          if (window.matchMedia) {
+            try {
+              prefersDark = window.matchMedia(
+                "(prefers-color-scheme: dark)"
+              ).matches;
+            } catch (e) {
+              // matchMedia failed, default to light
+            }
+          }
+          root.classList.add(prefersDark ? "dark" : "light");
+        } else {
+          root.classList.add(theme);
+        }
+        // Wait for body to exist before adding class
+        if (document.body) {
+          document.body.classList.add(`${theme}-theme`);
+        } else {
+          document.addEventListener("DOMContentLoaded", function () {
+            document.body.classList.add(`${theme}-theme`);
+          });
+        }
+      })();
+
+      // Image Protection: Disable right-click and drag on protected images
+      document.addEventListener("DOMContentLoaded", function () {
+        // Prevent context menu on protected images
+        document.addEventListener(
+          "contextmenu",
+          function (e) {
+            if (
+              e.target.tagName === "IMG" &&
+              e.target.classList.contains("protected-image")
+            ) {
+              e.preventDefault();
+              return false;
+            }
+          },
+          false
+        );
+
+        // Prevent drag and drop of protected images
+        document.addEventListener(
+          "dragstart",
+          function (e) {
+            if (
+              e.target.tagName === "IMG" &&
+              e.target.classList.contains("protected-image")
+            ) {
+              e.preventDefault();
+              return false;
+            }
+          },
+          false
+        );
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <!-- Defer script loading for better performance -->
+    <script type="module" src="/src/main.jsx" defer></script>
+  </body>
+</html>

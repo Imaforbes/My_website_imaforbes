@@ -1,0 +1,612 @@
+/* src/index.css */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* ============================================
+   MODERN DESIGN SYSTEM - 2025
+   ============================================ */
+/* Contemporary design tokens with enhanced depth and sophistication */
+
+:root {
+  /* Modern Color Palette */
+  --color-primary: #0a0a0a;
+  --color-secondary: #1a1a1a;
+  --color-accent: #000000;
+  --color-text-primary: #0a0a0a;
+  --color-text-secondary: #6b7280;
+  --color-text-light: #ffffff;
+  --color-border: #e5e7eb;
+  --color-border-dark: #374151;
+  --color-bg-light: #ffffff;
+  --color-bg-dark: #0a0a0a;
+  --color-bg-gray: #f9fafb;
+
+  /* Modern Gradients */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-subtle: linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.05) 100%);
+
+  /* Modern Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* Modern Spacing Scale */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+
+  /* Modern Border Radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-full: 9999px;
+
+  /* Modern Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  /* Un cambio a una fuente moderna y legible */
+  margin: 0;
+  padding: 0;
+}
+
+/* Serif font for blog content - editorial feel */
+.font-serif {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+/* Ensure body respects theme changes - NO transitions to prevent flashing */
+html.dark body {
+  background-color: #0a0a0a;
+  /* Near black */
+  color: #ffffff;
+  /* Pure white */
+}
+
+html.light body {
+  background-color: #ffffff;
+  /* Pure white */
+  color: #1a1a1a;
+  /* Rich black */
+}
+
+/* Disable background-color and color transitions on root elements to prevent flashing */
+html,
+body {
+  /* Instant theme changes - no transitions on background/color to prevent purple flash */
+  transition: background-color 0s, color 0s;
+}
+
+/* When theme is switching, disable background/color transitions to prevent flashing */
+html.theme-switching,
+html.theme-switching body {
+  transition: background-color 0s, color 0s !important;
+}
+
+/* Mobile-specific fix: prevent purple flash during theme switch */
+@media (max-width: 768px) {
+
+  html,
+  body {
+    /* On mobile, instant theme changes prevent purple flash */
+    transition: background-color 0s, color 0s !important;
+  }
+
+  /* During theme switching on mobile, disable transitions on gradient backgrounds */
+  /* This prevents purple gradients from flashing during theme changes */
+  html.theme-switching [class*="bg-gradient"],
+  html.theme-switching [class*="from-"],
+  html.theme-switching [class*="to-"],
+  html.theme-switching [class*="via-"],
+  html.theme-switching [class*="bg-purple"],
+  html.theme-switching [class*="bg-blue"] {
+    transition: background-color 0s, background 0s, opacity 0s !important;
+  }
+}
+
+/* ============================================
+   MINIMALIST & DELUXE DESIGN - ANIMATIONS
+   ============================================ */
+
+/* Subtle fade-in animation for minimalist approach */
+/* Replaces busy blob animations with clean fade-in effect */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* ============================================
+   DELUXE TEXT REFLECTION EFFECT
+   ============================================ */
+/* Creates a subtle mirrored reflection below text for premium feel */
+/* Applied to main titles throughout the portfolio */
+.text-reflection {
+  position: relative;
+  display: inline-block;
+}
+
+.text-reflection::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  transform: scaleY(-1);
+  opacity: 0.15;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  pointer-events: none;
+  line-height: 0.5;
+  margin-top: 0.1em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Dark mode reflection adjustment */
+.dark .text-reflection::after {
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Reduce reflection opacity on very small screens for better readability */
+@media (max-width: 640px) {
+  .text-reflection::after {
+    opacity: 0.08;
+  }
+
+  .dark .text-reflection::after {
+    opacity: 0.08;
+  }
+}
+
+/* Alternative reflection style (currently unused, kept for future use) */
+.text-reflect {
+  position: relative;
+  display: inline-block;
+}
+
+.text-reflect::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  transform: scaleY(-1);
+  opacity: 0.12;
+  filter: blur(0.5px);
+  pointer-events: none;
+  line-height: 0.3;
+  margin-top: 0.15em;
+}
+
+/* ============================================
+   MODERN DESIGN EFFECTS
+   ============================================ */
+/* Modern design system with glassmorphism, better shadows, and refined aesthetics */
+
+/* Modern rounded corners - More curved, softer appearance */
+.modern-card {
+  border-radius: 20px;
+}
+
+.modern-card-sm {
+  border-radius: 16px;
+}
+
+.modern-card-lg {
+  border-radius: 32px;
+}
+
+/* Glassmorphism effect - Modern frosted glass */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-effect {
+  background: rgba(15, 15, 15, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Modern layered shadows for depth - Enhanced 2025 */
+.modern-shadow {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 4px 6px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+.modern-shadow-md {
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.08),
+    0 10px 15px rgba(0, 0, 0, 0.05),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.modern-shadow-lg {
+  box-shadow:
+    0 10px 15px rgba(0, 0, 0, 0.1),
+    0 20px 25px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.modern-shadow-xl {
+  box-shadow:
+    0 20px 25px rgba(0, 0, 0, 0.12),
+    0 30px 40px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.dark .modern-shadow {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.4),
+    0 4px 6px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.dark .modern-shadow-md {
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.4),
+    0 10px 15px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.dark .modern-shadow-lg {
+  box-shadow:
+    0 10px 15px rgba(0, 0, 0, 0.5),
+    0 20px 25px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.dark .modern-shadow-xl {
+  box-shadow:
+    0 20px 25px rgba(0, 0, 0, 0.6),
+    0 30px 40px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+/* Subtle border for modern feel */
+.modern-border {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dark .modern-border {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Modern hover lift effect - Enhanced 2025 */
+.modern-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.modern-hover:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.dark .modern-hover:hover {
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Modern glow effect */
+.modern-glow {
+  position: relative;
+}
+
+.modern-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modern-glow:hover::before {
+  opacity: 1;
+}
+
+/* Modern gradient backgrounds - very subtle */
+.modern-bg-gradient {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+}
+
+.dark .modern-bg-gradient {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Minimalist scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Custom scrollbar classes for blog content area */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
+  background: rgba(209, 213, 219, 0.5);
+  border-radius: 3px;
+}
+
+.dark .scrollbar-thumb-gray-700::-webkit-scrollbar-thumb {
+  background: rgba(55, 65, 81, 0.5);
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Loading animations */
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Enhanced focus states */
+.focus-enhanced:focus {
+  outline: none;
+  ring: 4px;
+  ring-color: rgba(59, 130, 246, 0.5);
+  ring-offset: 2px;
+  ring-offset-color: #1f2937;
+}
+
+/* Gradient text animation */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Performance Optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-auto {
+  will-change: auto;
+}
+
+/* GPU Acceleration */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimized animations */
+.optimized-animation {
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .text-gray-300 {
+    color: white;
+  }
+
+  .bg-gray-800 {
+    background-color: black;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .dark-mode-optimized {
+    color-scheme: dark;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* Mobile menu language toggle styling */
+.mobile-menu-language-toggle>div {
+  background-color: rgba(31, 41, 55, 0.7) !important;
+  /* gray-800 with opacity */
+  border: 1px solid rgba(55, 65, 81, 0.5) !important;
+  /* gray-700 border */
+}
+
+.mobile-menu-language-toggle button {
+  color: rgb(229, 231, 235) !important;
+  /* gray-200 */
+}
+
+.mobile-menu-language-toggle button:hover {
+  color: white !important;
+}
+
+.mobile-menu-language-toggle button.bg-white {
+  background-color: rgb(59, 130, 246) !important;
+  /* blue-500 */
+  color: white !important;
+}
+
+/* Responsive mobile menu height */
+@media (max-width: 767px) {
+  .mobile-menu-nav {
+    height: calc(100vh - 4rem) !important;
+    /* h-16 = 64px = 4rem */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .mobile-menu-nav {
+    height: calc(100vh - 5rem) !important;
+    /* h-20 = 80px = 5rem */
+  }
+}
+
+/* Image Protection Styles */
+.protected-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.protected-image {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+  touch-action: none;
+}
+
+.protected-image-container * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent image download via CSS */
+.protected-image-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  background: transparent;
+  pointer-events: auto;
+}
+
+/* Disable text selection globally on images */
+img.protected-image,
+img.protected-image * {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important;
+}
+
+/* Otras utilidades de Tailwind si fueran necesarias */
