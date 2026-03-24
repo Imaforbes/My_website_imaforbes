@@ -24,6 +24,8 @@ const HeroBackground = () => (
     <img
       src="/img/baner.jpg"
       alt="Banner"
+      width="1920"
+      height="1080"
       className="w-full h-full object-cover opacity-40 dark:opacity-20"
     />
     {/* Minimal overlay for text readability */}

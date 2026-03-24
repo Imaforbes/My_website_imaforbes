@@ -14,9 +14,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     
-    <!-- Preload critical resources (only in production) -->
-    <!-- In development, Vite handles these automatically -->
-    <!-- These will be added by Vite during build for production -->
+    <!-- Preload critical resources -->
+    <!-- Preload LCP hero image for better Web Vitals -->
+    <link rel="preload" as="image" href="/img/baner.jpg" type="image/jpeg" />
     <script>
       // Apply theme immediately to prevent flash
       (function () {

@@ -25,6 +25,11 @@ RewriteRule ^(?!api_db).*$ /index.html [L]
     AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
 
+# LiteSpeed Cache Optimization for Hostinger
+<IfModule LiteSpeed>
+    CacheLookup on
+</IfModule>
+
 # Cache static assets - Optimized for performance
 <IfModule mod_expires.c>
     ExpiresActive on
