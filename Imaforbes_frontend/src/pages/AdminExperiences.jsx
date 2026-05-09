@@ -490,7 +490,7 @@ const AdminExperiences = () => {
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                     className="w-full px-4 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light"
-                    placeholder="Ej: Hostal Altaista S.A DE C.V"
+                    placeholder="Ej: Allegro San Angel Inn"
                   />
                 </div>
 

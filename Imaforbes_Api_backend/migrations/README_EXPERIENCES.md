@@ -30,6 +30,7 @@ DESCRIBE work_experiences;
 ### 3. Test the API
 
 The API endpoint is available at:
+
 - Development: `http://localhost:8888/api_db_portfolio/api/experiences.php`
 - Production: `https://www.imaforbes.com/api_db/api/experiences.php`
 
@@ -61,19 +62,23 @@ CREATE TABLE work_experiences (
 ## API Endpoints
 
 ### GET /api/experiences.php
+
 - Get all published experiences (public)
 - Get all experiences including drafts (admin only)
 - Query params: `?status=all` (admin only)
 
 ### POST /api/experiences.php
+
 - Create a new experience (admin only)
 - Requires authentication and CSRF token
 
 ### PUT /api/experiences.php?id={id}
+
 - Update an experience (admin only)
 - Requires authentication and CSRF token
 
 ### DELETE /api/experiences.php
+
 - Delete an experience (admin only)
 - Requires authentication and CSRF token
 - Body: `{ "id": 1 }`
@@ -83,7 +88,7 @@ CREATE TABLE work_experiences (
 ```json
 {
   "title": "Software Engineer",
-  "company": "Hostal Altaista S.A DE C.V",
+  "company": "Allegro San Angel Inn",
   "location": "Mexico City, MX",
   "period": "2025 - Present",
   "description": "Developing full-stack web applications and providing technical consulting services to clients.",
@@ -98,4 +103,3 @@ CREATE TABLE work_experiences (
   "status": "published"
 }
 ```
-
