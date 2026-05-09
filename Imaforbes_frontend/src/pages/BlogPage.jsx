@@ -12,7 +12,7 @@
  * - Blog cards: clean white/dark cards with subtle borders
  * - Simplified animations and removed colorful accents
  */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { api } from "../services/api.js";
@@ -40,21 +40,21 @@ const BlogPage = () => {
   const [likingPosts, setLikingPosts] = useState(new Set()); // Track which posts are currently being liked/unliked
 
   // Cookie helper functions for view tracking
-  const getCookie = (name) => {
+  const getCookie = useCallback((name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
     return null;
-  };
+  }, []);
 
-  const setCookie = (name, value, days = 365) => {
+  const setCookie = useCallback((name, value, days = 365) => {
     const date = new Date();
     date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
     const expires = `expires=${date.toUTCString()}`;
     document.cookie = `${name}=${value};${expires};path=/;SameSite=Lax`;
-  };
+  }, []);
 
-  const hasViewedPost = (postId) => {
+  const hasViewedPost = useCallback((postId) => {
     // Check cookie first (persistent across sessions)
     const cookieName = `blog_viewed_${postId}`;
     const cookieValue = getCookie(cookieName);
@@ -63,15 +63,15 @@ const BlogPage = () => {
     }
     // Also check in-memory state (current session)
     return viewedPosts.has(postId);
-  };
+  }, [getCookie, viewedPosts]);
 
-  const markPostAsViewed = (postId) => {
+  const markPostAsViewed = useCallback((postId) => {
     // Set cookie (persistent)
     const cookieName = `blog_viewed_${postId}`;
     setCookie(cookieName, 'true', 365); // Cookie expires in 1 year
     // Also update in-memory state
     setViewedPosts(prev => new Set([...prev, postId]));
-  };
+  }, [setCookie]);
 
   // Helper function to build image URL
   const getImageUrl = (imageUrl) => {
@@ -87,10 +87,55 @@ const BlogPage = () => {
     return `${baseUrl}${cleanPath}`;
   };
 
+  const fetchPosts = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const type = filter !== "all" ? filter : null;
+      const result = await api.blog.getAll(type, "published");
+
+      if (import.meta.env.DEV) {
+        console.log("Blog API Result:", result);
+      }
+
+      if (result.success) {
+        let postsData = [];
+
+        if (Array.isArray(result.data)) {
+          postsData = result.data;
+        } else if (result.data?.data && Array.isArray(result.data.data)) {
+          postsData = result.data.data;
+        } else {
+          postsData = [];
+        }
+
+        postsData = postsData.map((post) => ({
+          ...post,
+          likes_count: parseInt(post.likes_count) || 0,
+          views_count: parseInt(post.views_count) || 0,
+        }));
+
+        setPosts(postsData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+        setError(null);
+      } else {
+        if (import.meta.env.DEV) {
+          console.error("API returned error:", result);
+        }
+        setError(t("blog.failed-load"));
+      }
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error("Error fetching posts:", error);
+      }
+      setError(t("blog.failed-load"));
+    } finally {
+      setLoading(false);
+    }
+  }, [filter, t]);
+
   useEffect(() => {
     fetchPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter]);
+  }, [fetchPosts]);
 
   // Initialize viewed posts from cookies when posts load
   useEffect(() => {
@@ -110,73 +155,80 @@ const BlogPage = () => {
         setViewedPosts(viewedFromCookies);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [posts]);
+
+  }, [getCookie, posts]);
 
   // Check like status for all posts when they load
   useEffect(() => {
-    if (posts && posts.length > 0) {
-      checkLikeStatuses();
-      trackViews();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [posts]);
+    if (!posts || posts.length === 0) return;
 
-  const fetchPosts = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const type = filter !== "all" ? filter : null;
-      const result = await api.blog.getAll(type, "published");
+    const run = async () => {
+      // Check like statuses
+      try {
+        const likeChecks = posts
+          .filter((post) => post && post.id)
+          .map((post) => api.blog.getLikeStatus(post.id).catch(() => ({ success: false, data: { liked: false } })));
 
-      // SECURITY: Remove console.log in production to prevent information leakage
-      if (import.meta.env.DEV) {
-        console.log("Blog API Result:", result);
-      }
+        const results = await Promise.all(likeChecks);
+        const liked = new Set();
 
-      if (result.success) {
-        // API returns: { success: true, data: [...] }
-        let postsData = [];
+        results.forEach((result, index) => {
+          if (result.success && result.data) {
+            const apiData = result.data.data || result.data;
+            const likedStatus = apiData?.liked === true;
+            if (likedStatus) {
+              liked.add(posts[index].id);
+            }
 
-        if (Array.isArray(result.data)) {
-          // Direct array response (correct format)
-          postsData = result.data;
-        } else if (result.data?.data && Array.isArray(result.data.data)) {
-          // Nested response (fallback)
-          postsData = result.data.data;
-        } else {
-          // No posts yet, but API succeeded - that's OK
-          postsData = [];
+            if (apiData?.likes_count !== undefined) {
+              setPosts((prevPosts) =>
+                prevPosts.map((p) =>
+                  p.id === posts[index].id ? { ...p, likes_count: parseInt(apiData.likes_count) || 0 } : p
+                )
+              );
+            }
+          }
+        });
+
+        setLikedPosts(liked);
+      } catch (error) {
+        if (import.meta.env.DEV && error?.message && !error.message.includes("access control")) {
+          console.warn("Error checking like statuses:", error.message);
         }
+      }
 
-        // Ensure likes_count and views_count are numbers
-        postsData = postsData.map(post => ({
-          ...post,
-          likes_count: parseInt(post.likes_count) || 0,
-          views_count: parseInt(post.views_count) || 0
-        }));
+      // Track views
+      try {
+        const postsToTrack = posts.filter((post) => post && post.id && !hasViewedPost(post.id));
+        for (let i = 0; i < postsToTrack.length; i++) {
+          const post = postsToTrack[i];
+          if (i > 0) await new Promise((resolve) => setTimeout(resolve, 100));
 
-        setPosts(postsData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
-        setError(null); // Clear any previous errors
-      } else {
-        // SECURITY: Don't expose detailed error messages to users
-        if (import.meta.env.DEV) {
-          console.error("API returned error:", result);
+          const result = await api.blog.trackView(post.id);
+          if (result.success && result.data) {
+            const apiData = result.data.data || result.data;
+            if (apiData?.view_recorded !== false) {
+              markPostAsViewed(post.id);
+              if (apiData?.views_count !== undefined) {
+                setPosts((prevPosts) =>
+                  prevPosts.map((p) => (p.id === post.id ? { ...p, views_count: parseInt(apiData.views_count) || 0 } : p))
+                );
+              }
+            }
+          }
         }
-        const errorMsg = t("blog.failed-load");
-        setError(errorMsg);
+      } catch (error) {
+        if (import.meta.env.DEV && error?.message && !error.message.includes("access control")) {
+          console.warn("Error tracking views:", error.message);
+        }
       }
-    } catch (error) {
-      // SECURITY: Don't expose detailed error messages to users
-      if (import.meta.env.DEV) {
-        console.error("Error fetching posts:", error);
-      }
-      setError(t("blog.failed-load"));
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
+    run();
+  }, [hasViewedPost, markPostAsViewed, posts]);
+
+  // (removed legacy helper functions below; logic is handled inside the effect)
+/*
   // Check like status for all posts
   const checkLikeStatuses = async () => {
     // Skip if no posts
@@ -288,6 +340,7 @@ const BlogPage = () => {
       }
     }
   };
+*/
 
   // Handle like/unlike
   const handleLike = async (postId) => {

@@ -1,5 +1,5 @@
 // src/pages/AdminBlog.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_CONFIG } from "../config/api.js";
 import { api } from "../services/api.js";
@@ -75,11 +75,7 @@ const AdminBlog = () => {
     return `${baseUrl}${cleanPath}`;
   };
 
-  useEffect(() => {
-    fetchPosts();
-  }, [statusFilter, typeFilter]);
-
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
       setLoading(true);
       // Apply filters: typeFilter can be 'all', 'poem', or 'letter'
@@ -100,7 +96,11 @@ const AdminBlog = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter, typeFilter]);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
 
   const handleLogout = async () => {
     const baseURL = API_CONFIG.getBaseURL();

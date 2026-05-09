@@ -1,7 +1,7 @@
 // src/services/api.js
 // Centralized API service for the portfolio project
 
-import { API_CONFIG, buildApiUrl } from '../config/api.js';
+import { API_CONFIG } from '../config/api.js';
 
 class ApiService {
     constructor() {

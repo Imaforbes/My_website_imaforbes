@@ -99,7 +99,7 @@ export const validateUrl = (url) => {
     return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
   } catch {
     // If URL constructor fails, check if it's a relative path
-    return /^\/[a-zA-Z0-9_\/\-\.]+$/.test(url);
+    return /^\/[a-zA-Z0-9_/.-]+$/.test(url);
   }
 };
 

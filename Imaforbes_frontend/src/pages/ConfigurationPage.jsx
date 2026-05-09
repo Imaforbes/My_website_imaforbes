@@ -1,5 +1,5 @@
 // src/pages/ConfigurationPage.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { api } from "../services/api.js";
@@ -58,11 +58,7 @@ const ConfigurationPage = () => {
   const [initialLoading, setInitialLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchSettings();
-  }, []);
-
-  const fetchSettings = async () => {
+  const fetchSettings = useCallback(async () => {
     try {
       // Use centralized API service which handles CSRF tokens and errors properly
       const result = await api.settings.get();
@@ -166,7 +162,21 @@ const ConfigurationPage = () => {
     } finally {
       setInitialLoading(false);
     }
-  };
+  }, [
+    language,
+    navigate,
+    settings.admin_email,
+    settings.contact_email,
+    settings.site_description,
+    settings.site_name,
+    theme,
+    updateLanguage,
+    updateTheme,
+  ]);
+
+  useEffect(() => {
+    fetchSettings();
+  }, [fetchSettings]);
 
   const handleSave = async () => {
     setLoading(true);
@@ -274,8 +284,7 @@ const ConfigurationPage = () => {
     }, 0);
     
     return () => clearTimeout(timeoutId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings.appearance?.theme, settings.appearance?.language, initialLoading]);
+  }, [initialLoading, language, settings.appearance, theme, updateLanguage, updateTheme]);
 
   const configSections = [
     {
@@ -523,7 +532,7 @@ const ConfigurationPage = () => {
                   </h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {section.fields.map((field, fieldIndex) => (
+                    {section.fields.map((field) => (
                       <div key={field.key} className="space-y-2">
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                           {field.label}

@@ -128,12 +128,12 @@ const Header = memo(() => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-1 xl:space-x-2">
-            {navItems.map((link, index) => (
+            {navItems.map((link) => (
               <motion.div
                 key={link.path}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1, duration: 0.3 }}
+                transition={{ duration: 0.3 }}
               >
                 <Link
                   to={link.path}
@@ -216,7 +216,7 @@ const Header = memo(() => {
               onTouchMove={(e) => e.stopPropagation()} // Prevent body scroll when menu is open
             >
               <div className="flex flex-col py-4 px-4 space-y-1">
-                {navItems.map((link, index) => (
+                {navItems.map((link) => (
                   <motion.div key={link.path} variants={itemVariants} onClick={handleNavLinkClick}>
                     <Link
                       to={link.path}

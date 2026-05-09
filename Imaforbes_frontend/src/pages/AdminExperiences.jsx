@@ -80,10 +80,6 @@ const AdminExperiences = () => {
             return new Date(b.created_at) - new Date(a.created_at);
           }));
           return; // Success, exit early
-        } else if (apiResponse.success && Array.isArray(apiResponse.data) && apiResponse.data.length === 0) {
-          // Empty array is valid - no experiences yet
-          setExperiences([]);
-          return;
         }
       }
       
@@ -228,15 +224,6 @@ const AdminExperiences = () => {
     setFormData({
       ...formData,
       technologies: formData.technologies.filter((_, i) => i !== index),
-    });
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
     });
   };
 

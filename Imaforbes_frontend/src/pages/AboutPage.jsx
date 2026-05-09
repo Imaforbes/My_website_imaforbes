@@ -13,7 +13,6 @@
  * - Simplified all animations and removed colorful accents
  */
 import React, { useState, useEffect } from "react";
-// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { api } from "../services/api.js";
@@ -83,10 +82,6 @@ const AboutPage = () => {
             });
             setExperiences(sorted);
             return; // Success, exit early
-          } else if (apiResponse.success && Array.isArray(apiResponse.data) && apiResponse.data.length === 0) {
-            // Empty array is valid - no experiences yet
-            setExperiences([]);
-            return;
           }
         }
         

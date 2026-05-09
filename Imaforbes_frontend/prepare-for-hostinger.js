@@ -11,7 +11,7 @@
  */
 
 import { execSync } from 'child_process';
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { existsSync, writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -32,7 +32,7 @@ try {
         cwd: PROJECT_ROOT 
     });
     console.log('✅ Build completed successfully!\n');
-} catch (error) {
+} catch {
     console.error('❌ Build failed! Please fix errors and try again.');
     process.exit(1);
 }

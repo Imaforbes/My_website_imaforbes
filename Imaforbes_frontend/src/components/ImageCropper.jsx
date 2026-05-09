@@ -1,5 +1,5 @@
 // src/components/ImageCropper.jsx
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { X, Move, Check, ZoomIn, ZoomOut, RotateCw } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -80,10 +80,10 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
   }, [imageSize]);
 
   // Calculate actual displayed size with zoom applied
-  const zoomedDisplayedSize = {
+  const zoomedDisplayedSize = useMemo(() => ({
     width: displayedSize.width * zoom,
-    height: displayedSize.height * zoom
-  };
+    height: displayedSize.height * zoom,
+  }), [displayedSize.width, displayedSize.height, zoom]);
 
   const handleMouseDown = useCallback((e) => {
     e.preventDefault();

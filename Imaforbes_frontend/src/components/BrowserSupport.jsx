@@ -5,7 +5,6 @@
  */
 import React, { useState, useEffect } from 'react';
 import { X, AlertTriangle } from 'lucide-react';
-// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from 'framer-motion';
 import { safeLocalStorage } from '../utils/storage.js';
 

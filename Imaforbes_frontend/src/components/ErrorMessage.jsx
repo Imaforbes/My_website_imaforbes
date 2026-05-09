@@ -7,7 +7,6 @@ import {
   FiAlertTriangle,
   FiX,
   FiRefreshCw,
-  FiWifi,
   FiWifiOff,
 } from "react-icons/fi";
 

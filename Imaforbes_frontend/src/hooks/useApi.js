@@ -7,7 +7,7 @@ import { validateContactForm, sanitizeString } from '../utils/inputValidation';
 import { safeLocalStorage } from '../utils/storage.js';
 
 // Generic API hook
-export const useApi = (apiCall, dependencies = []) => {
+export const useApi = (apiCall) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -31,18 +31,18 @@ export const useApi = (apiCall, dependencies = []) => {
         } finally {
             setLoading(false);
         }
-    }, dependencies);
+    }, [apiCall]);
 
     return { data, loading, error, execute };
 };
 
 // Hook for API calls that should run on mount
-export const useApiOnMount = (apiCall, dependencies = []) => {
-    const { data, loading, error, execute } = useApi(apiCall, dependencies);
+export const useApiOnMount = (apiCall) => {
+    const { data, loading, error, execute } = useApi(apiCall);
 
     useEffect(() => {
         execute();
-    }, [execute, ...dependencies]);
+    }, [execute]);
 
     return { data, loading, error, refetch: execute };
 };
@@ -157,45 +157,50 @@ export const useContact = () => {
 
 // Projects hook
 export const useProjects = () => {
-    const { data: projects, loading, error, execute: fetchProjects } = useApi(api.projects.getAll);
+    const listApi = useApi(api.projects.getAll);
+    const getByIdApi = useApi(api.projects.getById);
+    const createApi = useApi(api.projects.create);
+    const updateApi = useApi(api.projects.update);
+    const deleteApi = useApi(api.projects.delete);
+
+    const fetchProjects = listApi.execute;
+    const getByIdExecute = getByIdApi.execute;
+    const createExecute = createApi.execute;
+    const updateExecute = updateApi.execute;
+    const deleteExecute = deleteApi.execute;
 
     const getProject = useCallback(async (id) => {
-        const { data, loading, error, execute } = useApi(api.projects.getById);
-        await execute(id);
-        return { data, loading, error };
-    }, []);
+        return await getByIdExecute(id);
+    }, [getByIdExecute]);
 
     const createProject = useCallback(async (projectData) => {
-        const { data, loading, error, execute } = useApi(api.projects.create);
-        const result = await execute(projectData);
+        const result = await createExecute(projectData);
         if (result.success) {
-            fetchProjects(); // Refresh the list
+            fetchProjects();
         }
         return result;
-    }, [fetchProjects]);
+    }, [createExecute, fetchProjects]);
 
     const updateProject = useCallback(async (id, projectData) => {
-        const { data, loading, error, execute } = useApi(api.projects.update);
-        const result = await execute(id, projectData);
+        const result = await updateExecute(id, projectData);
         if (result.success) {
-            fetchProjects(); // Refresh the list
+            fetchProjects();
         }
         return result;
-    }, [fetchProjects]);
+    }, [fetchProjects, updateExecute]);
 
     const deleteProject = useCallback(async (id) => {
-        const { data, loading, error, execute } = useApi(api.projects.delete);
-        const result = await execute(id);
+        const result = await deleteExecute(id);
         if (result.success) {
-            fetchProjects(); // Refresh the list
+            fetchProjects();
         }
         return result;
-    }, [fetchProjects]);
+    }, [deleteExecute, fetchProjects]);
 
     return {
-        projects,
-        loading,
-        error,
+        projects: listApi.data,
+        loading: listApi.loading,
+        error: listApi.error,
         fetchProjects,
         getProject,
         createProject,
@@ -206,33 +211,35 @@ export const useProjects = () => {
 
 // Admin messages hook
 export const useAdminMessages = (page = 1, limit = 10) => {
-    const { data, loading, error, execute: fetchMessages } = useApi(
-        () => api.admin.getMessages(page, limit),
-        [page, limit]
-    );
+    const listCall = useCallback(() => api.admin.getMessages(page, limit), [page, limit]);
+    const listApi = useApi(listCall);
+    const updateApi = useApi(api.admin.updateMessage);
+    const deleteApi = useApi(api.admin.deleteMessage);
+
+    const fetchMessages = listApi.execute;
+    const updateExecute = updateApi.execute;
+    const deleteExecute = deleteApi.execute;
 
     const updateMessage = useCallback(async (id, messageData) => {
-        const { data, loading, error, execute } = useApi(api.admin.updateMessage);
-        const result = await execute(id, messageData);
+        const result = await updateExecute(id, messageData);
         if (result.success) {
             fetchMessages(); // Refresh the list
         }
         return result;
-    }, [fetchMessages]);
+    }, [fetchMessages, updateExecute]);
 
     const deleteMessage = useCallback(async (id) => {
-        const { data, loading, error, execute } = useApi(api.admin.deleteMessage);
-        const result = await execute(id);
+        const result = await deleteExecute(id);
         if (result.success) {
             fetchMessages(); // Refresh the list
         }
         return result;
-    }, [fetchMessages]);
+    }, [deleteExecute, fetchMessages]);
 
     return {
-        messages: data,
-        loading,
-        error,
+        messages: listApi.data,
+        loading: listApi.loading,
+        error: listApi.error,
         fetchMessages,
         updateMessage,
         deleteMessage,
@@ -293,7 +300,7 @@ export const useAuth = () => {
             } else {
                 safeLocalStorage.removeItem('auth_token');
             }
-        } catch (error) {
+        } catch {
             safeLocalStorage.removeItem('auth_token');
         } finally {
             setLoading(false);

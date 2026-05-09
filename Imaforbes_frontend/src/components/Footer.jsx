@@ -12,7 +12,6 @@
 import React, { memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
 import { Mail, ArrowUpRight } from 'lucide-react';
 

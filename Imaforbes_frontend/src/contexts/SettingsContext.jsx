@@ -1,4 +1,5 @@
 // src/contexts/SettingsContext.jsx
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { API_CONFIG } from '../config/api.js';
@@ -104,13 +105,11 @@ export const SettingsProvider = ({ children }) => {
   useEffect(() => {
     applyTheme(theme);
     applyLanguage(language);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [applyLanguage, applyTheme, language, theme]);
 
   // Load settings from API on mount
   useEffect(() => {
     loadSettingsFromAPI();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Apply theme to document when it changes

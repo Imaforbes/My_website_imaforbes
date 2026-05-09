@@ -12,7 +12,7 @@
  * - Simplified all animations for cleaner feel
  * - Changed typography to font-light throughout
  */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { API_CONFIG } from "../config/api.js";
@@ -49,11 +49,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchStats();
-  }, []);
-
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     // Check if user is authenticated before making API call
     const authToken = safeLocalStorage.getItem('auth_token');
     if (!authToken) {
@@ -122,7 +118,7 @@ const Dashboard = () => {
           try {
             const errorText = await response.text();
             console.warn("Dashboard API error:", response.status, errorText);
-          } catch (e) {
+          } catch {
             // Ignore text parsing errors
           }
         }
@@ -141,7 +137,11 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [navigate]);
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats]);
 
   const handleLogout = async () => {
     const baseURL = API_CONFIG.getBaseURL();

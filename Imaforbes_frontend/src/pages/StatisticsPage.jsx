@@ -1,5 +1,5 @@
 // src/pages/StatisticsPage.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { API_CONFIG } from "../config/api.js";
@@ -45,12 +45,7 @@ const StatisticsPage = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchStatistics();
-    fetchBlogStatistics();
-  }, []);
-
-  const fetchStatistics = async () => {
+  const fetchStatistics = useCallback(async () => {
     try {
       const baseURL = API_CONFIG.getBaseURL();
 
@@ -107,54 +102,43 @@ const StatisticsPage = () => {
     } catch (error) {
       console.error("Error fetching statistics:", error);
     }
-  };
+  }, [navigate]);
 
-  const fetchBlogStatistics = async () => {
+  const fetchBlogStatistics = useCallback(async () => {
     try {
       const result = await api.blog.getStats();
-      
-      // Check for authentication errors
-      if (result.status === 401 || result.status === 403 || (result.success === false && (result.error?.includes('Authentication') || result.error?.includes('Unauthorized') || result.error?.includes('Forbidden')))) {
-        console.error("Blog Stats: Authentication failed - redirecting to login");
-        navigate("/login");
-        return;
-      }
-      
-      if (result.success && result.data?.success) {
-        const data = result.data.data || result.data;
-        setBlogStats({
-          totalPosts: data.total_posts || 0,
-          totalViews: data.total_views || 0,
-          totalLikes: data.total_likes || 0,
-          viewsLast7Days: data.views_last_7_days || 0,
-          viewsLast30Days: data.views_last_30_days || 0,
-          mostViewed: data.most_viewed || [],
-          mostLiked: data.most_liked || [],
-        });
-      } else if (result.success && result.data) {
-        // Handle case where data is directly in result.data
-        const data = result.data;
-        setBlogStats({
-          totalPosts: data.total_posts || 0,
-          totalViews: data.total_views || 0,
-          totalLikes: data.total_likes || 0,
-          viewsLast7Days: data.views_last_7_days || 0,
-          viewsLast30Days: data.views_last_30_days || 0,
-          mostViewed: data.most_viewed || [],
-          mostLiked: data.most_liked || [],
-        });
+      if (result.success && result.data) {
+        const apiResponse = result.data;
+        if (apiResponse.success && apiResponse.data) {
+          setBlogStats(prev => ({
+            ...prev,
+            ...apiResponse.data,
+          }));
+        }
       }
     } catch (error) {
-      console.error("Error fetching blog statistics:", error);
-      // If it's an authentication error, redirect to login
-      if (error.status === 401 || error.status === 403) {
-        navigate("/login");
-        return;
+      if (import.meta.env.DEV) {
+        console.warn("Error fetching blog stats:", error);
       }
-    } finally {
-      setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+
+    Promise.all([fetchStatistics(), fetchBlogStatistics()])
+      .catch(() => {
+        // errors already handled inside functions
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [fetchBlogStatistics, fetchStatistics]);
 
   if (loading) {
     return (
@@ -326,7 +310,7 @@ const StatisticsPage = () => {
               </h3>
               <div className="space-y-3">
                 {stats.messagesByMonth.length > 0 ? (
-                  stats.messagesByMonth.map((item, index) => (
+                  stats.messagesByMonth.map((item) => (
                     <div key={item.month} className="flex items-center justify-between">
                       <span className="text-gray-700 dark:text-gray-300 font-light">{item.month}</span>
                       <div className="flex items-center gap-2">
@@ -361,8 +345,8 @@ const StatisticsPage = () => {
               </h3>
               <div className="space-y-3">
                 {stats.recentActivity.length > 0 ? (
-                  stats.recentActivity.map((activity, index) => (
-                    <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-800">
+                  stats.recentActivity.map((activity) => (
+                    <div key={activity.id ?? `${activity.created_at}-${activity.name}`} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-800">
                       <div className="p-2 bg-gray-100 dark:bg-[#0a0a0a] rounded-lg">
                         <Mail size={16} className="text-gray-700 dark:text-gray-300" />
                       </div>
@@ -396,7 +380,7 @@ const StatisticsPage = () => {
               </h3>
               <div className="space-y-3">
                 {blogStats.mostViewed.length > 0 ? (
-                  blogStats.mostViewed.map((post, index) => (
+                  blogStats.mostViewed.map((post) => (
                     <div key={post.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-800">
                       <div className="flex-1">
                         <p className="text-gray-900 dark:text-white text-sm font-light line-clamp-1">{post.title}</p>
@@ -432,7 +416,7 @@ const StatisticsPage = () => {
               </h3>
               <div className="space-y-3">
                 {blogStats.mostLiked.length > 0 ? (
-                  blogStats.mostLiked.map((post, index) => (
+                  blogStats.mostLiked.map((post) => (
                     <div key={post.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-800">
                       <div className="flex-1">
                         <p className="text-gray-900 dark:text-white text-sm font-light line-clamp-1">{post.title}</p>

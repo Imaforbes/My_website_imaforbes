@@ -1,6 +1,6 @@
 // src/components/LazyImage.jsx
 import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion"; // eslint-disable-line no-unused-vars
+import { motion } from "framer-motion";
 
 const LazyImage = ({ src, alt, className, ...props }) => {
   const [isLoaded, setIsLoaded] = useState(false);

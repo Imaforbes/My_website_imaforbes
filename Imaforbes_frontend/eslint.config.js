@@ -23,7 +23,16 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // NOTE: JSX member expressions like <motion.div> may be flagged as unused by core no-unused-vars.
+      // We allow these common identifiers to avoid false positives.
+      'no-unused-vars': ['error', { varsIgnorePattern: '^(motion|AnimatePresence)$|^[A-Z_]' }],
+    },
+  },
+  // Node scripts (deployment helpers)
+  {
+    files: ['deploy.js', 'prepare-for-hostinger.js'],
+    languageOptions: {
+      globals: globals.node,
     },
   },
 ])
