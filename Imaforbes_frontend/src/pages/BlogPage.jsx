@@ -524,7 +524,7 @@ const BlogPage = () => {
   }
 
   return (
-    <section className="projects-section" style={{ minHeight: '100vh' }}>
+    <section className="projects-section" style={{ minHeight: '100svh' }}>
       <div className="container-premium" style={{ position: 'relative', zIndex: 10 }}>
         
         <div className="projects-header" style={{ position: 'relative', paddingTop: '1rem' }}>

@@ -401,6 +401,7 @@ const AboutPage = () => {
                   style={{ 
                     width: '100%', 
                     height: 'auto', 
+                    aspectRatio: '3 / 4',
                     borderRadius: '18px', 
                     display: 'block', 
                     filter: 'contrast(1.05) saturate(1.1)' 

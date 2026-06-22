@@ -274,7 +274,8 @@ html.dark .nav-item-premium:hover, html.dark .nav-item-premium.active {
 /* Hero Section */
 .hero-premium {
   position: relative;
-  min-height: 100vh;
+  min-height: 100vh; /* Fallback */
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -355,7 +356,8 @@ html.dark .hero-description {
    ============================================ */
 .projects-section {
   padding: 6rem 2rem;
-  min-height: 100vh;
+  min-height: 100vh; /* Fallback */
+  min-height: 100svh;
 }
 
 .projects-header {

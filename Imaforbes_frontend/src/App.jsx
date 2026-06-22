@@ -23,8 +23,8 @@ import LoadingSpinner from "./components/LoadingSpinner";
 
 import "./i18n"; // Configuración de internacionalización
 
-// Lazy load all pages for better performance and code splitting
-const HomePage = lazy(() => import("./pages/HomePage"));
+import HomePage from "./pages/HomePage";
+// Lazy load other pages for better performance and code splitting
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const ProjectsPage = lazy(() => import("./pages/ProjectsPage"));
 const ContactPage = lazy(() => import("./pages/ContactPage"));
@@ -82,7 +82,7 @@ function App() {
   return (
     <ErrorBoundary>
       <BrowserSupport />
-      <div className="app-wrapper" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <div className="app-wrapper" style={{ display: 'flex', flexDirection: 'column', minHeight: '100svh' }}>
         {!isAdminPage && <Header />}
         {!isAdminPage && <Breadcrumbs />}
         <main style={{ flexGrow: 1, paddingTop: !isAdminPage ? '5rem' : '0' }}>
