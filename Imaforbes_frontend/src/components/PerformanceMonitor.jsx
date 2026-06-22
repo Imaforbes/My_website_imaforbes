@@ -13,7 +13,7 @@ const PerformanceMonitor = () => {
       const observer = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           if (entry.entryType === "largest-contentful-paint") {
-            console.log("LCP:", entry.startTime);
+            // Logs removed for cleaner console
           }
         }
       });
@@ -28,7 +28,7 @@ const PerformanceMonitor = () => {
       const fidObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           if (entry.entryType === "first-input") {
-            console.log("FID:", entry.processingStart - entry.startTime);
+            // Logs removed for cleaner console
           }
         }
       });
@@ -47,7 +47,7 @@ const PerformanceMonitor = () => {
             clsValue += entry.value;
           }
         }
-        console.log("CLS:", clsValue);
+        // Logs removed for cleaner console
       });
 
       try {

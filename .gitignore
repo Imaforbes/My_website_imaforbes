@@ -32,3 +32,6 @@
 .vscode/
 .idea/
 
+
+# --- Database Dumps ---
+*.sql

@@ -15,7 +15,7 @@ i18n
     .use(initReactI18next)
     // Configuración inicial
     .init({
-        debug: import.meta.env.DEV, // Only debug in development
+        debug: false, // Disable debug logs in console
         lng: savedLanguage || undefined, // Use saved language or let detector decide
         fallbackLng: 'es', // Idioma por defecto si el del navegador falla
         interpolation: {

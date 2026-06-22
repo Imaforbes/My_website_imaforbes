@@ -1,15 +1,4 @@
 // src/components/Header.jsx
-/**
- * Header - Minimalist & Deluxe Design
- * 
- * DESIGN CHANGES:
- * - Updated background: clean white/dark with subtle border
- * - Changed logo typography: font-light instead of font-extrabold
- * - Updated navigation links: minimalist underline indicator instead of colored background
- * - Simplified hover states: subtle color changes instead of colorful backgrounds
- * - Updated mobile menu: clean white/dark instead of dark gray
- * - Removed colorful accents, using neutral grays throughout
- */
 import React, { useState, useEffect, memo, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -24,7 +13,6 @@ const Header = memo(() => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
-  // Handle scroll effect - memoized callback
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 50);
   }, []);
@@ -34,7 +22,6 @@ const Header = memo(() => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  // Close menu when clicking outside or on route change
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -46,27 +33,20 @@ const Header = memo(() => {
     };
   }, [isMenuOpen]);
 
-  // Keyboard shortcuts: Esc to close menu
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape" && isMenuOpen) {
         setIsMenuOpen(false);
       }
     };
-
     if (isMenuOpen) {
       document.addEventListener("keydown", handleKeyDown);
-      return () => {
-        document.removeEventListener("keydown", handleKeyDown);
-      };
+      return () => document.removeEventListener("keydown", handleKeyDown);
     }
   }, [isMenuOpen]);
 
-  const handleNavLinkClick = () => {
-    setIsMenuOpen(false);
-  };
+  const handleNavLinkClick = () => setIsMenuOpen(false);
 
-  // Unified navigation items
   const navItems = [
     { path: "/", label: "header.home" },
     { path: "/about", label: "header.about-me" },
@@ -75,79 +55,43 @@ const Header = memo(() => {
     { path: "/contact", label: "header.contact" },
   ];
 
-  // Menu animation variants
   const menuVariants = {
     hidden: { opacity: 0, y: -10 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: "tween", duration: 0.2, ease: "easeOut" },
-    },
-    exit: {
-      opacity: 0,
-      y: -10,
-      transition: { type: "tween", duration: 0.2, ease: "easeIn" },
-    },
+    visible: { opacity: 1, y: 0, transition: { type: "tween", duration: 0.2, ease: "easeOut" } },
+    exit: { opacity: 0, y: -10, transition: { type: "tween", duration: 0.2, ease: "easeIn" } },
   };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 10 },
-    visible: (i) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: i * 0.05, duration: 0.2 },
-    }),
+    visible: (i) => ({ opacity: 1, y: 0, transition: { delay: i * 0.05, duration: 0.2 } }),
   };
-
-  // Unified header height - consistent across all breakpoints
-  // Using standard Tailwind heights: 16 (64px), 20 (80px)
-  const headerHeight = "h-16 md:h-20";
-  const headerTopPosition = "top-16 md:top-20";
 
   return (
     <>
       <motion.header
-        className={`fixed top-0 left-0 right-0 w-full z-50 transition-all duration-200 ${
-          scrolled
-            ? "bg-white dark:bg-[#0a0a0a] shadow-sm"
-            : "bg-white dark:bg-[#0a0a0a] backdrop-blur-sm"
-        } border-b border-gray-200 dark:border-gray-800 ${headerHeight}`}
+        className={`header-premium ${scrolled ? 'scrolled' : ''}`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <nav className="flex justify-between items-center h-full max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8">
-          {/* Logo - Responsive sizing */}
-          <Link
-            to="/"
-            className="text-gray-900 dark:text-white text-lg sm:text-xl md:text-2xl lg:text-2xl font-light tracking-tight hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 flex-shrink-0"
-            onClick={handleNavLinkClick}
-          >
+        <div className="container-premium nav-premium">
+          {/* Logo */}
+          <Link to="/" className="logo-premium" onClick={handleNavLinkClick}>
             IMAFORBES
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-1 xl:space-x-2">
+          <nav className="nav-links-premium">
             {navItems.map((link) => (
-              <motion.div
-                key={link.path}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
+              <motion.div key={link.path} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
                 <Link
                   to={link.path}
-                  className={`relative text-gray-600 dark:text-gray-400 text-sm xl:text-base font-medium hover:text-gray-900 dark:hover:text-white transition-all duration-200 px-3 xl:px-4 py-2 group ${
-                    location.pathname === link.path
-                      ? "text-gray-900 dark:text-white font-medium"
-                      : ""
-                  }`}
+                  className={`nav-item-premium ${location.pathname === link.path ? 'active' : ''}`}
                 >
                   {t(link.label)}
-                  {/* Minimalist underline */}
                   {location.pathname === link.path && (
                     <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-px bg-black dark:bg-white"
+                      style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '1px', background: 'currentColor' }}
                       layoutId="activeTab"
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
@@ -156,89 +100,59 @@ const Header = memo(() => {
               </motion.div>
             ))}
 
-            {/* Language Toggle - Desktop */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5, duration: 0.3 }}
-              className="ml-2 xl:ml-4"
-            >
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5, duration: 0.3 }}>
               <LanguageToggle />
             </motion.div>
 
-            {/* Theme Toggle - Desktop */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.6, duration: 0.3 }}
-              className="ml-2 xl:ml-4"
-            >
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.6, duration: 0.3 }}>
               <ThemeToggle />
             </motion.div>
-          </div>
+          </nav>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden text-gray-800 dark:text-gray-200 focus:outline-none p-2 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 transition-colors duration-200"
+            className="lg:hidden"
+            style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--color-text-light)' }}
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isMenuOpen}
           >
-            {isMenuOpen ? (
-              <X size={24} className="text-gray-800 dark:text-gray-200" />
-            ) : (
-              <Menu size={24} className="text-gray-800 dark:text-gray-200" />
-            )}
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-        </nav>
+        </div>
       </motion.header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMenuOpen && (
           <>
-            {/* Backdrop Overlay */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
-              className="lg:hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+              style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.2)', backdropFilter: 'blur(4px)', zIndex: 40 }}
+              className="lg:hidden"
             />
 
-            {/* Mobile Menu Panel */}
             <motion.nav
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              variants={menuVariants}
-              className={`lg:hidden bg-white dark:bg-[#0a0a0a] fixed ${headerTopPosition} left-0 right-0 w-full flex flex-col overflow-y-auto z-50 border-t border-gray-200 dark:border-gray-800 shadow-sm mobile-menu-nav`}
-              onTouchMove={(e) => e.stopPropagation()} // Prevent body scroll when menu is open
+              initial="hidden" animate="visible" exit="exit" variants={menuVariants}
+              style={{ position: 'fixed', top: '5rem', left: 0, right: 0, background: 'var(--color-bg-light)', zIndex: 50, borderTop: '1px solid var(--color-border-light)' }}
+              className="lg:hidden dark:bg-dark"
+              onTouchMove={(e) => e.stopPropagation()}
             >
-              <div className="flex flex-col py-4 px-4 space-y-1">
+              <div style={{ display: 'flex', flexDirection: 'column', padding: '1rem' }}>
                 {navItems.map((link) => (
                   <motion.div key={link.path} variants={itemVariants} onClick={handleNavLinkClick}>
                     <Link
                       to={link.path}
-                      className={`block text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#0f0f0f] active:bg-gray-100 dark:active:bg-[#0f0f0f] transition-all duration-200 px-4 py-3 w-full text-left ${
-                        location.pathname === link.path
-                          ? "text-gray-900 dark:text-white font-medium bg-gray-50 dark:bg-[#0f0f0f]"
-                          : ""
-                      }`}
+                      style={{ display: 'block', padding: '1rem', color: location.pathname === link.path ? 'var(--color-text-light)' : 'var(--color-text-muted-light)', textDecoration: 'none', borderBottom: '1px solid var(--color-border-light)' }}
                     >
                       {t(link.label)}
                     </Link>
                   </motion.div>
                 ))}
 
-                {/* Language Toggle - Mobile */}
-                <motion.div variants={itemVariants} className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
-                  <div className="flex justify-center gap-4">
-                    <div className="mobile-menu-language-toggle">
-                      <LanguageToggle size="lg" />
-                    </div>
-                    <ThemeToggle size="lg" />
-                  </div>
+                <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem', paddingTop: '1rem' }}>
+                  <LanguageToggle size="lg" />
+                  <ThemeToggle size="lg" />
                 </motion.div>
               </div>
             </motion.nav>
@@ -250,5 +164,4 @@ const Header = memo(() => {
 });
 
 Header.displayName = 'Header';
-
 export default Header;

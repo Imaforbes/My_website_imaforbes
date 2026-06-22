@@ -43,9 +43,38 @@ import {
 import { Briefcase, Calendar, MapPin, ArrowRight } from "lucide-react";
 
 const HeroBackground = () => (
-  <div className="absolute inset-0 -z-10 overflow-hidden">
-    {/* Minimalist subtle background */}
-    <div className="absolute inset-0 bg-gray-50 dark:bg-[#0a0a0a]"></div>
+  <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-light)' }} className="dark:hidden"></div>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-dark)' }} className="hidden dark:block"></div>
+    
+    {/* Subtle animated gradient glow */}
+    <motion.div 
+      initial={{ opacity: 0.2, scale: 0.9 }}
+      animate={{ opacity: [0.2, 0.4, 0.2], scale: [0.9, 1.1, 0.9] }}
+      transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+      style={{ 
+        position: 'absolute', 
+        top: '20%', 
+        left: '20%', 
+        transform: 'translate(-50%, -50%)', 
+        width: '60vw', 
+        height: '60vw', 
+        background: 'radial-gradient(circle, rgba(150,150,150,0.03) 0%, rgba(0,0,0,0) 60%)',
+        borderRadius: '50%',
+        pointerEvents: 'none'
+      }}
+    />
+    
+    {/* Grid pattern very faint */}
+    <div style={{
+      position: 'absolute',
+      inset: 0,
+      backgroundImage: 'linear-gradient(rgba(100,100,100,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(100,100,100,0.03) 1px, transparent 1px)',
+      backgroundSize: '40px 40px',
+      pointerEvents: 'none',
+      maskImage: 'radial-gradient(circle at center, black, transparent 80%)',
+      WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)'
+    }} />
   </div>
 );
 
@@ -61,14 +90,8 @@ const AboutPage = () => {
         setLoadingExperiences(true);
         const result = await api.experiences.getAll('published');
         
-        // Debug logging (only in development)
-        if (import.meta.env.DEV) {
-          console.log('Experiences API result:', result);
-        }
-        
         // Check if result is successful and has data
         if (result.success && result.data) {
-          // The API returns: { success: true, data: { success: true, data: [...] } }
           const apiResponse = result.data;
           
           if (apiResponse.success && Array.isArray(apiResponse.data)) {
@@ -85,12 +108,7 @@ const AboutPage = () => {
           }
         }
         
-        // If we get here, API call didn't return expected format
-        if (import.meta.env.DEV) {
-          console.warn('Unexpected API response format, falling back to i18n');
-        }
-        
-        // Fallback to i18n if API fails or returns unexpected format
+        // Fallback to i18n
         const fallbackExperiences = t("about.experience", { returnObjects: true });
         if (Array.isArray(fallbackExperiences)) {
           setExperiences(fallbackExperiences);
@@ -99,7 +117,6 @@ const AboutPage = () => {
         }
       } catch (error) {
         console.error("Error fetching experiences:", error);
-        // Fallback to i18n on error
         const fallbackExperiences = t("about.experience", { returnObjects: true });
         if (Array.isArray(fallbackExperiences)) {
           setExperiences(fallbackExperiences);
@@ -354,98 +371,153 @@ const AboutPage = () => {
     : skillsData.filter(skill => skill.category === selectedCategory);
 
   return (
-    <motion.section
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="relative min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-white overflow-hidden"
-    >
+    <section id="sobre-mi" className="about-section" style={{ position: 'relative', overflow: 'hidden' }}>
       <HeroBackground />
-      {/* Ajuste de padding y max-w para diferentes tamaños de pantalla */}
-      <div className="relative z-10 container mx-auto max-w-7xl py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8">
-        {/* Disposición responsiva de la sección "sobre-mi" */}
-        <section
-          id="sobre-mi"
-          className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center mb-12 sm:mb-16 lg:mb-20 xl:mb-32"
-        >
+      <div className="container-premium" style={{ position: 'relative', zIndex: 10 }}>
+        
+        <div className="about-grid" style={{ alignItems: 'center', marginBottom: '6rem' }}>
           <motion.div
             variants={itemVariants}
-            // Imagen ocupa 1 columna en móvil, 2 en pantallas medianas y más grandes
-            className="lg:col-span-2"
-            whileHover={{ scale: 1.03 }}
-            transition={{ type: "spring", stiffness: 300 }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}
           >
-            <img
-              src="/img/IMG_0029.JPG"
-              alt="Imanol Pérez Arteaga"
-              className="rounded-lg object-cover w-full h-auto md:h-full shadow-sm"
-            />
+            {/* Image Container with subtle hover and premium styling */}
+            <div style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
+              <div style={{ 
+                position: 'absolute', 
+                inset: '-10px', 
+                background: 'linear-gradient(45deg, rgba(150,150,150,0.1), transparent, rgba(150,150,150,0.1))', 
+                borderRadius: '24px', 
+                filter: 'blur(15px)',
+                zIndex: -1
+              }}></div>
+              
+              <div className="card-premium" style={{ padding: '0.5rem', borderRadius: '24px', overflow: 'hidden' }}>
+                <img
+                  src="/img/IMG_0029.JPG"
+                  alt="Imanol Pérez Arteaga"
+                  style={{ 
+                    width: '100%', 
+                    height: 'auto', 
+                    borderRadius: '18px', 
+                    display: 'block', 
+                    filter: 'contrast(1.05) saturate(1.1)' 
+                  }}
+                />
+              </div>
+
+              {/* Floating Element 1 */}
+              <motion.div 
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                style={{ 
+                  position: 'absolute', top: '10%', left: '-15%', 
+                  background: 'var(--color-surface-light)',
+                  padding: '0.75rem 1rem', borderRadius: '12px',
+                  border: '1px solid var(--color-border-light)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+                  display: 'flex', alignItems: 'center', gap: '0.5rem'
+                }}
+                className="dark:bg-[#1a1a1a] dark:border-gray-800"
+              >
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'var(--color-bg-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-light)' }} className="dark:bg-[#0a0a0a] dark:text-white">
+                  <FaReact size={18} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted-light)', fontWeight: 500, textTransform: 'uppercase' }}>Stack</span>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', fontWeight: 600 }} className="dark:text-white">MERN / PHP</span>
+                </div>
+              </motion.div>
+
+              {/* Floating Element 2 */}
+              <motion.div 
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                style={{ 
+                  position: 'absolute', bottom: '15%', right: '-10%', 
+                  background: 'var(--color-surface-light)',
+                  padding: '0.75rem 1rem', borderRadius: '12px',
+                  border: '1px solid var(--color-border-light)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+                  display: 'flex', alignItems: 'center', gap: '0.5rem'
+                }}
+                className="dark:bg-[#1a1a1a] dark:border-gray-800"
+              >
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                  <span style={{ fontSize: '1.2rem', color: 'var(--color-text-light)', fontWeight: 700 }} className="dark:text-white">+3 Años</span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted-light)' }}>Experiencia Full Stack</span>
+                </div>
+              </motion.div>
+
+            </div>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="lg:col-span-3">
-            {/* Tamaño del título responsivo */}
-            <motion.h1
-              variants={itemVariants}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-4 leading-tight tracking-tight text-gray-900 dark:text-white text-reflection"
-              data-text={t("about.hero-title")}
-            >
+          <motion.div 
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            style={{ paddingLeft: '2rem' }}
+          >
+            <h1 className="hero-title" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', marginBottom: '1.5rem', textAlign: 'left', lineHeight: 1.1 }}>
               {t("about.hero-title")}
-            </motion.h1>
-            {/* Text styling */}
-            <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-4 sm:mb-6 font-light">
+            </h1>
+            <p className="text-muted" style={{ fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '1.5rem', fontWeight: 300 }}>
               {t("about.hero-text-1")}
             </p>
-            <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-6 sm:mb-8 font-light">
+            <p className="text-muted" style={{ fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '2.5rem', fontWeight: 300 }}>
               {t("about.hero-text-2")}
             </p>
 
-            {/* Download CV Button */}
             <a
               href="/resources/CvIng_Imanol Perez Arteaga.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-black dark:bg-white text-white dark:text-black text-sm sm:text-base md:text-lg font-medium tracking-wide transition-all duration-200 hover:bg-gray-800 dark:hover:bg-gray-100 rounded-2xl"
+              className="btn-premium"
+              style={{ display: 'inline-flex' }}
             >
               {t("about.download-cv")}
             </a>
           </motion.div>
-        </section>
+        </div>
 
-        <section id="habilidades" className="mb-12 sm:mb-16 lg:mb-20 xl:mb-32">
-          {/* Tamaño del título responsivo */}
+        <div className="skills-container" id="habilidades">
           <motion.h2
             variants={itemVariants}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-center mb-6 sm:mb-8 tracking-tight text-gray-900 dark:text-white text-reflection"
-            data-text={t("about.skills-title")}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="hero-title"
+            style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', textAlign: 'center', marginBottom: '2rem' }}
           >
             {t("about.skills-title")}
           </motion.h2>
 
-          {/* Category Filter Buttons */}
-          {/* Responsive: Smaller gaps and padding on mobile */}
           <motion.div
             variants={itemVariants}
-            className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-6 sm:mb-8 md:mb-10 px-2"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginBottom: '3rem' }}
           >
             {categories.map((category) => (
-              <motion.button
+              <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm md:text-base font-medium transition-all duration-200 flex items-center gap-1 sm:gap-2 border rounded-2xl ${
-                  selectedCategory === category.id
-                    ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white"
-                    : "bg-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border-gray-300 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white"
-                }`}
-                whileHover={{ scale: selectedCategory === category.id ? 1.05 : 1.02 }}
-                whileTap={{ scale: 0.95 }}
+                className={`project-tag ${selectedCategory === category.id ? 'active' : ''}`}
+                style={{ 
+                  cursor: 'pointer',
+                  background: selectedCategory === category.id ? 'var(--color-text-light)' : 'transparent',
+                  color: selectedCategory === category.id ? 'var(--color-bg-light)' : 'var(--color-text-muted-light)'
+                }}
               >
-                <span>{category.icon}</span>
-                <span>{category.name}</span>
-              </motion.button>
+                {category.icon} {category.name}
+              </button>
             ))}
           </motion.div>
 
-          {/* Skills Grid with AnimatePresence for smooth transitions */}
           <AnimatePresence mode="wait">
             <motion.div
               key={selectedCategory}
@@ -453,7 +525,7 @@ const AboutPage = () => {
               initial="hidden"
               animate="visible"
               exit="hidden"
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5 lg:gap-6"
+              className="skills-grid"
             >
               {filteredSkills.map((skill, index) => {
                 const IconComponent = skill.icon;
@@ -461,199 +533,99 @@ const AboutPage = () => {
                   <motion.div
                     key={skill.name}
                     variants={skillVariants}
-                    className="flex flex-col items-center justify-center p-3 sm:p-4 md:p-5 bg-white dark:bg-[#0f0f0f] rounded-sm shadow-sm border border-gray-200 dark:border-gray-800 hover:border-gray-900 dark:hover:border-gray-600 transition-all duration-200 cursor-pointer group relative overflow-hidden"
-                    whileHover="hover"
-                    whileTap={{ scale: 0.95 }}
-                    onHoverStart={() => setHoveredSkill(skill.name)}
-                    onHoverEnd={() => setHoveredSkill(null)}
-                    layout
+                    className="skill-card"
                   >
-                    {/* Animated background with skill color */}
-                    <motion.div
-                      className={`absolute inset-0 ${skill.bgColor} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
-                      initial={{ scale: 0 }}
-                      animate={{ scale: hoveredSkill === skill.name ? 1 : 0 }}
-                      transition={{ duration: 0.3 }}
-                    />
-
-                    {/* Icon with skill color */}
-                    {/* Responsive icon sizes */}
-                    <motion.div
-                      className={`${skill.color} mb-2 sm:mb-3 group-hover:scale-110 transition-all duration-300 relative z-10`}
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.6 }}
-                    >
-                      <IconComponent size={24} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" />
-                    </motion.div>
-
-                    {/* Skill name - Responsive text sizing */}
-                    <motion.p
-                      className="text-[10px] xs:text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 text-center group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200 relative z-10 mb-1 sm:mb-2 leading-tight"
-                      whileHover={{ scale: 1.02 }}
-                    >
+                    <IconComponent size={32} style={{ marginBottom: '1rem', color: 'var(--color-text-muted-light)' }} />
+                    <span style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--color-text-light)' }} className="dark:text-white">
                       {skill.name}
-                    </motion.p>
-
-                    {/* Progress bar - Minimalist */}
-                    <div className="w-full h-0.5 bg-gray-200 dark:bg-gray-800 rounded-full mt-1 relative z-10 overflow-hidden">
+                    </span>
+                    <div className="skill-progress-bar">
                       <motion.div
-                        className="h-full bg-black dark:bg-white rounded-full"
+                        className="skill-progress-fill"
                         initial={{ width: 0 }}
-                        animate={{ width: `${skill.level}%` }}
-                        transition={{ duration: 0.8, delay: index * 0.05, ease: "easeOut" }}
+                        whileInView={{ width: `${skill.level}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1, delay: 0.2 }}
                       />
                     </div>
-
-                    {/* Skill level percentage - Responsive text size */}
-                    <motion.span
-                      className="text-[10px] xs:text-xs text-gray-500 dark:text-gray-500 mt-1 sm:mt-1.5 relative z-10 font-light"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5, delay: index * 0.05 + 0.3 }}
-                    >
-                      {skill.level}%
-                    </motion.span>
                   </motion.div>
                 );
               })}
             </motion.div>
           </AnimatePresence>
+        </div>
 
-          {/* Skills count */}
-          <motion.p
-            variants={itemVariants}
-            className="text-center text-sm text-gray-500 dark:text-gray-500 mt-6 font-light"
-          >
-            {t("about.skills-count", { count: filteredSkills.length, total: skillsData.length })}
-          </motion.p>
-        </section>
-
-        {/* Work Experience Timeline Section */}
-        <section id="experiencia" className="mb-12 sm:mb-16 lg:mb-20 xl:mb-32">
+        <div className="timeline-container" id="experiencia">
           <motion.h2
             variants={itemVariants}
-            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-center mb-8 sm:mb-10 lg:mb-12 tracking-tight text-gray-900 dark:text-white text-reflection"
-            data-text={t("about.experience-title")}
-            style={{ overflow: 'hidden' }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="hero-title"
+            style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', textAlign: 'center', marginBottom: '4rem' }}
           >
             {t("about.experience-title")}
           </motion.h2>
 
-          {/* Timeline */}
-          <div className="relative max-w-4xl mx-auto">
-            {/* Timeline items */}
-            <div className="space-y-8 sm:space-y-12 relative">
-              {loadingExperiences ? (
-                <div className="text-center py-8 text-gray-600 dark:text-gray-400 font-light relative z-10">
-                  {t("about.experience-loading")}
-                </div>
-              ) : experiences.length === 0 ? (
-                <div className="text-center py-8 text-gray-600 dark:text-gray-400 font-light relative z-10">
-                  {t("about.experience-empty")}
-                </div>
-              ) : (
-                <>
-                  {/* Timeline line - Solo se muestra cuando hay experiencias */}
-                  <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gray-300 dark:bg-gray-700 transform md:-translate-x-1/2 -z-10"></div>
-                  {experiences.map((exp, index) => (
+          <div style={{ position: 'relative', maxWidth: '800px', margin: '0 auto' }}>
+            {loadingExperiences ? (
+              <p className="text-muted" style={{ textAlign: 'center' }}>{t("about.experience-loading")}</p>
+            ) : experiences.length === 0 ? (
+              <p className="text-muted" style={{ textAlign: 'center' }}>{t("about.experience-empty")}</p>
+            ) : (
+              experiences.map((exp, index) => (
                 <motion.div
                   key={index}
-                  variants={itemVariants}
-                  className="relative pl-12 md:pl-0 md:flex md:items-center"
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: "-100px" }}
+                  className="timeline-item"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5 }}
                 >
-                  {/* Timeline dot */}
-                  <div className="absolute left-2 md:left-1/2 w-3 h-3 bg-black dark:bg-white rounded-full border-2 border-white dark:border-black transform md:-translate-x-1/2 z-10"></div>
+                  <div className="timeline-content card-premium" style={{ padding: '2rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--color-text-muted-light)' }}>
+                      <Calendar size={16} />
+                      <span style={{ fontSize: '0.9rem' }}>{exp.period}</span>
+                    </div>
+                    
+                    <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--color-text-light)' }} className="dark:text-white">
+                      {exp.title}
+                    </h3>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--color-text-light)' }} className="dark:text-gray-300">
+                      <Briefcase size={16} />
+                      <span style={{ fontWeight: 500 }}>{exp.company}</span>
+                    </div>
 
-                  {/* Content card */}
-                  <div className={`md:w-1/2 ${index % 2 === 0 ? "md:pr-8 md:text-right" : "md:ml-auto md:pl-8"}`}>
-                    <motion.div
-                      className="bg-white dark:bg-[#0f0f0f] rounded-sm p-6 sm:p-8 border border-gray-200 dark:border-gray-800 shadow-sm hover:border-gray-900 dark:hover:border-gray-600 transition-all duration-200 group"
-                      whileHover={{ y: -2 }}
-                    >
-                      {/* Date */}
-                      <div className={`flex items-center gap-2 mb-3 ${index % 2 === 0 ? "md:justify-end" : ""}`}>
-                        <Calendar size={16} className="text-gray-500 dark:text-gray-400" />
-                        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                          {exp.period}
-                        </span>
+                    {exp.location && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--color-text-muted-light)' }}>
+                        <MapPin size={16} />
+                        <span style={{ fontSize: '0.9rem' }}>{exp.location}</span>
                       </div>
+                    )}
 
-                      {/* Job Title */}
-                      <h3 className="text-xl sm:text-2xl font-light text-gray-900 dark:text-white mb-2 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
-                        {exp.title}
-                      </h3>
+                    <p className="text-muted" style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                      {exp.description}
+                    </p>
 
-                      {/* Company */}
-                      <div className={`flex items-center gap-2 mb-4 ${index % 2 === 0 ? "md:justify-end" : ""}`}>
-                        <Briefcase size={16} className="text-gray-500 dark:text-gray-400" />
-                        <span className="text-lg font-medium text-gray-600 dark:text-gray-400">
-                          {exp.company}
-                        </span>
-                      </div>
-
-                      {/* Location */}
-                      {exp.location && (
-                        <div className={`flex items-center gap-2 mb-4 ${index % 2 === 0 ? "md:justify-end" : ""}`}>
-                          <MapPin size={16} className="text-gray-500 dark:text-gray-400" />
-                          <span className="text-sm text-gray-500 dark:text-gray-400">
-                            {exp.location}
+                    {exp.technologies && exp.technologies.length > 0 && (
+                      <div className="project-tags" style={{ marginBottom: 0 }}>
+                        {exp.technologies.map((tech, idx) => (
+                          <span key={idx} className="project-tag">
+                            {tech}
                           </span>
-                        </div>
-                      )}
-
-                      {/* Description */}
-                      <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed mb-4 font-light">
-                        {exp.description}
-                      </p>
-
-                      {/* Responsibilities */}
-                      {exp.responsibilities && exp.responsibilities.length > 0 && (
-                        <ul className={`space-y-2 ${index % 2 === 0 ? "md:text-right" : ""}`}>
-                          {exp.responsibilities.map((responsibility, idx) => (
-                            <li key={idx} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-400">
-                              {index % 2 === 0 ? (
-                                <>
-                                  <span className="md:order-2">{responsibility}</span>
-                                  <ArrowRight size={16} className="text-gray-400 dark:text-gray-500 mt-0.5 flex-shrink-0 md:order-1 md:rotate-180" />
-                                </>
-                              ) : (
-                                <>
-                                  <ArrowRight size={16} className="text-gray-400 dark:text-gray-500 mt-0.5 flex-shrink-0" />
-                                  <span>{responsibility}</span>
-                                </>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-
-                      {/* Technologies */}
-                      {exp.technologies && exp.technologies.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mt-4">
-                          {exp.technologies.map((tech, idx) => (
-                            <span
-                              key={idx}
-                              className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-medium border border-gray-300 dark:border-gray-700"
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </motion.div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </motion.div>
-                  ))}
-                </>
-              )}
-            </div>
+              ))
+            )}
           </div>
-        </section>
+        </div>
+
       </div>
-    </motion.section>
+    </section>
   );
 };
 

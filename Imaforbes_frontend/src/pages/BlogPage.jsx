@@ -23,9 +23,37 @@ import { FileText, Mail, Calendar, Filter, Heart, Eye } from "lucide-react";
 
 // Minimalist background - removed animated blobs
 const HeroBackground = () => (
-  <div className="absolute inset-0 -z-10 overflow-hidden">
-    {/* Minimalist subtle background */}
-    <div className="absolute inset-0 bg-gray-50 dark:bg-[#0a0a0a]"></div>
+  <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-light)' }} className="dark:hidden"></div>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-dark)' }} className="hidden dark:block"></div>
+    
+    {/* Subtle animated gradient glow */}
+    <motion.div 
+      initial={{ opacity: 0.1, scale: 0.9 }}
+      animate={{ opacity: [0.1, 0.3, 0.1], scale: [0.9, 1.1, 0.9] }}
+      transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: 2 }}
+      style={{ 
+        position: 'absolute', 
+        top: '15%', 
+        right: '10%', 
+        width: '50vw', 
+        height: '50vw', 
+        background: 'radial-gradient(circle, rgba(150,150,150,0.03) 0%, rgba(0,0,0,0) 60%)',
+        borderRadius: '50%',
+        pointerEvents: 'none'
+      }}
+    />
+    
+    {/* Grid pattern very faint */}
+    <div style={{
+      position: 'absolute',
+      inset: 0,
+      backgroundImage: 'linear-gradient(rgba(100,100,100,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(100,100,100,0.03) 1px, transparent 1px)',
+      backgroundSize: '40px 40px',
+      pointerEvents: 'none',
+      maskImage: 'radial-gradient(circle at center, black, transparent 80%)',
+      WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)'
+    }} />
   </div>
 );
 
@@ -94,9 +122,6 @@ const BlogPage = () => {
       const type = filter !== "all" ? filter : null;
       const result = await api.blog.getAll(type, "published");
 
-      if (import.meta.env.DEV) {
-        console.log("Blog API Result:", result);
-      }
 
       if (result.success) {
         let postsData = [];
@@ -499,79 +524,89 @@ const BlogPage = () => {
   }
 
   return (
-    <motion.section
-      className="relative min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-white overflow-hidden"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <HeroBackground />
-      <div className="relative z-10 container mx-auto max-w-7xl py-12 sm:py-16 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <motion.div
-          variants={itemVariants}
-          className="text-center mb-12 sm:mb-16"
-        >
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light mb-4 leading-tight tracking-tight text-gray-900 dark:text-white text-reflection" data-text={t("blog.title")}>
+    <section className="projects-section" style={{ minHeight: '100vh' }}>
+      <div className="container-premium" style={{ position: 'relative', zIndex: 10 }}>
+        
+        <div className="projects-header" style={{ position: 'relative', paddingTop: '1rem' }}>
+          <motion.h1
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="projects-title"
+          >
             {t("blog.title")}
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed px-4 font-light">
+          </motion.h1>
+          <motion.p
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-muted"
+            style={{ maxWidth: '600px', margin: '0 auto', fontSize: '1.1rem', lineHeight: 1.6 }}
+          >
             {t("blog.subtitle")}
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
-        {/* Filter Buttons - Modern pill design */}
         <motion.div
           variants={itemVariants}
-          className="flex justify-center gap-3 mb-8 sm:mb-12 flex-wrap"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '4rem' }}
         >
-          <motion.button
+          <button
             onClick={() => setFilter("all")}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className={`px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all duration-300 flex items-center gap-2 border rounded-2xl modern-shadow ${
-              filter === "all"
-                ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white modern-shadow-md"
-                : "bg-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border-gray-300 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white hover:modern-shadow-md"
-            }`}
+            className={`project-tag ${filter === "all" ? 'active' : ''}`}
+            style={{ 
+              cursor: 'pointer', padding: '0.5rem 1.25rem', fontSize: '0.95rem',
+              background: filter === "all" ? 'var(--color-text-light)' : 'transparent',
+              color: filter === "all" ? 'var(--color-bg-light)' : 'var(--color-text-muted-light)'
+            }}
           >
             <Filter size={16} />
             {t("blog.filter-all")}
-          </motion.button>
-          <motion.button
+          </button>
+          <button
             onClick={() => setFilter("poem")}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className={`px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all duration-300 flex items-center gap-2 border rounded-2xl modern-shadow ${
-              filter === "poem"
-                ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white modern-shadow-md"
-                : "bg-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border-gray-300 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white hover:modern-shadow-md"
-            }`}
+            className={`project-tag ${filter === "poem" ? 'active' : ''}`}
+            style={{ 
+              cursor: 'pointer', padding: '0.5rem 1.25rem', fontSize: '0.95rem',
+              background: filter === "poem" ? 'var(--color-text-light)' : 'transparent',
+              color: filter === "poem" ? 'var(--color-bg-light)' : 'var(--color-text-muted-light)'
+            }}
           >
             <FileText size={16} />
             {t("blog.filter-poems")}
-          </motion.button>
-          <motion.button
+          </button>
+          <button
             onClick={() => setFilter("letter")}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className={`px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium transition-all duration-300 flex items-center gap-2 border rounded-2xl modern-shadow ${
-              filter === "letter"
-                ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-white modern-shadow-md"
-                : "bg-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border-gray-300 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white hover:modern-shadow-md"
-            }`}
+            className={`project-tag ${filter === "letter" ? 'active' : ''}`}
+            style={{ 
+              cursor: 'pointer', padding: '0.5rem 1.25rem', fontSize: '0.95rem',
+              background: filter === "letter" ? 'var(--color-text-light)' : 'transparent',
+              color: filter === "letter" ? 'var(--color-bg-light)' : 'var(--color-text-muted-light)'
+            }}
           >
             <Mail size={16} />
             {t("blog.filter-letters")}
-          </motion.button>
+          </button>
         </motion.div>
 
-        {/* Posts List - Improved spacing between posts */}
         {posts.length > 0 ? (
           <motion.div
             variants={containerVariants}
-            className="space-y-8 sm:space-y-10 md:space-y-12 lg:space-y-16"
+            initial="hidden"
+            animate="visible"
+            style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+              gap: '2rem', 
+              maxWidth: '1200px', 
+              margin: '0 auto',
+              alignItems: 'start'
+            }}
           >
             {posts.map((post, index) => {
               const cardVariants = {
@@ -587,205 +622,129 @@ const BlogPage = () => {
                 <motion.article
                   key={post.id}
                   variants={cardVariants}
-                  whileHover={{ y: -4 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group relative overflow-hidden bg-white dark:bg-[#0f0f0f] modern-border modern-shadow-md modern-card-lg transition-all duration-300 hover:modern-shadow-lg modern-hover"
+                  className="card-premium"
+                  style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}
                 >
-                  {/* Conditional layout: Image-top with text below OR centered text-only */}
                   {post.image_url ? (
-                    /* New design: Image at top, text content below - Magazine style */
-                    <div className="flex flex-col">
-                      {/* Image Section - Prominent display at top */}
-                      <div className="w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[500px] relative overflow-hidden bg-gray-50 dark:bg-gray-900 rounded-t-lg modern-shadow">
-                        <motion.div
-                          className="w-full h-full relative"
-                          initial={{ opacity: 0, scale: 1.05 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.8, ease: "easeOut" }}
-                        >
-                          <ProtectedImage
-                            src={getImageUrl(post.image_url)}
-                            alt={post.title}
-                            className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                            loading="lazy"
-                            onError={(e) => {
-                              if (e.target) {
-                                e.target.style.display = 'none';
-                              }
-                            }}
-                          />
-                          {/* Subtle overlay for better contrast */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none"></div>
-                        </motion.div>
+                    <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                      <div style={{ width: '100%', height: '220px', position: 'relative', overflow: 'hidden' }}>
+                        <ProtectedImage
+                          src={getImageUrl(post.image_url)}
+                          alt={post.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          loading="lazy"
+                          onError={(e) => {
+                            if (e.target) {
+                              e.target.style.display = 'none';
+                            }
+                          }}
+                        />
                       </div>
 
-                      {/* Text Content Section - Below image */}
-                      <div className="flex flex-col p-6 sm:p-8 md:p-10 lg:p-12 xl:p-14 bg-white dark:bg-[#0f0f0f] rounded-b-lg">
-                        {/* Header Section */}
-                        <div className="mb-6 sm:mb-8">
-                          {/* Title */}
-                          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif italic font-bold text-gray-900 dark:text-white mb-4 sm:mb-5 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors duration-200 leading-tight">
+                      <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                        <div style={{ marginBottom: '1rem' }}>
+                          <h2 style={{ fontSize: '1.6rem', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '0.5rem', lineHeight: 1.3 }} className="dark:text-white">
                             {post.title}
                           </h2>
-                          
-                          {/* Location and Date */}
-                          <div className="flex items-center gap-2 sm:gap-3 text-sm sm:text-base md:text-lg text-gray-500 dark:text-gray-400 font-serif mb-6 sm:mb-8">
-                            <span className="font-medium">México</span>
-                            <span className="text-gray-400 dark:text-gray-600">•</span>
-                            <span className="font-light">{formatDate(post.created_at)}</span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text-muted-light)', fontSize: '0.85rem' }}>
+                            <span style={{ fontWeight: 500 }}>México</span>
+                            <span>•</span>
+                            <span style={{ fontWeight: 300 }}>{formatDate(post.created_at)}</span>
                           </div>
                         </div>
 
-                        {/* Content Section - Clean, readable text */}
-                        <div className="mb-8 sm:mb-10">
-                          {/* SECURITY: Render content as plain text to prevent XSS - content is sanitized on backend */}
-                          <div className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap leading-relaxed sm:leading-loose text-base sm:text-lg md:text-xl font-serif font-normal max-w-4xl">
+                        <div style={{ marginBottom: '1.5rem', flex: 1 }}>
+                          <div style={{ color: 'var(--color-text-light)', whiteSpace: 'pre-wrap', lineHeight: 1.6, fontSize: '1rem', fontWeight: 300, display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} className="dark:text-gray-300">
                             {post.content}
                           </div>
                         </div>
 
-                        {/* Footer Section */}
-                        <div className="pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-5">
-                          <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
-                            {/* Type badge */}
-                            <span className="text-xs sm:text-sm px-4 sm:px-5 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 font-medium uppercase tracking-wide rounded-2xl modern-shadow">
+                        <div style={{ paddingTop: '1.25rem', borderTop: '1px solid var(--color-border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }} className="dark:border-gray-800">
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <span className="project-tag" style={{ textTransform: 'uppercase', fontSize: '0.75rem', padding: '0.2rem 0.6rem' }}>
                               {post.type === "poem" ? t("blog.type-poem") : t("blog.type-letter")}
                             </span>
                             
-                            {/* Views */}
                             {(post.views_count > 0) && (
-                              <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm sm:text-base font-serif">
-                                <Eye size={16} className="sm:w-5 sm:h-5" />
-                                <span>
-                                  {post.views_count} {post.views_count === 1 ? t("blog.view-singular") : t("blog.views")}
-                                </span>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--color-text-muted-light)', fontSize: '0.8rem' }}>
+                                <Eye size={14} />
+                                <span>{post.views_count}</span>
                               </div>
                             )}
                           </div>
                           
-                          {/* Like Button */}
-                          <motion.button
+                          <button
                             onClick={() => handleLike(post.id)}
                             disabled={likingPosts.has(post.id)}
-                            className={`flex items-center justify-center gap-2 px-5 sm:px-6 py-3 text-sm sm:text-base font-medium transition-all duration-300 border rounded-2xl modern-shadow ${
-                              likingPosts.has(post.id)
-                                ? "bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 border-gray-300 dark:border-gray-700 cursor-not-allowed opacity-50"
-                                : likedPosts.has(post.id)
-                                ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white border-gray-900 dark:border-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:modern-shadow-md"
-                                : "bg-transparent text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:modern-shadow-md"
-                            }`}
-                            whileHover={likingPosts.has(post.id) ? {} : { scale: 1.02 }}
-                            whileTap={likingPosts.has(post.id) ? {} : { scale: 0.98 }}
-                            aria-label={likedPosts.has(post.id) ? t("blog.liked") : t("blog.like")}
-                            aria-busy={likingPosts.has(post.id)}
+                            className="btn-premium"
+                            style={{ 
+                              background: likedPosts.has(post.id) ? 'var(--color-text-light)' : 'transparent',
+                              color: likedPosts.has(post.id) ? 'var(--color-bg-light)' : 'var(--color-text-light)',
+                              padding: '0.35rem 0.8rem',
+                              opacity: likingPosts.has(post.id) ? 0.5 : 1,
+                              fontSize: '0.85rem'
+                            }}
                           >
-                            <Heart 
-                              size={18} 
-                              className={`sm:w-5 sm:h-5 ${
-                                likingPosts.has(post.id) 
-                                  ? "animate-pulse" 
-                                  : likedPosts.has(post.id) 
-                                  ? "fill-current" 
-                                  : ""
-                              }`}
-                            />
-                            <span className="whitespace-nowrap">
-                              {likingPosts.has(post.id) ? (
-                                <span className="animate-pulse">...</span>
-                              ) : (
-                                <>
-                                  {post.likes_count || 0} {post.likes_count === 1 ? t("blog.like-singular") : t("blog.likes")}
-                                </>
-                              )}
+                            <Heart size={14} className={likedPosts.has(post.id) ? "fill-current" : ""} />
+                            <span style={{ marginLeft: '4px' }}>
+                              {post.likes_count || 0}
                             </span>
-                          </motion.button>
+                          </button>
                         </div>
                       </div>
                     </div>
                   ) : (
-                    /* Text-only layout: Centered, full-width, optimized for reading */
-                    <div className="flex flex-col min-h-[400px] p-6 sm:p-8 md:p-10 lg:p-12 xl:p-14">
-                      {/* Header Section - Centered */}
-                      <div className="text-center mb-6 sm:mb-8 md:mb-10">
-                        {/* Title - Better sized for readability */}
-                        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-serif italic font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors duration-200 leading-tight">
+                    <div style={{ padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                      <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '1.6rem', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '0.5rem', lineHeight: 1.3 }} className="dark:text-white">
                           {post.title}
                         </h2>
-                        
-                        {/* Location and Date - Centered */}
-                        <div className="flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base md:text-lg text-gray-500 dark:text-gray-400 font-serif">
-                          <span className="font-medium">México</span>
-                          <span className="text-gray-400 dark:text-gray-600">•</span>
-                          <span className="font-light">{formatDate(post.created_at)}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: 'var(--color-text-muted-light)', fontSize: '0.85rem' }}>
+                          <span style={{ fontWeight: 500 }}>México</span>
+                          <span>•</span>
+                          <span style={{ fontWeight: 300 }}>{formatDate(post.created_at)}</span>
                         </div>
                       </div>
 
-                      {/* Content Section - Optimized for long text readability */}
-                      <div className="flex-1 flex justify-center">
-                        <div className="w-full max-w-3xl px-4 sm:px-6 md:px-8">
-                          {/* SECURITY: Render content as plain text to prevent XSS - content is sanitized on backend */}
-                          {/* Better text size and line height for comfortable reading */}
-                          <div className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap leading-relaxed sm:leading-loose text-base sm:text-lg md:text-xl font-serif font-normal text-center md:text-left py-3 sm:py-4">
+                      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem', flex: 1 }}>
+                        <div style={{ width: '100%' }}>
+                          <div style={{ color: 'var(--color-text-light)', whiteSpace: 'pre-wrap', lineHeight: 1.6, fontSize: '1rem', fontWeight: 300, textAlign: 'center', display: '-webkit-box', WebkitLineClamp: 8, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} className="dark:text-gray-300">
                             {post.content}
                           </div>
                         </div>
                       </div>
 
-                      {/* Footer Section - Centered */}
-                      <div className="mt-6 sm:mt-8 md:mt-10 pt-5 sm:pt-6 border-t border-gray-200 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-                        <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-center">
-                          {/* Type badge - Modern pill design */}
-                          <span className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 font-medium uppercase tracking-wide rounded-2xl modern-shadow">
+                      <div style={{ paddingTop: '1.25rem', borderTop: '1px solid var(--color-border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', flexWrap: 'wrap' }} className="dark:border-gray-800">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                          <span className="project-tag" style={{ textTransform: 'uppercase', fontSize: '0.75rem', padding: '0.2rem 0.6rem' }}>
                             {post.type === "poem" ? t("blog.type-poem") : t("blog.type-letter")}
                           </span>
                           
-                          {/* Views - Responsive text size */}
                           {(post.views_count > 0) && (
-                            <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs sm:text-sm font-serif">
-                              <Eye size={14} className="sm:w-4 sm:h-4" />
-                              <span>
-                                {post.views_count} {post.views_count === 1 ? t("blog.view-singular") : t("blog.views")}
-                              </span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--color-text-muted-light)', fontSize: '0.8rem' }}>
+                              <Eye size={14} />
+                              <span>{post.views_count}</span>
                             </div>
                           )}
                         </div>
                         
-                        {/* Like Button - Centered */}
-                        <motion.button
+                        <button
                           onClick={() => handleLike(post.id)}
                           disabled={likingPosts.has(post.id)}
-                          className={`flex items-center justify-center gap-2 px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-medium transition-all duration-300 border rounded-2xl modern-shadow ${
-                            likingPosts.has(post.id)
-                              ? "bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 border-gray-300 dark:border-gray-700 cursor-not-allowed opacity-50"
-                              : likedPosts.has(post.id)
-                              ? "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white border-gray-900 dark:border-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:modern-shadow-md"
-                              : "bg-transparent text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800/50 hover:modern-shadow-md"
-                          }`}
-                          whileHover={likingPosts.has(post.id) ? {} : { scale: 1.02 }}
-                          whileTap={likingPosts.has(post.id) ? {} : { scale: 0.98 }}
-                          aria-label={likedPosts.has(post.id) ? t("blog.liked") : t("blog.like")}
-                          aria-busy={likingPosts.has(post.id)}
+                          className="btn-premium"
+                          style={{ 
+                            background: likedPosts.has(post.id) ? 'var(--color-text-light)' : 'transparent',
+                            color: likedPosts.has(post.id) ? 'var(--color-bg-light)' : 'var(--color-text-light)',
+                            padding: '0.35rem 0.8rem',
+                            opacity: likingPosts.has(post.id) ? 0.5 : 1,
+                            fontSize: '0.85rem'
+                          }}
                         >
-                          <Heart 
-                            size={16} 
-                            className={`sm:w-[18px] sm:h-[18px] ${
-                              likingPosts.has(post.id) 
-                                ? "animate-pulse" 
-                                : likedPosts.has(post.id) 
-                                ? "fill-current" 
-                                : ""
-                            }`}
-                          />
-                          <span className="whitespace-nowrap">
-                            {likingPosts.has(post.id) ? (
-                              <span className="animate-pulse">...</span>
-                            ) : (
-                              <>
-                                {post.likes_count || 0} {post.likes_count === 1 ? t("blog.like-singular") : t("blog.likes")}
-                              </>
-                            )}
+                          <Heart size={14} className={likedPosts.has(post.id) ? "fill-current" : ""} />
+                          <span style={{ marginLeft: '4px' }}>
+                            {post.likes_count || 0}
                           </span>
-                        </motion.button>
+                        </button>
                       </div>
                     </div>
                   )}
@@ -796,21 +755,19 @@ const BlogPage = () => {
         ) : (
           <motion.div
             variants={itemVariants}
-            className="text-center py-16 bg-white dark:bg-[#0f0f0f] border border-gray-200 dark:border-gray-800"
+            style={{ textAlign: 'center', padding: '4rem 2rem' }}
+            className="card-premium"
           >
-            <FileText size={48} className="mx-auto text-gray-400 dark:text-gray-500 mb-4" />
-            <p className="text-gray-500 dark:text-gray-400 text-base sm:text-lg font-light">
+            <FileText size={48} style={{ margin: '0 auto 1.5rem', color: 'var(--color-text-muted-light)' }} />
+            <p style={{ fontSize: '1.1rem', color: 'var(--color-text-muted-light)', fontWeight: 300 }}>
               {filter === "all"
                 ? t("blog.no-posts")
-                : filter === "poem"
-                ? t("blog.no-poems")
-                : t("blog.no-letters")}
+                : t("blog.no-posts-filter")}
             </p>
           </motion.div>
         )}
-        </div>
       </div>
-    </motion.section>
+    </section>
   );
 };
 

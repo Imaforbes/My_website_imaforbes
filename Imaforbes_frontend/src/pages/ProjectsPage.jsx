@@ -1,57 +1,77 @@
 // src/pages/ProjectsPage.jsx
-/**
- * ProjectsPage - Modern Minimalist & Deluxe Design
- */
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { FiGithub, FiExternalLink } from "react-icons/fi";
+import { FiGithub, FiExternalLink, FiBriefcase, FiAward } from "react-icons/fi";
 
+/**
+ * HeroBackground Component
+ * Provides a subtle, animated glowing background with a faint grid
+ */
 const HeroBackground = () => (
-  <div className="absolute inset-0 -z-10 overflow-hidden">
-    <div className="absolute inset-0 bg-gray-50 dark:bg-[#0a0a0a]"></div>
+  <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-light)' }} className="dark:hidden"></div>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-dark)' }} className="hidden dark:block"></div>
+    
+    {/* Subtle animated gradient glow */}
+    <motion.div 
+      initial={{ opacity: 0.1, scale: 0.9 }}
+      animate={{ opacity: [0.1, 0.3, 0.1], scale: [0.9, 1.1, 0.9] }}
+      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      style={{ 
+        position: 'absolute', 
+        top: '10%', 
+        left: '50%', 
+        transform: 'translateX(-50%)', 
+        width: '60vw', 
+        height: '60vw', 
+        background: 'radial-gradient(circle, rgba(150,150,150,0.03) 0%, rgba(0,0,0,0) 60%)',
+        borderRadius: '50%',
+        pointerEvents: 'none'
+      }}
+    />
+    
+    {/* Grid pattern very faint */}
+    <div style={{
+      position: 'absolute',
+      inset: 0,
+      backgroundImage: 'linear-gradient(rgba(100,100,100,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(100,100,100,0.03) 1px, transparent 1px)',
+      backgroundSize: '40px 40px',
+      pointerEvents: 'none',
+      maskImage: 'radial-gradient(circle at center, black, transparent 80%)',
+      WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)'
+    }} />
   </div>
 );
 
+/**
+ * ProjectCard Component
+ * Renders an individual project with a premium card design
+ */
 const ProjectCard = ({ project, t, setPreviewImage }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
   const cardVariants = {
-    hidden: { opacity: 0, y: 40, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { type: "spring", damping: 15, stiffness: 100 },
-    },
-    hover: {
-      scale: 1.01,
-      y: -8,
-      transition: { type: "spring", damping: 8, stiffness: 200 },
-    },
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
   };
 
   return (
-    <motion.div
-      variants={cardVariants}
-      className="group relative overflow-hidden bg-white dark:bg-[#0f0f0f] modern-border modern-shadow-md modern-card modern-hover"
-      whileHover="hover"
-    >
-      {/* Container de la imagen */}
+    <motion.div variants={cardVariants} className="card-premium project-card" style={{ zIndex: 10, position: 'relative' }}>
       <div 
-        className="relative overflow-hidden bg-gray-100 dark:bg-gray-900 cursor-pointer"
+        className="project-image-container cursor-pointer"
         onClick={() => setPreviewImage && setPreviewImage(project.image)}
       >
         {!imageLoaded && !imageError && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-200 dark:bg-gray-800 z-10">
-            <div className="w-8 h-8 border-2 border-gray-400 dark:border-gray-600 border-t-transparent rounded-full animate-spin"></div>
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '30px', height: '30px', border: '2px solid var(--color-border-light)', borderTopColor: 'var(--color-text-light)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
           </div>
         )}
         
         {imageError && (
-          <div className="w-full h-48 xs:h-56 sm:h-64 md:h-72 lg:h-80 flex items-center justify-center bg-gray-200 dark:bg-gray-800">
-            <span className="text-gray-400 dark:text-gray-600 text-sm font-light">Image not available</span>
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span className="text-muted">Image not available</span>
           </div>
         )}
         
@@ -59,89 +79,54 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
           <img
             src={project.image}
             alt={t(project.titleKey)}
-            className={`w-full h-48 xs:h-56 sm:h-64 md:h-72 lg:h-80 object-cover transition-all duration-500 ease-out group-hover:scale-110 ${
-              imageLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
+            style={{ opacity: imageLoaded ? 1 : 0 }}
             onLoad={() => setImageLoaded(true)}
-            onError={() => {
-              setImageError(true);
-              setImageLoaded(false);
-            }}
+            onError={() => { setImageError(true); setImageLoaded(false); }}
             loading="lazy"
             decoding="async"
           />
         )}
-        
-        {/* Overlay gradiente - pointer-events-none para que no bloquee clics */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-        
-        {/* Texto de preview - pointer-events-none para que no bloquee clics */}
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center pointer-events-none">
-          <span className="text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/50 px-3 py-1.5 rounded-2xl">
-            Click to preview
-          </span>
-        </div>
       </div>
 
-      {/* Contenido de la tarjeta */}
-      <div className="p-5 sm:p-6 md:p-8 flex flex-col">
-        <motion.h3
-          className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light text-gray-900 dark:text-white mb-3 sm:mb-4 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors duration-200 leading-tight"
-        >
+      <div className="project-content">
+        <h3 style={{ fontSize: '1.5rem', fontWeight: 400, marginBottom: '1rem', color: 'var(--color-text-light)' }}>
           {t(project.titleKey)}
-        </motion.h3>
+        </h3>
 
-        <div className="flex flex-wrap gap-2 sm:gap-2.5 mb-4 sm:mb-5">
-          {project.tags.map((tag, index) => (
-            <motion.span
-              key={tag}
-              className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs sm:text-sm font-medium border border-gray-200 dark:border-gray-700 rounded-2xl modern-shadow"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.05, type: "spring", stiffness: 200 }}
-            >
+        <div className="project-tags">
+          {project.tags.map((tag) => (
+            <span key={tag} className="project-tag">
               {tag}
-            </motion.span>
+            </span>
           ))}
         </div>
 
-        <motion.p
-          className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 font-light leading-relaxed"
-        >
+        <p className="text-muted" style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
           {t(project.descriptionKey)}
-        </motion.p>
+        </p>
 
-        {/* BOTONES - Ahora con z-index alto y sin overlays que los bloqueen */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mt-auto relative">
-          
-          {/* BOTÓN DE GITHUB - SIEMPRE VISIBLE */}
+        <div className="project-actions">
           <a
             href={project.repo}
             target="_blank"
             rel="noopener noreferrer"
-            className="relative z-50 flex items-center justify-center gap-2 px-5 sm:px-6 py-3 bg-black dark:bg-white text-white dark:text-black text-sm sm:text-base font-medium transition-all duration-300 hover:bg-gray-800 dark:hover:bg-gray-100 rounded-2xl modern-shadow-md hover:modern-shadow-lg hover:scale-105 active:scale-95"
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log('GitHub button clicked:', project.repo);
-            }}
+            className="btn-premium"
+            onClick={(e) => e.stopPropagation()}
           >
-            <FiGithub size={18} className="sm:w-5 sm:h-5" />
+            <FiGithub size={18} />
             <span>Code</span>
           </a>
 
-          {/* BOTÓN LIVE (Solo si existe demo) */}
           {project.link && project.link !== "#" && (
             <a
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="relative z-50 flex items-center justify-center gap-2 px-5 sm:px-6 py-3 border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white text-sm sm:text-base font-medium transition-all duration-300 hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-black rounded-2xl modern-shadow-md hover:modern-shadow-lg hover:scale-105 active:scale-95"
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log('Live button clicked:', project.link);
-              }}
+              className="btn-premium"
+              style={{ borderColor: 'var(--color-text-muted-light)', color: 'var(--color-text-muted-light)', background: 'transparent' }}
+              onClick={(e) => e.stopPropagation()}
             >
-              <FiExternalLink size={18} className="sm:w-5 sm:h-5" />
+              <FiExternalLink size={18} />
               <span>Live</span>
             </a>
           )}
@@ -151,11 +136,24 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
   );
 };
 
+/**
+ * ProjectsPage Component
+ * Displays the portfolio of projects in a grid layout
+ */
 const ProjectsPage = () => {
   const { t } = useTranslation();
   const [previewImage, setPreviewImage] = useState(null);
 
   const projects = [
+    {
+      id: 8,
+      titleKey: "projects.notary-system.title",
+      descriptionKey: "projects.notary-system.description",
+      image: "/img/Proy8.png",
+      link: "#",
+      repo: "#",
+      tags: ["React 19", "Flask", "MySQL", "Chart.js", "React-PDF"],
+    },
     {
       id: 7,
       titleKey: "projects.restaurant-system.title",
@@ -225,48 +223,46 @@ const ProjectsPage = () => {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.5 },
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
     },
   };
 
   return (
-    <motion.section
-      id="proyectos"
-      className="relative min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-white overflow-hidden"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
+    <section id="proyectos" className="projects-section" style={{ position: 'relative', overflow: 'hidden' }}>
       <HeroBackground />
-      <div className="relative z-10 container mx-auto max-w-7xl py-16 sm:py-20 md:py-24 lg:py-28 px-4 sm:px-6 lg:px-8">
+      <div className="container-premium" style={{ position: 'relative', zIndex: 10 }}>
+        
+        {/* Floating Background Widgets */}
         <motion.div 
-          className="text-center mb-12 sm:mb-16 lg:mb-20"
-          variants={{
-            hidden: { opacity: 0, y: 30 },
-            visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-          }}
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          style={{ position: 'absolute', top: '5%', right: '10%', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--color-surface-light)', padding: '0.5rem 1rem', borderRadius: '50px', border: '1px solid var(--color-border-light)' }}
+          className="dark:bg-[#1a1a1a] dark:border-gray-800"
         >
-          <motion.h1 
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight tracking-tight text-gray-900 dark:text-white text-reflection"
-            data-text={t("projects.title")}
-          >
-            {t("projects.title")}
-          </motion.h1>
+          <FiBriefcase style={{ color: 'var(--color-text-muted-light)' }} />
+          <span style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>{projects.length} Proyectos</span>
+        </motion.div>
 
-          <motion.p
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0, transition: { delay: 0.2, duration: 0.6 } },
-            }}
-            className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed px-4 font-light"
-          >
+        <motion.div 
+          className="projects-header"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          style={{ position: 'relative', paddingTop: '2rem' }}
+        >
+          <h1 className="projects-title">
+            {t("projects.title")}
+          </h1>
+          <p className="text-muted" style={{ maxWidth: '600px', margin: '0 auto', fontSize: '1.1rem', lineHeight: 1.6 }}>
             {t("projects.description")}
-          </motion.p>
+          </p>
         </motion.div>
         
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10"
+          className="projects-grid"
           variants={containerVariants}
+          initial="hidden"
+          animate="visible"
         >
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} t={t} setPreviewImage={setPreviewImage} />
@@ -277,38 +273,31 @@ const ProjectsPage = () => {
       <AnimatePresence>
         {previewImage && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(4px)', padding: '2rem' }}
             onClick={() => setPreviewImage(null)}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative max-w-7xl max-h-[90vh] w-full h-full flex items-center justify-center"
+              initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+              style={{ position: 'relative', maxWidth: '1200px', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={previewImage}
-                alt="Project preview"
-                className="max-w-full max-h-full object-contain rounded-2xl modern-shadow-lg"
+                alt="Preview"
+                style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }}
               />
               <button
                 onClick={() => setPreviewImage(null)}
-                className="absolute top-4 right-4 p-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-2xl modern-shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200"
-                aria-label="Close preview"
+                style={{ position: 'absolute', top: 0, right: 0, padding: '0.5rem', background: 'var(--color-surface-light)', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
               </button>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.section>
+    </section>
   );
 };
 

@@ -97,15 +97,11 @@ export const SettingsProvider = ({ children }) => {
 
   // Define applyLanguage function
   const applyLanguage = React.useCallback((newLanguage) => {
-    i18n.changeLanguage(newLanguage);
+    if (i18n.language !== newLanguage) {
+      i18n.changeLanguage(newLanguage);
+    }
     safeLocalStorage.setItem('app_language', newLanguage);
   }, [i18n]);
-
-  // Apply initial theme and language immediately
-  useEffect(() => {
-    applyTheme(theme);
-    applyLanguage(language);
-  }, [applyLanguage, applyTheme, language, theme]);
 
   // Load settings from API on mount
   useEffect(() => {

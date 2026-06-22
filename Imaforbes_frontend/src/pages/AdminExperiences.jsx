@@ -61,11 +61,6 @@ const AdminExperiences = () => {
       const status = statusFilter !== "all" ? statusFilter : "all";
       const result = await api.experiences.getAll(status);
       
-      // Debug logging (only in development)
-      if (import.meta.env.DEV) {
-        console.log('Admin Experiences API result:', result);
-      }
-      
       // Check if result is successful and has data
       if (result.success && result.data) {
         const apiResponse = result.data;

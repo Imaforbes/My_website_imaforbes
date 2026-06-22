@@ -288,11 +288,6 @@ const AdminBlog = () => {
         result = await api.blog.create(dataToSend);
       }
 
-      // Log response in development mode
-      if (import.meta.env.DEV) {
-        console.log('Blog save response:', result);
-      }
-
       // Handle response
       // Check if result is successful (either result.success or result.data?.success)
       const isSuccess = result.success && (result.data?.success !== false);

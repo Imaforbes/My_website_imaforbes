@@ -36,10 +36,13 @@ const AdminMensajes = () => {
   const [messageToDelete, setMessageToDelete] = useState(null);
   const [copiedItem, setCopiedItem] = useState(null);
 
+  /**
+   * Fetches the messages from the API.
+   * Handles authentication checks, pagination extraction, and sorting.
+   */
   useEffect(() => {
     const fetchMensajes = async () => {
       try {
-        // Use the correct API endpoint with proper error handling
         const baseURL = API_CONFIG.getBaseURL();
 
         const response = await fetch(`${baseURL}/api/messages.php`, {
@@ -50,26 +53,17 @@ const AdminMensajes = () => {
           },
         });
 
-        console.log("API Response Status:", response.status);
-        console.log("API Response Headers:", response.headers);
-
         if (response.status === 401 || response.status === 403) {
-          console.error("AdminMensajes: Authentication failed - redirecting to login");
-          console.error("Response status:", response.status);
-          const errorText = await response.text();
-          console.error("Error response:", errorText);
           navigate("/login");
           return;
         }
 
         if (!response.ok) {
           const errorText = await response.text();
-          console.error("API Error:", errorText);
           throw new Error(`HTTP ${response.status}: ${errorText}`);
         }
 
         const data = await response.json();
-        console.log("API Response Data:", data);
 
         if (data.success && data.data) {
           // Handle the new API response format with items and pagination
@@ -83,7 +77,6 @@ const AdminMensajes = () => {
           messages.sort((a, b) => parseInt(b.id) - parseInt(a.id));
           setMensajes(messages);
         } else if (data.error) {
-          console.error("API returned error:", data.error);
           if (
             data.error.includes("Access denied") ||
             data.error.includes("login")
@@ -93,11 +86,9 @@ const AdminMensajes = () => {
             setError(data.error);
           }
         } else {
-          console.log("No data field in response, using raw data");
           setMensajes(data);
         }
       } catch (error) {
-        console.error("Fetch error:", error);
         setError(error.message);
       } finally {
         setLoading(false);

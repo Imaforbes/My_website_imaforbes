@@ -82,10 +82,10 @@ function App() {
   return (
     <ErrorBoundary>
       <BrowserSupport />
-      <div className="flex flex-col min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-white">
+      <div className="app-wrapper" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         {!isAdminPage && <Header />}
         {!isAdminPage && <Breadcrumbs />}
-        <main className={`flex-grow ${!isAdminPage ? 'pt-16 md:pt-20' : ''}`}>
+        <main style={{ flexGrow: 1, paddingTop: !isAdminPage ? '5rem' : '0' }}>
           <Suspense fallback={<LoadingSpinner />}>
             <Routes>
               {/* Rutas Públicas del Portafolio */}

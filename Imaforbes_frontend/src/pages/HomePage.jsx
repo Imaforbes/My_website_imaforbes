@@ -1,161 +1,137 @@
 // src/pages/HomePage.jsx
-/**
- * HomePage - Minimalist & Deluxe Design
- * 
- * DESIGN CHANGES:
- * - Removed animated blob backgrounds for clean, minimal look
- * - Changed from colorful gradients (blue/teal/purple) to neutral colors (black/white/grays)
- * - Updated typography to font-light for refined, elegant feel
- * - Added text reflection effect to main title for deluxe touch
- * - Simplified animations (subtle fade-in instead of spring animations)
- * - Clean button styles: black fill or border-only for minimalist aesthetic
- */
 import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { FiArrowRight, FiMail, FiCode, FiStar } from "react-icons/fi";
+import { FiArrowRight, FiMail, FiCode, FiTerminal, FiLayout, FiServer } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
-// Minimalist Hero Background
-// Removed animated blob backgrounds - replaced with clean, subtle overlay
 const HeroBackground = () => (
-  <div className="absolute inset-0 -z-10 overflow-hidden">
-    {/* Clean background image with subtle overlay */}
-    <img
-      src="/img/baner.jpg"
-      alt="Banner"
-      width="1920"
-      height="1080"
-      className="w-full h-full object-cover opacity-40 dark:opacity-20"
+  <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-light)' }} className="dark:hidden"></div>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-dark)' }} className="hidden dark:block"></div>
+    
+    {/* Subtle animated gradient glow (Heliouz style for dark mode, very faint for light mode) */}
+    <motion.div 
+      initial={{ opacity: 0.3, scale: 0.8 }}
+      animate={{ opacity: [0.3, 0.5, 0.3], scale: [0.8, 1.1, 0.8] }}
+      transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+      style={{ 
+        position: 'absolute', 
+        top: '10%', 
+        left: '50%', 
+        transform: 'translateX(-50%)', 
+        width: '70vw', 
+        height: '70vw', 
+        background: 'radial-gradient(circle, rgba(150,150,150,0.04) 0%, rgba(0,0,0,0) 60%)',
+        borderRadius: '50%',
+        pointerEvents: 'none'
+      }}
     />
-    {/* Minimal overlay for text readability */}
-    <div className="absolute inset-0 bg-white/50 dark:bg-black/30"></div>
+    
+    {/* Grid pattern very faint */}
+    <div style={{
+      position: 'absolute',
+      inset: 0,
+      backgroundImage: 'linear-gradient(rgba(100,100,100,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(100,100,100,0.03) 1px, transparent 1px)',
+      backgroundSize: '40px 40px',
+      pointerEvents: 'none',
+      maskImage: 'radial-gradient(circle at center, black, transparent 80%)',
+      WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)'
+    }} />
   </div>
 );
 
 const HomePage = () => {
   const { t } = useTranslation();
   
-  // Minimalist animation variants
-  // Simplified from spring animations to smooth fade-in for cleaner feel
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const titleVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const buttonVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
   };
 
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-white overflow-hidden px-4 py-8 sm:px-6 lg:px-8">
+    <section className="hero-premium" style={{ position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       <HeroBackground />
-      <div className="relative z-10 text-center max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col items-center justify-center"
-        >
-          {/* Main Title - Clean and elegant with subtle reflection */}
-          {/* Changed from gradient text to solid with reflection effect for deluxe feel */}
-          <motion.h1
-            variants={titleVariants}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light mb-6 sm:mb-8 leading-tight tracking-tight text-gray-900 dark:text-white text-reflection"
-            data-text={t("home.title")}
-          >
-            {t("home.title")}
-          </motion.h1>
-
-          {/* Subtitle - Minimalist */}
-          <motion.h2
-            variants={itemVariants}
-            className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-light mb-8 sm:mb-10 text-gray-600 dark:text-gray-400 tracking-wide"
-          >
-            {t("home.subtitle")}
-          </motion.h2>
-
-          {/* Description - Clean typography */}
-          <motion.p
-            variants={itemVariants}
-            className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 mb-12 sm:mb-16 max-w-2xl mx-auto leading-relaxed px-4 font-light"
-          >
-            {t("home.description")}
-          </motion.p>
-
-          {/* Action Buttons - Minimalist design */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 w-full max-w-xl mx-auto"
-          >
-            <motion.div
-              variants={buttonVariants}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Link
-                to="/projects"
-                className="group flex items-center justify-center gap-3 px-8 sm:px-10 py-4 sm:py-5 bg-black dark:bg-white text-white dark:text-black text-sm sm:text-base font-medium tracking-wide transition-all duration-200 hover:bg-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:ring-offset-2 w-full sm:w-auto rounded-2xl"
-              >
-                <FiCode className="text-lg sm:text-xl" />
-                <span>{t("home.view-projects")}</span>
-                <FiArrowRight className="transition-transform group-hover:translate-x-1" />
-              </Link>
-            </motion.div>
-            <motion.div
-              variants={buttonVariants}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Link
-                to="/contact"
-                className="flex items-center justify-center gap-3 px-8 sm:px-10 py-4 sm:py-5 bg-transparent border border-gray-900 dark:border-white text-gray-900 dark:text-white text-sm sm:text-base font-medium tracking-wide transition-all duration-200 hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-black focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:ring-offset-2 w-full sm:w-auto rounded-2xl"
-              >
-                <FiMail className="text-lg sm:text-xl" />
-                <span>{t("home.contact")}</span>
-              </Link>
-            </motion.div>
-          </motion.div>
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="hero-content"
+      >
+        {/* Status Pill */}
+        <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
+          <div style={{ 
+            display: 'flex', alignItems: 'center', gap: '0.5rem', 
+            padding: '0.5rem 1rem', borderRadius: '50px', 
+            background: 'var(--color-surface-light)',
+            border: '1px solid var(--color-border-light)',
+            fontSize: '0.8rem', fontWeight: 500, color: 'var(--color-text-muted-light)'
+          }} className="dark:bg-[#111] dark:border-gray-800">
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }}></span>
+            Available for new opportunities
+          </div>
         </motion.div>
-      </div>
+
+        <motion.h1 variants={itemVariants} className="hero-title" style={{ fontSize: 'clamp(3rem, 8vw, 5.5rem)', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
+          {t("home.title")}
+        </motion.h1>
+
+        <motion.h2 variants={itemVariants} className="hero-subtitle" style={{ fontSize: 'clamp(1.2rem, 3vw, 1.8rem)', marginTop: '1rem' }}>
+          {t("home.subtitle")}
+        </motion.h2>
+
+        <motion.p variants={itemVariants} className="hero-description" style={{ marginTop: '1.5rem', fontSize: '1.1rem' }}>
+          {t("home.description")}
+        </motion.p>
+
+        <motion.div variants={itemVariants} className="hero-actions" style={{ marginTop: '2.5rem' }}>
+          <Link to="/projects" className="btn-premium">
+            <span className="btn-icon">
+              <FiCode /> {t("home.view-projects")} <FiArrowRight />
+            </span>
+          </Link>
+          
+          <Link to="/contact" className="btn-premium" style={{ borderColor: 'var(--color-text-muted-light)', color: 'var(--color-text-muted-light)', background: 'transparent' }}>
+            <span className="btn-icon">
+              <FiMail /> {t("home.contact")}
+            </span>
+          </Link>
+        </motion.div>
+
+        {/* Floating Skills/Tags to add life */}
+        <motion.div 
+          variants={itemVariants} 
+          style={{ 
+            marginTop: '4rem', 
+            display: 'flex', 
+            justifyContent: 'center', 
+            gap: '1rem', 
+            flexWrap: 'wrap',
+            opacity: 0.7
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>
+            <FiTerminal size={14} /> <span>Frontend</span>
+          </div>
+          <span style={{ color: 'var(--color-border-light)' }}>•</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>
+            <FiServer size={14} /> <span>Backend</span>
+          </div>
+          <span style={{ color: 'var(--color-border-light)' }}>•</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>
+            <FiLayout size={14} /> <span>UI/UX Design</span>
+          </div>
+        </motion.div>
+
+      </motion.div>
     </section>
   );
 };

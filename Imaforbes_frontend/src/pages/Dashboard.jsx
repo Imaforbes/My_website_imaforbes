@@ -83,11 +83,6 @@ const Dashboard = () => {
       if (response.ok) {
         const data = await response.json();
         
-        // Only log in development mode
-        if (import.meta.env.DEV) {
-          console.log("Dashboard API response:", data);
-        }
-        
         if (data.success && data.data) {
           // Handle paginated response
           const messages = Array.isArray(data.data.items) ? data.data.items : [];

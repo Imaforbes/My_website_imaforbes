@@ -1,30 +1,61 @@
 /**
  * Console Cleanup Utilities
- * Helps reduce console noise in production
+ * Helps reduce console noise from browser extensions (e.g. MetaMask) and libraries in development and production
  */
 
-// Suppress specific console messages in production
-if (import.meta.env.PROD) {
-    // Suppress React DevTools warning
-    const originalConsoleLog = console.log;
-    console.log = (...args) => {
-        const message = args[0];
-        if (typeof message === 'string' && message.includes('React DevTools')) {
-            return; // Don't log React DevTools messages in production
-        }
-        originalConsoleLog.apply(console, args);
-    };
+// Filter functions to check if a message should be suppressed
+const shouldSuppressLog = (args) => {
+    if (!args || args.length === 0) return false;
+    const message = args[0];
+    if (typeof message === 'string') {
+        if (message.includes('React DevTools')) return true;
+        if (message.includes('DOM event tracking')) return true;
+    }
+    return false;
+};
 
-    // Suppress i18next debug messages
-    const originalConsoleWarn = console.warn;
-    console.warn = (...args) => {
-        const message = args[0];
-        if (typeof message === 'string' && message.includes('i18next')) {
-            return; // Don't log i18next messages in production
-        }
-        originalConsoleWarn.apply(console, args);
-    };
-}
+const shouldSuppressWarn = (args) => {
+    if (!args || args.length === 0) return false;
+    const message = args[0];
+    if (typeof message === 'string') {
+        if (message.includes('i18next')) return true;
+        if (message.includes('MaxListenersExceededWarning')) return true;
+        if (message.includes('ObjectMultiplex')) return true;
+        if (message.includes('EventEmitter memory leak')) return true;
+        if (message.includes('contentscript')) return true;
+    }
+    return false;
+};
+
+const shouldSuppressError = (args) => {
+    if (!args || args.length === 0) return false;
+    const message = args[0];
+    if (typeof message === 'string') {
+        if (message.includes('MaxListenersExceededWarning')) return true;
+        if (message.includes('ObjectMultiplex')) return true;
+        if (message.includes('contentscript')) return true;
+    }
+    return false;
+};
+
+// Intercept console functions to filter noise
+const originalConsoleLog = console.log;
+console.log = (...args) => {
+    if (shouldSuppressLog(args)) return;
+    originalConsoleLog.apply(console, args);
+};
+
+const originalConsoleWarn = console.warn;
+console.warn = (...args) => {
+    if (shouldSuppressWarn(args)) return;
+    originalConsoleWarn.apply(console, args);
+};
+
+const originalConsoleError = console.error;
+console.error = (...args) => {
+    if (shouldSuppressError(args)) return;
+    originalConsoleError.apply(console, args);
+};
 
 // Handle browser extension errors
 window.addEventListener('error', (event) => {

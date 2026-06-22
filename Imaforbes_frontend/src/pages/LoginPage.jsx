@@ -63,11 +63,6 @@ const LoginPage = () => {
         return;
       }
       
-      // Log response in development mode for debugging
-      if (import.meta.env.DEV) {
-        console.log("Login response:", { ok: response.ok, status: response.status, result });
-      }
-      
       if (response.ok && result.success) {
         // Save authentication indicator to localStorage
         // The API uses session-based authentication (cookies), but we need
