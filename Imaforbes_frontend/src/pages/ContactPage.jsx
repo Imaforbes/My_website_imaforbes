@@ -133,8 +133,8 @@ const ContactPage = () => {
           <motion.div 
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            style={{ position: 'absolute', top: '5%', right: '15%', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--color-surface-light)', padding: '0.5rem 1rem', borderRadius: '50px', border: '1px solid var(--color-border-light)' }}
-            className="dark:bg-[#1a1a1a] dark:border-gray-800"
+            style={{ position: 'absolute', top: '5%', right: '10%', opacity: 0.6, alignItems: 'center', gap: '0.5rem', background: 'var(--color-surface-light)', padding: '0.5rem 1rem', borderRadius: '50px', border: '1px solid var(--color-border-light)' }}
+            className="hidden md:flex dark:bg-[#1a1a1a] dark:border-gray-800"
           >
             <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></div>
             <span style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>Available for work</span>
@@ -253,7 +253,8 @@ const ContactPage = () => {
               whileInView="visible"
               viewport={{ once: true }}
               onSubmit={handleSubmit}
-              style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+              className="card-premium"
+              style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', padding: '2rem' }}
             >
               <div>
                 <label htmlFor="name" style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem', color: 'var(--color-text-muted-light)' }}>

@@ -28,7 +28,7 @@ const Breadcrumbs = () => {
 
   return (
     <nav
-      className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 lg:px-8 py-3 mt-16 md:mt-20"
+      className="bg-transparent px-4 sm:px-6 lg:px-8 py-3 mt-16 md:mt-20 relative z-10"
       aria-label="Breadcrumb"
     >
       <div className="max-w-7xl mx-auto">
@@ -47,10 +47,10 @@ const Breadcrumbs = () => {
             const isLast = index === pathnames.length - 1;
 
             return (
-              <li key={name} className="flex items-center">
+              <li key={name} className="flex items-center shrink-0">
                 <ChevronRight className="w-4 h-4 text-gray-400 dark:text-gray-500 mx-2" />
                 {isLast ? (
-                  <span className="text-gray-900 dark:text-gray-100 font-medium" aria-current="page">
+                  <span className="text-gray-900 dark:text-gray-100 font-medium truncate" aria-current="page">
                     {getBreadcrumbName(name)}
                   </span>
                 ) : (
@@ -71,4 +71,3 @@ const Breadcrumbs = () => {
 };
 
 export default Breadcrumbs;
-
