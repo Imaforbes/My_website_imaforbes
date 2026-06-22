@@ -560,37 +560,40 @@ const BlogPage = () => {
             onClick={() => setFilter("all")}
             className={`project-tag ${filter === "all" ? 'active' : ''}`}
             style={{ 
-              cursor: 'pointer', padding: '0.5rem 1.25rem', fontSize: '0.95rem',
+              cursor: 'pointer', padding: '0.6rem 1.25rem', fontSize: '0.95rem',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', whiteSpace: 'nowrap',
               background: filter === "all" ? 'var(--color-text-light)' : 'transparent',
               color: filter === "all" ? 'var(--color-bg-light)' : 'var(--color-text-muted-light)'
             }}
           >
             <Filter size={16} />
-            {t("blog.filter-all")}
+            <span>{t("blog.filter-all")}</span>
           </button>
           <button
             onClick={() => setFilter("poem")}
             className={`project-tag ${filter === "poem" ? 'active' : ''}`}
             style={{ 
-              cursor: 'pointer', padding: '0.5rem 1.25rem', fontSize: '0.95rem',
+              cursor: 'pointer', padding: '0.6rem 1.25rem', fontSize: '0.95rem',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', whiteSpace: 'nowrap',
               background: filter === "poem" ? 'var(--color-text-light)' : 'transparent',
               color: filter === "poem" ? 'var(--color-bg-light)' : 'var(--color-text-muted-light)'
             }}
           >
             <FileText size={16} />
-            {t("blog.filter-poems")}
+            <span>{t("blog.filter-poems")}</span>
           </button>
           <button
             onClick={() => setFilter("letter")}
             className={`project-tag ${filter === "letter" ? 'active' : ''}`}
             style={{ 
-              cursor: 'pointer', padding: '0.5rem 1.25rem', fontSize: '0.95rem',
+              cursor: 'pointer', padding: '0.6rem 1.25rem', fontSize: '0.95rem',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', whiteSpace: 'nowrap',
               background: filter === "letter" ? 'var(--color-text-light)' : 'transparent',
               color: filter === "letter" ? 'var(--color-bg-light)' : 'var(--color-text-muted-light)'
             }}
           >
             <Mail size={16} />
-            {t("blog.filter-letters")}
+            <span>{t("blog.filter-letters")}</span>
           </button>
         </motion.div>
 
