@@ -146,6 +146,15 @@ const ProjectsPage = () => {
 
   const projects = [
     {
+      id: 9,
+      titleKey: "projects.worldcup-app.title",
+      descriptionKey: "projects.worldcup-app.description",
+      image: "/img/Proy9.png",
+      link: "#",
+      repo: "#",
+      tags: ["React", "Vite", "Supabase", "PostgreSQL", "Vanilla CSS"],
+    },
+    {
       id: 8,
       titleKey: "projects.notary-system.title",
       descriptionKey: "projects.notary-system.description",
