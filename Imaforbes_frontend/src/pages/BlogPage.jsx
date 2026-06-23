@@ -644,12 +644,12 @@ const BlogPage = () => {
                         />
                       </div>
 
-                      <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                      <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1, textAlign: post.type === 'poem' ? 'center' : 'left' }}>
                         <div style={{ marginBottom: '1rem' }}>
                           <h2 style={{ fontSize: '1.6rem', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '0.5rem', lineHeight: 1.3 }} className="dark:text-white">
                             {post.title}
                           </h2>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text-muted-light)', fontSize: '0.85rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: post.type === 'poem' ? 'center' : 'flex-start', gap: '0.5rem', color: 'var(--color-text-muted-light)', fontSize: '0.85rem' }}>
                             <span style={{ fontWeight: 500 }}>México</span>
                             <span>•</span>
                             <span style={{ fontWeight: 300 }}>{formatDate(post.created_at)}</span>

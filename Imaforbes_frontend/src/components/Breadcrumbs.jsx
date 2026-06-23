@@ -28,7 +28,7 @@ const Breadcrumbs = () => {
 
   return (
     <nav
-      className="bg-transparent px-4 sm:px-6 lg:px-8 py-3 mt-16 md:mt-20 relative z-10"
+      className="bg-transparent px-4 sm:px-6 lg:px-8 py-3 mt-[80px] md:mt-[100px] relative z-10"
       aria-label="Breadcrumb"
     >
       <div className="max-w-7xl mx-auto">
