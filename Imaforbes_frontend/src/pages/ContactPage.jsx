@@ -254,7 +254,7 @@ const ContactPage = () => {
               viewport={{ once: true }}
               onSubmit={handleSubmit}
               className="card-premium"
-              style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', padding: '2rem' }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', padding: 'clamp(1.25rem, 4vw, 2rem)' }}
             >
               <div>
                 <label htmlFor="name" style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem', color: 'var(--color-text-muted-light)' }}>

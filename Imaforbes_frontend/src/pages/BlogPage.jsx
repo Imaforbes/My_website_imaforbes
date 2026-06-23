@@ -183,16 +183,19 @@ const BlogPage = () => {
 
   }, [getCookie, posts]);
 
+  // Create a string of post IDs to use as a stable dependency for the effect
+  const postIdsString = (posts || []).map(p => p.id).join(',');
+
   // Check like status for all posts when they load
   useEffect(() => {
-    if (!posts || posts.length === 0) return;
+    if (!postIdsString) return;
 
     const run = async () => {
+      const ids = postIdsString.split(',');
+      
       // Check like statuses
       try {
-        const likeChecks = posts
-          .filter((post) => post && post.id)
-          .map((post) => api.blog.getLikeStatus(post.id).catch(() => ({ success: false, data: { liked: false } })));
+        const likeChecks = ids.map((id) => api.blog.getLikeStatus(id).catch(() => ({ success: false, data: { liked: false } })));
 
         const results = await Promise.all(likeChecks);
         const liked = new Set();
@@ -202,20 +205,20 @@ const BlogPage = () => {
             const apiData = result.data.data || result.data;
             const likedStatus = apiData?.liked === true;
             if (likedStatus) {
-              liked.add(posts[index].id);
+              liked.add(ids[index]);
             }
 
             if (apiData?.likes_count !== undefined) {
               setPosts((prevPosts) =>
                 prevPosts.map((p) =>
-                  p.id === posts[index].id ? { ...p, likes_count: parseInt(apiData.likes_count) || 0 } : p
+                  p.id == ids[index] ? { ...p, likes_count: parseInt(apiData.likes_count) || 0 } : p
                 )
               );
             }
           }
         });
 
-        setLikedPosts(liked);
+        setLikedPosts((prev) => new Set([...prev, ...liked]));
       } catch (error) {
         if (import.meta.env.DEV && error?.message && !error.message.includes("access control")) {
           console.warn("Error checking like statuses:", error.message);
@@ -224,19 +227,19 @@ const BlogPage = () => {
 
       // Track views
       try {
-        const postsToTrack = posts.filter((post) => post && post.id && !hasViewedPost(post.id));
+        const postsToTrack = ids.filter((id) => !hasViewedPost(id));
         for (let i = 0; i < postsToTrack.length; i++) {
-          const post = postsToTrack[i];
+          const id = postsToTrack[i];
           if (i > 0) await new Promise((resolve) => setTimeout(resolve, 100));
 
-          const result = await api.blog.trackView(post.id);
+          const result = await api.blog.trackView(id);
           if (result.success && result.data) {
             const apiData = result.data.data || result.data;
             if (apiData?.view_recorded !== false) {
-              markPostAsViewed(post.id);
+              markPostAsViewed(id);
               if (apiData?.views_count !== undefined) {
                 setPosts((prevPosts) =>
-                  prevPosts.map((p) => (p.id === post.id ? { ...p, views_count: parseInt(apiData.views_count) || 0 } : p))
+                  prevPosts.map((p) => (p.id == id ? { ...p, views_count: parseInt(apiData.views_count) || 0 } : p))
                 );
               }
             }
@@ -250,7 +253,7 @@ const BlogPage = () => {
     };
 
     run();
-  }, [hasViewedPost, markPostAsViewed, posts]);
+  }, [hasViewedPost, markPostAsViewed, postIdsString]);
 
   // (removed legacy helper functions below; logic is handled inside the effect)
 /*

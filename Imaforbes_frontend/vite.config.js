@@ -6,9 +6,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      // Local API proxy (MAMP): /api/* -> http://localhost:8888/Sitio_Web_imaforbes/Imaforbes_Api_backend/api/*
+      // Local API proxy (MAMP): /api/* -> http://localhost:8888/My_website_imaforbes/Imaforbes_Api_backend/api/*
       '/api': {
-        target: 'http://localhost:8888/Sitio_Web_imaforbes/Imaforbes_Api_backend',
+        target: 'http://localhost:8888/My_website_imaforbes/Imaforbes_Api_backend',
         changeOrigin: true,
         secure: false,
       },
