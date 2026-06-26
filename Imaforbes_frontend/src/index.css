@@ -83,6 +83,7 @@ html.dark body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   border-radius: 4px; /* Anthropic style sharp/slight radius */
   font-family: var(--font-sans);

@@ -174,34 +174,34 @@ const ContactPage = () => {
                 {t("contact.contact-info")}
               </h3>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
                 <a href="mailto:imanol@imaforbes.com" className="card-premium" style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none' }}>
-                  <div style={{ padding: '0.75rem', background: 'var(--color-bg-light)', borderRadius: '8px' }} className="dark:bg-gray-800">
+                  <div style={{ padding: '0.75rem', background: 'var(--color-bg-light)', borderRadius: '8px', flexShrink: 0 }} className="dark:bg-gray-800">
                     <FiMail size={20} style={{ color: 'var(--color-text-light)' }} className="dark:text-gray-300" />
                   </div>
-                  <div>
+                  <div style={{ minWidth: 0 }}>
                     <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>Email</p>
-                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text-light)' }} className="dark:text-white">imanol@imaforbes.com</p>
+                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text-light)', wordBreak: 'break-word' }} className="dark:text-white">imanol@imaforbes.com</p>
                   </div>
                 </a>
 
                 <div className="card-premium" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <div style={{ padding: '0.75rem', background: 'var(--color-bg-light)', borderRadius: '8px' }} className="dark:bg-gray-800">
+                  <div style={{ padding: '0.75rem', background: 'var(--color-bg-light)', borderRadius: '8px', flexShrink: 0 }} className="dark:bg-gray-800">
                     <FiMapPin size={20} style={{ color: 'var(--color-text-light)' }} className="dark:text-gray-300" />
                   </div>
-                  <div>
+                  <div style={{ minWidth: 0 }}>
                     <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>Location</p>
-                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text-light)' }} className="dark:text-white">Mexico City, MX</p>
+                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text-light)', wordBreak: 'break-word' }} className="dark:text-white">Mexico City, MX</p>
                   </div>
                 </div>
 
                 <div className="card-premium" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <div style={{ padding: '0.75rem', background: 'var(--color-bg-light)', borderRadius: '8px' }} className="dark:bg-gray-800">
+                  <div style={{ padding: '0.75rem', background: 'var(--color-bg-light)', borderRadius: '8px', flexShrink: 0 }} className="dark:bg-gray-800">
                     <FiClock size={20} style={{ color: 'var(--color-text-light)' }} className="dark:text-gray-300" />
                   </div>
-                  <div>
+                  <div style={{ minWidth: 0 }}>
                     <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>Available</p>
-                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text-light)' }} className="dark:text-white">Mon - Fri, 9AM - 5PM</p>
+                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text-light)', wordBreak: 'break-word' }} className="dark:text-white">Mon - Fri, 9AM - 5PM</p>
                   </div>
                 </div>
               </div>
