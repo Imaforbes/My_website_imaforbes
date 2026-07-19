@@ -83,15 +83,6 @@ const ContactPage = () => {
     e.preventDefault();
     await sendMessage(formData);
   };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.5 },
-    },
-  };
-
   const itemVariants = {
     hidden: { opacity: 0, y: 40, scale: 0.95 },
     visible: {
@@ -102,26 +93,6 @@ const ContactPage = () => {
     },
   };
 
-  const formVariants = {
-    hidden: { opacity: 0, y: 30, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { type: "spring", damping: 12, stiffness: 120 },
-    },
-    hover: {
-      scale: 1.01,
-      transition: { type: "spring", damping: 10, stiffness: 200 },
-    },
-  };
-
-  const inputVariants = {
-    focus: {
-      scale: 1.02,
-      transition: { type: "spring", damping: 8, stiffness: 200 },
-    },
-  };
 
   return (
     <>

@@ -13,43 +13,24 @@
     <!-- Preconnect to external domains for faster resource loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <!-- Preload critical resources -->
     <!-- Preload LCP hero image for better Web Vitals -->
     <script>
       // Apply theme immediately to prevent flash
       (function () {
-        // Safe localStorage access
-        let theme = "dark";
-        try {
-          theme = localStorage.getItem("app_theme") || "dark";
-        } catch (e) {
-          // localStorage not available, use default
-        }
-
         const root = document.documentElement;
-        if (theme === "auto") {
-          // Safe matchMedia access with fallback
-          let prefersDark = false;
-          if (window.matchMedia) {
-            try {
-              prefersDark = window.matchMedia(
-                "(prefers-color-scheme: dark)"
-              ).matches;
-            } catch (e) {
-              // matchMedia failed, default to light
-            }
-          }
-          root.classList.add(prefersDark ? "dark" : "light");
-        } else {
-          root.classList.add(theme);
-        }
+        root.classList.add("dark");
+        root.classList.remove("light");
+        
         // Wait for body to exist before adding class
         if (document.body) {
-          document.body.classList.add(`${theme}-theme`);
+          document.body.classList.add("dark-theme");
         } else {
           document.addEventListener("DOMContentLoaded", function () {
-            document.body.classList.add(`${theme}-theme`);
+            document.body.classList.add("dark-theme");
           });
         }
       })();

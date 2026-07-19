@@ -10,19 +10,17 @@
  * - Smooth animations and transitions
  */
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Lock, User, Eye, EyeOff } from "lucide-react";
 import { API_CONFIG } from "../config/api.js";
 import { safeLocalStorage } from "../utils/storage.js";
 
-// Modern animated background
+// Minimal cinematic background
 const HeroBackground = () => (
-  <div className="absolute inset-0 -z-10 overflow-hidden">
-    {/* Modern gradient background */}
-    <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-[#0a0a0a] dark:via-[#0f0f0f] dark:to-[#0a0a0a]"></div>
-    {/* Subtle animated grid pattern */}
-    <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] opacity-40"></div>
+  <div className="absolute inset-0 -z-10 overflow-hidden bg-black">
+    {/* Subtle dark gradient to simulate depth */}
+    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-80"></div>
   </div>
 );
 
@@ -100,32 +98,37 @@ const LoginPage = () => {
   // --- FIN DE LA LÓGICA AÑADIDA ---
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-white p-4 sm:p-6">
+    <div className="relative min-h-screen flex items-center justify-center bg-black text-white p-4 sm:p-6">
       <HeroBackground />
       
-      {/* Modern glassmorphism card with enhanced design */}
+      {/* Botón de Regresar (Cinemático y discreto) */}
+      <Link 
+        to="/" 
+        className="absolute top-6 left-6 z-50 text-xs font-semibold tracking-widest uppercase text-gray-500 hover:text-white transition-colors duration-300 flex items-center gap-2"
+      >
+        <span style={{ fontSize: '1.2rem' }}>←</span> Regresar al sitio web
+      </Link>
+      
+      {/* Minimalist Login Card */}
       <motion.div
-        initial={{ opacity: 0, y: 30, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
         className="relative z-10 w-full max-w-md"
       >
-        <div className="bg-white/80 dark:bg-[#0f0f0f]/80 backdrop-blur-xl p-8 sm:p-10 md:p-12 modern-border modern-shadow-xl modern-card-lg border border-gray-200/50 dark:border-gray-800/50">
+        <div className="bg-transparent p-8 sm:p-10 md:p-12">
           {/* Logo/Brand Section */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="text-center mb-8"
+            className="text-center mb-12"
           >
-            <div className="inline-flex items-center justify-center w-16 h-16 mb-4 bg-gray-100 dark:bg-gray-800 rounded-2xl modern-shadow-md">
-              <Lock className="w-8 h-8 text-gray-700 dark:text-gray-300" />
-            </div>
-            <h1 className="text-3xl sm:text-4xl font-light mb-2 leading-tight tracking-tight text-gray-900 dark:text-white">
-              Admin Login
+            <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 uppercase tracking-[0.1em] text-white" style={{ fontFamily: 'var(--font-serif)' }}>
+              Login
             </h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 font-light">
-              Accede a tu panel de administración
+            <p className="text-xs uppercase tracking-widest text-gray-400 font-semibold mt-4">
+              Administración
             </p>
           </motion.div>
 
@@ -136,15 +139,9 @@ const LoginPage = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
-                Usuario
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <User className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
+                  <User className="w-4 h-4 text-gray-500 group-focus-within:text-white transition-colors" />
                 </div>
                 <input
                   type="text"
@@ -152,8 +149,8 @@ const LoginPage = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
-                  className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:border-transparent transition-all duration-300 modern-shadow-sm focus:modern-shadow-md"
-                  placeholder="Ingresa tu usuario"
+                  className="w-full pl-8 pr-4 py-3 bg-transparent border-b-2 border-gray-800 text-white placeholder-gray-600 focus:outline-none focus:border-white transition-all duration-300 text-sm tracking-wider"
+                  placeholder="USUARIO"
                 />
               </div>
             </motion.div>
@@ -164,15 +161,9 @@ const LoginPage = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4, duration: 0.5 }}
             >
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-              >
-                Contraseña
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
+                  <Lock className="w-4 h-4 text-gray-500 group-focus-within:text-white transition-colors" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
@@ -180,19 +171,19 @@ const LoginPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-12 pr-12 py-3.5 bg-white dark:bg-[#0a0a0a] border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:border-transparent transition-all duration-300 modern-shadow-sm focus:modern-shadow-md"
-                  placeholder="Ingresa tu contraseña"
+                  className="w-full pl-8 pr-12 py-3 bg-transparent border-b-2 border-gray-800 text-white placeholder-gray-600 focus:outline-none focus:border-white transition-all duration-300 text-sm tracking-wider"
+                  placeholder="CONTRASEÑA"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200 focus:outline-none"
+                  className="absolute inset-y-0 right-0 flex items-center text-gray-600 hover:text-white transition-colors duration-200 focus:outline-none"
                   aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                 >
                   {showPassword ? (
-                    <EyeOff className="w-5 h-5" />
+                    <EyeOff className="w-4 h-4" />
                   ) : (
-                    <Eye className="w-5 h-5" />
+                    <Eye className="w-4 h-4" />
                   )}
                 </button>
               </div>
@@ -217,11 +208,9 @@ const LoginPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full px-6 py-3.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-base font-medium tracking-wide rounded-xl modern-shadow-md hover:modern-shadow-lg transition-all duration-300 modern-hover"
+              className="w-full mt-8 py-3 bg-transparent border-b-2 border-white text-white text-xs font-bold tracking-[0.15em] uppercase hover:opacity-70 transition-opacity"
             >
-              Entrar
+              ENTRAR
             </motion.button>
           </form>
         </div>

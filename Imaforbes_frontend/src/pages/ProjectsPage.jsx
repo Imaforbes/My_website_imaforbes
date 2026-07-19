@@ -58,20 +58,18 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
   };
 
   return (
-    <motion.div variants={cardVariants} className="card-premium project-card" style={{ zIndex: 10, position: 'relative' }}>
+    <motion.div variants={cardVariants} className="project-cinematic-card" style={{ zIndex: 10 }}>
+      
+      {/* Background Image Container */}
       <div 
-        className="project-image-container cursor-pointer"
+        className="cinematic-image-wrapper cursor-pointer"
         onClick={() => setPreviewImage && setPreviewImage(project.image)}
       >
-        {!imageLoaded && !imageError && (
-          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: '30px', height: '30px', border: '2px solid var(--color-border-light)', borderTopColor: 'var(--color-text-light)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
-          </div>
-        )}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 100%)', zIndex: 1 }}></div>
         
-        {imageError && (
-          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span className="text-muted">Image not available</span>
+        {!imageLoaded && !imageError && (
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111' }}>
+            <div style={{ width: '30px', height: '30px', border: '2px solid #333', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
           </div>
         )}
         
@@ -79,42 +77,39 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
           <img
             src={project.image}
             alt={t(project.titleKey)}
-            style={{ opacity: imageLoaded ? 1 : 0 }}
+            style={{ opacity: imageLoaded ? 1 : 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.8s ease' }}
             onLoad={() => setImageLoaded(true)}
             onError={() => { setImageError(true); setImageLoaded(false); }}
             loading="lazy"
             decoding="async"
+            className="cinematic-img"
           />
         )}
       </div>
 
-      <div className="project-content">
-        <h3 style={{ fontSize: '1.5rem', fontWeight: 400, marginBottom: '1rem', color: 'var(--color-text-light)' }}>
-          {t(project.titleKey)}
+      {/* Title - Responsive Floating */}
+      <div className="cinematic-title-container">
+        <h3 className="cinematic-title">
+          {t(project.titleKey).split(' ').map((word, i) => <span key={i}>{word}</span>)}
         </h3>
+      </div>
 
-        <div className="project-tags">
-          {project.tags.map((tag) => (
-            <span key={tag} className="project-tag">
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        <p className="text-muted" style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+      {/* Description & Links - Responsive */}
+      <div className="cinematic-desc-container">
+        <p style={{ fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1.5rem', color: '#ccc', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>
           {t(project.descriptionKey)}
         </p>
 
-        <div className="project-actions">
+        <div className="project-actions" style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
           <a
             href={project.repo}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-premium"
+            className="btn-premium cinematic-link"
             onClick={(e) => e.stopPropagation()}
+            style={{ borderColor: 'transparent', padding: '0.5rem 0', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}
           >
-            <FiGithub size={18} />
-            <span>Code</span>
+            <span>{t("projects.view_code", "VIEW CODE")}</span>
           </a>
 
           {project.link && project.link !== "#" && (
@@ -122,12 +117,11 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-premium"
-              style={{ borderColor: 'var(--color-text-muted-light)', color: 'var(--color-text-muted-light)', background: 'transparent' }}
+              className="btn-premium cinematic-link"
               onClick={(e) => e.stopPropagation()}
+              style={{ borderColor: 'transparent', padding: '0.5rem 0', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}
             >
-              <FiExternalLink size={18} />
-              <span>Live</span>
+              <span>{t("projects.discover", "DISCOVER")}</span>
             </a>
           )}
         </div>
@@ -245,7 +239,7 @@ const ProjectsPage = () => {
         <motion.div 
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          style={{ position: 'absolute', top: '5%', right: '10%', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--color-surface-light)', padding: '0.5rem 1rem', borderRadius: '50px', border: '1px solid var(--color-border-light)' }}
+          style={{ position: 'absolute', top: '2%', right: '5%', zIndex: 20, opacity: 0.8, display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--color-surface-light)', padding: '0.5rem 1rem', borderRadius: '50px', border: '1px solid var(--color-border-light)' }}
           className="dark:bg-[#1a1a1a] dark:border-gray-800"
         >
           <FiBriefcase style={{ color: 'var(--color-text-muted-light)' }} />

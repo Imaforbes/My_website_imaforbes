@@ -193,31 +193,34 @@ const BlogPage = () => {
     const run = async () => {
       const ids = postIdsString.split(',');
       
-      // Check like statuses
+      // Check like statuses sequentially to avoid server rate limiting (ERR_CONNECTION_CLOSED)
       try {
-        const likeChecks = ids.map((id) => api.blog.getLikeStatus(id).catch(() => ({ success: false, data: { liked: false } })));
-
-        const results = await Promise.all(likeChecks);
         const liked = new Set();
+        for (let i = 0; i < ids.length; i++) {
+          const id = ids[i];
+          if (i > 0) await new Promise((resolve) => setTimeout(resolve, 50)); // Small delay
+          
+          try {
+            const result = await api.blog.getLikeStatus(id);
+            if (result.success && result.data) {
+              const apiData = result.data.data || result.data;
+              const likedStatus = apiData?.liked === true;
+              if (likedStatus) {
+                liked.add(id);
+              }
 
-        results.forEach((result, index) => {
-          if (result.success && result.data) {
-            const apiData = result.data.data || result.data;
-            const likedStatus = apiData?.liked === true;
-            if (likedStatus) {
-              liked.add(ids[index]);
+              if (apiData?.likes_count !== undefined) {
+                setPosts((prevPosts) =>
+                  prevPosts.map((p) =>
+                    p.id == id ? { ...p, likes_count: parseInt(apiData.likes_count) || 0 } : p
+                  )
+                );
+              }
             }
-
-            if (apiData?.likes_count !== undefined) {
-              setPosts((prevPosts) =>
-                prevPosts.map((p) =>
-                  p.id == ids[index] ? { ...p, likes_count: parseInt(apiData.likes_count) || 0 } : p
-                )
-              );
-            }
+          } catch {
+             // Ignore individual errors
           }
-        });
-
+        }
         setLikedPosts((prev) => new Set([...prev, ...liked]));
       } catch (error) {
         if (import.meta.env.DEV && error?.message && !error.message.includes("access control")) {
@@ -530,7 +533,7 @@ const BlogPage = () => {
     <section className="projects-section" style={{ minHeight: '100svh' }}>
       <div className="container-premium" style={{ position: 'relative', zIndex: 10 }}>
         
-        <div className="projects-header" style={{ position: 'relative', paddingTop: '1rem' }}>
+        <div className="projects-header" style={{ position: 'relative', paddingTop: '8rem' }}>
           <motion.h1
             variants={itemVariants}
             initial="hidden"
@@ -647,12 +650,12 @@ const BlogPage = () => {
                         />
                       </div>
 
-                      <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1, textAlign: post.type === 'poem' ? 'center' : 'left' }}>
+                      <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'center' }}>
                         <div style={{ marginBottom: '1rem' }}>
                           <h2 style={{ fontSize: '1.6rem', fontWeight: 400, color: 'var(--color-text-light)', marginBottom: '0.5rem', lineHeight: 1.3 }} className="dark:text-white">
                             {post.title}
                           </h2>
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: post.type === 'poem' ? 'center' : 'flex-start', gap: '0.5rem', color: 'var(--color-text-muted-light)', fontSize: '0.85rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: 'var(--color-text-muted-light)', fontSize: '0.85rem' }}>
                             <span style={{ fontWeight: 500 }}>México</span>
                             <span>•</span>
                             <span style={{ fontWeight: 300 }}>{formatDate(post.created_at)}</span>

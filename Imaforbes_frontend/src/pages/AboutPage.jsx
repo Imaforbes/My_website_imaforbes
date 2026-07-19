@@ -363,7 +363,10 @@ const AboutPage = () => {
   ];
 
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [hoveredSkill, setHoveredSkill] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const aboutImages = ["/img/IMG_0029.JPG", "/img/me.jpeg"];
+
+  const nextImage = () => setCurrentImageIndex((prev) => (prev + 1) % aboutImages.length);
 
   // Filter skills by category
   const filteredSkills = selectedCategory === "all"
@@ -394,19 +397,58 @@ const AboutPage = () => {
                 zIndex: -1
               }}></div>
               
-              <div className="card-premium" style={{ padding: '0.5rem', borderRadius: '24px', overflow: 'hidden' }}>
-                <img
-                  src="/img/IMG_0029.JPG"
-                  alt="Imanol Pérez Arteaga"
-                  style={{ 
-                    width: '100%', 
-                    height: 'auto', 
-                    aspectRatio: '3 / 4',
-                    borderRadius: '18px', 
-                    display: 'block', 
-                    filter: 'contrast(1.05) saturate(1.1)' 
-                  }}
-                />
+              <div 
+                className="card-premium" 
+                style={{ padding: '0.5rem', borderRadius: '24px', overflow: 'hidden', cursor: 'pointer', position: 'relative' }}
+                onClick={nextImage}
+              >
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={currentImageIndex}
+                    src={aboutImages[currentImageIndex]}
+                    alt="Imanol Pérez Arteaga"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3 }}
+                    style={{ 
+                      width: '100%', 
+                      height: 'auto', 
+                      aspectRatio: '3 / 4',
+                      borderRadius: '18px', 
+                      display: 'block', 
+                      filter: 'contrast(1.05) saturate(1.1)',
+                      objectFit: 'cover'
+                    }}
+                  />
+                </AnimatePresence>
+                
+                {/* Gradient overlay for better indicator visibility */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0, left: 0, right: 0,
+                  height: '60px',
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%)',
+                  borderRadius: '0 0 18px 18px',
+                  pointerEvents: 'none'
+                }}></div>
+
+                {/* Carousel Indicators */}
+                <div style={{ position: 'absolute', bottom: '1rem', left: '0', right: '0', display: 'flex', justifyContent: 'center', gap: '0.5rem', zIndex: 2 }}>
+                  {aboutImages.map((_, idx) => (
+                    <div 
+                      key={idx}
+                      style={{
+                        width: idx === currentImageIndex ? '20px' : '8px',
+                        height: '8px',
+                        borderRadius: '4px',
+                        background: idx === currentImageIndex ? '#ffffff' : 'rgba(255, 255, 255, 0.5)',
+                        transition: 'all 0.3s ease',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.5)'
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
 
               {/* Floating Element 1 */}
@@ -528,7 +570,7 @@ const AboutPage = () => {
               exit="hidden"
               className="skills-grid"
             >
-              {filteredSkills.map((skill, index) => {
+              {filteredSkills.map((skill) => {
                 const IconComponent = skill.icon;
                 return (
                   <motion.div

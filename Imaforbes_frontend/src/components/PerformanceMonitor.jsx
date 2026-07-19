@@ -40,11 +40,10 @@ const PerformanceMonitor = () => {
       }
 
       // Monitor Cumulative Layout Shift (CLS)
-      let clsValue = 0;
       const clsObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           if (!entry.hadRecentInput) {
-            clsValue += entry.value;
+             // empty
           }
         }
         // Logs removed for cleaner console

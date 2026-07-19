@@ -76,9 +76,11 @@ const Header = memo(() => {
       >
         <div className="container-premium nav-premium">
           {/* Logo */}
-          <Link to="/" className="logo-premium" onClick={handleNavLinkClick}>
-            IMAFORBES
-          </Link>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+            <Link to="/" className="logo-premium" onClick={handleNavLinkClick}>
+              IMAFORBES
+            </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="nav-links-premium">
@@ -91,7 +93,7 @@ const Header = memo(() => {
                   {t(link.label)}
                   {location.pathname === link.path && (
                     <motion.div
-                      style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '1px', background: 'currentColor' }}
+                      className="nav-active-indicator"
                       layoutId="activeTab"
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
@@ -99,15 +101,13 @@ const Header = memo(() => {
                 </Link>
               </motion.div>
             ))}
+          </nav>
 
+          <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5, duration: 0.3 }}>
               <LanguageToggle />
             </motion.div>
-
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.6, duration: 0.3 }}>
-              <ThemeToggle />
-            </motion.div>
-          </nav>
+          </div>
 
           {/* Mobile Menu Button */}
           <button
