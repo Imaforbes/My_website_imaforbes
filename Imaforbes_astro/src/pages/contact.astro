@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ContactPage from '../pages_react/ContactPage.jsx';
+---
+
+<Layout isAdmin={false}>
+  <ContactPage client:only="react" />
+</Layout>

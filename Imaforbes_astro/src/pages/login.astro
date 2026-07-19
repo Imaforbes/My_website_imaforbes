@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import LoginPage from '../pages_react/LoginPage.jsx';
+---
+
+<Layout isAdmin={true}>
+  <LoginPage client:only="react" />
+</Layout>

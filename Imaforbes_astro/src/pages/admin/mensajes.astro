@@ -1,0 +1,8 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminMensajes from '../../pages_react/AdminMensajes.jsx';
+---
+
+<Layout isAdmin={true}>
+  <AdminMensajes client:only="react" />
+</Layout>

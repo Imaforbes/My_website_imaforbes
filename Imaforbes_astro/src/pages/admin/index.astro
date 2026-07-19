@@ -1,0 +1,8 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Dashboard from '../../pages_react/Dashboard.jsx';
+---
+
+<Layout isAdmin={true}>
+  <Dashboard client:only="react" />
+</Layout>

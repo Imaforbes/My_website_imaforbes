@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import AboutPage from '../pages_react/AboutPage.jsx';
+---
+
+<Layout isAdmin={false}>
+  <AboutPage client:only="react" />
+</Layout>

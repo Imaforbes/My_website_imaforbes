@@ -1,0 +1,135 @@
+{
+  "about": {
+    "download-cv": "Download CV",
+    "experience": "Experience",
+    "experience-empty": "No experience recorded",
+    "experience-loading": "Loading experience...",
+    "experience-title": "Experience",
+    "hero-text-1": "Full Stack Web Developer with a passion for building clean, scalable, and efficient web applications.",
+    "hero-text-2": "I specialize in modern technologies and creating smooth, engaging digital experiences.",
+    "hero-title": "About Me",
+    "skills-count": "{{count}} of {{total}} skills",
+    "skills-filter-all": "All",
+    "skills-filter-backend": "Backend",
+    "skills-filter-database": "Databases",
+    "skills-filter-devops": "DevOps",
+    "skills-filter-frontend": "Frontend",
+    "skills-filter-tools": "Tools",
+    "skills-title": "Skills"
+  },
+  "blog": {
+    "error": "Error",
+    "failed-load": "Failed to load posts",
+    "filter-all": "All",
+    "filter-letters": "Letters",
+    "filter-poems": "Poems",
+    "like": "Like",
+    "like-singular": "Like",
+    "liked": "Liked",
+    "likes": "Likes",
+    "no-letters": "No letters available",
+    "no-poems": "No poems available",
+    "no-posts": "No posts available",
+    "subtitle": "Thoughts, articles and poetry",
+    "title": "Blog",
+    "type-letter": "Letter",
+    "type-poem": "Poem",
+    "view-singular": "View",
+    "views": "Views"
+  },
+  "breadcrumbs": {
+    "home": "Home"
+  },
+  "contact": {
+    "contact-info": "Contact Info",
+    "description": "Have a project in mind? Let's talk!",
+    "email": "Email",
+    "message": "Message",
+    "name": "Name",
+    "privacy-text": "I accept the privacy policy and data processing.",
+    "privacy-title": "Privacy Policy",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "title": "Contact"
+  },
+  "footer": {
+    "copyright": "All rights reserved",
+    "description": "Full Stack Developer passionate about building high-quality digital experiences.",
+    "get-in-touch": "Get in touch",
+    "made-with": "Made with",
+    "navigation": "Navigation",
+    "response-time": "Estimated response time: less than 24 hours"
+  },
+  "header": {
+    "home": "Home",
+    "about-me": "About Me",
+    "blog": "Blog",
+    "contact": "Contact",
+    "proyects": "Projects"
+  },
+  "home": {
+    "contact": "Contact",
+    "description": "Welcome to my portfolio! I build amazing digital experiences.",
+    "subtitle": "Full Stack Web Developer & Designer",
+    "title": "Imanol Perez Arteaga",
+    "view-projects": "View Projects"
+  },
+  "language": {
+    "switchToEnglish": "Switch to English",
+    "switchToSpanish": "Switch to Spanish"
+  },
+  "notFound": {
+    "backHome": "Back to Home",
+    "goBack": "Go Back",
+    "message": "Page not found"
+  },
+  "projects": {
+    "description": "A selection of my most recent projects",
+    "title": "Projects",
+    "restaurant-system": {
+      "title": "Expense Management System",
+      "description": "System designed for expense tracking, managing purchased inventory, generating detailed financial reports, and optimizing the business profitability in real time."
+    },
+    "hotel-system": {
+      "title": "Hotel Management System - Safari's Hotel",
+      "description": "An administrative platform for guest check-ins, room reservations, check-out control, and billing."
+    },
+    "grinch-animation": {
+      "title": "Interactive Grinch Animation",
+      "description": "A creative frontend web design project showcasing smooth animations built entirely with pure HTML5 and CSS3."
+    },
+    "freelancer-portfolio": {
+      "title": "Freelancer Portfolio",
+      "description": "A professional portfolio website layout featuring a modern architecture, fully responsive design, and SEO optimization."
+    },
+    "responsive-landing": {
+      "title": "Responsive Online Store",
+      "description": "Mockup of an e-commerce storefront with a Mobile-First layout, clean formatting, and semantic HTML structure."
+    },
+    "vaccination-page": {
+      "title": "Vaccination Info Page",
+      "description": "An interactive website displaying information regarding vaccination processes, guidelines, and booking schedules."
+    },
+    "pokedex": {
+      "title": "Interactive Pokédex",
+      "description": "A web application consuming the PokeApi in real time to search, list, and detail the status of various Pokémon."
+    },
+    "notary-system": {
+      "title": "CRM/ERP Notary Public No. 73",
+      "description": "Comprehensive platform to digitize, automate and control notary workflows. Includes mathematical engine for fees, automated Word deed generation, and Aspel SAE integration."
+    },
+    "worldcup-app": {
+      "title": "World Cup 2026 Predictions",
+      "description": "Interactive web app for World Cup match predictions. Features real-time scoring, interactive knockout brackets, global leaderboards, admin panel, and anti-copy rules."
+    }
+  },
+  "scrollToTop": {
+    "label": "Scroll to top"
+  },
+  "theme": {
+    "auto": "Auto",
+    "dark": "Dark",
+    "light": "Light",
+    "toggleTheme": "Toggle Theme"
+  }
+}

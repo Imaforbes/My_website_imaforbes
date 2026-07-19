@@ -1,94 +1,71 @@
-# Sitio_Web_imaforbes
+# Sitio Web Imaforbes (Portafolio v2.0)
 
-Proyecto web de portafolio **IMAFORBES** compuesto por:
+Proyecto web de portafolio **IMAFORBES**, actualizado a su versión más reciente con una arquitectura orientada al rendimiento (Astro) y un backend robusto en PHP.
 
-- **`Imaforbes_frontend/`**: Frontend en **React + Vite + Tailwind**.
-- **`Imaforbes_Api_backend/`**: Backend en **PHP** (API REST) para proyectos, blog, contacto, auth y uploads.
+## Arquitectura Actual (¡Actualizado!)
 
-## Cómo funciona (arquitectura)
+El proyecto se divide principalmente en dos carpetas activas:
 
-- El **frontend** consume datos desde la **API PHP** (proyectos, blog, mensajes de contacto, etc.).
-- En **desarrollo**, el frontend usa un **proxy de Vite** para evitar problemas de CORS:
-  - Ruta: `/api_db_portfolio`
-  - Target: `http://localhost:8888` (configurado en `Imaforbes_frontend/vite.config.js`)
-- La **API** responde en **JSON** con un formato estándar (ver `Imaforbes_Api_backend/docs/API_ENDPOINTS.md`).
+- **`Imaforbes_astro/` (Frontend Activo 🚀)**: El nuevo frontend construido con **Astro**, **React**, **Tailwind CSS** y **Framer Motion**. Esta carpeta reemplaza por completo a la anterior SPA (Single Page Application). Al usar Astro, el sitio ahora soporta renderizado estático y mejora significativamente el SEO y el rendimiento (Performance). Todas las modificaciones visuales, páginas y componentes se realizan aquí.
+  
+- **`api_db/` (Backend Activo ⚙️)**: El backend en **PHP** (API REST). Maneja las conexiones con la base de datos MySQL, procesamiento de correos de contacto (con medidas Anti-Spam), control de sesiones, operaciones CRUD del blog, subida de imágenes, etc.
 
-## Requisitos
+*Nota: Las carpetas `Imaforbes_frontend/` y `Imaforbes_Api_backend/` corresponden a las versiones antiguas de la aplicación y se conservan únicamente como respaldo (archivos históricos).*
 
-- **Node.js + npm** (para el frontend)
-- **PHP** (recomendado con **MAMP** en macOS)
-- **MySQL** (para persistencia de datos)
+## Cómo funciona la conexión (Frontend ↔ Backend)
 
-## Ejecutar en local (desarrollo)
+- El **frontend (Astro)** consume datos JSON desde la **API (PHP)** ubicada en `api_db/api/`.
+- **En entorno de desarrollo local**, Astro utiliza un **proxy de Vite** (configurado en `Imaforbes_astro/astro.config.mjs`) para evitar problemas de CORS:
+  - Todas las peticiones a `/api` son redirigidas internamente hacia `http://localhost:8888/My_website_imaforbes/api_db`.
+  - Las peticiones a `/uploads` son redirigidas a `http://localhost:8888/My_website_imaforbes/api_db/uploads`.
 
-### 1) Backend (PHP) en MAMP
+## Requisitos del Sistema
 
-1. Coloca/expón la carpeta del backend en el servidor local (MAMP).
-2. Asegúrate de poder acceder a la API desde el navegador, por ejemplo:
-   - `http://localhost:8888/api_db_portfolio/api/projects.php`
+- **Node.js + npm** (para ejecutar y construir el frontend Astro).
+- **PHP** (recomendado usar **MAMP** en macOS).
+- **MySQL** (Base de datos local configurada en puerto 8889 por defecto en MAMP).
 
-Notas:
-- La documentación incluye configuración local para MAMP y base de datos.
-- **No subas credenciales reales a Git** (ver sección “Seguridad”).
+## Ejecutar en local (Modo Desarrollo)
 
-### 2) Frontend (React + Vite)
+### 1) Entorno Backend (MAMP)
 
-Desde `Imaforbes_frontend/`:
+1. Enciende los servidores de Apache y MySQL en la aplicación **MAMP**.
+2. Verifica que la carpeta principal `My_website_imaforbes` esté ubicada dentro de la ruta `/Applications/MAMP/htdocs/`.
+3. Tu base de datos MySQL debe contar con la estructura necesaria (usa el archivo `portfolio.sql` para importar las tablas a tu gestor local, ej. phpMyAdmin).
+4. El backend estará disponible en `http://localhost:8888/My_website_imaforbes/api_db/`.
+
+### 2) Entorno Frontend (Astro)
+
+Abre una terminal, navega a la carpeta activa del frontend e inicializa el servidor:
 
 ```bash
+cd /Applications/MAMP/htdocs/My_website_imaforbes/Imaforbes_astro
 npm install
 npm run dev
 ```
 
-Opcional: crea un archivo `.env` (o usa tu estrategia) tomando como base `Imaforbes_frontend/env.example`.
+El sitio frontend cargará en tu navegador, generalmente en la dirección `http://localhost:4321`.
 
-## Variables de entorno
+## Resumen de la carpeta Frontend (`Imaforbes_astro/`)
 
-### Frontend
+- **`src/pages/`**: Rutas nativas de Astro (`.astro`). Encargadas del layout principal y del SEO.
+- **`src/pages_react/`**: Componentes de página complejos elaborados en React (`.jsx`) que requieren estado dinámico (useState, useEffect, animaciones de Framer Motion).
+- **`src/components/`**: Componentes visuales reutilizables (Header, Footer, Tarjetas, Modales).
+- **`src/services/` y `src/hooks/`**: Lógica de conexión a la API (`api.js`) y Custom Hooks para manejar el estado global.
+- **`public/`**: Recursos estáticos (favicons, tipografías locales, etc.).
+- **`astro.config.mjs`**: Archivo crucial de configuración donde se declaran las reglas del proxy y las integraciones de Astro (React, Tailwind).
 
-- Plantilla: `Imaforbes_frontend/env.example`
-- Variables comunes:
-  - `VITE_APP_ENV`
-  - `VITE_API_BASE_URL` (en desarrollo normalmente se usa `/api_db_portfolio` para que aplique el proxy)
+## Resumen de la carpeta Backend (`api_db/`)
 
-### Backend
+- **`api/`**: Archivos `.php` expuestos públicamente como endpoints (`blog.php`, `contact.php`, `projects.php`).
+- **`config/`**: Archivos de conexión a base de datos (`database.php`) y manejo de respuestas (`response.php`).
+- **`utils/`**: Herramientas críticas del backend como Protección CSRF, Rate Limiting (contra SPAM) y el envío de correos vía SMTP (`EmailSender.php`).
+- **`uploads/images/`**: Directorio donde se almacenan físicamente las imágenes subidas a través de la API (por ejemplo, miniaturas del blog).
 
-- Plantilla: `Imaforbes_Api_backend/.env.example`
-- Variables típicas:
-  - DB: `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASS`, `DB_NAME`
-  - SMTP: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_SECURE`, `FROM_EMAIL`, etc.
+## Seguridad 🔒
 
-## Resumen de carpetas
+- **Archivos Sensibles**: Evita compartir públicamente el archivo `api_db/config/database.php` y cualquier configuración de servidor SMTP. 
+- La API de contacto incluye rate limiting por IP, impidiendo más de 3 solicitudes en 10 minutos para combatir spambots.
 
-### `Imaforbes_frontend/`
-
-- **`src/`**: Código fuente React (rutas/páginas, componentes, hooks, servicios, i18n, contextos).
-- **`public/`**: Assets públicos servidos tal cual.
-- **`docs/`**: Guías de despliegue, seguridad, documentación de consumo de API y checklists.
-- **`vite.config.js`**: Config de Vite (incluye proxy `/api_db_portfolio` → `http://localhost:8888`).
-- **`deploy.js` / `prepare-for-hostinger.js` / `start-dev.sh`**: utilidades de despliegue y scripts.
-
-### `Imaforbes_Api_backend/`
-
-- **`api/`**: Endpoints de la API (por ejemplo `projects.php`, `contact.php`, `blog.php`, `upload/`, `auth/`, `admin/`).
-- **`auth/`**: Lógica de autenticación/sesión (según implementación).
-- **`config/`**: Configuración (DB, email, CORS, etc.; normalmente lee variables de entorno).
-- **`migrations/`**: Scripts/migraciones de base de datos.
-- **`uploads/`**: Archivos subidos (imágenes/documentos). Suele requerir permisos de escritura.
-- **`storage/`**: Almacenamiento auxiliar (según implementación).
-- **`utils/`**: Helpers/utilidades compartidas.
-- **`docs/`**: Documentación técnica (endpoints, seguridad, CORS fixes, MAMP setup, despliegue).
-
-## Documentación útil (dentro del repo)
-
-- **API endpoints**: `Imaforbes_Api_backend/docs/API_ENDPOINTS.md`
-- **Docs backend**: `Imaforbes_Api_backend/docs/README.md`
-- **Docs frontend**: `Imaforbes_frontend/docs/README.md`
-
-## Seguridad (muy importante)
-
-- **Nunca** subas archivos con secretos:
-  - Backend: `Imaforbes_Api_backend/.env`
-  - Frontend: `Imaforbes_frontend/.env`, `.env.local`, etc.
-- Usa siempre los archivos `*.example` como plantilla y mantén credenciales reales fuera del control de versiones.
-
+---
+*Documentación generada y actualizada para reflejar el traslado exitoso a Astro Framework.*

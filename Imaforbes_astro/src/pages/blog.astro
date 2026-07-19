@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import BlogPage from '../pages_react/BlogPage.jsx';
+---
+
+<Layout isAdmin={false}>
+  <BlogPage client:only="react" />
+</Layout>

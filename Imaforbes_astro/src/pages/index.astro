@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HomePage from '../pages_react/HomePage.jsx';
+---
+
+<Layout isAdmin={false}>
+  <HomePage client:only="react" />
+</Layout>

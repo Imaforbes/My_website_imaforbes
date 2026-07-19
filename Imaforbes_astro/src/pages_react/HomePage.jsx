@@ -1,7 +1,8 @@
+import withProviders from '../components/withProviders.jsx';
 // src/pages/HomePage.jsx
 import React from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+
 import { FiArrowRight, FiMail, FiCode, FiTerminal, FiLayout, FiServer } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
@@ -93,17 +94,17 @@ const HomePage = () => {
         </motion.p>
 
         <motion.div variants={itemVariants} className="hero-actions" style={{ marginTop: '2.5rem' }}>
-          <Link to="/projects" className="btn-premium">
+          <a href="/projects" className="btn-premium">
             <span className="btn-icon">
               <FiCode /> {t("home.view-projects")} <FiArrowRight />
             </span>
-          </Link>
+          </a>
           
-          <Link to="/contact" className="btn-premium" style={{ borderColor: 'var(--color-text-muted-light)', color: 'var(--color-text-muted-light)', background: 'transparent' }}>
+          <a href="/contact" className="btn-premium" style={{ borderColor: 'var(--color-text-muted-light)', color: 'var(--color-text-muted-light)', background: 'transparent' }}>
             <span className="btn-icon">
               <FiMail /> {t("home.contact")}
             </span>
-          </Link>
+          </a>
         </motion.div>
 
         {/* Floating Skills/Tags to add life */}
@@ -136,4 +137,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default withProviders(HomePage);

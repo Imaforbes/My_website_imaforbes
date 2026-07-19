@@ -1,0 +1,8 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import StatisticsPage from '../../pages_react/StatisticsPage.jsx';
+---
+
+<Layout isAdmin={true}>
+  <StatisticsPage client:only="react" />
+</Layout>

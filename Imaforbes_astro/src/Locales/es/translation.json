@@ -1,0 +1,135 @@
+{
+  "about": {
+    "download-cv": "Descargar CV",
+    "experience": "Experiencia",
+    "experience-empty": "No hay experiencia para mostrar",
+    "experience-loading": "Cargando experiencia...",
+    "experience-title": "Experiencia",
+    "hero-text-1": "Desarrollador Web Full Stack con pasión por crear aplicaciones web limpias, escalables y eficientes.",
+    "hero-text-2": "Me especializo en tecnologías modernas y en crear experiencias digitales fluidas y atractivas.",
+    "hero-title": "Sobre mí",
+    "skills-count": "{{count}} de {{total}} habilidades",
+    "skills-filter-all": "Todas",
+    "skills-filter-backend": "Backend",
+    "skills-filter-database": "Bases de datos",
+    "skills-filter-devops": "DevOps",
+    "skills-filter-frontend": "Frontend",
+    "skills-filter-tools": "Herramientas",
+    "skills-title": "Habilidades"
+  },
+  "blog": {
+    "error": "Error",
+    "failed-load": "Error al cargar las publicaciones",
+    "filter-all": "Todos",
+    "filter-letters": "Cartas",
+    "filter-poems": "Poemas",
+    "like": "Me gusta",
+    "like-singular": "Me gusta",
+    "liked": "Te gusta esto",
+    "likes": "Me gusta",
+    "no-letters": "No hay cartas disponibles",
+    "no-poems": "No hay poemas disponibles",
+    "no-posts": "No hay publicaciones disponibles",
+    "subtitle": "Pensamientos, artículos y poesía",
+    "title": "Blog",
+    "type-letter": "Carta",
+    "type-poem": "Poema",
+    "view-singular": "Vista",
+    "views": "Vistas"
+  },
+  "breadcrumbs": {
+    "home": "Inicio"
+  },
+  "contact": {
+    "contact-info": "Información de contacto",
+    "description": "¿Tienes algún proyecto en mente? ¡Hablemos!",
+    "email": "Correo electrónico",
+    "message": "Mensaje",
+    "name": "Nombre",
+    "privacy-text": "Acepto la política de privacidad y el tratamiento de mis datos.",
+    "privacy-title": "Política de Privacidad",
+    "send": "Enviar mensaje",
+    "sending": "Enviando...",
+    "title": "Contacto"
+  },
+  "footer": {
+    "copyright": "Todos los derechos reservados",
+    "description": "Desarrollador Full Stack apasionado por construir experiencias digitales de calidad.",
+    "get-in-touch": "Contacto",
+    "made-with": "Creado con",
+    "navigation": "Navegación",
+    "response-time": "Tiempo de respuesta estimado: menos de 24 horas"
+  },
+  "header": {
+    "home": "Inicio",
+    "about-me": "Sobre mí",
+    "blog": "Blog",
+    "contact": "Contacto",
+    "proyects": "Proyectos"
+  },
+  "home": {
+    "contact": "Contacto",
+    "description": "¡Bienvenido a mi portafolio! Creo experiencias digitales increíbles.",
+    "subtitle": "Desarrollador Web Full Stack & Diseñador",
+    "title": "Imanol Perez Arteaga",
+    "view-projects": "Ver proyectos"
+  },
+  "language": {
+    "switchToEnglish": "Cambiar a Inglés",
+    "switchToSpanish": "Cambiar a Español"
+  },
+  "notFound": {
+    "backHome": "Volver al inicio",
+    "goBack": "Atrás",
+    "message": "Página no encontrada"
+  },
+  "projects": {
+    "description": "Una selección de mis proyectos más recientes",
+    "title": "Proyectos",
+    "restaurant-system": {
+      "title": "Sistema de Gestión de Gastos",
+      "description": "Sistema diseñado para el control de gastos, llevar el manejo de inventario de lo que se ha comprado, generar reportes financieros detallados y optimizar la rentabilidad del negocio en tiempo real."
+    },
+    "hotel-system": {
+      "title": "Sistema de Control Hotelero - Hotel Safari's",
+      "description": "Plataforma administrativa para la gestión de huéspedes, reservación de habitaciones, control de entradas/salidas y facturación."
+    },
+    "grinch-animation": {
+      "title": "Animación Interactiva de El Grinch",
+      "description": "Un proyecto creativo de diseño web frontend con animaciones fluidas utilizando únicamente HTML5 y CSS3 puro."
+    },
+    "freelancer-portfolio": {
+      "title": "Portafolio para Freelancer",
+      "description": "Diseño de sitio web profesional tipo portafolio con arquitectura moderna, totalmente responsivo y optimizado para SEO."
+    },
+    "responsive-landing": {
+      "title": "Tienda en Línea Responsiva",
+      "description": "Maquetación de una tienda de comercio electrónico responsiva con enfoque Mobile-First, estructurada de manera limpia y semántica."
+    },
+    "vaccination-page": {
+      "title": "Página informativa de Vacunación",
+      "description": "Sitio web interactivo con información sobre procesos de vacunación, requisitos y registro de citas."
+    },
+    "pokedex": {
+      "title": "Pokédex Interactiva",
+      "description": "Aplicación web que consume la PokeApi en tiempo real para buscar, listar y detallar las estadísticas de cada Pokémon."
+    },
+    "notary-system": {
+      "title": "CRM/ERP Notaría Pública No. 73",
+      "description": "Plataforma integral para digitalizar, automatizar y controlar el flujo de trabajo notarial. Incluye motor matemático de aranceles, automatización de escrituras en Word y conexión con Aspel SAE."
+    },
+    "worldcup-app": {
+      "title": "Quiniela Mundial 2026",
+      "description": "Aplicación web interactiva para pronosticar partidos del Mundial. Cuenta con puntuación en tiempo real, llave de eliminatorias interactivas, ranking global, panel de administración y reglas anti-copia."
+    }
+  },
+  "scrollToTop": {
+    "label": "Ir arriba"
+  },
+  "theme": {
+    "auto": "Automático",
+    "dark": "Oscuro",
+    "light": "Claro",
+    "toggleTheme": "Alternar tema"
+  }
+}

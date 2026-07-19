@@ -1,0 +1,8 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminBlog from '../../pages_react/AdminBlog.jsx';
+---
+
+<Layout isAdmin={true}>
+  <AdminBlog client:only="react" />
+</Layout>

@@ -1,0 +1,8 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AdminExperiences from '../../pages_react/AdminExperiences.jsx';
+---
+
+<Layout isAdmin={true}>
+  <AdminExperiences client:only="react" />
+</Layout>
