@@ -63,17 +63,18 @@ const AdminBlog = () => {
   const navigate = (path) => { window.location.href = path; };
 
   // Helper function to build image URL
-  const getImageUrl = (imageUrl) => {
-    if (!imageUrl) return null;
-    // If it's a full URL (starts with http/https), use it directly
-    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-      return imageUrl;
-    }
-    // If it's a relative path, prepend the API base URL
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return '';
+    if (imagePath.startsWith('http')) return imagePath;
+    
     const baseUrl = API_CONFIG.getBaseURL();
-    // Ensure the path starts with / and doesn't have double slashes
-    const cleanPath = imageUrl.startsWith('/') ? imageUrl : `/${imageUrl}`;
-    return `${baseUrl}${cleanPath}`;
+
+    // Si la ruta ya tiene uploads/, asegurar que tenga el slash inicial
+    if (imagePath.startsWith('uploads/')) {
+        return `${baseUrl}/${imagePath}`;
+    }
+    
+    return `${baseUrl}/uploads/images/${imagePath}`;
   };
 
   const fetchPosts = useCallback(async () => {

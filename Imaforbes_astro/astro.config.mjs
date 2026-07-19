@@ -8,6 +8,10 @@ export default defineConfig({
     react(),
     tailwind()
   ],
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'hover'
+  },
   vite: {
     server: {
       proxy: {

@@ -42,7 +42,7 @@ import {
   SiFigma,
   SiApache,
 } from "react-icons/si";
-import { Briefcase, Calendar, MapPin, ArrowRight } from "lucide-react";
+
 
 const HeroBackground = () => (
   <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
