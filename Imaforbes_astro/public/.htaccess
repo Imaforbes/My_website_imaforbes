@@ -81,7 +81,7 @@
         Header set Cache-Control "max-age=2592000, private"
     </FilesMatch>
     <FilesMatch "\.(x?html?|php)$">
-        Header set Cache-Control "max-age=600, private, must-revalidate"
+        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
     </FilesMatch>
 </IfModule>
 

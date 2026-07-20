@@ -53,6 +53,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Dark mode handling */
+html {
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}
+
 html.dark {
   /* Override light variables to act as dark values for inline styles */
   --color-bg-light: var(--color-bg-dark);
