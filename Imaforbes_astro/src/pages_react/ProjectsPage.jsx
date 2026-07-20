@@ -66,26 +66,16 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
         className="cinematic-image-wrapper cursor-pointer"
         onClick={() => setPreviewImage && setPreviewImage(project.image)}
       >
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 100%)', zIndex: 1 }}></div>
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 100%)', zIndex: 1 }} className="dark:block hidden"></div>
         
-        {!imageLoaded && !imageError && (
-          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#111' }}>
-            <div style={{ width: '30px', height: '30px', border: '2px solid #333', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
-          </div>
-        )}
-        
-        {!imageError && (
-          <img
-            src={project.image}
-            alt={t(project.titleKey)}
-            style={{ opacity: imageLoaded ? 1 : 0, width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.8s ease' }}
-            onLoad={() => setImageLoaded(true)}
-            onError={() => { setImageError(true); setImageLoaded(false); }}
-            loading="lazy"
-            decoding="async"
-            className="cinematic-img"
-          />
-        )}
+        <img
+          src={project.image}
+          alt={t(project.titleKey)}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.8s ease' }}
+          loading="lazy"
+          decoding="async"
+          className="cinematic-img"
+        />
       </div>
 
       {/* Title - Responsive Floating */}
@@ -97,30 +87,32 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
 
       {/* Description & Links - Responsive */}
       <div className="cinematic-desc-container">
-        <p style={{ fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1.5rem', color: '#ccc', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>
+        <p className="text-gray-600 dark:text-gray-300" style={{ fontSize: '1rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
           {t(project.descriptionKey)}
         </p>
 
         <div className="project-actions" style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
-          <a
-            href={project.repo}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-premium cinematic-link"
-            onClick={(e) => e.stopPropagation()}
-            style={{ borderColor: 'transparent', padding: '0.5rem 0', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}
-          >
-            <span>{t("projects.view_code", "VIEW CODE")}</span>
-          </a>
+          {project.repo && project.repo !== "#" && (
+            <a
+              href={project.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-premium cinematic-link text-gray-800 dark:text-white"
+              onClick={(e) => e.stopPropagation()}
+              style={{ borderColor: 'transparent', padding: '0.5rem 0' }}
+            >
+              <span>{t("projects.view_code", "VIEW CODE")}</span>
+            </a>
+          )}
 
           {project.link && project.link !== "#" && (
             <a
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-premium cinematic-link"
+              className="btn-premium cinematic-link text-gray-800 dark:text-white"
               onClick={(e) => e.stopPropagation()}
-              style={{ borderColor: 'transparent', padding: '0.5rem 0', textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}
+              style={{ borderColor: 'transparent', padding: '0.5rem 0' }}
             >
               <span>{t("projects.discover", "DISCOVER")}</span>
             </a>

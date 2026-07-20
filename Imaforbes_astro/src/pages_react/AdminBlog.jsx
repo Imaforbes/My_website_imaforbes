@@ -68,13 +68,14 @@ const AdminBlog = () => {
     if (imagePath.startsWith('http')) return imagePath;
     
     const baseUrl = API_CONFIG.getBaseURL();
+    const cleanPath = imagePath.startsWith('/') ? imagePath.substring(1) : imagePath;
 
     // Si la ruta ya tiene uploads/, asegurar que tenga el slash inicial
-    if (imagePath.startsWith('uploads/')) {
-        return `${baseUrl}/${imagePath}`;
+    if (cleanPath.startsWith('uploads/')) {
+        return `${baseUrl}/${cleanPath}`;
     }
     
-    return `${baseUrl}/uploads/images/${imagePath}`;
+    return `${baseUrl}/uploads/images/${cleanPath}`;
   };
 
   const fetchPosts = useCallback(async () => {

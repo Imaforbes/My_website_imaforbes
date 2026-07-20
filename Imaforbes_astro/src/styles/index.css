@@ -207,13 +207,15 @@ html.dark .header-premium {
 }
 
 .header-premium.scrolled {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 html.dark .header-premium.scrolled {
   background: rgba(0, 0, 0, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .nav-premium {
@@ -439,15 +441,20 @@ html.dark .projects-title {
   font-size: clamp(2.5rem, 8vw, 5rem);
   font-weight: 900;
   margin: 0;
-  color: #fff;
+  color: #222;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  text-shadow: 0 10px 30px rgba(0,0,0,0.9), 0 2px 10px rgba(0,0,0,0.5);
+  text-shadow: 2px 2px 10px rgba(255,255,255,0.8);
   line-height: 1.1;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.5rem;
+}
+
+html.dark .cinematic-title {
+  color: #fff;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.9), 0 2px 10px rgba(0,0,0,0.5);
 }
 
 .cinematic-desc-container {

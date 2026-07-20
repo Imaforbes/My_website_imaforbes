@@ -516,14 +516,13 @@ const AboutPage = () => {
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 style={{ 
-                  position: 'absolute', top: '10%', left: '-15%', 
                   background: 'var(--color-surface-light)',
                   padding: '0.75rem 1rem', borderRadius: '12px',
                   border: '1px solid var(--color-border-light)',
                   boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
                   display: 'flex', alignItems: 'center', gap: '0.5rem'
                 }}
-                className="dark:bg-[#1a1a1a] dark:border-gray-800"
+                className="absolute top-[10%] -left-2 md:-left-8 lg:-left-[15%] dark:bg-[#1a1a1a] dark:border-gray-800"
               >
                 <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'var(--color-bg-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-light)' }} className="dark:bg-[#0a0a0a] dark:text-white">
                   <FaReact size={18} />
@@ -539,14 +538,13 @@ const AboutPage = () => {
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                 style={{ 
-                  position: 'absolute', bottom: '15%', right: '-10%', 
                   background: 'var(--color-surface-light)',
                   padding: '0.75rem 1rem', borderRadius: '12px',
                   border: '1px solid var(--color-border-light)',
                   boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
                   display: 'flex', alignItems: 'center', gap: '0.5rem'
                 }}
-                className="dark:bg-[#1a1a1a] dark:border-gray-800"
+                className="absolute bottom-[15%] -right-2 md:-right-6 lg:-right-[10%] dark:bg-[#1a1a1a] dark:border-gray-800"
               >
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                   <span style={{ fontSize: '1.2rem', color: 'var(--color-text-light)', fontWeight: 700 }} className="dark:text-white">+3 Años</span>
