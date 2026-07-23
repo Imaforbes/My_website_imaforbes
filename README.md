@@ -1,42 +1,42 @@
-# Sitio Web Imaforbes (Portafolio v2.0)
+# Imaforbes Website (Portfolio v2.0)
 
-Proyecto web de portafolio **IMAFORBES**, actualizado a su versión más reciente con una arquitectura orientada al rendimiento (Astro) y un backend robusto en PHP.
+**IMAFORBES** web portfolio project, updated to its latest version with a performance-oriented architecture (Astro) and a robust PHP backend.
 
-## Arquitectura Actual (¡Actualizado!)
+## Current Architecture (Updated!)
 
-El proyecto se divide principalmente en dos carpetas activas:
+The project is mainly divided into two active folders:
 
-- **`Imaforbes_astro/` (Frontend Activo 🚀)**: El nuevo frontend construido con **Astro**, **React**, **Tailwind CSS** y **Framer Motion**. Esta carpeta reemplaza por completo a la anterior SPA (Single Page Application). Al usar Astro, el sitio ahora soporta renderizado estático y mejora significativamente el SEO y el rendimiento (Performance). Todas las modificaciones visuales, páginas y componentes se realizan aquí.
+- **`Imaforbes_astro/` (Active Frontend 🚀)**: The new frontend built with **Astro**, **React**, **Tailwind CSS**, and **Framer Motion**. This folder completely replaces the previous SPA (Single Page Application). By using Astro, the site now supports static rendering and significantly improves SEO and performance. All visual modifications, pages, and components are handled here.
   
-- **`api_db/` (Backend Activo ⚙️)**: El backend en **PHP** (API REST). Maneja las conexiones con la base de datos MySQL, procesamiento de correos de contacto (con medidas Anti-Spam), control de sesiones, operaciones CRUD del blog, subida de imágenes, etc.
+- **`api_db/` (Active Backend ⚙️)**: The **PHP** backend (REST API). It manages connections to the MySQL database, processing of contact emails (with Anti-Spam measures), session control, blog CRUD operations, image uploads, etc.
 
-*Nota: Las carpetas `Imaforbes_frontend/` y `Imaforbes_Api_backend/` corresponden a las versiones antiguas de la aplicación y se conservan únicamente como respaldo (archivos históricos).*
+*Note: The `Imaforbes_frontend/` and `Imaforbes_Api_backend/` folders correspond to the old versions of the application and are kept only as a backup (historical files).*
 
-## Cómo funciona la conexión (Frontend ↔ Backend)
+## How the Connection Works (Frontend ↔ Backend)
 
-- El **frontend (Astro)** consume datos JSON desde la **API (PHP)** ubicada en `api_db/api/`.
-- **En entorno de desarrollo local**, Astro utiliza un **proxy de Vite** (configurado en `Imaforbes_astro/astro.config.mjs`) para evitar problemas de CORS:
-  - Todas las peticiones a `/api` son redirigidas internamente hacia `http://localhost:8888/My_website_imaforbes/api_db`.
-  - Las peticiones a `/uploads` son redirigidas a `http://localhost:8888/My_website_imaforbes/api_db/uploads`.
+- The **frontend (Astro)** consumes JSON data from the **API (PHP)** located at `api_db/api/`.
+- **In the local development environment**, Astro uses a **Vite proxy** (configured in `Imaforbes_astro/astro.config.mjs`) to avoid CORS issues:
+  - All requests to `/api` are internally redirected to `http://localhost:8888/My_website_imaforbes/api_db`.
+  - Requests to `/uploads` are redirected to `http://localhost:8888/My_website_imaforbes/api_db/uploads`.
 
-## Requisitos del Sistema
+## System Requirements
 
-- **Node.js + npm** (para ejecutar y construir el frontend Astro).
-- **PHP** (recomendado usar **MAMP** en macOS).
-- **MySQL** (Base de datos local configurada en puerto 8889 por defecto en MAMP).
+- **Node.js + npm** (to run and build the Astro frontend).
+- **PHP** (using **MAMP** on macOS is recommended).
+- **MySQL** (Local database configured on port 8889 by default in MAMP).
 
-## Ejecutar en local (Modo Desarrollo)
+## Run Locally (Development Mode)
 
-### 1) Entorno Backend (MAMP)
+### 1) Backend Environment (MAMP)
 
-1. Enciende los servidores de Apache y MySQL en la aplicación **MAMP**.
-2. Verifica que la carpeta principal `My_website_imaforbes` esté ubicada dentro de la ruta `/Applications/MAMP/htdocs/`.
-3. Tu base de datos MySQL debe contar con la estructura necesaria (usa el archivo `portfolio.sql` para importar las tablas a tu gestor local, ej. phpMyAdmin).
-4. El backend estará disponible en `http://localhost:8888/My_website_imaforbes/api_db/`.
+1. Start the Apache and MySQL servers in the **MAMP** application.
+2. Ensure that the main `My_website_imaforbes` folder is located inside the `/Applications/MAMP/htdocs/` path.
+3. Your MySQL database must have the necessary structure (use the `portfolio.sql` file to import the tables to your local manager, e.g., phpMyAdmin).
+4. The backend will be available at `http://localhost:8888/My_website_imaforbes/api_db/`.
 
-### 2) Entorno Frontend (Astro)
+### 2) Frontend Environment (Astro)
 
-Abre una terminal, navega a la carpeta activa del frontend e inicializa el servidor:
+Open a terminal, navigate to the active frontend folder, and start the server:
 
 ```bash
 cd /Applications/MAMP/htdocs/My_website_imaforbes/Imaforbes_astro
@@ -44,28 +44,28 @@ npm install
 npm run dev
 ```
 
-El sitio frontend cargará en tu navegador, generalmente en la dirección `http://localhost:4321`.
+The frontend site will load in your browser, usually at the address `http://localhost:4321`.
 
-## Resumen de la carpeta Frontend (`Imaforbes_astro/`)
+## Frontend Folder Overview (`Imaforbes_astro/`)
 
-- **`src/pages/`**: Rutas nativas de Astro (`.astro`). Encargadas del layout principal y del SEO.
-- **`src/pages_react/`**: Componentes de página complejos elaborados en React (`.jsx`) que requieren estado dinámico (useState, useEffect, animaciones de Framer Motion).
-- **`src/components/`**: Componentes visuales reutilizables (Header, Footer, Tarjetas, Modales).
-- **`src/services/` y `src/hooks/`**: Lógica de conexión a la API (`api.js`) y Custom Hooks para manejar el estado global.
-- **`public/`**: Recursos estáticos (favicons, tipografías locales, etc.).
-- **`astro.config.mjs`**: Archivo crucial de configuración donde se declaran las reglas del proxy y las integraciones de Astro (React, Tailwind).
+- **`src/pages/`**: Native Astro routes (`.astro`). Responsible for the main layout and SEO.
+- **`src/pages_react/`**: Complex page components built in React (`.jsx`) that require dynamic state (useState, useEffect, Framer Motion animations).
+- **`src/components/`**: Reusable visual components (Header, Footer, Cards, Modals).
+- **`src/services/` and `src/hooks/`**: API connection logic (`api.js`) and Custom Hooks to manage global state.
+- **`public/`**: Static assets (favicons, local fonts, etc.).
+- **`astro.config.mjs`**: Crucial configuration file where proxy rules and Astro integrations (React, Tailwind) are declared.
 
-## Resumen de la carpeta Backend (`api_db/`)
+## Backend Folder Overview (`api_db/`)
 
-- **`api/`**: Archivos `.php` expuestos públicamente como endpoints (`blog.php`, `contact.php`, `projects.php`).
-- **`config/`**: Archivos de conexión a base de datos (`database.php`) y manejo de respuestas (`response.php`).
-- **`utils/`**: Herramientas críticas del backend como Protección CSRF, Rate Limiting (contra SPAM) y el envío de correos vía SMTP (`EmailSender.php`).
-- **`uploads/images/`**: Directorio donde se almacenan físicamente las imágenes subidas a través de la API (por ejemplo, miniaturas del blog).
+- **`api/`**: `.php` files publicly exposed as endpoints (`blog.php`, `contact.php`, `projects.php`).
+- **`config/`**: Database connection files (`database.php`) and response management (`response.php`).
+- **`utils/`**: Critical backend tools such as CSRF Protection, Rate Limiting (against SPAM), and sending emails via SMTP (`EmailSender.php`).
+- **`uploads/images/`**: Directory where images uploaded via the API are physically stored (e.g., blog thumbnails).
 
-## Seguridad 🔒
+## Security 🔒
 
-- **Archivos Sensibles**: Evita compartir públicamente el archivo `api_db/config/database.php` y cualquier configuración de servidor SMTP. 
-- La API de contacto incluye rate limiting por IP, impidiendo más de 3 solicitudes en 10 minutos para combatir spambots.
+- **Sensitive Files**: Avoid publicly sharing the `api_db/config/database.php` file and any SMTP server configuration.
+- The contact API includes rate limiting by IP, preventing more than 3 requests in 10 minutes to combat spambots.
 
 ---
-*Documentación generada y actualizada para reflejar el traslado exitoso a Astro Framework.*
+*Documentation generated and updated to reflect the successful migration to the Astro Framework.*
