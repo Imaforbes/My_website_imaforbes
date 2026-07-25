@@ -89,7 +89,7 @@ const HomePage = () => {
           {t("home.title")}
         </motion.h1>
 
-        <motion.h2 variants={itemVariants} className="hero-subtitle" style={{ fontSize: 'clamp(1.2rem, 3vw, 1.8rem)', marginTop: '1rem' }}>
+        <motion.h2 variants={itemVariants} className="hero-subtitle" style={{ fontSize: 'clamp(0.9rem, 2.8vw, 1.8rem)', marginTop: '1rem', whiteSpace: 'nowrap' }}>
           {t("home.subtitle")}
         </motion.h2>
 

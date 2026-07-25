@@ -67,14 +67,14 @@ const { title = "Imaforbes Portfolio", description = "Portfolio profesional de I
     
     <div class="app-wrapper" style="display: flex; flex-direction: column; min-height: 100svh;">
       {!isAdmin && <Header client:load currentPath={Astro.url.pathname} />}
-      {!isAdmin && <Breadcrumbs client:load currentPath={Astro.url.pathname} />}
+      {!isAdmin && <Breadcrumbs client:idle currentPath={Astro.url.pathname} />}
       
       <main style={`flex-grow: 1; padding-top: ${!isAdmin ? '5rem' : '0'};`}>
         <slot />
       </main>
       
-      {!isAdmin && <Footer client:load currentPath={Astro.url.pathname} />}
-      {!isAdmin && <ScrollToTopButton client:load />}
+      {!isAdmin && <Footer client:visible currentPath={Astro.url.pathname} />}
+      {!isAdmin && <ScrollToTopButton client:idle />}
     </div>
   </body>
 </html>
