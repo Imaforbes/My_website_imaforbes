@@ -5,8 +5,8 @@
     "experience-empty": "No experience recorded",
     "experience-loading": "Loading experience...",
     "experience-title": "Experience",
-    "hero-text-1": "Full Stack Web Developer with a passion for building clean, scalable, and efficient web applications.",
-    "hero-text-2": "I specialize in modern technologies and creating smooth, engaging digital experiences.",
+    "hero-text-1": "My fascination with technology began at the age of 13. I grew up immersed in books by the industry's greatest innovators. Among them, Steve Jobs' vision and story became my greatest inspiration, fundamentally shaping my way of thinking.",
+    "hero-text-2": "That impact was so strong that it pushed me out of my comfort zone to study abroad for a year, far from home. That adventure turned into one of the best experiences of my life, forging the engineering and design mindset I bring to every project today.",
     "hero-title": "About Me",
     "skills-count": "{{count}} of {{total}} skills",
     "skills-filter-all": "All",
@@ -54,9 +54,9 @@
   },
   "footer": {
     "copyright": "All rights reserved",
-    "description": "Full Stack Developer passionate about building high-quality digital experiences.",
+    "description": "Software Engineer & Developer passionate about building high-quality digital experiences.",
     "get-in-touch": "Get in touch",
-    "made-with": "Made with",
+    "made-with": "Made with programming knowledge",
     "navigation": "Navigation",
     "response-time": "Estimated response time: less than 24 hours"
   },
@@ -69,9 +69,9 @@
   },
   "home": {
     "contact": "Contact",
-    "description": "Welcome to my portfolio! I build amazing digital experiences.",
-    "subtitle": "Full Stack Web Developer & Designer",
-    "title": "Imanol Perez Arteaga",
+    "description": "Welcome to my digital ecosystem. Here I document my software projects and share my personal experiences, thoughts, and learnings through my blog.",
+    "subtitle": "Software Engineer & Developer",
+    "title": "Imanol",
     "view-projects": "View Projects"
   },
   "language": {

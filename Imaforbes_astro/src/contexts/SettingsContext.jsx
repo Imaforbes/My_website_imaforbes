@@ -22,11 +22,7 @@ export const SettingsProvider = ({ children }) => {
     const savedTheme = safeLocalStorage.getItem('app_theme');
     return savedTheme || 'dark';
   });
-  const [language, setLanguage] = useState(() => {
-    // Load from localStorage first, then default to browser language or 'es'
-    const savedLang = safeLocalStorage.getItem('app_language');
-    return savedLang || i18n.language || 'es';
-  });
+  const [language, setLanguage] = useState('es'); // SSR default
   const [loading, setLoading] = useState(true);
 
   // Define applyTheme function
@@ -103,6 +99,20 @@ export const SettingsProvider = ({ children }) => {
     safeLocalStorage.setItem('app_language', newLanguage);
   }, [i18n]);
 
+  // Initialize language from localStorage on client-side to prevent hydration mismatch
+  useEffect(() => {
+    const savedLang = safeLocalStorage.getItem('app_language');
+    let browserLang = 'es';
+    if (typeof navigator !== 'undefined' && navigator.language) {
+      browserLang = navigator.language.startsWith('en') ? 'en' : 'es';
+    }
+    const targetLang = savedLang || browserLang;
+    
+    if (targetLang !== 'es') {
+      setLanguage(targetLang);
+    }
+  }, []);
+
   // Load settings from API on mount
   useEffect(() => {
     loadSettingsFromAPI();
@@ -158,11 +168,16 @@ export const SettingsProvider = ({ children }) => {
             : null;
 
           if (appearance) {
-            if (appearance.theme) {
+            // Solo sobrescribimos si no hay una preferencia local ya guardada
+            // o si estamos forzando la sincronización.
+            const hasLocalTheme = !!safeLocalStorage.getItem('app_theme');
+            const hasLocalLanguage = !!safeLocalStorage.getItem('app_language');
+
+            if (appearance.theme && !hasLocalTheme) {
               setTheme(appearance.theme);
               safeLocalStorage.setItem('app_theme', appearance.theme);
             }
-            if (appearance.language) {
+            if (appearance.language && !hasLocalLanguage) {
               setLanguage(appearance.language);
               safeLocalStorage.setItem('app_language', appearance.language);
             }
@@ -185,14 +200,38 @@ export const SettingsProvider = ({ children }) => {
     }
   };
 
-  const updateTheme = (newTheme) => {
+  const updateTheme = async (newTheme) => {
     setTheme(newTheme);
     applyTheme(newTheme);
+    
+    // Si el usuario está autenticado, sincronizar el tema con la base de datos
+    // para que no se sobrescriba al recargar la página.
+    const authToken = safeLocalStorage.getItem('auth_token');
+    if (authToken) {
+      try {
+        // Importación dinámica para evitar problemas de dependencias circulares si las hubiera
+        const { api } = await import('../services/api.js');
+        await api.settings.update({ appearance: { theme: newTheme, language } });
+      } catch (error) {
+        console.warn('Failed to sync theme with API:', error);
+      }
+    }
   };
 
-  const updateLanguage = (newLanguage) => {
+  const updateLanguage = async (newLanguage) => {
     setLanguage(newLanguage);
     applyLanguage(newLanguage);
+    
+    // Si el usuario está autenticado, sincronizar el idioma con la base de datos
+    const authToken = safeLocalStorage.getItem('auth_token');
+    if (authToken) {
+      try {
+        const { api } = await import('../services/api.js');
+        await api.settings.update({ appearance: { theme, language: newLanguage } });
+      } catch (error) {
+        console.warn('Failed to sync language with API:', error);
+      }
+    }
   };
 
   const value = {

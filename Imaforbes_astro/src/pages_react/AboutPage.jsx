@@ -15,6 +15,7 @@ import withProviders from '../components/withProviders.jsx';
  */
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { BorderBeam } from "border-beam";
 import { useTranslation } from "react-i18next";
 import { Briefcase, Calendar, MapPin, ArrowRight, ChevronRight, ChevronLeft } from "lucide-react";
 import { api } from "../services/api.js";
@@ -560,7 +561,7 @@ const AboutPage = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            style={{ paddingLeft: '2rem' }}
+            className="lg:pl-10"
           >
             <h1 className="hero-title" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', marginBottom: '1.5rem', textAlign: 'left', lineHeight: 1.1 }}>
               {t("about.hero-title")}
@@ -572,15 +573,17 @@ const AboutPage = () => {
               {t("about.hero-text-2")}
             </p>
 
-            <a
-              href="/resources/CvIng_Imanol Perez Arteaga.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-premium"
-              style={{ display: 'inline-flex' }}
-            >
-              {t("about.download-cv")}
-            </a>
+            <BorderBeam theme="auto" size="sm" duration={3} colorVariant="ocean" className="rounded-full w-max">
+              <a
+                href="/resources/CvIng_Imanol Perez Arteaga.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-premium"
+                style={{ display: 'inline-flex', padding: '0.75rem 1.75rem', borderRadius: '9999px', borderBottom: 'none', background: 'var(--color-surface-light)' }}
+              >
+                {t("about.download-cv")}
+              </a>
+            </BorderBeam>
           </motion.div>
         </div>
 

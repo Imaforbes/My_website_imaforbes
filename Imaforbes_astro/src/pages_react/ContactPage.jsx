@@ -15,6 +15,7 @@ import withProviders from '../components/withProviders.jsx';
  */
 import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { BorderBeam } from "border-beam";
 import {
   FiSend,
   FiMail,
@@ -105,11 +106,22 @@ const ContactPage = () => {
           <motion.div 
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            style={{ position: 'absolute', top: '5%', right: '10%', opacity: 0.6, alignItems: 'center', gap: '0.5rem', background: 'var(--color-surface-light)', padding: '0.5rem 1rem', borderRadius: '50px', border: '1px solid var(--color-border-light)' }}
-            className="hidden md:flex dark:bg-[#1a1a1a] dark:border-gray-800"
+            style={{ position: 'absolute', top: '5%', right: '10%', zIndex: 20 }}
+            className="hidden md:flex"
           >
-            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></div>
-            <span style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>Available for work</span>
+            <BorderBeam theme="auto" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
+              <div style={{ 
+                display: 'flex', alignItems: 'center', gap: '0.5rem', 
+                padding: '0.5rem 1rem', borderRadius: '50px', 
+                background: 'var(--color-surface-light)',
+                border: '1px solid var(--color-border-light)',
+                fontSize: '0.8rem', fontWeight: 500, color: 'var(--color-text-muted-light)',
+                position: 'relative'
+              }} className="dark:bg-[#111] dark:border-gray-800">
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }}></span>
+                Available for new opportunities
+              </div>
+            </BorderBeam>
           </motion.div>
 
           <div className="projects-header" style={{ position: 'relative', paddingTop: '1rem' }}>
@@ -226,10 +238,10 @@ const ContactPage = () => {
               viewport={{ once: true }}
               onSubmit={handleSubmit}
               className="card-premium"
-              style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', padding: 'clamp(1.25rem, 4vw, 2rem)' }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '2rem', padding: 'clamp(1.5rem, 5vw, 2.5rem)' }}
             >
               <div>
-                <label htmlFor="name" style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem', color: 'var(--color-text-muted-light)' }}>
+                <label htmlFor="name" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--color-text-dark)' }} className="dark:text-white">
                   {t("contact.name")}
                 </label>
                 <input
@@ -242,22 +254,21 @@ const ContactPage = () => {
                   maxLength={200}
                   style={{ 
                     width: '100%', 
-                    padding: '1rem', 
-                    background: 'var(--color-surface-light)', 
-                    border: validationErrors.name ? '1px solid red' : '1px solid var(--color-border-light)', 
-                    borderRadius: '8px',
-                    color: 'var(--color-text-light)',
-                    fontSize: '1rem'
+                    padding: '1rem 1.25rem', 
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    transition: 'all 0.3s ease'
                   }}
-                  className="dark:bg-gray-900 dark:border-gray-800 dark:text-white"
+                  className={`bg-gray-50 border ${validationErrors.name ? 'border-red-500' : 'border-gray-200'} focus:border-gray-900 focus:ring-2 focus:ring-gray-900/20 dark:bg-[#151515] dark:${validationErrors.name ? 'border-red-500' : 'border-gray-800'} dark:focus:border-white dark:focus:ring-white/20 dark:text-white outline-none`}
+                  placeholder="Tu nombre completo"
                 />
                 {validationErrors.name && (
-                  <p style={{ color: 'red', fontSize: '0.8rem', marginTop: '0.25rem' }}>{validationErrors.name}</p>
+                  <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.5rem' }}>{validationErrors.name}</p>
                 )}
               </div>
               
               <div>
-                <label htmlFor="email" style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem', color: 'var(--color-text-muted-light)' }}>
+                <label htmlFor="email" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--color-text-dark)' }} className="dark:text-white">
                   {t("contact.email")}
                 </label>
                 <input
@@ -270,22 +281,21 @@ const ContactPage = () => {
                   maxLength={200}
                   style={{ 
                     width: '100%', 
-                    padding: '1rem', 
-                    background: 'var(--color-surface-light)', 
-                    border: validationErrors.email ? '1px solid red' : '1px solid var(--color-border-light)', 
-                    borderRadius: '8px',
-                    color: 'var(--color-text-light)',
-                    fontSize: '1rem'
+                    padding: '1rem 1.25rem', 
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    transition: 'all 0.3s ease'
                   }}
-                  className="dark:bg-gray-900 dark:border-gray-800 dark:text-white"
+                  className={`bg-gray-50 border ${validationErrors.email ? 'border-red-500' : 'border-gray-200'} focus:border-gray-900 focus:ring-2 focus:ring-gray-900/20 dark:bg-[#151515] dark:${validationErrors.email ? 'border-red-500' : 'border-gray-800'} dark:focus:border-white dark:focus:ring-white/20 dark:text-white outline-none`}
+                  placeholder="tu@correo.com"
                 />
                 {validationErrors.email && (
-                  <p style={{ color: 'red', fontSize: '0.8rem', marginTop: '0.25rem' }}>{validationErrors.email}</p>
+                  <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.5rem' }}>{validationErrors.email}</p>
                 )}
               </div>
               
               <div>
-                <label htmlFor="message" style={{ display: 'block', fontSize: '0.9rem', marginBottom: '0.5rem', color: 'var(--color-text-muted-light)' }}>
+                <label htmlFor="message" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--color-text-dark)' }} className="dark:text-white">
                   {t("contact.message")}
                 </label>
                 <textarea
@@ -298,51 +308,66 @@ const ContactPage = () => {
                   maxLength={2000}
                   style={{ 
                     width: '100%', 
-                    padding: '1rem', 
-                    background: 'var(--color-surface-light)', 
-                    border: validationErrors.message ? '1px solid red' : '1px solid var(--color-border-light)', 
-                    borderRadius: '8px',
-                    color: 'var(--color-text-light)',
+                    padding: '1rem 1.25rem', 
+                    borderRadius: '12px',
                     fontSize: '1rem',
-                    resize: 'none'
+                    resize: 'none',
+                    transition: 'all 0.3s ease'
                   }}
-                  className="dark:bg-gray-900 dark:border-gray-800 dark:text-white"
+                  className={`bg-gray-50 border ${validationErrors.message ? 'border-red-500' : 'border-gray-200'} focus:border-gray-900 focus:ring-2 focus:ring-gray-900/20 dark:bg-[#151515] dark:${validationErrors.message ? 'border-red-500' : 'border-gray-800'} dark:focus:border-white dark:focus:ring-white/20 dark:text-white outline-none`}
+                  placeholder="¿En qué te puedo ayudar?"
                 ></textarea>
-                {validationErrors.message && (
-                  <p style={{ color: 'red', fontSize: '0.8rem', marginTop: '0.25rem' }}>{validationErrors.message}</p>
-                )}
-                <p style={{ textAlign: 'right', fontSize: '0.8rem', color: 'var(--color-text-muted-light)', marginTop: '0.25rem' }}>
-                  {formData.message.length}/2000
-                </p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem' }}>
+                  {validationErrors.message ? (
+                    <p style={{ color: '#ef4444', fontSize: '0.8rem' }}>{validationErrors.message}</p>
+                  ) : <div></div>}
+                  <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted-light)' }}>
+                    {formData.message.length}/2000
+                  </p>
+                </div>
+              </div>
+
+              {/* Privacy Policy Checkbox */}
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-gray-50 border border-gray-200 dark:bg-[#151515] dark:border-gray-800">
+                <div className="flex items-center h-5 mt-0.5">
+                  <input
+                    id="privacy"
+                    name="privacy"
+                    type="checkbox"
+                    required
+                    className="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:checked:bg-white dark:focus:ring-white transition-colors cursor-pointer"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label htmlFor="privacy" className="text-sm font-medium text-gray-900 dark:text-white cursor-pointer">
+                    {t("contact.privacy-title")}
+                  </label>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    {t("contact.privacy-text")}
+                  </p>
+                </div>
               </div>
 
               <button
                 type="submit"
                 disabled={status.sending}
-                className="btn-premium"
-                style={{ width: '100%', justifyContent: 'center' }}
+                className="group relative flex items-center justify-center gap-2 w-full py-4 px-6 rounded-xl overflow-hidden transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed bg-gray-900 text-white dark:bg-white dark:text-gray-900"
               >
-                {status.sending ? (
-                  <>
-                    <FiLoader className="animate-spin" />
-                    <span>{t("contact.sending")}</span>
-                  </>
-                ) : (
-                  <>
-                    <span>{t("contact.send")}</span>
-                    <FiSend />
-                  </>
-                )}
+                <div className="absolute inset-0 bg-white/20 dark:bg-black/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                <div className="relative z-10 flex items-center gap-2 font-medium">
+                  {status.sending ? (
+                    <>
+                      <FiLoader className="animate-spin" />
+                      <span>{t("contact.sending")}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>{t("contact.send")}</span>
+                      <FiSend className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                    </>
+                  )}
+                </div>
               </button>
-
-              <div className="card-premium" style={{ background: 'transparent' }}>
-                <h4 style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--color-text-light)', marginBottom: '0.5rem' }} className="dark:text-white">
-                  {t("contact.privacy-title")}
-                </h4>
-                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted-light)', lineHeight: 1.5 }}>
-                  {t("contact.privacy-text")}
-                </p>
-              </div>
             </motion.form>
           </div>
         </div>

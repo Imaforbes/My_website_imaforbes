@@ -66,7 +66,7 @@ require_once '../auth/session.php';
 
 // Start session explicitly (after CORS headers are set)
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+    SessionManager::startSession();
 }
 
 // Check multiple session variables for backward compatibility

@@ -89,11 +89,19 @@ class CsrfProtection
         $token = null;
         
         // Check X-CSRF-Token header
-        $headers = getallheaders();
-        if (isset($headers['X-CSRF-Token'])) {
-            $token = $headers['X-CSRF-Token'];
-        } elseif (isset($headers['x-csrf-token'])) {
-            $token = $headers['x-csrf-token'];
+        $token = null;
+        if (function_exists('getallheaders')) {
+            $headers = getallheaders();
+            if (isset($headers['X-CSRF-Token'])) {
+                $token = $headers['X-CSRF-Token'];
+            } elseif (isset($headers['x-csrf-token'])) {
+                $token = $headers['x-csrf-token'];
+            }
+        }
+
+        // Fallback for Nginx / FastCGI where getallheaders might not work or be available
+        if (!$token && isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+            $token = $_SERVER['HTTP_X_CSRF_TOKEN'];
         }
 
         // If not in header, check request body

@@ -2,6 +2,7 @@ import withProviders from '../components/withProviders.jsx';
 // src/pages/HomePage.jsx
 import React from "react";
 import { motion } from "framer-motion";
+import { BorderBeam } from "border-beam";
 
 import { FiArrowRight, FiMail, FiCode, FiTerminal, FiLayout, FiServer } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
@@ -69,16 +70,19 @@ const HomePage = () => {
       >
         {/* Status Pill */}
         <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
-          <div style={{ 
-            display: 'flex', alignItems: 'center', gap: '0.5rem', 
-            padding: '0.5rem 1rem', borderRadius: '50px', 
-            background: 'var(--color-surface-light)',
-            border: '1px solid var(--color-border-light)',
-            fontSize: '0.8rem', fontWeight: 500, color: 'var(--color-text-muted-light)'
-          }} className="dark:bg-[#111] dark:border-gray-800">
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }}></span>
-            Available for new opportunities
-          </div>
+          <BorderBeam theme="auto" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
+            <div style={{ 
+              display: 'flex', alignItems: 'center', gap: '0.5rem', 
+              padding: '0.5rem 1rem', borderRadius: '50px', 
+              background: 'var(--color-surface-light)',
+              border: '1px solid var(--color-border-light)',
+              fontSize: '0.8rem', fontWeight: 500, color: 'var(--color-text-muted-light)',
+              position: 'relative'
+            }} className="dark:bg-[#111] dark:border-gray-800">
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }}></span>
+              Available for new opportunities
+            </div>
+          </BorderBeam>
         </motion.div>
 
         <motion.h1 variants={itemVariants} className="hero-title" style={{ fontSize: 'clamp(3rem, 8vw, 5.5rem)', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
@@ -94,17 +98,21 @@ const HomePage = () => {
         </motion.p>
 
         <motion.div variants={itemVariants} className="hero-actions" style={{ marginTop: '2.5rem' }}>
-          <a href="/projects" className="btn-premium">
-            <span className="btn-icon">
-              <FiCode /> {t("home.view-projects")} <FiArrowRight />
-            </span>
-          </a>
+          <BorderBeam theme="auto" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
+            <a href="/projects" className="btn-premium dark:bg-[#111] dark:border-gray-800" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)' }}>
+              <span className="btn-icon">
+                <FiCode /> {t("home.view-projects")} <FiArrowRight />
+              </span>
+            </a>
+          </BorderBeam>
           
-          <a href="/contact" className="btn-premium" style={{ borderColor: 'var(--color-text-muted-light)', color: 'var(--color-text-muted-light)', background: 'transparent' }}>
-            <span className="btn-icon">
-              <FiMail /> {t("home.contact")}
-            </span>
-          </a>
+          <BorderBeam theme="auto" size="sm" duration={3} colorVariant="mono" className="rounded-full">
+            <a href="/contact" className="btn-premium dark:bg-[#111] dark:border-gray-800" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)', color: 'var(--color-text-muted-light)' }}>
+              <span className="btn-icon">
+                <FiMail /> {t("home.contact")}
+              </span>
+            </a>
+          </BorderBeam>
         </motion.div>
 
         {/* Floating Skills/Tags to add life */}

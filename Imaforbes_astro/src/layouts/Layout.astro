@@ -29,17 +29,35 @@ const { title = "Imaforbes Portfolio", description = "Portfolio profesional de I
     <script is:inline>
       // Apply theme immediately to prevent flash
       (function () {
-        const root = document.documentElement;
-        root.classList.add("dark");
-        root.classList.remove("light");
-        
-        // Wait for body to exist before adding class
-        if (document.body) {
-          document.body.classList.add("dark-theme");
-        } else {
-          document.addEventListener("DOMContentLoaded", function () {
-            document.body.classList.add("dark-theme");
-          });
+        try {
+          var savedTheme = localStorage.getItem('app_theme');
+          var theme = 'dark'; // Default
+          
+          if (savedTheme === 'light') {
+            theme = 'light';
+          } else if (savedTheme === 'dark') {
+            theme = 'dark';
+          } else if (savedTheme === 'auto') {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          
+          var root = document.documentElement;
+          root.classList.add(theme);
+          root.classList.remove(theme === 'dark' ? 'light' : 'dark');
+          
+          var addBodyClass = function() {
+            document.body.classList.remove('light-theme', 'dark-theme', 'auto-theme');
+            document.body.classList.add(theme + '-theme');
+          };
+          
+          if (document.body) {
+            addBodyClass();
+          } else {
+            document.addEventListener('DOMContentLoaded', addBodyClass);
+          }
+        } catch (e) {
+          // Fallback if localStorage is blocked
+          document.documentElement.classList.add('dark');
         }
       })();
     </script>

@@ -5,8 +5,8 @@
     "experience-empty": "No hay experiencia para mostrar",
     "experience-loading": "Cargando experiencia...",
     "experience-title": "Experiencia",
-    "hero-text-1": "Desarrollador Web Full Stack con pasión por crear aplicaciones web limpias, escalables y eficientes.",
-    "hero-text-2": "Me especializo en tecnologías modernas y en crear experiencias digitales fluidas y atractivas.",
+    "hero-text-1": "Mi fascinación por la tecnología comenzó a los 13 años. Crecí inmerso en los libros de los grandes innovadores de la industria. Entre todos ellos, la visión y la historia de Steve Jobs se convirtieron en mi mayor inspiración, marcando profundamente mi forma de pensar.",
+    "hero-text-2": "Ese impacto fue tan fuerte que me impulsó a dejar mi zona de confort y estudiar un año en otro país, lejos de casa. Esa aventura se transformó en una de las mejores experiencias de mi vida, forjando la mentalidad de ingeniería y diseño con la que hoy construyo cada proyecto.",
     "hero-title": "Sobre mí",
     "skills-count": "{{count}} de {{total}} habilidades",
     "skills-filter-all": "Todas",
@@ -54,9 +54,9 @@
   },
   "footer": {
     "copyright": "Todos los derechos reservados",
-    "description": "Desarrollador Full Stack apasionado por construir experiencias digitales de calidad.",
+    "description": "Ingeniero de Software y Desarrollador apasionado por construir experiencias digitales de calidad.",
     "get-in-touch": "Contacto",
-    "made-with": "Creado con",
+    "made-with": "Creado con conocimiento en programación",
     "navigation": "Navegación",
     "response-time": "Tiempo de respuesta estimado: menos de 24 horas"
   },
@@ -69,9 +69,9 @@
   },
   "home": {
     "contact": "Contacto",
-    "description": "¡Bienvenido a mi portafolio! Creo experiencias digitales increíbles.",
-    "subtitle": "Desarrollador Web Full Stack & Diseñador",
-    "title": "Imanol Perez Arteaga",
+    "description": "Bienvenido a mi ecosistema digital. Aquí documento mis proyectos de software y comparto mis vivencias personales, pensamientos y aprendizajes a través de mi blog.",
+    "subtitle": "Ingeniero de Software & Desarrollador",
+    "title": "Imanol",
     "view-projects": "Ver proyectos"
   },
   "language": {

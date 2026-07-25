@@ -2,6 +2,7 @@ import withProviders from '../components/withProviders.jsx';
 // src/pages/ProjectsPage.jsx
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { BorderBeam } from "border-beam";
 import { useTranslation } from "react-i18next";
 import { FiGithub, FiExternalLink, FiBriefcase, FiAward } from "react-icons/fi";
 
@@ -45,81 +46,87 @@ const HeroBackground = () => (
   </div>
 );
 
-/**
- * ProjectCard Component
- * Renders an individual project with a premium card design
- */
 const ProjectCard = ({ project, t, setPreviewImage }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
-
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
   };
 
   return (
-    <motion.div variants={cardVariants} className="project-cinematic-card" style={{ zIndex: 10 }}>
+    <BorderBeam theme="auto" size="pulse-inner" duration={6} colorVariant="ocean" className="rounded-2xl h-full w-full relative">
+      <motion.div variants={cardVariants} className="project-card-premium h-full dark:bg-[#111] dark:border-gray-800" style={{ zIndex: 10, background: 'var(--color-surface-light)', borderRadius: '1rem', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid var(--color-border-light)' }}>
       
       {/* Background Image Container */}
       <div 
-        className="cinematic-image-wrapper cursor-pointer"
+        className="cursor-pointer"
+        style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}
         onClick={() => setPreviewImage && setPreviewImage(project.image)}
       >
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 100%)', zIndex: 1 }} className="dark:block hidden"></div>
-        
         <img
           src={project.image}
           alt={t(project.titleKey)}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.8s ease' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
           loading="lazy"
           decoding="async"
-          className="cinematic-img"
+          className="hover:scale-105"
         />
       </div>
 
-      {/* Title - Responsive Floating */}
-      <div className="cinematic-title-container">
-        <h3 className="cinematic-title">
-          {t(project.titleKey).split(' ').map((word, i) => <span key={i}>{word}</span>)}
+      {/* Content Container */}
+      <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--color-text-dark)' }} className="dark:text-white">
+          {t(project.titleKey)}
         </h3>
-      </div>
-
-      {/* Description & Links - Responsive */}
-      <div className="cinematic-desc-container">
-        <p className="text-gray-600 dark:text-gray-300" style={{ fontSize: '1rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+        
+        <p className="text-gray-600 dark:text-gray-300" style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
           {t(project.descriptionKey)}
         </p>
+        
+        {/* Tags */}
+        {project.tags && project.tags.length > 0 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
+            {project.tags.map((tag, i) => (
+              <span key={i} className="dark:bg-[#222] dark:text-gray-300 dark:border-gray-700" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem', borderRadius: '50px', background: 'var(--color-bg-light)', color: 'var(--color-text-muted-light)', border: '1px solid var(--color-border-light)' }}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
 
-        <div className="project-actions" style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
+        <div className="project-actions" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           {project.repo && project.repo !== "#" && (
-            <a
-              href={project.repo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-premium cinematic-link text-gray-800 dark:text-white"
-              onClick={(e) => e.stopPropagation()}
-              style={{ borderColor: 'transparent', padding: '0.5rem 0' }}
-            >
-              <span>{t("projects.view_code", "VIEW CODE")}</span>
-            </a>
+            <BorderBeam theme="auto" size="sm" duration={4} colorVariant="mono" className="rounded-full">
+              <a
+                href={project.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-premium dark:bg-[#111] dark:border-gray-800"
+                onClick={(e) => e.stopPropagation()}
+                style={{ padding: '0.6rem 1.2rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}
+              >
+                <FiGithub /> <span>{t("projects.view_code", "VIEW CODE")}</span>
+              </a>
+            </BorderBeam>
           )}
 
           {project.link && project.link !== "#" && (
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-premium cinematic-link text-gray-800 dark:text-white"
-              onClick={(e) => e.stopPropagation()}
-              style={{ borderColor: 'transparent', padding: '0.5rem 0' }}
-            >
-              <span>{t("projects.discover", "DISCOVER")}</span>
-            </a>
+            <BorderBeam theme="auto" size="sm" duration={4} colorVariant="ocean" className="rounded-full">
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-premium dark:bg-[#111] dark:border-gray-800"
+                onClick={(e) => e.stopPropagation()}
+                style={{ padding: '0.6rem 1.2rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}
+              >
+                <FiExternalLink /> <span>{t("projects.discover", "DISCOVER")}</span>
+              </a>
+            </BorderBeam>
           )}
         </div>
       </div>
-    </motion.div>
+      </motion.div>
+    </BorderBeam>
   );
 };
 
@@ -138,7 +145,7 @@ const ProjectsPage = () => {
       descriptionKey: "projects.worldcup-app.description",
       image: "/img/Proy9.png",
       link: "#",
-      repo: "#",
+      repo: "https://github.com/Imaforbes/Quiniela_Mundial_2026",
       tags: ["React", "Vite", "Supabase", "PostgreSQL", "Vanilla CSS"],
     },
     {
@@ -147,7 +154,7 @@ const ProjectsPage = () => {
       descriptionKey: "projects.notary-system.description",
       image: "/img/Proy8.png",
       link: "#",
-      repo: "#",
+      repo: "https://github.com/Imaforbes/Sistema_Notarial_CRM",
       tags: ["React 19", "Flask", "MySQL", "Chart.js", "React-PDF"],
     },
     {
@@ -244,7 +251,7 @@ const ProjectsPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          style={{ position: 'relative', paddingTop: '2rem' }}
+          style={{ position: 'relative', paddingTop: '0rem' }}
         >
           <h1 className="projects-title">
             {t("projects.title")}

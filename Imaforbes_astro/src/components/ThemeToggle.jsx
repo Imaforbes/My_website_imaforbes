@@ -9,7 +9,12 @@ const ThemeToggle = ({ className = "", size = "default" }) => {
   const { theme, updateTheme } = useSettings();
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const themes = [
     { value: "light", icon: Sun, label: t("theme.light") || "Light" },
@@ -18,7 +23,8 @@ const ThemeToggle = ({ className = "", size = "default" }) => {
   ];
 
   const currentTheme = themes.find((t) => t.value === theme) || themes[1];
-  const CurrentIcon = currentTheme.icon;
+  // Force the first client render to match the server's default ('dark' -> Moon) to prevent hydration mismatch
+  const CurrentIcon = mounted ? currentTheme.icon : themes[1].icon;
 
   const sizeClasses = {
     sm: "p-1.5",

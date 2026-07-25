@@ -110,8 +110,7 @@ const Footer = memo(({ currentPath }) => {
             © {currentYear} Imanol Pérez Arteaga. {t("footer.copyright")}
           </p>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>
-            <span>{t("footer.made-with") || "Made with"}</span>
-            <span style={{ color: '#ef4444' }}>♥</span>
+            <span>{t("footer.made-with")}</span>
           </div>
         </motion.div>
 

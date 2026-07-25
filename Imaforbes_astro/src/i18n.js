@@ -15,11 +15,11 @@ i18n
     .use(initReactI18next)
     // Configuración inicial
     .init({
-        debug: false, // Disable debug logs in console
-        lng: savedLanguage || undefined, // Use saved language or let detector decide
-        fallbackLng: 'es', // Idioma por defecto si el del navegador falla
+        debug: false,
+        lng: 'es', // Force Spanish on SSR and initial client render to match SSR HTML
+        fallbackLng: 'es',
         interpolation: {
-            escapeValue: false, // React ya protege contra XSS
+            escapeValue: false,
         },
         resources: {
             en: {

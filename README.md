@@ -62,6 +62,16 @@ The frontend site will load in your browser, usually at the address `http://loca
 - **`utils/`**: Critical backend tools such as CSRF Protection, Rate Limiting (against SPAM), and sending emails via SMTP (`EmailSender.php`).
 - **`uploads/images/`**: Directory where images uploaded via the API are physically stored (e.g., blog thumbnails).
 
+## Deployment & Hosting (Hostinger / Apache)
+
+For production deployment, the frontend must be built statically:
+1. Run `npm run build` inside `Imaforbes_astro/`.
+2. Upload the contents of the newly generated `dist/` folder to the `public_html` directory of your hosting provider (e.g., Hostinger).
+3. **Caching Optimization:** The project includes a highly optimized `.htaccess` file (located in `public/.htaccess` which gets copied to `dist/`). This file is configured to:
+   - Provide GZIP/Brotli compression.
+   - Set aggressive caching for static assets (JS, CSS, Images) for up to a year.
+   - Force `no-cache` and `must-revalidate` for HTML files. This prevents 404 errors during new deployments by ensuring browsers always fetch the latest `.html` file that references the newest JavaScript and CSS chunks.
+
 ## Security 🔒
 
 - **Sensitive Files**: Avoid publicly sharing the `api_db/config/database.php` file and any SMTP server configuration.

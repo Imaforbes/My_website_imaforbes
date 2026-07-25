@@ -293,7 +293,7 @@ This email was sent from your portfolio contact form.
                     <p>Hi {$name},</p>
                     <p>Thank you for reaching out through my portfolio contact form. I've received your message and will get back to you as soon as possible.</p>
                     <p>I typically respond within 24 hours, so please keep an eye on your inbox.</p>
-                    <p>Best regards,<br>Imanol Pérez Arteaga<br>Software Engineer</p>
+                    <p>Best regards,<br>Imanol Pérez Arteaga<br>Software Engineer & Developer</p>
                 </div>
                 <div class='footer'>
                     <p>This is an automated response from imanol@imaforbes.com</p>
@@ -317,7 +317,7 @@ I typically respond within 24 hours, so please keep an eye on your inbox.
 
 Best regards,
 Imanol Pérez Arteaga
-Full Stack Developer
+Software Engineer & Developer
 
 This is an automated response from imanol@imaforbes.com
         ";

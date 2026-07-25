@@ -111,8 +111,7 @@ function handleGetBlogPosts($db)
         $status = isset($_GET['status']) ? InputValidator::sanitizeString($_GET['status'], 50) : 'published';
         $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 
-        // SECURITY: Validate status and type values
-        if ($status && !in_array($status, ['draft', 'published', 'archived'])) {
+        if ($status && !in_array($status, ['draft', 'published', 'archived', 'all'])) {
             $status = 'published';
         }
         if ($type && !in_array($type, ['poem', 'letter'])) {
