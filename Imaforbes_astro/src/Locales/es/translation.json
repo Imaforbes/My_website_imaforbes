@@ -86,17 +86,19 @@
   "projects": {
     "description": "Una selección de mis proyectos más recientes",
     "title": "Proyectos",
+    "view_code": "VER CÓDIGO",
+    "discover": "VER DEMO",
     "restaurant-system": {
       "title": "Sistema de Gestión de Gastos",
       "description": "Sistema diseñado para el control de gastos, llevar el manejo de inventario de lo que se ha comprado, generar reportes financieros detallados y optimizar la rentabilidad del negocio en tiempo real."
     },
     "hotel-system": {
-      "title": "Sistema de Control Hotelero - Hotel Safari's",
-      "description": "Plataforma administrativa para la gestión de huéspedes, reservación de habitaciones, control de entradas/salidas y facturación."
+      "title": "Sistema de Gestión Hotelera - Hotel Safari's",
+      "description": "Plataforma integral para administración y operación de resorts ecoturísticos con control de acceso por roles (RBAC) dual. Construido con arquitectura de seguridad PHP 8 y PDO MySQL, autenticación Bcrypt, operaciones asíncronas AJAX, conector DB universal y diseño editorial Obsidian."
     },
     "grinch-animation": {
-      "title": "Animación Interactiva de El Grinch",
-      "description": "Un proyecto creativo de diseño web frontend con animaciones fluidas utilizando únicamente HTML5 y CSS3 puro."
+      "title": "Animación Navideña Interactiva - El Grinch",
+      "description": "Experiencia navideña interactiva creada desde cero con HTML5 puro y animaciones CSS3 por Keyframes. Incorpora un corazón interactivo de 3 tamaños con progresión de aura, burbuja de frases célebres de la película, motor ambiental de nevada y barra editorial Hallmark."
     },
     "freelancer-portfolio": {
       "title": "Portafolio para Freelancer",

@@ -86,17 +86,19 @@
   "projects": {
     "description": "A selection of my most recent projects",
     "title": "Projects",
+    "view_code": "VIEW CODE",
+    "discover": "LIVE DEMO",
     "restaurant-system": {
       "title": "Expense Management System",
       "description": "System designed for expense tracking, managing purchased inventory, generating detailed financial reports, and optimizing the business profitability in real time."
     },
     "hotel-system": {
-      "title": "Hotel Management System - Safari's Hotel",
-      "description": "An administrative platform for guest check-ins, room reservations, check-out control, and billing."
+      "title": "Safari's Hotel - Enterprise Resort System",
+      "description": "Enterprise-grade resort management and operations platform featuring Dual Role-Based Access Control (RBAC) for executives and staff. Architected with hardened PHP 8 / PDO MySQL security, Bcrypt auth, async AJAX operations, universal DB connector, and an Obsidian Hallmark UI."
     },
     "grinch-animation": {
-      "title": "Interactive Grinch Animation",
-      "description": "A creative frontend web design project showcasing smooth animations built entirely with pure HTML5 and CSS3."
+      "title": "Interactive Grinch Christmas Animation",
+      "description": "Interactive Christmas character experience built from scratch using pure HTML5 and advanced CSS3 Keyframe animations. Features an interactive 3-size glowing heart with telemetry aura, pop-in speech bubble movie quotes, a winter snowfall engine, and a Hallmark editorial frame."
     },
     "freelancer-portfolio": {
       "title": "Freelancer Portfolio",

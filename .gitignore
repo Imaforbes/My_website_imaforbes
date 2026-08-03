@@ -35,3 +35,7 @@
 
 # --- Database Dumps ---
 *.sql
+
+# --- Legacy / Obsolete folders ---
+Imaforbes_frontend/
+Imaforbes_Api_backend/
