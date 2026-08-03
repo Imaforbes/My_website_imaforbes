@@ -88,6 +88,11 @@
     "title": "Proyectos",
     "view_code": "VER CÓDIGO",
     "discover": "VER DEMO",
+    "view_all_repos": "VER TODOS LOS REPOSITORIOS EN GITHUB",
+    "getsoft": {
+      "title": "GETSOFT 2.0 - Marketplace de Software y Juegos",
+      "description": "Plataforma editorial y mercado técnico de nueva generación para desarrolladores independientes y estudios de videojuegos. Arquitectura construida con Python FastAPI, SQLite portátil con arreglos JSON, autenticación Bcrypt, interfaz React Vite, diseño industrial Hallmark Anti-AI-Slop y orquestador Bash de servidor híbrido."
+    },
     "restaurant-system": {
       "title": "Sistema de Gestión de Gastos",
       "description": "Sistema diseñado para el control de gastos, llevar el manejo de inventario de lo que se ha comprado, generar reportes financieros detallados y optimizar la rentabilidad del negocio en tiempo real."

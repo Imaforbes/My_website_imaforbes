@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BorderBeam } from "border-beam";
 import { useTranslation } from "react-i18next";
-import { FiGithub, FiExternalLink, FiBriefcase, FiAward } from "react-icons/fi";
+import { FiGithub, FiExternalLink, FiBriefcase, FiAward, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 /**
  * HeroBackground Component
@@ -47,6 +47,20 @@ const HeroBackground = () => (
 );
 
 const ProjectCard = ({ project, t, setPreviewImage }) => {
+  const [currentImgIdx, setCurrentImgIdx] = useState(0);
+  const images = (project.images && project.images.length > 0) ? project.images : [project.image];
+  const currentImg = images[currentImgIdx];
+
+  const nextImg = (e) => {
+    e.stopPropagation();
+    setCurrentImgIdx((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImg = (e) => {
+    e.stopPropagation();
+    setCurrentImgIdx((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
@@ -56,20 +70,74 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
     <BorderBeam theme="auto" size="pulse-inner" duration={6} colorVariant="ocean" className="rounded-2xl h-full w-full relative">
       <motion.div variants={cardVariants} className="project-card-premium h-full dark:bg-[#111] dark:border-gray-800" style={{ zIndex: 10, background: 'var(--color-surface-light)', borderRadius: '1rem', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid var(--color-border-light)' }}>
       
-      {/* Background Image Container */}
+      {/* Background Image / Carousel Container */}
       <div 
-        className="cursor-pointer"
-        style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative' }}
-        onClick={() => setPreviewImage && setPreviewImage(project.image)}
+        className="cursor-pointer group relative"
+        style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative', background: '#0B0C0F' }}
+        onClick={() => setPreviewImage && setPreviewImage(currentImg)}
       >
-        <img
-          src={project.image}
-          alt={t(project.titleKey)}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
-          loading="lazy"
-          decoding="async"
-          className="hover:scale-105"
-        />
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={currentImgIdx}
+            src={currentImg}
+            alt={`${t(project.titleKey)} - ${currentImgIdx + 1}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            loading="lazy"
+            decoding="async"
+            className="hover:scale-105 transition-transform duration-500"
+          />
+        </AnimatePresence>
+
+        {/* Carousel Navigation if multiple images */}
+        {images.length > 1 && (
+          <>
+            <button 
+              onClick={prevImg}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-1.5 rounded-full z-20 opacity-0 group-hover:opacity-100 transition-opacity"
+              style={{ border: '1px solid rgba(255,255,255,0.2)' }}
+              title="Previous screenshot"
+            >
+              <FiChevronLeft size={18} />
+            </button>
+            <button 
+              onClick={nextImg}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-1.5 rounded-full z-20 opacity-0 group-hover:opacity-100 transition-opacity"
+              style={{ border: '1px solid rgba(255,255,255,0.2)' }}
+              title="Next screenshot"
+            >
+              <FiChevronRight size={18} />
+            </button>
+
+            {/* Indicator Dots */}
+            <div 
+              className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-20 bg-black/50 px-2.5 py-1 rounded-full backdrop-blur-sm"
+              style={{ border: '1px solid rgba(255,255,255,0.15)' }}
+            >
+              {images.map((_, idx) => (
+                <span
+                  key={idx}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentImgIdx(idx);
+                  }}
+                  style={{
+                    width: idx === currentImgIdx ? '16px' : '6px',
+                    height: '6px',
+                    borderRadius: '4px',
+                    background: idx === currentImgIdx ? 'var(--color-primary-light, #00F090)' : 'rgba(255,255,255,0.4)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    display: 'inline-block'
+                  }}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
 
       {/* Content Container */}
@@ -139,6 +207,21 @@ const ProjectsPage = () => {
   const [previewImage, setPreviewImage] = useState(null);
 
   const projects = [
+    {
+      id: 10,
+      titleKey: "projects.getsoft.title",
+      descriptionKey: "projects.getsoft.description",
+      image: "/img/Proy10-1.png",
+      images: [
+        "/img/Proy10-1.png",
+        "/img/Proy10-2.png",
+        "/img/Proy10-3.png",
+        "/img/Proy10-4.png",
+      ],
+      link: "#",
+      repo: "https://github.com/Imaforbes/GETSOFT",
+      tags: ["Python 3", "FastAPI", "React 19", "Vite", "SQLite", "Editorial UI", "RBAC"],
+    },
     {
       id: 9,
       titleKey: "projects.worldcup-app.title",
@@ -270,6 +353,38 @@ const ProjectsPage = () => {
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} t={t} setPreviewImage={setPreviewImage} />
           ))}
+        </motion.div>
+
+        {/* View All Repositories CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          style={{ display: 'flex', justifyContent: 'center', marginTop: '4rem', marginBottom: '2rem' }}
+        >
+          <BorderBeam theme="auto" size="md" duration={5} colorVariant="ocean" className="rounded-full">
+            <a
+              href="https://github.com/Imaforbes?tab=repositories&q=&type=&language=&sort="
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-premium dark:bg-[#111] dark:border-gray-800"
+              style={{
+                padding: '1rem 2.5rem',
+                borderRadius: '9999px',
+                background: 'var(--color-surface-light)',
+                border: '1px solid var(--color-border-light)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                fontSize: '1rem',
+                fontWeight: 600
+              }}
+            >
+              <FiGithub size={20} />
+              <span>{t("projects.view_all_repos", "VIEW ALL REPOSITORIES ON GITHUB")}</span>
+            </a>
+          </BorderBeam>
         </motion.div>
       </div>
 

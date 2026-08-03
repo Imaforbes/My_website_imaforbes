@@ -88,6 +88,11 @@
     "title": "Projects",
     "view_code": "VIEW CODE",
     "discover": "LIVE DEMO",
+    "view_all_repos": "VIEW ALL REPOSITORIES ON GITHUB",
+    "getsoft": {
+      "title": "GETSOFT 2.0 - Indie Software & Game Dev Marketplace",
+      "description": "Next-generation editorial and technical marketplace engineered for indie game studios and developers. Built with a Python FastAPI async backend, portable SQLite with JSON arrays, Bcrypt authentication, React Vite UI, Hallmark Anti-AI-Slop industrial aesthetics, and hybrid Bash server orchestration."
+    },
     "restaurant-system": {
       "title": "Expense Management System",
       "description": "System designed for expense tracking, managing purchased inventory, generating detailed financial reports, and optimizing the business profitability in real time."
