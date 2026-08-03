@@ -10,7 +10,16 @@ The project is mainly divided into two active folders:
   
 - **`api_db/` (Active Backend ⚙️)**: The **PHP** backend (REST API). It manages connections to the MySQL database, processing of contact emails (with Anti-Spam measures), session control, blog CRUD operations, image uploads, etc.
 
-*Note: The `Imaforbes_frontend/` and `Imaforbes_Api_backend/` folders correspond to the old versions of the application and are kept only as a backup (historical files).*
+*Note: The legacy `Imaforbes_frontend/` and `Imaforbes_Api_backend/` folders have been untracked from Git to keep the repository clean and focused exclusively on the active modern architecture (`Imaforbes_astro/` and `api_db/`).*
+
+## Featured Engineering Projects
+
+The portfolio showcases several advanced full-stack and interactive web applications:
+
+- **🏨 Safari's Hotel Management System (`Hotel-Safaris`)**: Enterprise-grade resort operations platform built with **PHP 8**, **PDO MySQL**, **Bcrypt Authentication**, and **Dual Role-Based Access Control (RBAC)** for executives and operational staff. Features asynchronous AJAX interactions and an Obsidian Hallmark UI.
+- **🎄 Interactive Grinch Christmas Animation (`grinch_animado`)**: Creative frontend animation experience crafted from scratch using **Pure HTML5**, **CSS3 Keyframe Animations**, and an interactive **JavaScript ES6 Suite** (featuring an interactive 3-size glowing heart, movie quote speech bubbles, and a winter snowfall engine). Includes live interactive demo.
+- **⚖️ CRM/ERP Notary Public No. 73**: Digital workflow and document automation platform with custom fee calculation engines and Aspel SAE integration.
+
 
 ## How the Connection Works (Frontend ↔ Backend)
 
