@@ -5,103 +5,10 @@
  * Handles CRUD operations for portfolio projects
  */
 
-// CRITICAL: Set CORS headers FIRST, before any other output
-// ========================================
-// CORS CONFIGURATION
-// ========================================
-
-// Get origin from request
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-
-// If no origin header, try to get from referer
-if (empty($origin) && !empty($_SERVER['HTTP_REFERER'])) {
-    $parsedUrl = parse_url($_SERVER['HTTP_REFERER']);
-    if ($parsedUrl && isset($parsedUrl['scheme']) && isset($parsedUrl['host'])) {
-        $origin = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
-    }
-}
-
-// PRODUCTION (HOSTINGER) - Comentado, no modificar
-/*
-$host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
-$isProduction = (
-    strpos($host, 'imaforbes.com') !== false ||
-    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' && strpos($host, 'localhost') === false)
-);
-
-if ($isProduction) {
-    // PRODUCTION: Always allow imaforbes.com variants - NEVER return localhost
-    if (!empty($origin) && strpos($origin, 'imaforbes.com') !== false) {
-        $corsOrigin = $origin;
-    } else {
-        $corsOrigin = 'https://imaforbes.com';
-    }
-} else {
-    // DEVELOPMENT: Use localhost
-    $allowedOrigins = [
-        'http://localhost:5173',
-        'http://localhost:5174',
-        'http://localhost:5175',
-        'http://localhost:3000',
-    ];
-    
-    if (!empty($origin) && in_array($origin, $allowedOrigins)) {
-        $corsOrigin = $origin;
-    } else {
-        $corsOrigin = 'http://localhost:5173';
-    }
-}
-*/
-
-// Detect environment: LOCAL or PRODUCTION
-$host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
-$isProduction = (
-    strpos($host, 'imaforbes.com') !== false ||
-    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' && 
-     strpos($host, 'localhost') === false && strpos($host, '127.0.0.1') === false)
-);
-
-if ($isProduction) {
-    // PRODUCTION: Allow imaforbes.com origins
-    if (!empty($origin) && strpos($origin, 'imaforbes.com') !== false) {
-        $corsOrigin = $origin;
-    } else {
-        $corsOrigin = 'https://www.imaforbes.com';
-    }
-} else {
-    // DEVELOPMENT: Allow localhost origins (any port)
-    if (!empty($origin)) {
-        if (strpos($origin, 'http://localhost:') === 0 || 
-            strpos($origin, 'http://127.0.0.1:') === 0 ||
-            $origin === 'http://localhost' ||
-            $origin === 'http://127.0.0.1') {
-            $corsOrigin = $origin;
-        } else {
-            $corsOrigin = 'http://localhost:5173';
-        }
-    } else {
-        $corsOrigin = 'http://localhost:5173';
-    }
-}
-
-// Set CORS headers
-header("Access-Control-Allow-Origin: $corsOrigin");
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-CSRF-Token');
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Max-Age: 86400');
-
-// Handle preflight requests immediately
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
+require_once __DIR__ . '/../utils/cors.php';
 
 require_once '../config/database.php';
 require_once '../config/response.php';
-
-// Also set CORS headers using the handler (as backup)
-CorsHandler::setHeaders();
 
 $method = $_SERVER['REQUEST_METHOD'];
 $db = Database::getInstance();
@@ -162,11 +69,11 @@ function handleGetProjects($db)
 
         $whereClause = 'WHERE ' . implode(' AND ', $whereConditions);
 
-        $sql = "SELECT id, title, description, short_description, image_url, 
+        $sql = "SELECT id, title, description, short_description, image_url,
                        technologies, github_url, live_url, featured, sort_order, created_at
-                FROM projects 
-                {$whereClause} 
-                ORDER BY sort_order ASC, created_at DESC 
+                FROM projects
+                {$whereClause}
+                ORDER BY sort_order ASC, created_at DESC
                 LIMIT ?";
 
         $params[] = $limit;
@@ -193,7 +100,7 @@ function handleCreateProject($db)
     if (!SessionManager::isAuthenticated()) {
         ApiResponse::unauthorized('Authentication required');
     }
-    
+
     // SECURITY: Validate CSRF token
     CsrfProtection::requireToken();
 
@@ -257,8 +164,8 @@ function handleCreateProject($db)
     }
 
     // Insert project
-    $sql = "INSERT INTO projects (title, description, short_description, image_url, 
-                                technologies, github_url, live_url, featured, status, sort_order) 
+    $sql = "INSERT INTO projects (title, description, short_description, image_url,
+                                technologies, github_url, live_url, featured, status, sort_order)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $technologiesJson = json_encode($technologies);
@@ -299,7 +206,7 @@ function handleUpdateProject($db)
     if (!SessionManager::isAuthenticated()) {
         ApiResponse::unauthorized('Authentication required');
     }
-    
+
     // SECURITY: Validate CSRF token
     CsrfProtection::requireToken();
 
@@ -374,7 +281,7 @@ function handleDeleteProject($db)
     if (!SessionManager::isAuthenticated()) {
         ApiResponse::unauthorized('Authentication required');
     }
-    
+
     // SECURITY: Validate CSRF token
     CsrfProtection::requireToken();
 

@@ -2,6 +2,8 @@
   "about": {
     "download-cv": "Download CV",
     "experience": "Experience",
+    "experience-label": "Full Stack Experience",
+    "experience-years": "+3 Years",
     "experience-empty": "No experience recorded",
     "experience-loading": "Loading experience...",
     "experience-title": "Experience",
@@ -18,6 +20,7 @@
     "skills-title": "Skills"
   },
   "blog": {
+    "back": "Back",
     "error": "Error",
     "failed-load": "Failed to load posts",
     "filter-all": "All",
@@ -30,6 +33,7 @@
     "no-letters": "No letters available",
     "no-poems": "No poems available",
     "no-posts": "No posts available",
+    "read-more": "Read more",
     "subtitle": "Thoughts, articles and poetry",
     "title": "Blog",
     "type-letter": "Letter",
@@ -40,11 +44,23 @@
   "breadcrumbs": {
     "home": "Home"
   },
+  "browserSupport": {
+    "dismiss": "Dismiss browser compatibility notice",
+    "recommended": "Recommended browsers:",
+    "title": "Browser Not Fully Supported",
+    "unknown": "Your browser may not support all features of this website. Please update to a modern browser for the best experience.",
+    "using": "You're using {{browser}}{{version}}. For the best experience, please update to a modern browser."
+  },
   "contact": {
+    "available-badge": "Available for new opportunities",
+    "available-hours": "Mon - Fri, 9AM - 5PM",
+    "available-label": "Available",
     "contact-info": "Contact Info",
     "description": "Have a project in mind? Let's talk!",
     "email": "Email",
     "message": "Message",
+    "location-label": "Location",
+    "location-value": "Mexico City, MX",
     "name": "Name",
     "privacy-text": "I accept the privacy policy and data processing.",
     "privacy-title": "Privacy Policy",
@@ -60,17 +76,40 @@
     "navigation": "Navigation",
     "response-time": "Estimated response time: less than 24 hours"
   },
+  "errorBoundary": {
+    "home": "Go home",
+    "message": "An unexpected error occurred. Please try reloading the page.",
+    "reload": "Reload page",
+    "title": "Oops! Something went wrong"
+  },
   "header": {
     "home": "Home",
     "about-me": "About Me",
     "blog": "Blog",
     "contact": "Contact",
-    "proyects": "Projects"
+    "projects": "Projects"
+  },
+  "imageCropper": {
+    "apply": "Apply crop",
+    "cancel": "Cancel",
+    "close": "Close image cropper",
+    "drag": "Drag the image to position it",
+    "instructions": "Use the mouse wheel or the buttons to zoom",
+    "preview": "Crop preview",
+    "reset": "Reset",
+    "title": "Crop image",
+    "zoom": "Zoom",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out"
   },
   "home": {
+    "available": "Available for new opportunities",
     "contact": "Contact",
     "description": "Welcome to my digital ecosystem. Here I document my software projects and share my personal experiences, thoughts, and learnings through my blog.",
     "subtitle": "Software Engineer & Developer",
+    "tag_backend": "Backend",
+    "tag_frontend": "Frontend",
+    "tag_uiux": "UI/UX Design",
     "title": "Imanol",
     "view-projects": "View Projects"
   },
@@ -84,6 +123,7 @@
     "message": "Page not found"
   },
   "projects": {
+    "count-label": "Projects",
     "description": "A selection of my most recent projects",
     "title": "Projects",
     "view_code": "VIEW CODE",

@@ -19,27 +19,3 @@
 export const isIntersectionObserverSupported = () => {
   return typeof window !== 'undefined' && 'IntersectionObserver' in window;
 };
-
-// Optional: Load polyfill dynamically
-export const loadIntersectionObserverPolyfill = async () => {
-  if (isIntersectionObserverSupported()) {
-    return; // Already supported, no need for polyfill
-  }
-
-  try {
-    // Dynamic import of intersection-observer polyfill
-    // Note: You need to install it first: npm install intersection-observer
-    await import('intersection-observer');
-    console.log('IntersectionObserver polyfill loaded');
-  } catch (error) {
-    console.warn('Failed to load IntersectionObserver polyfill:', error);
-    console.warn('Images will load immediately (graceful degradation)');
-  }
-};
-
-// Auto-load polyfill in development (optional)
-// Uncomment the line below if you want automatic polyfill loading
-// if (import.meta.env.DEV) {
-//   loadIntersectionObserverPolyfill();
-// }
-

@@ -19,7 +19,6 @@ import {
   Save,
   X,
   Upload,
-  Image as ImageIcon,
   Loader,
   Heart,
   Filter,
@@ -621,6 +620,7 @@ const AdminBlog = () => {
                     </button>
                     <button
                       onClick={() => handleDeleteClick(post)}
+                      aria-label="Eliminar post"
                       className="flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-[#151515] text-xs rounded-xl transition-colors font-light"
                     >
                       <Trash2 size={14} />
@@ -660,6 +660,7 @@ const AdminBlog = () => {
                 </h2>
                 <button
                   onClick={() => setShowModal(false)}
+                  aria-label="Cerrar modal"
                   className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                 >
                   <X size={24} />

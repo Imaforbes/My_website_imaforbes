@@ -85,38 +85,3 @@ export const validateContactForm = (formData) => {
     errors,
   };
 };
-
-/**
- * Validates URL to prevent malicious URLs
- * @param {string} url - URL to validate
- * @returns {boolean} - True if valid, false otherwise
- */
-export const validateUrl = (url) => {
-  if (!url || typeof url !== 'string') return false;
-  try {
-    const urlObj = new URL(url);
-    // Only allow http and https protocols
-    return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
-  } catch {
-    // If URL constructor fails, check if it's a relative path
-    return /^\/[a-zA-Z0-9_/.-]+$/.test(url);
-  }
-};
-
-/**
- * Escapes HTML to prevent XSS
- * @param {string} str - String to escape
- * @returns {string} - Escaped string
- */
-export const escapeHtml = (str) => {
-  if (!str || typeof str !== 'string') return '';
-  const map = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;',
-  };
-  return str.replace(/[&<>"']/g, (m) => map[m]);
-};
-

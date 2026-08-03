@@ -13,7 +13,6 @@ import {
   User,
   Calendar,
   MessageSquare,
-  Phone,
   Copy,
   Check,
   Globe,
@@ -99,15 +98,17 @@ const AdminMensajes = () => {
   }, [navigate]);
 
   const handleLogout = async () => {
-    const baseURL = import.meta.env.PROD
-      ? "https://www.imaforbes.com/api_db"
-      : "API_CONFIG.getBaseURL()";
-
-    await fetch(`${baseURL}/logout.php`, {
-      method: "POST",
-      credentials: "include",
-    });
-    navigate("/login");
+    try {
+      const baseURL = API_CONFIG.getBaseURL();
+      await fetch(`${baseURL}/api/auth/logout.php`, {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      navigate("/login");
+    }
   };
 
   const handleDeleteClick = (id) => {

@@ -2,6 +2,8 @@
   "about": {
     "download-cv": "Descargar CV",
     "experience": "Experiencia",
+    "experience-label": "Experiencia Full Stack",
+    "experience-years": "+3 Años",
     "experience-empty": "No hay experiencia para mostrar",
     "experience-loading": "Cargando experiencia...",
     "experience-title": "Experiencia",
@@ -18,6 +20,7 @@
     "skills-title": "Habilidades"
   },
   "blog": {
+    "back": "Volver",
     "error": "Error",
     "failed-load": "Error al cargar las publicaciones",
     "filter-all": "Todos",
@@ -30,6 +33,7 @@
     "no-letters": "No hay cartas disponibles",
     "no-poems": "No hay poemas disponibles",
     "no-posts": "No hay publicaciones disponibles",
+    "read-more": "Leer más",
     "subtitle": "Pensamientos, artículos y poesía",
     "title": "Blog",
     "type-letter": "Carta",
@@ -40,11 +44,23 @@
   "breadcrumbs": {
     "home": "Inicio"
   },
+  "browserSupport": {
+    "dismiss": "Cerrar aviso de compatibilidad del navegador",
+    "recommended": "Navegadores recomendados:",
+    "title": "El navegador no es totalmente compatible",
+    "unknown": "Es posible que tu navegador no admita todas las funciones de este sitio. Actualízalo para una mejor experiencia.",
+    "using": "Estás usando {{browser}}{{version}}. Para una mejor experiencia, actualiza a un navegador moderno."
+  },
   "contact": {
+    "available-badge": "Disponible para nuevas oportunidades",
+    "available-hours": "Lun - Vie, 9:00 - 17:00",
+    "available-label": "Disponibilidad",
     "contact-info": "Información de contacto",
     "description": "¿Tienes algún proyecto en mente? ¡Hablemos!",
     "email": "Correo electrónico",
     "message": "Mensaje",
+    "location-label": "Ubicación",
+    "location-value": "Ciudad de México, MX",
     "name": "Nombre",
     "privacy-text": "Acepto la política de privacidad y el tratamiento de mis datos.",
     "privacy-title": "Política de Privacidad",
@@ -60,17 +76,40 @@
     "navigation": "Navegación",
     "response-time": "Tiempo de respuesta estimado: menos de 24 horas"
   },
+  "errorBoundary": {
+    "home": "Ir al inicio",
+    "message": "Ha ocurrido un error inesperado. Por favor, intenta recargar la página.",
+    "reload": "Recargar página",
+    "title": "¡Oops! Algo salió mal"
+  },
   "header": {
     "home": "Inicio",
     "about-me": "Sobre mí",
     "blog": "Blog",
     "contact": "Contacto",
-    "proyects": "Proyectos"
+    "projects": "Proyectos"
+  },
+  "imageCropper": {
+    "apply": "Aplicar recorte",
+    "cancel": "Cancelar",
+    "close": "Cerrar ventana de recorte",
+    "drag": "Arrastra la imagen para posicionarla",
+    "instructions": "Usa la rueda del mouse o los botones para hacer zoom",
+    "preview": "Vista previa del recorte",
+    "reset": "Restablecer",
+    "title": "Recortar imagen",
+    "zoom": "Zoom",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar"
   },
   "home": {
+    "available": "Disponible para nuevas oportunidades",
     "contact": "Contacto",
     "description": "Bienvenido a mi ecosistema digital. Aquí documento mis proyectos de software y comparto mis vivencias personales, pensamientos y aprendizajes a través de mi blog.",
     "subtitle": "Ingeniero de Software & Desarrollador",
+    "tag_backend": "Backend",
+    "tag_frontend": "Frontend",
+    "tag_uiux": "Diseño UI/UX",
     "title": "Imanol",
     "view-projects": "Ver proyectos"
   },
@@ -84,6 +123,7 @@
     "message": "Página no encontrada"
   },
   "projects": {
+    "count-label": "Proyectos",
     "description": "Una selección de mis proyectos más recientes",
     "title": "Proyectos",
     "view_code": "VER CÓDIGO",

@@ -7,100 +7,7 @@
 // CRITICAL: Set CORS headers IMMEDIATELY - no output before this point
 // No whitespace, no BOM, no echo statements before headers
 
-// ========================================
-// CORS CONFIGURATION
-// ========================================
-
-// Get origin from request
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-
-// If no origin header, try to get from referer
-if (empty($origin) && !empty($_SERVER['HTTP_REFERER'])) {
-    $parsedUrl = parse_url($_SERVER['HTTP_REFERER']);
-    if ($parsedUrl && isset($parsedUrl['scheme']) && isset($parsedUrl['host'])) {
-        $origin = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
-    }
-}
-
-// PRODUCTION (HOSTINGER) - Comentado, no modificar
-/*
-$allowedOrigins = [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:5175',
-    'http://localhost:3000',
-    'https://www.imaforbes.com',
-    'https://imaforbes.com'
-];
-
-// Determine CORS origin
-$corsOrigin = null;
-
-if (!empty($origin)) {
-    if (in_array($origin, $allowedOrigins)) {
-        $corsOrigin = $origin;
-    } elseif (strpos($origin, 'imaforbes.com') !== false) {
-        $corsOrigin = $origin;
-    }
-}
-
-// Fallback: Check if we're in production environment
-if (empty($corsOrigin)) {
-    $host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
-    $isProduction = (
-        strpos($host, 'imaforbes.com') !== false ||
-        strpos($host, 'www.imaforbes.com') !== false ||
-        (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' && strpos($host, 'localhost') === false)
-    );
-    
-    if ($isProduction) {
-        $corsOrigin = !empty($origin) && strpos($origin, 'imaforbes.com') !== false 
-            ? $origin 
-            : 'https://imaforbes.com';
-    } else {
-        $corsOrigin = 'http://localhost:5173';
-    }
-}
-*/
-
-// Get origin and detect environment
-$host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
-
-// Detect environment: LOCAL or PRODUCTION
-$isProduction = (
-    strpos($host, 'imaforbes.com') !== false ||
-    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' && 
-     strpos($host, 'localhost') === false && strpos($host, '127.0.0.1') === false)
-);
-
-if ($isProduction) {
-    // PRODUCTION: Allow imaforbes.com origins (both www and non-www)
-    if (!empty($origin) && strpos($origin, 'imaforbes.com') !== false) {
-        $corsOrigin = $origin;
-    } else {
-        // Default to www version if origin not provided
-        $corsOrigin = 'https://www.imaforbes.com';
-    }
-} else {
-    // DEVELOPMENT: Allow localhost origins (any port)
-    $corsOrigin = 'http://localhost:5173';
-    if (!empty($origin) && (strpos($origin, 'http://localhost') === 0 || strpos($origin, 'http://127.0.0.1') === 0)) {
-        $corsOrigin = $origin;
-    }
-}
-
-// Set ALL CORS headers - these MUST be set before any output
-header("Access-Control-Allow-Origin: $corsOrigin", true);
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-CSRF-Token');
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Max-Age: 86400');
-
-// Handle OPTIONS preflight requests - exit immediately
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit;
-}
+require_once __DIR__ . '/../utils/cors.php';
 
 require_once '../config/database.php';
 require_once '../config/response.php';
@@ -191,11 +98,11 @@ try {
         error_log("=== CONTACT FORM SUBMISSION ===");
         error_log("Current database: " . $currentDb);
         error_log("Expected database: portfolio");
-        
+
         // First, check if the datos table exists and get its structure
         $checkTable = $db->query("SHOW TABLES LIKE 'datos'");
         $tableExists = $checkTable->rowCount() > 0;
-        
+
         if (!$tableExists) {
             error_log("⚠️ datos table does NOT exist - creating it...");
             // Create the datos table if it doesn't exist
@@ -221,7 +128,7 @@ try {
         // Use the existing datos table with the exact structure: id, nombre, email, mensaje, fecha, ip_address, user_agent
         // Insert with all columns matching the table structure
         $sql = "INSERT INTO datos (nombre, email, mensaje, fecha, ip_address, user_agent) VALUES (?, ?, ?, CURDATE(), ?, ?)";
-        
+
         // Log database info for debugging
         $connection = $db->getConnection();
         $dbName = $connection->query("SELECT DATABASE()")->fetchColumn();
@@ -229,7 +136,7 @@ try {
         error_log("Attempting INSERT into datos table");
         error_log("SQL: " . $sql);
         error_log("Values: nombre={$name}, email={$email}, mensaje length=" . strlen($message) . ", fecha=CURDATE(), ip_address={$ipAddress}, user_agent length=" . strlen($userAgent));
-        
+
         try {
             $stmt = $db->query($sql, [$name, $email, $message, $ipAddress, $userAgent]);
             error_log("✅ INSERT query executed successfully");
@@ -249,13 +156,13 @@ try {
             // Verify the insert by querying the database
             $verifyStmt = $db->query("SELECT * FROM datos WHERE id = ?", [$messageId]);
             $verifyRow = $verifyStmt->fetch(PDO::FETCH_ASSOC);
-            
+
             if ($verifyRow) {
                 error_log("✅ Insert verified - Record found in database: ID {$messageId}");
             } else {
                 error_log("⚠️ WARNING: Insert ID returned but record not found in database!");
             }
-            
+
             // Log successful submission
             error_log("Contact form submitted successfully: ID {$messageId}, Email: {$email}");
 
@@ -287,7 +194,7 @@ try {
 
             // SECURITY: Reset rate limit on successful submission
             RateLimiter::resetLimit('contact');
-            
+
             ApiResponse::success([
                 'id' => $messageId,
                 'name' => $name,

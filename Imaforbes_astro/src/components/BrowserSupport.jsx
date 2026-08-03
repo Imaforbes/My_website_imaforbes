@@ -7,6 +7,7 @@ import withProviders from './withProviders.jsx';
 import React, { useState, useEffect } from 'react';
 import { X, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { safeLocalStorage } from '../utils/storage.js';
 
 // Custom browser icon components (since lucide-react doesn't have browser icons)
@@ -29,6 +30,7 @@ const EdgeIcon = ({ className }) => (
 );
 
 const BrowserSupport = () => {
+  const { t } = useTranslation();
   const [isUnsupported, setIsUnsupported] = useState(false);
   const [browserInfo, setBrowserInfo] = useState(null);
 
@@ -141,27 +143,24 @@ const BrowserSupport = () => {
               
               <div className="flex-1 min-w-0">
                 <h3 className="text-sm font-semibold text-yellow-900 dark:text-yellow-100 mb-1">
-                  Browser Not Fully Supported
+                  {t('browserSupport.title')}
                 </h3>
                 <p className="text-sm text-yellow-800 dark:text-yellow-200 mb-3">
                   {browserInfo && (
                     <>
-                      You're using <strong>{browserInfo.name}</strong>
-                      {browserInfo.version && ` ${browserInfo.version}`}. 
-                      For the best experience, please update to a modern browser.
+                      {t('browserSupport.using', { browser: browserInfo.name, version: browserInfo.version ? ` ${browserInfo.version}` : '' })}
                     </>
                   )}
                   {!browserInfo && (
                     <>
-                      Your browser may not support all features of this website. 
-                      Please update to a modern browser for the best experience.
+                      {t('browserSupport.unknown')}
                     </>
                   )}
                 </p>
                 
                 <div className="flex flex-wrap items-center gap-3">
                   <span className="text-xs text-yellow-700 dark:text-yellow-300 font-medium">
-                    Recommended browsers:
+                    {t('browserSupport.recommended')}
                   </span>
                   {getBrowserDownloadLinks().map((browser) => {
                     const Icon = browser.icon;
@@ -184,7 +183,7 @@ const BrowserSupport = () => {
               <button
                 onClick={handleDismiss}
                 className="flex-shrink-0 p-1 text-yellow-600 dark:text-yellow-400 hover:text-yellow-800 dark:hover:text-yellow-200 transition-colors rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-800/50"
-                aria-label="Dismiss browser support message"
+                aria-label={t('browserSupport.dismiss')}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -197,4 +196,3 @@ const BrowserSupport = () => {
 };
 
 export default withProviders(BrowserSupport);
-

@@ -17,7 +17,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BorderBeam } from "border-beam";
 import { useTranslation } from "react-i18next";
-import { Briefcase, Calendar, MapPin, ArrowRight, ChevronRight, ChevronLeft } from "lucide-react";
+import { Briefcase, Calendar, MapPin, ChevronRight, ChevronLeft } from "lucide-react";
 import { api } from "../services/api.js";
 import {
   FaHtml5,
@@ -367,7 +367,7 @@ const AboutPage = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const aboutImages = ["/img/me.png", "/img/me2.png", "/img/me3.png"];
+  const aboutImages = ["/img/me.webp", "/img/me2.webp", "/img/me3.png"];
 
   const nextImage = (e) => {
     if (e) e.stopPropagation();
@@ -437,6 +437,7 @@ const AboutPage = () => {
                 {/* Navigation Arrows */}
                 <button 
                   onClick={prevImage}
+                  aria-label="Anterior imagen"
                   style={{
                     position: 'absolute',
                     top: '50%',
@@ -461,6 +462,7 @@ const AboutPage = () => {
 
                 <button 
                   onClick={nextImage}
+                  aria-label="Siguiente imagen"
                   style={{
                     position: 'absolute',
                     top: '50%',
@@ -548,8 +550,8 @@ const AboutPage = () => {
                 className="absolute bottom-[15%] -right-2 md:-right-6 lg:-right-[10%] dark:bg-[#1a1a1a] dark:border-gray-800"
               >
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                  <span style={{ fontSize: '1.2rem', color: 'var(--color-text-light)', fontWeight: 700 }} className="dark:text-white">+3 Años</span>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted-light)' }}>Experiencia Full Stack</span>
+                  <span style={{ fontSize: '1.2rem', color: 'var(--color-text-light)', fontWeight: 700 }} className="dark:text-white">{t("about.experience-years", "+3 Años")}</span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted-light)' }}>{t("about.experience-label", "Experiencia Full Stack")}</span>
                 </div>
               </motion.div>
 

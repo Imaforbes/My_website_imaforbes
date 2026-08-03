@@ -4,12 +4,10 @@
  * Document Upload API Endpoint
  */
 
+require_once __DIR__ . '/../../utils/cors.php';
 require_once '../../config/database.php';
 require_once '../../config/response.php';
 require_once '../../auth/session.php';
-
-// Set CORS headers
-CorsHandler::setHeaders();
 
 // Check authentication
 SessionManager::requireAuth();

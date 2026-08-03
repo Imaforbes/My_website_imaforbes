@@ -7,7 +7,7 @@ import { api } from "../services/api.js";
 import { API_CONFIG } from "../config/api.js";
 import ProtectedImage from "../components/ProtectedImage.jsx";
 import BlogPostSkeleton from "../components/BlogPostSkeleton.jsx";
-import { FileText, Mail, Calendar, Filter, Heart, Eye, ArrowLeft, ArrowRight } from "lucide-react";
+import { FileText, Mail, Filter, Heart, Eye, ArrowLeft, ArrowRight } from "lucide-react";
 
 const HeroBackground = () => (
   <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
@@ -207,7 +207,9 @@ const BlogPage = () => {
             );
           }
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error('Blog operation failed:', error);
+      }
 
       // 2. Track view for the opened post
       if (!hasViewedPost(selectedPostId)) {
@@ -224,7 +226,9 @@ const BlogPage = () => {
               }
             }
           }
-        } catch (error) {}
+        } catch (error) {
+          console.error('Blog operation failed:', error);
+        }
       }
     };
 
@@ -334,7 +338,7 @@ const BlogPage = () => {
               className="btn-premium" 
               style={{ marginBottom: '2.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'transparent', color: 'var(--color-text-dark)', padding: '0.5rem 0' }}
             >
-              <ArrowLeft size={18} /> Volver
+              <ArrowLeft size={18} /> {t("blog.back", "Volver")}
             </button>
             
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
@@ -530,7 +534,7 @@ const BlogPage = () => {
                         </div>
                         <div style={{ paddingTop: '1.25rem', borderTop: '1px solid var(--color-border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }} className="dark:border-gray-800">
                           <button onClick={() => openPost(post.id)} className="btn-premium" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.9rem', padding: '0.4rem 0.8rem', background: 'transparent', color: 'var(--color-text-dark)' }}>
-                            Leer más <ArrowRight size={16} />
+                            {t("blog.read-more")} <ArrowRight size={16} />
                           </button>
                         </div>
                       </div>
@@ -556,7 +560,7 @@ const BlogPage = () => {
                       </div>
                       <div style={{ paddingTop: '1.25rem', borderTop: '1px solid var(--color-border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }} className="dark:border-gray-800">
                         <button onClick={() => openPost(post.id)} className="btn-premium" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.9rem', padding: '0.4rem 0.8rem', background: 'transparent', color: 'var(--color-text-dark)' }}>
-                          Leer más <ArrowRight size={16} />
+                          {t("blog.read-more")} <ArrowRight size={16} />
                         </button>
                       </div>
                     </div>

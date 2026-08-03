@@ -58,22 +58,4 @@ export const API_CONFIG = {
     }
 };
 
-export const buildApiUrl = (endpoint) => {
-    const baseURL = API_CONFIG.getBaseURL();
-    return `${baseURL}${endpoint}`;
-};
-
-export const makeApiRequest = async (endpoint, options = {}) => {
-    const url = buildApiUrl(endpoint);
-    const config = {
-        ...API_CONFIG.DEFAULT_CONFIG,
-        ...options,
-        headers: {
-            ...API_CONFIG.DEFAULT_CONFIG.headers,
-            ...options.headers
-        }
-    };
-    return fetch(url, config);
-};
-
 export default API_CONFIG;

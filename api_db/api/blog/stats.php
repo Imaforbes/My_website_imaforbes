@@ -6,48 +6,7 @@
  * Requires admin authentication
  */
 
-// CRITICAL: Set CORS headers IMMEDIATELY - no output before this point
-ob_start();
-
-// Get origin and detect environment
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-$host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
-
-// Detect environment: LOCAL or PRODUCTION
-$isProduction = (
-    strpos($host, 'imaforbes.com') !== false ||
-    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' &&
-        strpos($host, 'localhost') === false && strpos($host, '127.0.0.1') === false)
-);
-
-if ($isProduction) {
-    if (!empty($origin) && strpos($origin, 'imaforbes.com') !== false) {
-        $corsOrigin = $origin;
-    } else {
-        $corsOrigin = 'https://www.imaforbes.com';
-    }
-} else {
-    $corsOrigin = 'http://localhost:5173';
-    if (!empty($origin) && (strpos($origin, 'http://localhost') === 0 || strpos($origin, 'http://127.0.0.1') === 0)) {
-        $corsOrigin = $origin;
-    }
-}
-
-// Set CORS headers
-header("Access-Control-Allow-Origin: $corsOrigin");
-header('Access-Control-Allow-Methods: GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-CSRF-Token');
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Max-Age: 86400');
-
-// Handle preflight OPTIONS requests
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    ob_end_clean();
-    http_response_code(200);
-    exit;
-}
-
-ob_end_clean();
+require_once __DIR__ . '/../../utils/cors.php';
 
 require_once '../../config/database.php';
 require_once '../../config/response.php';

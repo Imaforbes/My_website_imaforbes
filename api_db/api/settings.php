@@ -5,64 +5,13 @@
  * Handles CRUD operations for system configuration settings
  */
 
-// CRITICAL: Set CORS headers FIRST, before any other output
-// SIMPLIFIED HARDCODED CORS - Always works in production
-
-// ========================================
-// CORS HEADERS - MUST BE ABSOLUTELY FIRST
-// ========================================
-// Suppress any output that might interfere
-ob_start();
-
-// Get origin and detect environment
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-$host = $_SERVER['HTTP_HOST'] ?? $_SERVER['SERVER_NAME'] ?? '';
-
-// Detect environment: LOCAL or PRODUCTION
-$isProduction = (
-    strpos($host, 'imaforbes.com') !== false ||
-    (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' && 
-     strpos($host, 'localhost') === false && strpos($host, '127.0.0.1') === false)
-);
-
-if ($isProduction) {
-    // PRODUCTION: Allow imaforbes.com origins (both www and non-www)
-    if (!empty($origin) && strpos($origin, 'imaforbes.com') !== false) {
-        $corsOrigin = $origin;
-    } else {
-        // Default to www version if origin not provided
-        $corsOrigin = 'https://www.imaforbes.com';
-    }
-} else {
-    // DEVELOPMENT: Allow localhost origins (any port)
-    $corsOrigin = 'http://localhost:5173';
-    if (!empty($origin) && (strpos($origin, 'http://localhost') === 0 || strpos($origin, 'http://127.0.0.1') === 0)) {
-        $corsOrigin = $origin;
-    }
-}
-
-// Set CORS headers - MUST be before any output
-header("Access-Control-Allow-Origin: $corsOrigin");
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, PATCH, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-CSRF-Token');
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Max-Age: 86400');
-
-// Handle preflight OPTIONS requests IMMEDIATELY
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    ob_end_clean();
-    http_response_code(200);
-    exit;
-}
-
-// Clear any accidental output before continuing
-ob_end_clean();
+require_once __DIR__ . '/../utils/cors.php';
 
 require_once '../config/database.php';
 require_once '../config/response.php';
 require_once '../auth/session.php';
 
-// NOTE: CORS headers already set above - don't call CorsHandler as it might override
+// CORS headers are provided by the centralized middleware above.
 
 // Start session explicitly (after CORS headers are set)
 if (session_status() === PHP_SESSION_NONE) {
@@ -192,7 +141,7 @@ function handleUpdateSettings($db)
 
             // Sanitize the key
             $key = preg_replace('/[^a-zA-Z0-9_]/', '_', $key);
-            
+
             if (is_array($value) && isset($value['value'])) {
                 // Handle nested settings (like notifications, security, etc.)
                 $settingValue = json_encode($value['value'], JSON_UNESCAPED_UNICODE);
@@ -201,25 +150,25 @@ function handleUpdateSettings($db)
             }
 
             $description = getSettingDescription($key);
-            
+
             // Check if setting exists first
             $checkSql = "SELECT id FROM portfolio_settings WHERE setting_key = ?";
             $checkStmt = $db->query($checkSql, [$key]);
             $exists = $checkStmt->fetch();
-            
+
             if ($exists) {
                 // Update existing setting
-                $updateSql = "UPDATE portfolio_settings 
-                             SET setting_value = ?, description = ?, updated_at = CURRENT_TIMESTAMP 
+                $updateSql = "UPDATE portfolio_settings
+                             SET setting_value = ?, description = ?, updated_at = CURRENT_TIMESTAMP
                              WHERE setting_key = ?";
                 $db->query($updateSql, [$settingValue, $description, $key]);
             } else {
                 // Insert new setting
-                $insertSql = "INSERT INTO portfolio_settings (setting_key, setting_value, description) 
+                $insertSql = "INSERT INTO portfolio_settings (setting_key, setting_value, description)
                              VALUES (?, ?, ?)";
                 $db->query($insertSql, [$key, $settingValue, $description]);
             }
-            
+
             $updatedSettings[$key] = $settingValue;
         }
 
@@ -254,7 +203,7 @@ function handleUpdateSettings($db)
         } catch (Exception $rollbackException) {
             // Ignore rollback errors, continue with error reporting
         }
-        
+
         $errorMessage = $e->getMessage();
         $trace = $e->getTraceAsString();
         error_log("Update settings error: " . $errorMessage);
@@ -269,17 +218,17 @@ function getSystemStatus($db)
     try {
         // Check database connection
         $dbStatus = 'connected';
-        
+
         // Check API status
         $apiStatus = 'working';
-        
+
         // Check backup status (simulate)
         $backupStatus = 'pending';
-        
+
         // Get message count
         $stmt = $db->query("SELECT COUNT(*) as count FROM datos");
         $messageCount = $stmt->fetch()['count'];
-        
+
         return [
             'database' => $dbStatus,
             'api' => $apiStatus,

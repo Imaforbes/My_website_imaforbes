@@ -97,6 +97,7 @@ const ErrorMessage = ({
             <div className="flex-shrink-0 ml-3">
               <button
                 onClick={onDismiss}
+                aria-label="Cerrar mensaje de error"
                 className="hover:bg-black/10 rounded-full p-1 transition-colors"
               >
                 <FiX className="w-4 h-4" />

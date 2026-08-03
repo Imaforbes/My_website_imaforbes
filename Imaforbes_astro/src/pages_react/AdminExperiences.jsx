@@ -18,8 +18,6 @@ import {
   Save,
   X,
   Filter,
-  Archive,
-  CheckCircle,
   ArrowRight,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";

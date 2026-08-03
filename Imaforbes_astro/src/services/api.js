@@ -339,46 +339,6 @@ export const api = {
     },
 };
 
-// Utility functions for common API patterns
-export const apiUtils = {
-    // Handle API response with loading states
-    async withLoading(apiCall, setLoading) {
-        try {
-            setLoading(true);
-            const result = await apiCall();
-            return result;
-        } finally {
-            setLoading(false);
-        }
-    },
-
-    // Retry failed requests
-    async withRetry(apiCall, maxRetries = 3, delay = 1000) {
-        for (let i = 0; i < maxRetries; i++) {
-            try {
-                const result = await apiCall();
-                if (result.success) return result;
-            } catch (error) {
-                if (i === maxRetries - 1) throw error;
-                await new Promise(resolve => setTimeout(resolve, delay * (i + 1)));
-            }
-        }
-    },
-
-    // Debounce API calls
-    debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    },
-};
-
 // Error types for better error handling
 export const ApiError = {
     NETWORK_ERROR: 'NETWORK_ERROR',

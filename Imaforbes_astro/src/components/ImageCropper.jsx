@@ -1,9 +1,11 @@
 // src/components/ImageCropper.jsx
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react';
-import { X, Move, Check, ZoomIn, ZoomOut, RotateCw } from 'lucide-react';
+import { X, Move, Check, ZoomIn, ZoomOut } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
+  const { t } = useTranslation();
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1); // Zoom level (1 = 100%, 2 = 200%, etc.)
   const [imageSrc, setImageSrc] = useState(null);
@@ -304,9 +306,10 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
       >
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-800">
-          <h3 className="text-lg font-light text-gray-900 dark:text-white">Recortar Imagen</h3>
+          <h3 className="text-lg font-light text-gray-900 dark:text-white">{t('imageCropper.title')}</h3>
           <button
             onClick={onCancel}
+            aria-label={t('imageCropper.close')}
             className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             <X size={24} />
@@ -334,7 +337,7 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
             <img
               ref={imageRef}
               src={imageSrc}
-              alt="Crop preview"
+              alt={t('imageCropper.preview')}
               className="absolute top-1/2 left-1/2 select-none"
               style={{
                 width: `${zoomedDisplayedSize.width}px`,
@@ -356,7 +359,7 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
           {/* Zoom Controls */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600 dark:text-gray-400 font-light">Zoom:</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400 font-light">{t('imageCropper.zoom')}:</span>
               <span className="text-sm font-medium text-gray-900 dark:text-white">{Math.round(zoom * 100)}%</span>
             </div>
             <div className="flex items-center gap-2">
@@ -364,22 +367,24 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
                 onClick={handleZoomOut}
                 disabled={zoom <= 0.5}
                 className="p-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Alejar"
+                title={t('imageCropper.zoomOut')}
+                aria-label={t('imageCropper.zoomOut')}
               >
                 <ZoomOut size={18} />
               </button>
               <button
                 onClick={handleReset}
                 className="px-3 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] rounded-lg transition-colors text-xs font-light"
-                title="Resetear"
+                title={t('imageCropper.reset')}
               >
-                Reset
+                {t('imageCropper.reset')}
               </button>
               <button
                 onClick={handleZoomIn}
                 disabled={zoom >= 5}
                 className="p-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                title="Acercar"
+                title={t('imageCropper.zoomIn')}
+                aria-label={t('imageCropper.zoomIn')}
               >
                 <ZoomIn size={18} />
               </button>
@@ -390,10 +395,10 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
           <div className="flex flex-col gap-1">
             <p className="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-2 font-light">
               <Move size={14} />
-              Arrastra la imagen para posicionarla
+              {t('imageCropper.drag')}
             </p>
             <p className="text-xs text-gray-600 dark:text-gray-400 font-light">
-              Usa la rueda del mouse o los botones para hacer zoom
+              {t('imageCropper.instructions')}
             </p>
           </div>
         </div>
@@ -404,14 +409,14 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
             onClick={onCancel}
             className="px-6 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] rounded-xl transition-colors font-light"
           >
-            Cancelar
+            {t('imageCropper.cancel')}
           </button>
           <button
             onClick={handleCrop}
             className="px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 rounded-xl transition-colors flex items-center gap-2 font-light"
           >
             <Check size={18} />
-            Aplicar Recorte
+            {t('imageCropper.apply')}
           </button>
         </div>
       </motion.div>

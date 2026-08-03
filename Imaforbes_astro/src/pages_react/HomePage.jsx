@@ -80,7 +80,7 @@ const HomePage = () => {
               position: 'relative'
             }} className="dark:bg-[#111] dark:border-gray-800">
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }}></span>
-              Available for new opportunities
+              {t("home.available", "Available for new opportunities")}
             </div>
           </BorderBeam>
         </motion.div>
@@ -89,7 +89,7 @@ const HomePage = () => {
           {t("home.title")}
         </motion.h1>
 
-        <motion.h2 variants={itemVariants} className="hero-subtitle" style={{ fontSize: 'clamp(0.9rem, 2.8vw, 1.8rem)', marginTop: '1rem', whiteSpace: 'nowrap' }}>
+        <motion.h2 variants={itemVariants} className="hero-subtitle" style={{ fontSize: 'clamp(0.9rem, 2.8vw, 1.8rem)', marginTop: '1rem' }}>
           {t("home.subtitle")}
         </motion.h2>
 
@@ -128,15 +128,15 @@ const HomePage = () => {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>
-            <FiTerminal size={14} /> <span>Frontend</span>
+            <FiTerminal size={14} /> <span>{t("home.tag_frontend", "Frontend")}</span>
           </div>
           <span style={{ color: 'var(--color-border-light)' }}>•</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>
-            <FiServer size={14} /> <span>Backend</span>
+            <FiServer size={14} /> <span>{t("home.tag_backend", "Backend")}</span>
           </div>
           <span style={{ color: 'var(--color-border-light)' }}>•</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>
-            <FiLayout size={14} /> <span>UI/UX Design</span>
+            <FiLayout size={14} /> <span>{t("home.tag_uiux", "UI/UX Design")}</span>
           </div>
         </motion.div>
 

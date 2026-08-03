@@ -5,14 +5,12 @@
  * Enhanced security: file content validation, path traversal protection, MIME type verification
  */
 
+require_once __DIR__ . '/../../utils/cors.php';
 require_once '../../config/database.php';
 require_once '../../config/response.php';
 require_once '../../auth/session.php';
 require_once '../../utils/CsrfProtection.php';
 require_once '../../utils/RateLimiter.php';
-
-// Set CORS headers
-CorsHandler::setHeaders();
 
 // Check authentication
 SessionManager::requireAuth();

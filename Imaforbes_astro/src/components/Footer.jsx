@@ -14,7 +14,7 @@ const Footer = memo(({ currentPath }) => {
   const navItems = [
     { path: "/", label: "header.home" },
     { path: "/about", label: "header.about-me" },
-    { path: "/projects", label: "header.proyects" },
+    { path: "/projects", label: "header.projects" },
     { path: "/blog", label: "header.blog" },
     { path: "/contact", label: "header.contact" },
   ];

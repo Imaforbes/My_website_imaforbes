@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BorderBeam } from "border-beam";
 import { useTranslation } from "react-i18next";
-import { FiGithub, FiExternalLink, FiBriefcase, FiAward, FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { FiGithub, FiExternalLink, FiBriefcase, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 /**
  * HeroBackground Component
@@ -226,7 +226,7 @@ const ProjectsPage = () => {
       id: 9,
       titleKey: "projects.worldcup-app.title",
       descriptionKey: "projects.worldcup-app.description",
-      image: "/img/Proy9.png",
+      image: "/img/Proy9.webp",
       link: "#",
       repo: "https://github.com/Imaforbes/Quiniela_Mundial_2026",
       tags: ["React", "Vite", "Supabase", "PostgreSQL", "Vanilla CSS"],
@@ -253,7 +253,7 @@ const ProjectsPage = () => {
       id: 1,
       titleKey: "projects.hotel-system.title",
       descriptionKey: "projects.hotel-system.description",
-      image: "/img/Proy1.png",
+      image: "/img/Proy1.webp",
       link: "#",
       repo: "https://github.com/Imaforbes/Hotel-Safaris",
       tags: ["PHP 8", "MySQL PDO", "AJAX", "JavaScript ES6", "Bootstrap 5", "RBAC", "Bcrypt"],
@@ -326,7 +326,7 @@ const ProjectsPage = () => {
           className="dark:bg-[#1a1a1a] dark:border-gray-800"
         >
           <FiBriefcase style={{ color: 'var(--color-text-muted-light)' }} />
-          <span style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>{projects.length} Proyectos</span>
+          <span style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>{projects.length} {t("projects.count-label", "Proyectos")}</span>
         </motion.div>
 
         <motion.div 
@@ -406,6 +406,7 @@ const ProjectsPage = () => {
                 style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '8px' }}
               />
               <button
+                aria-label="Close preview"
                 onClick={() => setPreviewImage(null)}
                 style={{ position: 'absolute', top: 0, right: 0, padding: '0.5rem', background: 'var(--color-surface-light)', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
               >

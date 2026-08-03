@@ -19,7 +19,7 @@ const Breadcrumbs = ({ currentPath }) => {
   const getBreadcrumbName = (pathname) => {
     const translations = {
       about: t("header.about-me") || "About",
-      projects: t("header.proyects") || "Projects",
+      projects: t("header.projects") || "Projects",
       blog: t("header.blog") || "Blog",
       contact: t("header.contact") || "Contact",
     };

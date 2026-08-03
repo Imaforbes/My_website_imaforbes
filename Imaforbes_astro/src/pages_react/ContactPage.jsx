@@ -26,10 +26,8 @@ import {
   FiCheckCircle,
   FiAlertTriangle,
   FiX,
-  FiPhone,
   FiMapPin,
   FiClock,
-  FiGlobe,
 } from "react-icons/fi";
 import { useContact } from "../hooks/useApi";
 import { useTranslation } from "react-i18next";
@@ -119,7 +117,7 @@ const ContactPage = () => {
                 position: 'relative'
               }} className="dark:bg-[#111] dark:border-gray-800">
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }}></span>
-                Available for new opportunities
+                {t("contact.available-badge", "Available for new opportunities")}
               </div>
             </BorderBeam>
           </motion.div>
@@ -174,8 +172,8 @@ const ContactPage = () => {
                     <FiMapPin size={20} style={{ color: 'var(--color-text-light)' }} className="dark:text-gray-300" />
                   </div>
                   <div style={{ minWidth: 0 }}>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>Location</p>
-                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text-light)', wordBreak: 'break-word' }} className="dark:text-white">Mexico City, MX</p>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>{t("contact.location-label", "Location")}</p>
+                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text-light)', wordBreak: 'break-word' }} className="dark:text-white">{t("contact.location-value", "Mexico City, MX")}</p>
                   </div>
                 </div>
 
@@ -184,8 +182,8 @@ const ContactPage = () => {
                     <FiClock size={20} style={{ color: 'var(--color-text-light)' }} className="dark:text-gray-300" />
                   </div>
                   <div style={{ minWidth: 0 }}>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>Available</p>
-                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text-light)', wordBreak: 'break-word' }} className="dark:text-white">Mon - Fri, 9AM - 5PM</p>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>{t("contact.available-label", "Available")}</p>
+                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text-light)', wordBreak: 'break-word' }} className="dark:text-white">{t("contact.available-hours", "Mon - Fri, 9AM - 5PM")}</p>
                   </div>
                 </div>
               </div>

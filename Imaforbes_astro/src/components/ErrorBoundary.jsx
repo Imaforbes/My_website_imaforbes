@@ -3,6 +3,7 @@
 
 import React from "react";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import { withTranslation } from "react-i18next";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -35,6 +36,7 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
+      const { t } = this.props;
       return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
           <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 text-center">
@@ -43,12 +45,11 @@ class ErrorBoundary extends React.Component {
             </div>
 
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              ¡Oops! Algo salió mal
+              {t("errorBoundary.title")}
             </h2>
 
             <p className="text-gray-600 mb-6">
-              Ha ocurrido un error inesperado. Por favor, intenta recargar la
-              página.
+              {t("errorBoundary.message")}
             </p>
 
             <div className="space-y-3">
@@ -57,7 +58,7 @@ class ErrorBoundary extends React.Component {
                 className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
-                Recargar página
+                {t("errorBoundary.reload")}
               </button>
 
               <button
@@ -65,7 +66,7 @@ class ErrorBoundary extends React.Component {
                 className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
               >
                 <Home className="w-4 h-4" />
-                Ir al inicio
+                {t("errorBoundary.home")}
               </button>
             </div>
 
@@ -89,4 +90,4 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-export default ErrorBoundary;
+export default withTranslation()(ErrorBoundary);
