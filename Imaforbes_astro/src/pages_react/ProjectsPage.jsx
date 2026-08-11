@@ -67,7 +67,7 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
   };
 
   return (
-    <BorderBeam theme="auto" size="pulse-inner" duration={6} colorVariant="ocean" className="rounded-2xl h-full w-full relative">
+    <BorderBeam theme="dark" size="pulse-inner" duration={6} colorVariant="ocean" className="rounded-2xl h-full w-full relative">
       <motion.div variants={cardVariants} className="project-card-premium h-full dark:bg-[#111] dark:border-gray-800" style={{ zIndex: 10, background: 'var(--color-surface-light)', borderRadius: '1rem', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid var(--color-border-light)' }}>
       
       {/* Background Image / Carousel Container */}
@@ -142,7 +142,7 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
 
       {/* Content Container */}
       <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--color-text-dark)' }} className="dark:text-white">
+        <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--color-text-light)' }} className="dark:text-white">
           {t(project.titleKey)}
         </h3>
         
@@ -163,7 +163,7 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
 
         <div className="project-actions" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           {project.repo && project.repo !== "#" && (
-            <BorderBeam theme="auto" size="sm" duration={4} colorVariant="mono" className="rounded-full">
+            <BorderBeam theme="dark" size="sm" duration={4} colorVariant="mono" className="rounded-full">
               <a
                 href={project.repo}
                 target="_blank"
@@ -178,7 +178,7 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
           )}
 
           {project.link && project.link !== "#" && (
-            <BorderBeam theme="auto" size="sm" duration={4} colorVariant="ocean" className="rounded-full">
+            <BorderBeam theme="dark" size="sm" duration={4} colorVariant="ocean" className="rounded-full">
               <a
                 href={project.link}
                 target="_blank"
@@ -363,7 +363,7 @@ const ProjectsPage = () => {
           transition={{ duration: 0.5 }}
           style={{ display: 'flex', justifyContent: 'center', marginTop: '4rem', marginBottom: '2rem' }}
         >
-          <BorderBeam theme="auto" size="md" duration={5} colorVariant="ocean" className="rounded-full">
+          <BorderBeam theme="dark" size="md" duration={5} colorVariant="ocean" className="rounded-full">
             <a
               href="https://github.com/Imaforbes?tab=repositories&q=&type=&language=&sort="
               target="_blank"

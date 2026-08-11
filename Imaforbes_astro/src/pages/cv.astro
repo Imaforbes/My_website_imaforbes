@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CvPage from '../pages_react/CvPage.jsx';
+---
+
+<Layout title="Curriculum Vitae (.md) | Imaforbes" description="Curriculum Vitae en formato Markdown de Imanol Pérez Arteaga — Desarrollador Full Stack e Ingeniero de Software" isAdmin={false}>
+  <CvPage client:load />
+</Layout>

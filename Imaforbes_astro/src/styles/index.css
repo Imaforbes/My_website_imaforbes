@@ -600,3 +600,23 @@ html.dark .skill-progress-fill {
     width: 45%;
   }
 }
+
+/* ============================================
+   MOBILE UI/UX PERFORMANCE & TOUCH OPTIMIZATIONS
+   ============================================ */
+button, a, input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@media (max-width: 640px) {
+  /* Prevent horizontal overflow on small mobile viewports */
+  body, html {
+    overflow-x: hidden;
+  }
+  
+  /* Smooth inertial scrolling for code blocks and scrollable containers on mobile */
+  pre, .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}

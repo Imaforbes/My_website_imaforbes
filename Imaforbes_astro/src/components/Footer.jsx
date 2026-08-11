@@ -5,6 +5,7 @@ import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { Mail, ArrowUpRight } from 'lucide-react';
+import { openCvModal } from '../utils/cvModal.js';
 
 const Footer = memo(({ currentPath }) => {
   const { t } = useTranslation();
@@ -14,9 +15,11 @@ const Footer = memo(({ currentPath }) => {
   const navItems = [
     { path: "/", label: "header.home" },
     { path: "/about", label: "header.about-me" },
+    { path: "/trajectory", label: "header.trajectory" },
     { path: "/projects", label: "header.projects" },
     { path: "/blog", label: "header.blog" },
     { path: "/contact", label: "header.contact" },
+    { path: "#cv", label: "header.cv", isCvModal: true },
   ];
 
   const containerVariants = {
@@ -60,6 +63,12 @@ const Footer = memo(({ currentPath }) => {
                 <li key={item.path}>
                   <a 
                     href={item.path}
+                    onClick={(e) => {
+                      if (item.isCvModal) {
+                        e.preventDefault();
+                        openCvModal();
+                      }
+                    }}
                     style={{ 
                       textDecoration: 'none', 
                       fontSize: '0.95rem',

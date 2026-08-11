@@ -33,7 +33,10 @@
     "no-letters": "No letters available",
     "no-poems": "No poems available",
     "no-posts": "No posts available",
+    "no-search-results": "No posts matched your search",
     "read-more": "Read more",
+    "search-label": "Search posts",
+    "search-placeholder": "Search by title or content...",
     "subtitle": "Thoughts, articles and poetry",
     "title": "Blog",
     "type-letter": "Letter",
@@ -87,7 +90,28 @@
     "about-me": "About Me",
     "blog": "Blog",
     "contact": "Contact",
-    "projects": "Projects"
+    "projects": "Projects",
+    "trajectory": "Trajectory",
+    "cv": "CV"
+  },
+  "cvModal": {
+    "title": "Curriculum Vitae",
+    "lang-question": "In which language do you want it?",
+    "english": "English",
+    "spanish": "Spanish",
+    "selected-lang": "Selected language:",
+    "change": "(Change)",
+    "format-question": "Download my curriculum vitae in your preferred format:",
+    "markdown": "Markdown",
+    "pdf": "PDF"
+  },
+  "cvPage": {
+    "title": "Curriculum Vitae — Markdown",
+    "back-home": "Back to site",
+    "copy-md": "Copy .md",
+    "copied": "Copied!",
+    "download-md": "Download .md",
+    "download-pdf": "Download PDF"
   },
   "imageCropper": {
     "apply": "Apply crop",
@@ -111,6 +135,7 @@
     "tag_frontend": "Frontend",
     "tag_uiux": "UI/UX Design",
     "title": "Imanol",
+    "view-trajectory": "Trajectory",
     "view-projects": "View Projects"
   },
   "language": {
@@ -178,5 +203,14 @@
     "dark": "Dark",
     "light": "Light",
     "toggleTheme": "Toggle Theme"
+  },
+  "trajectory": {
+    "contact": "Let's talk",
+    "description": "A look at my professional experience, the technologies I work with, and the projects that have shaped how I build software.",
+    "download-cv": "Download CV",
+    "empty": "More professional experience will be shared here soon.",
+    "eyebrow": "Professional profile",
+    "loading": "Loading trajectory...",
+    "title": "Trajectory"
   }
 }

@@ -33,7 +33,10 @@
     "no-letters": "No hay cartas disponibles",
     "no-poems": "No hay poemas disponibles",
     "no-posts": "No hay publicaciones disponibles",
+    "no-search-results": "No se encontraron publicaciones con esa búsqueda",
     "read-more": "Leer más",
+    "search-label": "Buscar publicaciones",
+    "search-placeholder": "Buscar por título o contenido...",
     "subtitle": "Pensamientos, artículos y poesía",
     "title": "Blog",
     "type-letter": "Carta",
@@ -87,7 +90,28 @@
     "about-me": "Sobre mí",
     "blog": "Blog",
     "contact": "Contacto",
-    "projects": "Proyectos"
+    "projects": "Proyectos",
+    "trajectory": "Trayectoria",
+    "cv": "CV"
+  },
+  "cvModal": {
+    "title": "Curriculum Vitae",
+    "lang-question": "¿En qué idioma lo prefieres?",
+    "english": "Inglés",
+    "spanish": "Español",
+    "selected-lang": "Idioma seleccionado:",
+    "change": "(Cambiar)",
+    "format-question": "Descarga mi currículum en tu formato preferido:",
+    "markdown": "Markdown",
+    "pdf": "PDF"
+  },
+  "cvPage": {
+    "title": "Curriculum Vitae — Markdown",
+    "back-home": "Volver al sitio",
+    "copy-md": "Copiar .md",
+    "copied": "¡Copiado!",
+    "download-md": "Descargar .md",
+    "download-pdf": "Descargar PDF"
   },
   "imageCropper": {
     "apply": "Aplicar recorte",
@@ -111,6 +135,7 @@
     "tag_frontend": "Frontend",
     "tag_uiux": "Diseño UI/UX",
     "title": "Imanol",
+    "view-trajectory": "Trayectoria",
     "view-projects": "Ver proyectos"
   },
   "language": {
@@ -178,5 +203,14 @@
     "dark": "Oscuro",
     "light": "Claro",
     "toggleTheme": "Alternar tema"
+  },
+  "trajectory": {
+    "contact": "Hablemos",
+    "description": "Un recorrido por mi experiencia profesional, las tecnologías con las que trabajo y los proyectos que han definido mi forma de construir software.",
+    "download-cv": "Descargar CV",
+    "empty": "Próximamente compartiré aquí más experiencia profesional.",
+    "eyebrow": "Perfil profesional",
+    "loading": "Cargando trayectoria...",
+    "title": "Trayectoria"
   }
 }

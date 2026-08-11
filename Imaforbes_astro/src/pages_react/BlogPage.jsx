@@ -7,7 +7,7 @@ import { api } from "../services/api.js";
 import { API_CONFIG } from "../config/api.js";
 import ProtectedImage from "../components/ProtectedImage.jsx";
 import BlogPostSkeleton from "../components/BlogPostSkeleton.jsx";
-import { FileText, Mail, Filter, Heart, Eye, ArrowLeft, ArrowRight } from "lucide-react";
+import { FileText, Mail, Filter, Heart, Eye, ArrowLeft, ArrowRight, Search } from "lucide-react";
 
 const HeroBackground = () => (
   <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
@@ -48,6 +48,7 @@ const BlogPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [likedPosts, setLikedPosts] = useState(new Set());
   const [viewedPosts, setViewedPosts] = useState(new Set());
   const [likingPosts, setLikingPosts] = useState(new Set());
@@ -296,6 +297,11 @@ const BlogPage = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
   };
 
+  const normalizedSearch = searchTerm.trim().toLocaleLowerCase();
+  const filteredPosts = normalizedSearch
+    ? posts.filter((post) => `${post.title || ''} ${post.content || ''}`.toLocaleLowerCase().includes(normalizedSearch))
+    : posts;
+
   if (loading) {
     return (
       <motion.section className="relative min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-white overflow-hidden" variants={containerVariants} initial="hidden" animate="visible">
@@ -336,7 +342,7 @@ const BlogPage = () => {
             <button 
               onClick={closePost} 
               className="btn-premium" 
-              style={{ marginBottom: '2.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'transparent', color: 'var(--color-text-dark)', padding: '0.5rem 0' }}
+              style={{ marginBottom: '2.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'transparent', color: 'var(--color-text-light)', padding: '0.5rem 0' }}
             >
               <ArrowLeft size={18} /> {t("blog.back", "Volver")}
             </button>
@@ -345,7 +351,7 @@ const BlogPage = () => {
               <span className="project-tag" style={{ textTransform: 'uppercase', fontSize: '0.85rem', padding: '0.3rem 0.8rem', marginBottom: '1.5rem', display: 'inline-block' }}>
                 {selectedPost.type === "poem" ? t("blog.type-poem") : t("blog.type-letter")}
               </span>
-              <h1 style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 700, color: 'var(--color-text-dark)', marginBottom: '1.5rem', lineHeight: 1.2, wordBreak: 'break-word' }} className="dark:text-white">
+              <h1 style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 700, color: 'var(--color-text-light)', marginBottom: '1.5rem', lineHeight: 1.2, wordBreak: 'break-word' }} className="dark:text-white">
                 {selectedPost.title}
               </h1>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', color: 'var(--color-text-muted-light)', fontSize: '1rem' }}>
@@ -375,7 +381,7 @@ const BlogPage = () => {
 
             <div 
               className="dark:text-gray-300" 
-              style={{ color: 'var(--color-text-dark)', whiteSpace: 'pre-wrap', lineHeight: 1.8, fontSize: '1.15rem', fontWeight: 400, wordBreak: 'break-word', paddingBottom: '3rem' }}
+              style={{ color: 'var(--color-text-light)', whiteSpace: 'pre-wrap', lineHeight: 1.8, fontSize: '1.15rem', fontWeight: 400, wordBreak: 'break-word', paddingBottom: '3rem' }}
             >
               {selectedPost.content ? selectedPost.content.trim() : ''}
             </div>
@@ -439,6 +445,25 @@ const BlogPage = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
+          style={{ maxWidth: '580px', margin: '0 auto 1.25rem', position: 'relative' }}
+        >
+          <Search size={18} aria-hidden="true" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted-light)' }} />
+          <input
+            type="search"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            placeholder={t('blog.search-placeholder')}
+            aria-label={t('blog.search-label')}
+            className="dark:bg-[#111] dark:border-gray-800 dark:text-white"
+            style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 2.8rem', borderRadius: '999px', border: '1px solid var(--color-border-light)', background: 'var(--color-surface-light)', color: 'var(--color-text-light)', outline: 'none' }}
+          />
+        </motion.div>
+
+        <motion.div
+          variants={itemVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
           style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '4rem' }}
         >
           <button
@@ -479,7 +504,7 @@ const BlogPage = () => {
           </button>
         </motion.div>
 
-        {posts.length > 0 ? (
+        {filteredPosts.length > 0 ? (
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -493,14 +518,14 @@ const BlogPage = () => {
               alignItems: 'stretch'
             }}
           >
-            {posts.map((post, index) => {
+            {filteredPosts.map((post, index) => {
               const cardVariants = {
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut", delay: index * 0.05 } }
               };
 
               return (
-                <BorderBeam key={post.id} theme="auto" size="pulse-inner" duration={6} colorVariant="ocean" className="rounded-2xl relative w-full h-full">
+                <BorderBeam key={post.id} theme="dark" size="pulse-inner" duration={6} colorVariant="ocean" className="rounded-2xl relative w-full h-full">
                   <motion.article
                     variants={cardVariants}
                     className="card-premium h-full"
@@ -518,7 +543,7 @@ const BlogPage = () => {
                       </div>
                       <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'left' }}>
                         <div style={{ marginBottom: '1rem' }}>
-                          <h2 style={{ fontSize: 'clamp(1.3rem, 5vw, 1.6rem)', fontWeight: 600, color: 'var(--color-text-dark)', marginBottom: '0.5rem', lineHeight: 1.3, wordBreak: 'break-word' }} className="dark:text-white">
+                          <h2 style={{ fontSize: 'clamp(1.3rem, 5vw, 1.6rem)', fontWeight: 600, color: 'var(--color-text-light)', marginBottom: '0.5rem', lineHeight: 1.3, wordBreak: 'break-word' }} className="dark:text-white">
                             {post.title}
                           </h2>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text-muted-light)', fontSize: '0.85rem' }}>
@@ -528,12 +553,12 @@ const BlogPage = () => {
                           </div>
                         </div>
                         <div style={{ marginBottom: '1.5rem', flex: 1 }}>
-                          <div style={{ color: 'var(--color-text-dark)', whiteSpace: 'pre-wrap', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 400, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} className="dark:text-gray-300">
+                          <div style={{ color: 'var(--color-text-light)', whiteSpace: 'pre-wrap', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 400, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} className="dark:text-gray-300">
                             {post.content ? post.content.trim() : ''}
                           </div>
                         </div>
                         <div style={{ paddingTop: '1.25rem', borderTop: '1px solid var(--color-border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }} className="dark:border-gray-800">
-                          <button onClick={() => openPost(post.id)} className="btn-premium" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.9rem', padding: '0.4rem 0.8rem', background: 'transparent', color: 'var(--color-text-dark)' }}>
+                          <button onClick={() => openPost(post.id)} className="btn-premium" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.9rem', padding: '0.4rem 0.8rem', background: 'transparent', color: 'var(--color-text-light)' }}>
                             {t("blog.read-more")} <ArrowRight size={16} />
                           </button>
                         </div>
@@ -542,7 +567,7 @@ const BlogPage = () => {
                   ) : (
                     <div style={{ padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
                       <div style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: 'clamp(1.3rem, 5vw, 1.6rem)', fontWeight: 600, color: 'var(--color-text-dark)', marginBottom: '0.5rem', lineHeight: 1.3, wordBreak: 'break-word' }} className="dark:text-white">
+                        <h2 style={{ fontSize: 'clamp(1.3rem, 5vw, 1.6rem)', fontWeight: 600, color: 'var(--color-text-light)', marginBottom: '0.5rem', lineHeight: 1.3, wordBreak: 'break-word' }} className="dark:text-white">
                           {post.title}
                         </h2>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text-muted-light)', fontSize: '0.85rem' }}>
@@ -553,13 +578,13 @@ const BlogPage = () => {
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '1.5rem', flex: 1 }}>
                         <div style={{ width: '100%' }}>
-                          <div style={{ color: 'var(--color-text-dark)', whiteSpace: 'pre-wrap', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 400, textAlign: 'left', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} className="dark:text-gray-300">
+                          <div style={{ color: 'var(--color-text-light)', whiteSpace: 'pre-wrap', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 400, textAlign: 'left', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} className="dark:text-gray-300">
                             {post.content ? post.content.trim() : ''}
                           </div>
                         </div>
                       </div>
                       <div style={{ paddingTop: '1.25rem', borderTop: '1px solid var(--color-border-light)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }} className="dark:border-gray-800">
-                        <button onClick={() => openPost(post.id)} className="btn-premium" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.9rem', padding: '0.4rem 0.8rem', background: 'transparent', color: 'var(--color-text-dark)' }}>
+                        <button onClick={() => openPost(post.id)} className="btn-premium" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.9rem', padding: '0.4rem 0.8rem', background: 'transparent', color: 'var(--color-text-light)' }}>
                           {t("blog.read-more")} <ArrowRight size={16} />
                         </button>
                       </div>
@@ -574,7 +599,7 @@ const BlogPage = () => {
           <motion.div variants={itemVariants} style={{ textAlign: 'center', padding: '4rem 2rem' }} className="card-premium">
             <FileText size={48} style={{ margin: '0 auto 1.5rem', color: 'var(--color-text-muted-light)' }} />
             <p style={{ fontSize: '1.1rem', color: 'var(--color-text-muted-light)', fontWeight: 300 }}>
-              {filter === "all" ? t("blog.no-posts") : t("blog.no-posts-filter")}
+              {normalizedSearch ? t('blog.no-search-results') : filter === "all" ? t("blog.no-posts") : t("blog.no-posts-filter")}
             </p>
           </motion.div>
         )}

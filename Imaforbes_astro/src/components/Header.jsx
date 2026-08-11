@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import LanguageToggle from "./LanguageToggle";
 import ThemeToggle from "./ThemeToggle";
+import CvModal from "./CvModal.jsx";
+import { openCvModal } from "../utils/cvModal.js";
 
 const Header = memo(({ currentPath }) => {
   const { t } = useTranslation();
@@ -51,9 +53,11 @@ const Header = memo(({ currentPath }) => {
   const navItems = [
     { path: "/", label: "header.home" },
     { path: "/about", label: "header.about-me" },
+    { path: "/trajectory", label: "header.trajectory" },
     { path: "/projects", label: "header.projects" },
     { path: "/blog", label: "header.blog" },
     { path: "/contact", label: "header.contact" },
+    { path: "#cv", label: "header.cv", isCvModal: true },
   ];
 
   const menuVariants = {
@@ -89,6 +93,12 @@ const Header = memo(({ currentPath }) => {
               <motion.div key={link.path} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
                 <a 
                   href={link.path}
+                  onClick={(e) => {
+                    if (link.isCvModal) {
+                      e.preventDefault();
+                      openCvModal();
+                    }
+                  }}
                   className={`nav-item-premium ${location.pathname === link.path ? 'active' : ''}`}
                 >
                   {t(link.label)}
@@ -118,7 +128,7 @@ const Header = memo(({ currentPath }) => {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden"
             style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--color-text-light)' }}
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-label={isMenuOpen ? t("header.close-menu", "Cerrar menú") : t("header.open-menu", "Abrir menú")}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -144,7 +154,15 @@ const Header = memo(({ currentPath }) => {
             >
               <div style={{ display: 'flex', flexDirection: 'column', padding: '1rem' }}>
                 {navItems.map((link) => (
-                  <motion.div key={link.path} variants={itemVariants} onClick={handleNavLinkClick}>
+                  <motion.div key={link.path} variants={itemVariants} onClick={(e) => {
+                    if (link.isCvModal) {
+                      e.preventDefault();
+                      openCvModal();
+                      setIsMenuOpen(false);
+                    } else {
+                      handleNavLinkClick();
+                    }
+                  }}>
                     <a 
                       href={link.path}
                       style={{ display: 'block', padding: '1rem', color: location.pathname === link.path ? 'var(--color-text-light)' : 'var(--color-text-muted-light)', textDecoration: 'none', borderBottom: '1px solid var(--color-border-light)' }}
@@ -163,6 +181,8 @@ const Header = memo(({ currentPath }) => {
           </>
         )}
       </AnimatePresence>
+
+      <CvModal />
     </>
   );
 });

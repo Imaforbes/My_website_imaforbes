@@ -18,6 +18,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BorderBeam } from "border-beam";
 import { useTranslation } from "react-i18next";
 import { Briefcase, Calendar, MapPin, ChevronRight, ChevronLeft } from "lucide-react";
+import { openCvModal } from "../utils/cvModal.js";
 import { api } from "../services/api.js";
 import {
   FaHtml5,
@@ -575,16 +576,17 @@ const AboutPage = () => {
               {t("about.hero-text-2")}
             </p>
 
-            <BorderBeam theme="auto" size="sm" duration={3} colorVariant="ocean" className="rounded-full w-max">
-              <a
-                href="/resources/CvIng_Imanol Perez Arteaga.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+            <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full w-max">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  openCvModal();
+                }}
                 className="btn-premium"
-                style={{ display: 'inline-flex', padding: '0.75rem 1.75rem', borderRadius: '9999px', borderBottom: 'none', background: 'var(--color-surface-light)' }}
+                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0.75rem 1.75rem', borderRadius: '9999px', borderBottom: 'none', background: 'var(--color-surface-light)', cursor: 'pointer', minHeight: '46px' }}
               >
                 {t("about.download-cv")}
-              </a>
+              </button>
             </BorderBeam>
           </motion.div>
         </div>

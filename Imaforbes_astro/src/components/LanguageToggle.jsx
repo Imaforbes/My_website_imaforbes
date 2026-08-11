@@ -21,7 +21,7 @@ const LanguageToggle = ({ className = "", size = "default" }) => {
 
   return (
     <div
-      className={`flex items-center p-1 bg-gray-200 rounded-full ${className}`}
+      className={`flex items-center p-1 bg-gray-200 dark:bg-gray-800 rounded-full ${className}`}
     >
       <button
         onClick={() => handleLanguageChange("es")}
@@ -29,8 +29,8 @@ const LanguageToggle = ({ className = "", size = "default" }) => {
           sizeClasses[size]
         } font-semibold rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
           (i18n.language || "es").startsWith("es")
-            ? "bg-white text-gray-800 shadow"
-            : "bg-transparent text-gray-500 hover:text-gray-800"
+            ? "bg-white text-gray-800 shadow dark:bg-gray-700 dark:text-white"
+            : "bg-transparent text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
         }`}
         aria-label={t("language.switchToSpanish") || "Switch to Spanish"}
         aria-pressed={(i18n.language || "es").startsWith("es")}
@@ -43,8 +43,8 @@ const LanguageToggle = ({ className = "", size = "default" }) => {
           sizeClasses[size]
         } font-semibold rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
           (i18n.language || "es").startsWith("en")
-            ? "bg-white text-gray-800 shadow"
-            : "bg-transparent text-gray-500 hover:text-gray-800"
+            ? "bg-white text-gray-800 shadow dark:bg-gray-700 dark:text-white"
+            : "bg-transparent text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white"
         }`}
         aria-label={t("language.switchToEnglish") || "Switch to English"}
         aria-pressed={(i18n.language || "es").startsWith("en")}

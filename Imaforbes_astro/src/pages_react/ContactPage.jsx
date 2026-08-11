@@ -100,29 +100,31 @@ const ContactPage = () => {
         <HeroBackground />
         <div className="container-premium" style={{ position: 'relative', zIndex: 10 }}>
           
-          {/* Floating Background Widget */}
-          <motion.div 
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            style={{ position: 'absolute', top: '5%', right: '10%', zIndex: 20 }}
-            className="hidden md:flex"
-          >
-            <BorderBeam theme="auto" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
-              <div style={{ 
-                display: 'flex', alignItems: 'center', gap: '0.5rem', 
-                padding: '0.5rem 1rem', borderRadius: '50px', 
-                background: 'var(--color-surface-light)',
-                border: '1px solid var(--color-border-light)',
-                fontSize: '0.8rem', fontWeight: 500, color: 'var(--color-text-muted-light)',
-                position: 'relative'
-              }} className="dark:bg-[#111] dark:border-gray-800">
-                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }}></span>
-                {t("contact.available-badge", "Available for new opportunities")}
-              </div>
-            </BorderBeam>
-          </motion.div>
-
           <div className="projects-header" style={{ position: 'relative', paddingTop: '1rem' }}>
+            {/* Available Badge - Perfectly centered above title, zero crowding or overlapping */}
+            <motion.div 
+              variants={itemVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}
+            >
+              <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
+                <div style={{ 
+                  display: 'flex', alignItems: 'center', gap: '0.6rem', 
+                  padding: '0.5rem 1.25rem', borderRadius: '9999px', 
+                  background: 'var(--color-surface-light)',
+                  border: '1px solid var(--color-border-light)',
+                  fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-text-muted-light)',
+                  boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                  position: 'relative'
+                }} className="dark:bg-[#111] dark:border-gray-800">
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }}></span>
+                  {t("contact.available-badge", "Available for new opportunities")}
+                </div>
+              </BorderBeam>
+            </motion.div>
+
             <motion.h2
               variants={itemVariants}
               initial="hidden"
@@ -239,7 +241,7 @@ const ContactPage = () => {
               style={{ display: 'flex', flexDirection: 'column', gap: '2rem', padding: 'clamp(1.5rem, 5vw, 2.5rem)' }}
             >
               <div>
-                <label htmlFor="name" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--color-text-dark)' }} className="dark:text-white">
+                <label htmlFor="name" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--color-text-light)' }} className="dark:text-white">
                   {t("contact.name")}
                 </label>
                 <input
@@ -257,7 +259,7 @@ const ContactPage = () => {
                     fontSize: '1rem',
                     transition: 'all 0.3s ease'
                   }}
-                  className={`bg-gray-50 border ${validationErrors.name ? 'border-red-500' : 'border-gray-200'} focus:border-gray-900 focus:ring-2 focus:ring-gray-900/20 dark:bg-[#151515] dark:${validationErrors.name ? 'border-red-500' : 'border-gray-800'} dark:focus:border-white dark:focus:ring-white/20 dark:text-white outline-none`}
+                  className={`bg-gray-50 border ${validationErrors.name ? 'border-red-500' : 'border-gray-200'} focus:border-gray-900 focus:ring-2 focus:ring-gray-900/20 text-gray-900 dark:bg-[#151515] dark:${validationErrors.name ? 'border-red-500' : 'border-gray-800'} dark:focus:border-white dark:focus:ring-white/20 dark:text-white outline-none`}
                   placeholder="Tu nombre completo"
                 />
                 {validationErrors.name && (
@@ -266,7 +268,7 @@ const ContactPage = () => {
               </div>
               
               <div>
-                <label htmlFor="email" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--color-text-dark)' }} className="dark:text-white">
+                <label htmlFor="email" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--color-text-light)' }} className="dark:text-white">
                   {t("contact.email")}
                 </label>
                 <input
@@ -284,7 +286,7 @@ const ContactPage = () => {
                     fontSize: '1rem',
                     transition: 'all 0.3s ease'
                   }}
-                  className={`bg-gray-50 border ${validationErrors.email ? 'border-red-500' : 'border-gray-200'} focus:border-gray-900 focus:ring-2 focus:ring-gray-900/20 dark:bg-[#151515] dark:${validationErrors.email ? 'border-red-500' : 'border-gray-800'} dark:focus:border-white dark:focus:ring-white/20 dark:text-white outline-none`}
+                  className={`bg-gray-50 border ${validationErrors.email ? 'border-red-500' : 'border-gray-200'} focus:border-gray-900 focus:ring-2 focus:ring-gray-900/20 text-gray-900 dark:bg-[#151515] dark:${validationErrors.email ? 'border-red-500' : 'border-gray-800'} dark:focus:border-white dark:focus:ring-white/20 dark:text-white outline-none`}
                   placeholder="tu@correo.com"
                 />
                 {validationErrors.email && (
@@ -293,7 +295,7 @@ const ContactPage = () => {
               </div>
               
               <div>
-                <label htmlFor="message" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--color-text-dark)' }} className="dark:text-white">
+                <label htmlFor="message" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--color-text-light)' }} className="dark:text-white">
                   {t("contact.message")}
                 </label>
                 <textarea
@@ -312,7 +314,7 @@ const ContactPage = () => {
                     resize: 'none',
                     transition: 'all 0.3s ease'
                   }}
-                  className={`bg-gray-50 border ${validationErrors.message ? 'border-red-500' : 'border-gray-200'} focus:border-gray-900 focus:ring-2 focus:ring-gray-900/20 dark:bg-[#151515] dark:${validationErrors.message ? 'border-red-500' : 'border-gray-800'} dark:focus:border-white dark:focus:ring-white/20 dark:text-white outline-none`}
+                  className={`bg-gray-50 border ${validationErrors.message ? 'border-red-500' : 'border-gray-200'} focus:border-gray-900 focus:ring-2 focus:ring-gray-900/20 text-gray-900 dark:bg-[#151515] dark:${validationErrors.message ? 'border-red-500' : 'border-gray-800'} dark:focus:border-white dark:focus:ring-white/20 dark:text-white outline-none`}
                   placeholder="¿En qué te puedo ayudar?"
                 ></textarea>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem' }}>

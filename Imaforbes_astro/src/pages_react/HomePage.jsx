@@ -4,7 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { BorderBeam } from "border-beam";
 
-import { FiArrowRight, FiMail, FiCode, FiTerminal, FiLayout, FiServer } from "react-icons/fi";
+import { FiArrowRight, FiMail, FiCode, FiTerminal, FiLayout, FiServer, FiBriefcase } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
 const HeroBackground = () => (
@@ -70,7 +70,7 @@ const HomePage = () => {
       >
         {/* Status Pill */}
         <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
-          <BorderBeam theme="auto" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
+          <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
             <div style={{ 
               display: 'flex', alignItems: 'center', gap: '0.5rem', 
               padding: '0.5rem 1rem', borderRadius: '50px', 
@@ -97,19 +97,27 @@ const HomePage = () => {
           {t("home.description")}
         </motion.p>
 
-        <motion.div variants={itemVariants} className="hero-actions" style={{ marginTop: '2.5rem' }}>
-          <BorderBeam theme="auto" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
-            <a href="/projects" className="btn-premium dark:bg-[#111] dark:border-gray-800" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)' }}>
+        <motion.div variants={itemVariants} className="hero-actions" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1rem', marginTop: '2.5rem' }}>
+          <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
+            <a href="/projects" className="btn-premium dark:bg-[#111] dark:border-gray-800" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)', color: 'var(--color-text-light)' }}>
               <span className="btn-icon">
                 <FiCode /> {t("home.view-projects")} <FiArrowRight />
               </span>
             </a>
           </BorderBeam>
           
-          <BorderBeam theme="auto" size="sm" duration={3} colorVariant="mono" className="rounded-full">
-            <a href="/contact" className="btn-premium dark:bg-[#111] dark:border-gray-800" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)', color: 'var(--color-text-muted-light)' }}>
+          <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
+            <a href="/contact" className="btn-premium dark:bg-[#111] dark:border-gray-800" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)', color: 'var(--color-text-light)' }}>
               <span className="btn-icon">
                 <FiMail /> {t("home.contact")}
+              </span>
+            </a>
+          </BorderBeam>
+
+          <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
+            <a href="/trajectory" className="btn-premium dark:bg-[#111] dark:border-gray-800" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)', color: 'var(--color-text-light)' }}>
+              <span className="btn-icon">
+                <FiBriefcase /> {t("home.view-trajectory")}
               </span>
             </a>
           </BorderBeam>
