@@ -63,7 +63,7 @@ function handleGetBlogPosts($db)
         if ($status && !in_array($status, ['draft', 'published', 'archived', 'all'])) {
             $status = 'published';
         }
-        if ($type && !in_array($type, ['poem', 'letter'])) {
+        if ($type && !in_array($type, ['poem', 'letter', 'article'])) {
             $type = null;
         }
         if ($id !== null && $id <= 0) {
@@ -139,7 +139,7 @@ function handleCreateBlogPost($db)
         // SECURITY: Sanitize all input
         $title = InputValidator::sanitizeString($input['title'], 200);
         $content = InputValidator::sanitizeText($input['content'], 50000);
-        $type = isset($input['type']) && in_array($input['type'], ['poem', 'letter']) 
+        $type = isset($input['type']) && in_array($input['type'], ['poem', 'letter', 'article']) 
             ? $input['type'] 
             : 'poem';
         $status = isset($input['status']) && in_array($input['status'], ['draft', 'published', 'archived']) 
@@ -251,8 +251,8 @@ function handleUpdateBlogPost($db)
 
         // SECURITY: Validate type and status values
         if (isset($input['type'])) {
-            if (!in_array($input['type'], ['poem', 'letter'])) {
-                ApiResponse::validationError(['type' => 'Invalid type. Must be "poem" or "letter"']);
+            if (!in_array($input['type'], ['poem', 'letter', 'article'])) {
+                ApiResponse::validationError(['type' => 'Invalid type. Must be "poem", "letter", or "article"']);
             }
             $updates[] = "type = ?";
             $params[] = $input['type'];

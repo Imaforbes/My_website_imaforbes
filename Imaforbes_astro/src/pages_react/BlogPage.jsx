@@ -349,7 +349,7 @@ const BlogPage = () => {
             
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
               <span className="project-tag" style={{ textTransform: 'uppercase', fontSize: '0.85rem', padding: '0.3rem 0.8rem', marginBottom: '1.5rem', display: 'inline-block' }}>
-                {selectedPost.type === "poem" ? t("blog.type-poem") : t("blog.type-letter")}
+                {selectedPost.type === "poem" ? t("blog.type-poem") : selectedPost.type === "letter" ? t("blog.type-letter") : t("blog.type-article")}
               </span>
               <h1 style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 700, color: 'var(--color-text-light)', marginBottom: '1.5rem', lineHeight: 1.2, wordBreak: 'break-word' }} className="dark:text-white">
                 {selectedPost.title}
@@ -501,6 +501,18 @@ const BlogPage = () => {
             }}
           >
             <Mail size={16} /> <span>{t("blog.filter-letters")}</span>
+          </button>
+          <button
+            onClick={() => setFilter("article")}
+            className={`project-tag ${filter === "article" ? 'active' : ''}`}
+            style={{ 
+              cursor: 'pointer', padding: '0.6rem 1.25rem', fontSize: '0.95rem',
+              display: 'flex', alignItems: 'center', gap: '0.4rem', whiteSpace: 'nowrap',
+              background: filter === "article" ? 'var(--color-text-light)' : 'transparent',
+              color: filter === "article" ? 'var(--color-bg-light)' : 'var(--color-text-muted-light)'
+            }}
+          >
+            <FileText size={16} /> <span>{t("blog.filter-articles")}</span>
           </button>
         </motion.div>
 

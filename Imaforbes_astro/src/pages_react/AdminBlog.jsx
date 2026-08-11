@@ -527,6 +527,17 @@ const AdminBlog = () => {
                   <Mail size={14} />
                   Cartas
                 </button>
+                <button
+                  onClick={() => setTypeFilter("article")}
+                  className={`px-4 py-2 rounded-xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
+                    typeFilter === "article"
+                      ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
+                      : "bg-white dark:bg-[#0f0f0f] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515]"
+                  }`}
+                >
+                  <FileText size={14} />
+                  Artículos
+                </button>
               </div>
 
               {/* Results Count */}
@@ -535,7 +546,7 @@ const AdminBlog = () => {
                   <>
                     Mostrando {posts.length} {posts.length === 1 ? "post" : "posts"}
                     {statusFilter !== "all" && ` (${statusFilter === "published" ? "publicados" : statusFilter === "draft" ? "borradores" : "archivados"})`}
-                    {typeFilter !== "all" && ` - ${typeFilter === "poem" ? "Poemas" : "Cartas"}`}
+                    {typeFilter !== "all" && ` - ${typeFilter === "poem" ? "Poemas" : typeFilter === "letter" ? "Cartas" : "Artículos"}`}
                   </>
                 ) : (
                   <span>No hay posts con estos filtros</span>
@@ -573,11 +584,13 @@ const AdminBlog = () => {
                       <div className="flex items-center gap-2 mb-2">
                         {post.type === "poem" ? (
                           <FileText size={16} className="text-gray-500 dark:text-gray-500" />
-                        ) : (
+                        ) : post.type === "letter" ? (
                           <Mail size={16} className="text-gray-500 dark:text-gray-500" />
+                        ) : (
+                          <FileText size={16} className="text-gray-500 dark:text-gray-500" />
                         )}
                         <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-[#1a1a1a] rounded-full text-gray-700 dark:text-gray-300 font-light">
-                          {post.type === "poem" ? "Poema" : "Carta"}
+                          {post.type === "poem" ? "Poema" : post.type === "letter" ? "Carta" : "Artículo"}
                         </span>
                         {post.status === "published" ? (
                           <Eye size={14} className="text-gray-500 dark:text-gray-500" />
@@ -630,7 +643,7 @@ const AdminBlog = () => {
               ))
             ) : (
               <div className="col-span-full text-center p-8 text-gray-600 dark:text-gray-400 bg-white dark:bg-[#0f0f0f] rounded-xl border border-gray-200 dark:border-gray-800 font-light">
-                No hay posts aún. Crea tu primer poema o carta.
+                No hay posts aún. Crea tu primer poema, carta o artículo.
               </div>
             )}
           </div>
@@ -644,62 +657,82 @@ const AdminBlog = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-3 sm:p-4 z-50 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-0 sm:p-4 z-50 backdrop-blur-sm"
             onClick={() => setShowModal(false)}
           >
             <motion.div
-              initial={{ scale: 0.7, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.7, opacity: 0 }}
-              className="bg-white dark:bg-[#0f0f0f] rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-800"
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="bg-white dark:bg-[#0f0f0f] flex flex-col w-full h-full sm:h-auto sm:max-h-[95vh] sm:rounded-2xl shadow-2xl max-w-5xl border-0 sm:border border-gray-200 dark:border-gray-800 relative overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex justify-between items-center mb-4">
+              {/* Sticky Header */}
+              <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-100 dark:border-gray-800 shrink-0 bg-white dark:bg-[#0f0f0f] z-10">
                 <h2 className="text-xl sm:text-2xl font-light text-gray-900 dark:text-white">
                   {editingPost ? "Editar Post" : "Nuevo Post"}
                 </h2>
-                <button
-                  onClick={() => setShowModal(false)}
-                  aria-label="Cerrar modal"
-                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-                >
-                  <X size={24} />
-                </button>
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <button
+                    onClick={() => setShowModal(false)}
+                    className="hidden sm:block px-4 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] rounded-xl transition-colors font-light text-sm"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={handleSave}
+                    className="px-4 sm:px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 rounded-xl transition-colors flex items-center gap-2 font-light text-sm"
+                  >
+                    <Save size={16} />
+                    Guardar
+                  </button>
+                  <button
+                    onClick={() => setShowModal(false)}
+                    aria-label="Cerrar modal"
+                    className="p-2 sm:hidden text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                  >
+                    <X size={24} />
+                  </button>
+                </div>
               </div>
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
-                    Título
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.title}
-                    onChange={(e) =>
-                      setFormData({ ...formData, title: e.target.value })
-                    }
-                    className="w-full px-4 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light"
-                    placeholder="Título del poema o carta"
-                  />
+              {/* Scrollable Body */}
+              <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
+                      Título
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.title}
+                      onChange={(e) =>
+                        setFormData({ ...formData, title: e.target.value })
+                      }
+                      className="w-full px-4 py-3 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light text-lg"
+                      placeholder="Título del poema, carta o artículo"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
+                      Tipo
+                    </label>
+                    <select
+                      value={formData.type}
+                      onChange={(e) =>
+                        setFormData({ ...formData, type: e.target.value })
+                      }
+                      className="w-full px-4 py-3 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light text-lg"
+                    >
+                      <option value="poem">Poema</option>
+                      <option value="letter">Carta</option>
+                      <option value="article">Artículo</option>
+                    </select>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
-                    Tipo
-                  </label>
-                  <select
-                    value={formData.type}
-                    onChange={(e) =>
-                      setFormData({ ...formData, type: e.target.value })
-                    }
-                    className="w-full px-4 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light"
-                  >
-                    <option value="poem">Poema</option>
-                    <option value="letter">Carta</option>
-                  </select>
-                </div>
-
-                <div>
+                <div className="flex-1 flex flex-col min-h-[45vh]">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
                     Contenido
                   </label>
@@ -708,176 +741,155 @@ const AdminBlog = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, content: e.target.value })
                     }
-                    rows={12}
-                    className="w-full px-4 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white resize-none whitespace-pre-wrap transition-all duration-300 font-light"
-                    placeholder="Escribe tu poema o carta aquí..."
+                    className="flex-1 w-full px-5 py-4 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white resize-none whitespace-pre-wrap transition-all duration-300 font-light text-lg leading-relaxed"
+                    placeholder="Escribe tu poema, carta o artículo aquí. Toma todo el espacio que necesites..."
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
-                    Imagen (Opcional)
-                  </label>
-                  
-                  {/* File Upload Section */}
-                  <div className="space-y-3 mb-3">
-                    <div className="flex items-center gap-3">
-                      <label className="flex-1 cursor-pointer">
-                        <input
-                          type="file"
-                          accept="image/jpeg,image/png,image/gif,image/webp"
-                          onChange={handleFileSelect}
-                          className="hidden"
-                          disabled={uploadingImage}
-                        />
-                        <div className="flex items-center justify-center gap-2 px-4 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] transition-colors duration-200 font-light">
-                          <Upload size={18} />
-                          <span className="text-sm">
-                            {selectedFile ? selectedFile.name : "Seleccionar imagen"}
-                          </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-gray-100 dark:border-gray-800">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
+                      Imagen (Opcional)
+                    </label>
+                    
+                    {/* File Upload Section */}
+                    <div className="space-y-3 mb-3">
+                      <div className="flex items-center gap-3">
+                        <label className="flex-1 cursor-pointer">
+                          <input
+                            type="file"
+                            accept="image/jpeg,image/png,image/gif,image/webp"
+                            onChange={handleFileSelect}
+                            className="hidden"
+                            disabled={uploadingImage}
+                          />
+                          <div className="flex items-center justify-center gap-2 px-4 py-3 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] transition-colors duration-200 font-light">
+                            <Upload size={18} />
+                            <span className="text-sm truncate max-w-[150px]">
+                              {selectedFile ? selectedFile.name : "Seleccionar imagen"}
+                            </span>
+                          </div>
+                        </label>
+                        {selectedFile && (
+                          <button
+                            type="button"
+                            onClick={handleUploadImage}
+                            disabled={uploadingImage}
+                            className="px-4 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:cursor-not-allowed rounded-xl transition-colors duration-200 flex items-center gap-2 font-light"
+                          >
+                            {uploadingImage ? (
+                              <>
+                                <Loader size={18} className="animate-spin" />
+                                <span>Subiendo...</span>
+                              </>
+                            ) : (
+                              <>
+                                <Upload size={18} />
+                                <span>Subir</span>
+                              </>
+                            )}
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Upload Error */}
+                      {uploadError && (
+                        <div className="px-3 py-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm font-light">
+                          {uploadError}
                         </div>
-                      </label>
-                      {selectedFile && (
-                        <button
-                          type="button"
-                          onClick={handleUploadImage}
-                          disabled={uploadingImage}
-                          className="px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:cursor-not-allowed rounded-xl transition-colors duration-200 flex items-center gap-2 font-light"
-                        >
-                          {uploadingImage ? (
-                            <>
-                              <Loader size={18} className="animate-spin" />
-                              <span>Subiendo...</span>
-                            </>
-                          ) : (
-                            <>
-                              <Upload size={18} />
-                              <span>Subir</span>
-                            </>
-                          )}
-                        </button>
+                      )}
+
+                      {/* Selected File Info and Preview */}
+                      {selectedFile && !uploadingImage && (
+                        <div className="space-y-2">
+                          <div className="px-3 py-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg text-gray-700 dark:text-gray-300 text-xs font-light">
+                            Archivo: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+                          </div>
+                          {/* Preview of selected file */}
+                          <div className="relative rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700">
+                            <img
+                              src={URL.createObjectURL(selectedFile)}
+                              alt="Preview"
+                              className="w-full h-32 object-cover bg-gray-50 dark:bg-[#0a0a0a]"
+                              onError={() => setImageError(true)}
+                              onLoad={() => setImageError(false)}
+                            />
+                          </div>
+                        </div>
                       )}
                     </div>
 
-                    {/* Upload Error */}
-                    {uploadError && (
-                      <div className="px-3 py-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm font-light">
-                        {uploadError}
+                    {/* Manual URL Input */}
+                    <div className="relative">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700"></div>
+                        <span className="text-xs text-gray-600 dark:text-gray-400 font-light">o</span>
+                        <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700"></div>
                       </div>
-                    )}
-
-                    {/* Selected File Info and Preview */}
-                    {selectedFile && !uploadingImage && (
-                      <div className="space-y-2">
-                        <div className="px-3 py-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg text-gray-700 dark:text-gray-300 text-xs font-light">
-                          Archivo seleccionado: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
-                        </div>
-                        {/* Preview of selected file */}
-                        <div className="relative rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700">
-                          <img
-                            src={URL.createObjectURL(selectedFile)}
-                            alt="Preview"
-                            className="w-full h-40 object-contain bg-gray-50 dark:bg-[#0a0a0a]"
-                            onError={() => setImageError(true)}
-                            onLoad={() => setImageError(false)}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Manual URL Input */}
-                  <div className="relative">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700"></div>
-                      <span className="text-xs text-gray-600 dark:text-gray-400 font-light">o</span>
-                      <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700"></div>
+                      <input
+                        type="text"
+                        value={formData.image_url}
+                        onChange={(e) => {
+                          setFormData({ ...formData, image_url: e.target.value });
+                          setImageError(false);
+                        }}
+                        className="w-full px-4 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light text-sm"
+                        placeholder="Pega una URL de imagen (/uploads/...)"
+                      />
                     </div>
-                    <input
-                      type="text"
-                      value={formData.image_url}
-                      onChange={(e) => {
-                        setFormData({ ...formData, image_url: e.target.value });
-                        setImageError(false); // Reset error when URL changes
-                      }}
-                      className="w-full px-4 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light"
-                      placeholder="Pega una URL de imagen o ruta (/uploads/...)"
-                    />
                   </div>
 
-                  {/* Image Preview */}
-                  {formData.image_url && (
-                    <div className="mt-3">
-                      <div className="relative rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700 min-h-[10rem]">
-                        {imageError ? (
-                          // SECURITY: Use React-safe text rendering instead of innerHTML
-                          <div className="w-full h-40 bg-gray-50 dark:bg-[#0a0a0a] flex items-center justify-center text-gray-600 dark:text-gray-400 text-sm font-light">
-                            Imagen no disponible
-                          </div>
-                        ) : (
-                          <img
-                            src={getImageUrl(formData.image_url)}
-                            alt="Preview"
-                            className="w-full h-40 object-contain bg-gray-50 dark:bg-[#0a0a0a]"
-                            onError={() => setImageError(true)}
-                            onLoad={() => setImageError(false)}
-                          />
-                        )}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
+                      Vista Previa de Imagen
+                    </label>
+                    {/* Image Preview */}
+                    <div className="relative rounded-xl overflow-hidden border border-gray-300 dark:border-gray-700 h-40 sm:h-full min-h-[10rem]">
+                      {imageError || !formData.image_url ? (
+                        <div className="w-full h-full bg-gray-50 dark:bg-[#0a0a0a] flex items-center justify-center text-gray-400 dark:text-gray-600 text-sm font-light text-center p-4">
+                          {formData.image_url ? "Imagen no disponible" : "No has seleccionado ninguna imagen principal"}
+                        </div>
+                      ) : (
+                        <img
+                          src={getImageUrl(formData.image_url)}
+                          alt="Preview"
+                          className="w-full h-full object-cover bg-gray-50 dark:bg-[#0a0a0a]"
+                          onError={() => setImageError(true)}
+                          onLoad={() => setImageError(false)}
+                        />
+                      )}
+                      {formData.image_url && (
                         <button
                           type="button"
                           onClick={() => {
                             setFormData({ ...formData, image_url: "" });
                             setImageError(false);
                           }}
-                          className="absolute top-2 right-2 p-1 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-[#151515] rounded-full transition-colors"
+                          className="absolute top-2 right-2 p-1.5 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-[#151515] rounded-full transition-colors shadow-sm"
                           title="Eliminar imagen"
                         >
                           <X size={16} />
                         </button>
-                      </div>
+                      )}
                     </div>
-                  )}
-                  
-                  <p className="mt-2 text-xs text-gray-600 dark:text-gray-400 font-light">
-                    Sube una imagen desde tu PC o pega una URL. Formatos: JPEG, PNG, GIF, WebP (máx. 20MB)
-                    <br />
-                    <span className="text-gray-500 dark:text-gray-500 italic">
-                      💡 Mantén presionada la tecla Shift al seleccionar para subir sin recortar (resolución original)
-                    </span>
-                  </p>
+                  </div>
                 </div>
 
-                <div>
+                <div className="pt-2">
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
-                    Estado
+                    Estado de Publicación
                   </label>
                   <select
                     value={formData.status}
                     onChange={(e) =>
                       setFormData({ ...formData, status: e.target.value })
                     }
-                    className="w-full px-4 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light"
+                    className="w-full sm:w-1/2 px-4 py-3 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light text-lg"
                   >
-                    <option value="draft">Borrador</option>
-                    <option value="published">Publicado</option>
+                    <option value="draft">Borrador (Oculto)</option>
+                    <option value="published">Publicado (Visible)</option>
                     <option value="archived">Archivado</option>
                   </select>
-                </div>
-
-                <div className="flex justify-end gap-3 pt-4">
-                  <button
-                    onClick={() => setShowModal(false)}
-                    className="px-6 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] rounded-xl transition-colors font-light"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    onClick={handleSave}
-                    className="px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 rounded-xl transition-colors flex items-center gap-2 font-light"
-                  >
-                    <Save size={16} />
-                    Guardar
-                  </button>
                 </div>
               </div>
             </motion.div>

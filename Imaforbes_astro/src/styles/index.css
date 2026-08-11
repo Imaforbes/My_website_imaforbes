@@ -212,14 +212,14 @@ html.dark .header-premium {
 }
 
 .header-premium.scrolled {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(250, 249, 246, 0.6); /* More transparent for glass effect */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: none;
 }
 
 html.dark .header-premium.scrolled {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.5); /* More transparent for dark mode glass effect */
   border-bottom: none;
 }
 

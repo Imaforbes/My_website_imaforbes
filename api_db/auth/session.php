@@ -78,9 +78,9 @@ class SessionManager
     {
         $db = Database::getInstance();
 
-        // Use the existing usuarios table
+        // Use the correct admin_users table
         $sql = "SELECT id, username, password_hash 
-                FROM usuarios 
+                FROM admin_users 
                 WHERE username = ?";
 
         $stmt = $db->query($sql, [$username]);
