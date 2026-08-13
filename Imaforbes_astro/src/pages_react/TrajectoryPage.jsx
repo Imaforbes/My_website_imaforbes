@@ -65,7 +65,7 @@ const TrajectoryPage = () => {
           >
             <Download size={16} /> {t('trajectory.download-cv')}
           </button>
-          <a href="/contact" className="btn-premium" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'transparent', color: 'var(--color-text-light)', border: '1px solid var(--color-border-light)' }}>
+          <a href="/contact" className="btn-premium" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
             {t('trajectory.contact')} <ArrowUpRight size={16} />
           </a>
         </motion.div>

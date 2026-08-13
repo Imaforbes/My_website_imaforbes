@@ -57,7 +57,7 @@
     "using": "Estás usando {{browser}}{{version}}. Para una mejor experiencia, actualiza a un navegador moderno."
   },
   "contact": {
-    "available-badge": "Disponible para nuevas oportunidades",
+    "available-badge": "THINKDIFFERENT",
     "available-hours": "Lun - Vie, 9:00 - 17:00",
     "available-label": "Disponibilidad",
     "contact-info": "Información de contacto",
@@ -75,7 +75,7 @@
   },
   "footer": {
     "copyright": "Todos los derechos reservados",
-    "description": "Ingeniero de Software y Desarrollador apasionado por construir experiencias digitales de calidad.",
+    "description": "Ingeniero de Software y Desarrollador apasionado por construir experiencias de calidad.",
     "get-in-touch": "Contacto",
     "made-with": "Creado con conocimiento en programación",
     "navigation": "Navegación",
@@ -129,7 +129,7 @@
     "zoomOut": "Alejar"
   },
   "home": {
-    "available": "Disponible para nuevas oportunidades",
+    "available": "THINKDIFFERENT",
     "contact": "Contacto",
     "description": "Bienvenido a mi ecosistema digital. Aquí documento mis proyectos de software y comparto mis vivencias personales, pensamientos y aprendizajes a través de mi blog.",
     "subtitle": "Ingeniero de Software & Desarrollador",

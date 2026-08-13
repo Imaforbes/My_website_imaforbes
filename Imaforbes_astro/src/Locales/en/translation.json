@@ -57,7 +57,7 @@
     "using": "You're using {{browser}}{{version}}. For the best experience, please update to a modern browser."
   },
   "contact": {
-    "available-badge": "Available for new opportunities",
+    "available-badge": "THINKDIFFERENT",
     "available-hours": "Mon - Fri, 9AM - 5PM",
     "available-label": "Available",
     "contact-info": "Contact Info",
@@ -75,7 +75,7 @@
   },
   "footer": {
     "copyright": "All rights reserved",
-    "description": "Software Engineer & Developer passionate about building high-quality digital experiences.",
+    "description": "Software Engineer & Developer passionate about building high-quality experiences.",
     "get-in-touch": "Get in touch",
     "made-with": "Made with programming knowledge",
     "navigation": "Navigation",
@@ -129,7 +129,7 @@
     "zoomOut": "Zoom out"
   },
   "home": {
-    "available": "Available for new opportunities",
+    "available": "THINKDIFFERENT",
     "contact": "Contact",
     "description": "Welcome to my digital ecosystem. Here I document my software projects and share my personal experiences, thoughts, and learnings through my blog.",
     "subtitle": "Software Engineer & Developer",

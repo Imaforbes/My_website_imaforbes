@@ -63,7 +63,7 @@ const ThemeToggle = ({ className = "", size = "default" }) => {
     <div ref={dropdownRef} className={`relative ${className}`}>
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className={`${sizeClasses[size]} rounded-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-gray-900`}
+        className={`${sizeClasses[size]} flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors duration-200 focus:outline-none shadow-sm`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         aria-label={t("theme.toggleTheme") || "Toggle theme"}
@@ -80,7 +80,7 @@ const ThemeToggle = ({ className = "", size = "default" }) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
+            className="absolute left-1/2 -translate-x-1/2 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
           >
               {themes.map((themeOption) => {
                 const Icon = themeOption.icon;

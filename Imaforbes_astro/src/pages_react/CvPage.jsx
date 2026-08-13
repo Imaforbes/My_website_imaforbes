@@ -38,21 +38,8 @@ Software Engineer with experience building robust web and business applications,
 
 ### **ALLEGRO SAN ÁNGEL INN / CORPORATE GROUP**
 **Lead Software Engineer** | *September 2025 – Present*
-- Digitized the management of notarial case files for a 3-person legal team, replacing physical workflows with a centralized digital platform for client information, documentation, case operations, expenses, and financial movements.
-- Automated 8+ previously manual critical processes, eliminating sequential handoffs between team members by integrating CRM, case management, financial control, document generation, compliance, reporting, and client tracking workflows into a unified platform.
-- Architected a system comprising 15 technical modules supporting 10 business modules, integrating CRM, client management, case workflows, financial operations, dashboards, document automation, client tracking, and role-based security.
-- Reduced manual work for lawyers when creating and managing case files, by centralizing client information, legal operations, documents, workflow status, and financial data in a single system.
-- Automated financial analysis and expense tracking for individual case files, enabling centralized control of notarial fees, taxes, third-party funds, invoices, expenses, and financial movements.
-- Implemented a 5-phase case workflow with automated business rules, preventing incomplete cases from advancing until required signatures, fiscal integration, and registration requirements were satisfied.
-- Automated critical-case monitoring, flagging cases inactive for more than 15 days through dashboard-based status indicators and alerts for the Notary.
-- Implemented automated compliance monitoring for fiscal and anti-money-laundering processes, evaluating payment, tax, and regulatory requirements and assigning completion statuses to support operational control.
-- Improved client self-service and reduced repetitive status inquiries, by implementing a secure public tracking portal accessible through QR codes or unique links that provides real-time case-status information.
-- Automated document generation, reducing repetitive data entry by developing a document engine that injects case information into standardized Microsoft Word (.docx) templates.
-- Strengthened financial control over third-party funds, separating notarial revenue from funds held for taxes and external payments and automatically calculating corresponding amounts.
-- Automated coordination between legal and financial operations, eliminating paper-based cheque requests by implementing a digital requisition workflow for lawyers and financial approval.
-- Automated commercial parking access and revenue tracking, enabling real-time ticket issuance and transaction logging by developing a FastAPI backend and integrating thermal printing hardware.
-- Improved operational continuity across the business group, supporting point-of-sale and administrative systems by designing and segmenting network infrastructure using TP-Link Omada, VLANs, and structured network topologies.
-- **Technologies:** Python, FastAPI, React, JavaScript, SQL, Local Databases, Linux, Git, TP-Link Omada, VLANs
+- Lead the end-to-end development of a custom CRM and operational management system to modernize legal and administrative workflows. Engineered a robust architecture featuring automated prospect tracking, smart email dispatching, and AI-powered drafting for client communications using Google Gemini. Designed a responsive, high-performance frontend with dynamic animations, deeply integrated with a secure Python backend and a relational database to manage complex legal portfolios, real estate transactions, and financial control.
+- **Technologies:** React, JavaScript, Vite, CSS / Bootstrap, Framer Motion, Python, Flask, Google Gemini AI, MySQL, Linux Shell, REST APIs, SMTP
 
 ### **INDEPENDENT PROJECTS & CONSULTING**
 **Full-Stack Developer & Technical IT Project Manager** | *May 2026 – Present*

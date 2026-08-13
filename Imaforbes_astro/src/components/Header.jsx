@@ -74,7 +74,11 @@ const Header = memo(({ currentPath }) => {
   return (
     <>
       <motion.header
-        className={`header-premium ${scrolled ? 'scrolled' : ''}`}
+        className={`header-premium ${scrolled && !isMenuOpen ? 'scrolled' : ''}`}
+        style={{
+          background: isMenuOpen ? 'var(--color-bg-light)' : undefined,
+          backdropFilter: isMenuOpen ? 'none' : undefined,
+        }}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
