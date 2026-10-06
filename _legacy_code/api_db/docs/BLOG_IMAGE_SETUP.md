@@ -11,8 +11,9 @@ Image support has been added to the blog system. You can now add images to your 
 If you already have a database with blog posts, run this SQL script to add the image column:
 
 ```bash
-cd /Applications/MAMP/htdocs/api_db_portfolio
-mysql -u root -proot -h 127.0.0.1 -P 8889 portfolio < add_blog_image_column.sql
+cd api_db
+# Usa las credenciales del .env local o del contenedor MySQL.
+mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" -p "$DB_DATABASE" < add_blog_image_column.sql
 ```
 
 Or manually run the SQL:
@@ -28,7 +29,7 @@ ADD COLUMN image_url VARCHAR(500) NULL AFTER content;
 If you're setting up a fresh database, the updated `database_schema.sql` already includes the `image_url` column. Just run:
 
 ```bash
-cd /Applications/MAMP/htdocs/api_db_portfolio
+cd api_db
 php setup.php
 ```
 
@@ -99,4 +100,3 @@ php setup.php
 ## ✅ Ready to Use!
 
 After running the database migration, you can immediately start adding images to your blog posts!
-

@@ -36,15 +36,14 @@ http://localhost:8888/api_db_portfolio/api/settings.php
 
 ## Si sigue dando "Not Found":
 
-1. Verifica la ruta en MAMP:
-   - MAMP → Preferences → Web Server
-   - Debe apuntar a: `/Applications/MAMP/htdocs/`
+1. Verifica que el servidor PHP tenga como raíz pública el directorio correcto
+   del proyecto o que el proxy apunte al proceso PHP configurado.
 
-2. Verifica que los archivos están en:
-   - `/Applications/MAMP/htdocs/api_db_portfolio/`
+2. Verifica que los archivos estén dentro de la copia Git activa de `api_db/`.
 
 3. Prueba acceder directamente desde el navegador:
-   - `http://localhost:8888/api_db_portfolio/test_server.php`
+   - La URL local configurada por tu servidor, por ejemplo
+     `http://127.0.0.1:8080/test_server.php`
 
 ## Verificar CORS en el Navegador:
 
@@ -54,4 +53,3 @@ http://localhost:8888/api_db_portfolio/api/settings.php
 4. Click en la petición
 5. Ve a "Headers" → "Response Headers"
 6. Debe mostrar: `Access-Control-Allow-Origin: http://localhost:5173`
-

@@ -36,20 +36,20 @@ The portfolio showcases several advanced full-stack and interactive web applicat
 
 ## Run Locally (Development Mode)
 
-### 1) Backend Environment (MAMP)
+### 1) Backend Environment
 
-1. Start the Apache and MySQL servers in the **MAMP** application.
-2. Ensure that the main `My_website_imaforbes` folder is located inside the `/Applications/MAMP/htdocs/` path.
-3. Your MySQL database must have the necessary structure (use the `portfolio.sql` file to import the tables to your local manager, e.g., phpMyAdmin).
-4. The backend will be available at `http://localhost:8888/My_website_imaforbes/api_db/`.
+1. Run PHP and MySQL using Docker or your operating system's services; do not rely on MAMP paths.
+2. Keep the project in any Git workspace, such as `Developer/projects`.
+3. Import `portfolio.sql` using the database credentials defined in the local ignored `.env` file.
+4. Configure the server's document root to `api_db/` or expose it through your chosen reverse proxy.
 
 ### 2) Frontend Environment (Astro)
 
 Open a terminal, navigate to the active frontend folder, and start the server:
 
 ```bash
-cd /Applications/MAMP/htdocs/My_website_imaforbes/Imaforbes_astro
-npm install
+cd Imaforbes_astro
+npm ci
 npm run dev
 ```
 
