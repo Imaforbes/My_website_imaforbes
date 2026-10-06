@@ -601,3 +601,55 @@ body::before {
     mix-blend-mode: overlay;
   }
 }
+
+/* ============================================
+   BENTO GRID LAYOUT
+   ============================================ */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.bento-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 2rem;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition-smooth);
+}
+
+.bento-item:hover {
+  border-color: var(--color-border-strong);
+  transform: translateY(-2px);
+}
+
+.bento-item-large { grid-column: span 12; }
+.bento-item-medium { grid-column: span 8; }
+.bento-item-small { grid-column: span 4; }
+.bento-item-half { grid-column: span 6; }
+
+@media (max-width: 1024px) {
+  .bento-item-medium { grid-column: span 12; }
+  .bento-item-small { grid-column: span 6; }
+}
+
+@media (max-width: 768px) {
+  .bento-item-half { grid-column: span 12; }
+  .bento-item-small { grid-column: span 12; }
+}
+
+@keyframes pulse-subtle {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.3; }
+  100% { opacity: 0.6; }
+}
+.skeleton-pulse {
+  animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

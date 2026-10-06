@@ -390,13 +390,13 @@ const AboutPage = () => {
       <HeroBackground />
       <div className="container-premium" style={{ position: 'relative', zIndex: 10 }}>
         
-        <div className="about-grid" style={{ alignItems: 'center', marginBottom: '6rem' }}>
+        <div className="bento-grid" style={{ marginBottom: '6rem' }}>
           <motion.div
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}
+            className="bento-item bento-item-small" style={{ position: 'relative', display: 'flex', justifyContent: 'center', padding: '0' }}
           >
             {/* Image Container with subtle hover and premium styling */}
             <div style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
@@ -564,7 +564,7 @@ const AboutPage = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="lg:pl-10"
+            className="bento-item bento-item-medium"
           >
             <h1 className="hero-title" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', marginBottom: '1.5rem', textAlign: 'left', lineHeight: 1.1 }}>
               {t("about.hero-title")}
@@ -608,7 +608,7 @@ const AboutPage = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginBottom: '3rem' }}
+            className="bento-item bento-item-large" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginBottom: '3rem' }}
           >
             {categories.map((category) => (
               <button

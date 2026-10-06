@@ -72,7 +72,21 @@ const TrajectoryPage = () => {
 
         <div style={{ maxWidth: '880px', margin: '0 auto' }}>
           {isLoading ? (
-            <p className="text-muted" style={{ textAlign: 'center' }}>{t('trajectory.loading')}</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              {[1, 2, 3].map((_, idx) => (
+                <div key={idx} className="card-premium skeleton-loader" style={{ height: '280px', padding: '2.5rem', opacity: 1 - (idx * 0.2) }}>
+                   <div className="skeleton-pulse" style={{ height: '32px', width: '50%', marginBottom: '1rem', borderRadius: '4px', background: 'var(--color-border)' }}></div>
+                   <div className="skeleton-pulse" style={{ height: '20px', width: '30%', marginBottom: '2rem', borderRadius: '4px', background: 'var(--color-border)' }}></div>
+                   <div className="skeleton-pulse" style={{ height: '16px', width: '100%', marginBottom: '0.6rem', borderRadius: '4px', background: 'var(--color-border)' }}></div>
+                   <div className="skeleton-pulse" style={{ height: '16px', width: '90%', marginBottom: '0.6rem', borderRadius: '4px', background: 'var(--color-border)' }}></div>
+                   <div className="skeleton-pulse" style={{ height: '16px', width: '95%', marginBottom: '2rem', borderRadius: '4px', background: 'var(--color-border)' }}></div>
+                   <div style={{ display: 'flex', gap: '0.5rem' }}>
+                     <div className="skeleton-pulse" style={{ height: '28px', width: '90px', borderRadius: '999px', background: 'var(--color-border)' }}></div>
+                     <div className="skeleton-pulse" style={{ height: '28px', width: '120px', borderRadius: '999px', background: 'var(--color-border)' }}></div>
+                   </div>
+                </div>
+              ))}
+            </div>
           ) : experiences.length === 0 ? (
             <div className="card-premium" style={{ textAlign: 'center', padding: '3rem 1.5rem' }}>
               <BriefcaseBusiness size={36} style={{ margin: '0 auto 1rem', color: 'var(--color-text-muted)' }} />
