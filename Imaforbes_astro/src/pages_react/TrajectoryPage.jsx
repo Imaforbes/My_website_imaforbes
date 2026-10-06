@@ -15,8 +15,8 @@ const TrajectoryPage = () => {
     const loadExperiences = async () => {
       try {
         const result = await api.experiences.getAll('published');
-        const items = result?.success && result.data?.success && Array.isArray(result.data.data)
-          ? result.data.data
+        const items = result?.success && Array.isArray(result.data)
+          ? result.data
           : [];
 
         setExperiences(items.sort((a, b) => {

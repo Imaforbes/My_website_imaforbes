@@ -61,20 +61,15 @@ const AdminExperiences = () => {
       const result = await api.experiences.getAll(status);
       
       // Check if result is successful and has data
-      if (result.success && result.data) {
-        const apiResponse = result.data;
-        
-        // The API returns: { success: true, data: { success: true, data: [...] } }
-        if (apiResponse.success && Array.isArray(apiResponse.data)) {
-          const experiencesData = apiResponse.data;
-          setExperiences(experiencesData.sort((a, b) => {
-            if (a.sort_order !== b.sort_order) {
-              return a.sort_order - b.sort_order;
-            }
-            return new Date(b.created_at) - new Date(a.created_at);
-          }));
-          return; // Success, exit early
-        }
+      if (result.success && Array.isArray(result.data)) {
+        const experiencesData = result.data;
+        setExperiences(experiencesData.sort((a, b) => {
+          if (a.sort_order !== b.sort_order) {
+            return a.sort_order - b.sort_order;
+          }
+          return new Date(b.created_at) - new Date(a.created_at);
+        }));
+        return; // Success, exit early
       }
       
       // If we get here, API call didn't return expected format
