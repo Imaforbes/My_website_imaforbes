@@ -34,68 +34,39 @@ const LoginPage = () => {
 
   // --- LÓGICA AÑADIDA ---
   // Esta función ahora envía los datos de login al backend.
+  
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      // Use centralized API config URL
-      const response = await fetch(`${API_CONFIG.getBaseURL()}${API_CONFIG.ENDPOINTS.LOGIN}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-        credentials: "include", // Importante para manejar cookies de sesión
+      const { supabase } = await import('../services/supabase.js');
+      // Supabase usa email, así que el campo 'username' lo usaremos como email
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email: username,
+        password: password
       });
       
-      // Check if response is JSON
-      const contentType = response.headers.get("content-type");
-      let result;
-      
-      if (contentType && contentType.includes("application/json")) {
-        result = await response.json();
-      } else {
-        // If not JSON, get text to see the error
-        const text = await response.text();
-        if (import.meta.env.DEV) {
-          console.error("Login error (non-JSON):", text);
-        }
-        setError("Error del servidor. Por favor, intenta de nuevo.");
+      if (signInError) {
+        setError(signInError.message || "Error al iniciar sesión.");
         return;
       }
       
-      if (response.ok && result.success) {
-        // Save authentication indicator to localStorage
-        // The API uses session-based authentication (cookies), but we need
-        // a localStorage flag so the Dashboard knows the user is authenticated
-        if (result.data && result.data.token) {
-          // If API returns a token, use it
-          safeLocalStorage.setItem('auth_token', result.data.token);
-        } else {
-          // For session-based auth, create a session indicator
-          // Format: 'session_' + timestamp + '_' + user_id (if available)
-          const userId = result.data?.id || result.data?.user?.id || 'unknown';
-          safeLocalStorage.setItem('auth_token', `session_${Date.now()}_${userId}`);
-        }
+      if (data.session) {
+        localStorage.setItem('auth_token', data.session.access_token);
+        localStorage.setItem('user', JSON.stringify(data.user));
         
-        // Store user info if available
-        if (result.data) {
-          const userData = result.data.user || result.data;
-          safeLocalStorage.setItem('user', JSON.stringify(userData));
-        }
-        
-        // Small delay to ensure localStorage is saved before navigation
         setTimeout(() => {
           navigate("/admin");
         }, 100);
-      } else {
-        setError(result.message || result.error || "Error al iniciar sesión.");
       }
-    } catch (error) {
+    } catch (err) {
       if (import.meta.env.DEV) {
-        console.error("Login error:", error);
+        console.error("Login error:", err);
       }
-      setError("Error de conexión. Verifica que el servidor esté funcionando e inténtalo de nuevo.");
+      setError("Error de conexión. Verifica que el servidor esté funcionando.");
     }
   };
+
   // --- FIN DE LA LÓGICA AÑADIDA ---
 
   return (
@@ -151,7 +122,7 @@ const LoginPage = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   required
                   className="w-full pl-8 pr-4 py-3 bg-transparent border-b-2 border-gray-800 text-white placeholder-gray-600 focus:outline-none focus:border-white transition-all duration-300 text-sm tracking-wider"
-                  placeholder="USUARIO"
+                  placeholder="CORREO (EMAIL)"
                 />
               </div>
             </motion.div>

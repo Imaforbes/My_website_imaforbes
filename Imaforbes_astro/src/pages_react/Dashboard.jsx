@@ -139,14 +139,16 @@ const Dashboard = () => {
     fetchStats();
   }, [fetchStats]);
 
-  const handleLogout = async () => {
-    const baseURL = API_CONFIG.getBaseURL();
-
-    await fetch(`${baseURL}/api/auth/logout.php`, {
-      method: "POST",
-      credentials: "include",
-    });
-    navigate("/login");
+    const handleLogout = async () => {
+    try {
+      const { supabase } = await import('../services/supabase.js');
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.error(err);
+    }
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user');
+    window.location.href = '/login';
   };
 
   const dashboardItems = [
