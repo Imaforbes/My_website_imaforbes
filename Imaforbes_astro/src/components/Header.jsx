@@ -6,7 +6,6 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import LanguageToggle from "./LanguageToggle";
-import ThemeToggle from "./ThemeToggle";
 import CvModal from "./CvModal.jsx";
 import { openCvModal } from "../utils/cvModal.js";
 
@@ -76,7 +75,7 @@ const Header = memo(({ currentPath }) => {
       <motion.header
         className={`header-premium ${scrolled && !isMenuOpen ? 'scrolled' : ''}`}
         style={{
-          background: isMenuOpen ? 'var(--color-bg-light)' : undefined,
+          background: isMenuOpen ? 'var(--color-bg)' : undefined,
           backdropFilter: isMenuOpen ? 'none' : undefined,
         }}
         initial={{ y: -100 }}
@@ -120,7 +119,6 @@ const Header = memo(({ currentPath }) => {
 
           <div className="hidden lg:flex" style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', gap: '1rem', paddingRight: '1rem' }}>
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5, duration: 0.3 }}>
-              <ThemeToggle />
             </motion.div>
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.6, duration: 0.3 }}>
               <LanguageToggle />
@@ -131,7 +129,7 @@ const Header = memo(({ currentPath }) => {
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden"
-            style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--color-text-light)' }}
+            style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--color-text)' }}
             aria-label={isMenuOpen ? t("header.close-menu", "Cerrar menú") : t("header.open-menu", "Abrir menú")}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -152,7 +150,7 @@ const Header = memo(({ currentPath }) => {
 
             <motion.nav
               initial="hidden" animate="visible" exit="exit" variants={menuVariants}
-              style={{ position: 'fixed', top: '5rem', left: 0, right: 0, background: 'var(--color-bg-light)', zIndex: 50, borderTop: '1px solid var(--color-border-light)' }}
+              style={{ position: 'fixed', top: '5rem', left: 0, right: 0, background: 'var(--color-bg)', zIndex: 50, borderTop: '1px solid var(--color-border)' }}
               className="lg:hidden dark:bg-dark"
               onTouchMove={(e) => e.stopPropagation()}
             >
@@ -169,7 +167,7 @@ const Header = memo(({ currentPath }) => {
                   }}>
                     <a 
                       href={link.path}
-                      style={{ display: 'block', padding: '1rem', color: location.pathname === link.path ? 'var(--color-text-light)' : 'var(--color-text-muted-light)', textDecoration: 'none', borderBottom: '1px solid var(--color-border-light)' }}
+                      style={{ display: 'block', padding: '1rem', color: location.pathname === link.path ? 'var(--color-text)' : 'var(--color-text-muted)', textDecoration: 'none', borderBottom: '1px solid var(--color-border)' }}
                     >
                       {t(link.label)}
                     </a>
@@ -178,7 +176,6 @@ const Header = memo(({ currentPath }) => {
 
                 <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem', paddingTop: '1rem' }}>
                   <LanguageToggle size="lg" />
-                  <ThemeToggle size="lg" />
                 </motion.div>
               </div>
             </motion.nav>

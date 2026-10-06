@@ -43,7 +43,7 @@ const TrajectoryPage = () => {
           className="projects-header"
           style={{ paddingTop: 0 }}
         >
-          <p style={{ color: 'var(--color-text-muted-light)', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '1rem' }}>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '1rem' }}>
             {t('trajectory.eyebrow')}
           </p>
           <h1 className="projects-title">{t('trajectory.title')}</h1>
@@ -75,7 +75,7 @@ const TrajectoryPage = () => {
             <p className="text-muted" style={{ textAlign: 'center' }}>{t('trajectory.loading')}</p>
           ) : experiences.length === 0 ? (
             <div className="card-premium" style={{ textAlign: 'center', padding: '3rem 1.5rem' }}>
-              <BriefcaseBusiness size={36} style={{ margin: '0 auto 1rem', color: 'var(--color-text-muted-light)' }} />
+              <BriefcaseBusiness size={36} style={{ margin: '0 auto 1rem', color: 'var(--color-text-muted)' }} />
               <p className="text-muted">{t('trajectory.empty')}</p>
             </div>
           ) : (
@@ -89,17 +89,17 @@ const TrajectoryPage = () => {
                   className="card-premium"
                   style={{ padding: 'clamp(1.25rem, 4vw, 2rem)', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '1rem' }}
                 >
-                  <div aria-hidden="true" style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'var(--color-bg-light)', color: 'var(--color-text-light)', border: '1px solid var(--color-border-light)' }} className="dark:bg-[#151515] dark:text-white dark:border-gray-700">
+                  <div aria-hidden="true" style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'var(--color-bg)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }} className="dark:bg-[#151515] dark:text-text dark:border-strong">
                     <BriefcaseBusiness size={18} />
                   </div>
                   <div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '0.6rem', marginBottom: '0.45rem' }}>
-                      <h2 style={{ margin: 0, fontSize: 'clamp(1.15rem, 3vw, 1.45rem)', color: 'var(--color-text-light)' }} className="dark:text-white">{experience.title}</h2>
+                      <h2 style={{ margin: 0, fontSize: 'clamp(1.15rem, 3vw, 1.45rem)', color: 'var(--color-text)' }} className="dark:text-text">{experience.title}</h2>
                       {experience.period && <span className="text-muted" style={{ fontSize: '0.85rem' }}>{experience.period}</span>}
                     </div>
                     {(experience.company || experience.location) && (
                       <p className="text-muted" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.45rem', marginBottom: '0.9rem' }}>
-                        {experience.company && <strong style={{ color: 'var(--color-text-light)' }} className="dark:text-gray-200">{experience.company}</strong>}
+                        {experience.company && <strong style={{ color: 'var(--color-text)' }} className="dark:text-text-muted">{experience.company}</strong>}
                         {experience.location && <><span aria-hidden="true">·</span><MapPin size={14} /> {experience.location}</>}
                       </p>
                     )}
@@ -107,7 +107,7 @@ const TrajectoryPage = () => {
                     {Array.isArray(experience.technologies) && experience.technologies.length > 0 && (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
                         {experience.technologies.map((technology) => (
-                          <span key={technology} style={{ fontSize: '0.75rem', padding: '0.28rem 0.65rem', border: '1px solid var(--color-border-light)', borderRadius: '999px', color: 'var(--color-text-muted-light)' }} className="dark:border-gray-700">{technology}</span>
+                          <span key={technology} style={{ fontSize: '0.75rem', padding: '0.28rem 0.65rem', border: '1px solid var(--color-border)', borderRadius: '999px', color: 'var(--color-text-muted)' }} className="dark:border-strong">{technology}</span>
                         ))}
                       </div>
                     )}

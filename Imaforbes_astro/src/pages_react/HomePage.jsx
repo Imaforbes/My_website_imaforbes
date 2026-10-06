@@ -9,8 +9,8 @@ import { useTranslation } from "react-i18next";
 
 const HeroBackground = () => (
   <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
-    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-light)' }} className="dark:hidden"></div>
-    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-dark)' }} className="hidden dark:block"></div>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg)' }} ></div>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg)' }} ></div>
     
     {/* Subtle animated gradient glow (Heliouz style for dark mode, very faint for light mode) */}
     <motion.div 
@@ -74,11 +74,11 @@ const HomePage = () => {
             <div style={{ 
               display: 'flex', alignItems: 'center', gap: '0.5rem', 
               padding: '0.5rem 1rem', borderRadius: '50px', 
-              background: 'var(--color-surface-light)',
-              border: '1px solid var(--color-border-light)',
-              fontSize: '0.8rem', fontWeight: 500, color: 'var(--color-text-muted-light)',
+              background: 'var(--color-surface)',
+              border: '1px solid var(--color-border)',
+              fontSize: '0.8rem', fontWeight: 500, color: 'var(--color-text-muted)',
               position: 'relative'
-            }} className="dark:bg-[#111] dark:border-gray-800">
+            }} className="dark:bg-[#111] dark:border-strong">
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }}></span>
               {t("home.available", "Available for new opportunities")}
             </div>
@@ -99,7 +99,7 @@ const HomePage = () => {
 
         <motion.div variants={itemVariants} className="hero-actions" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1rem', marginTop: '2.5rem' }}>
           <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
-            <a href="/projects" className="btn-premium dark:bg-[#111] dark:border-gray-800" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)', color: 'var(--color-text-light)' }}>
+            <a href="/projects" className="btn-premium dark:bg-[#111] dark:border-strong" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}>
               <span className="btn-icon">
                 <FiCode /> {t("home.view-projects")} <FiArrowRight />
               </span>
@@ -107,7 +107,7 @@ const HomePage = () => {
           </BorderBeam>
           
           <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
-            <a href="/contact" className="btn-premium dark:bg-[#111] dark:border-gray-800" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)', color: 'var(--color-text-light)' }}>
+            <a href="/contact" className="btn-premium dark:bg-[#111] dark:border-strong" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}>
               <span className="btn-icon">
                 <FiMail /> {t("home.contact")}
               </span>
@@ -115,7 +115,7 @@ const HomePage = () => {
           </BorderBeam>
 
           <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
-            <a href="/trajectory" className="btn-premium dark:bg-[#111] dark:border-gray-800" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)', color: 'var(--color-text-light)' }}>
+            <a href="/trajectory" className="btn-premium dark:bg-[#111] dark:border-strong" style={{ padding: '0.75rem 1.75rem', borderRadius: '9999px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}>
               <span className="btn-icon">
                 <FiBriefcase /> {t("home.view-trajectory")}
               </span>
@@ -135,15 +135,15 @@ const HomePage = () => {
             opacity: 0.7
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
             <FiTerminal size={14} /> <span>{t("home.tag_frontend", "Frontend")}</span>
           </div>
-          <span style={{ color: 'var(--color-border-light)' }}>•</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>
+          <span style={{ color: 'var(--color-border)' }}>•</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
             <FiServer size={14} /> <span>{t("home.tag_backend", "Backend")}</span>
           </div>
-          <span style={{ color: 'var(--color-border-light)' }}>•</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted-light)' }}>
+          <span style={{ color: 'var(--color-border)' }}>•</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
             <FiLayout size={14} /> <span>{t("home.tag_uiux", "UI/UX Design")}</span>
           </div>
         </motion.div>

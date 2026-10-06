@@ -37,7 +37,7 @@ const Breadcrumbs = ({ currentPath }) => {
         <ol className="flex items-center space-x-2 text-sm">
           <li>
             <a               href="/"
-              className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200 flex items-center"
+              className="text-text dark:text-text-muted hover:text-text dark:hover:text-text-muted transition-colors duration-200 flex items-center"
             >
               <Home className="w-4 h-4" />
               <span className="sr-only">{t("breadcrumbs.home") || "Home"}</span>
@@ -49,14 +49,14 @@ const Breadcrumbs = ({ currentPath }) => {
 
             return (
               <li key={name} className="flex items-center shrink-0">
-                <ChevronRight className="w-4 h-4 text-gray-400 dark:text-gray-500 mx-2" />
+                <ChevronRight className="w-4 h-4 text-text-muted dark:text-text mx-2" />
                 {isLast ? (
-                  <span className="text-gray-900 dark:text-gray-100 font-medium truncate" aria-current="page">
+                  <span className="text-text dark:text-text-muted font-medium truncate" aria-current="page">
                     {getBreadcrumbName(name)}
                   </span>
                 ) : (
                   <a                     href={routeTo}
-                    className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors duration-200"
+                    className="text-text dark:text-text-muted hover:text-text dark:hover:text-text-muted transition-colors duration-200"
                   >
                     {getBreadcrumbName(name)}
                   </a>

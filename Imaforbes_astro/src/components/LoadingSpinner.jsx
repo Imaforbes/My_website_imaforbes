@@ -13,7 +13,7 @@ const LoadingSpinner = memo(({ size = "md", className = "" }) => {
   return (
     <div role="status" aria-label="Loading" className={`flex items-center justify-center min-h-[400px] ${className}`}>
       <motion.div
-        className={`${sizeClasses[size]} border-2 border-gray-300 dark:border-gray-700 border-t-gray-900 dark:border-t-white rounded-full`}
+        className={`${sizeClasses[size]} border-2 border-strong dark:border-strong border-t-gray-900 dark:border-t-white rounded-full`}
         animate={{ rotate: 360 }}
         transition={{
           duration: 1,

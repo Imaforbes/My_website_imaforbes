@@ -76,7 +76,7 @@ const CvModal = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm"
+            className="fixed inset-0 bg-background/40 backdrop-blur-sm"
           />
 
           {/* Modal Card */}
@@ -85,16 +85,16 @@ const CvModal = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 16 }}
             transition={{ type: 'spring', duration: 0.35, bounce: 0.2 }}
-            className="relative w-full max-w-md overflow-hidden rounded-2xl bg-[#f5f3ef] dark:bg-[#161616] border border-gray-200/80 dark:border-gray-800 p-6 sm:p-8 shadow-2xl text-gray-900 dark:text-white"
+            className="relative w-full max-w-md overflow-hidden rounded-2xl bg-[#f5f3ef] dark:bg-[#161616] border border-strong/80 dark:border-strong p-6 sm:p-8 shadow-2xl text-text dark:text-text"
           >
             {/* Top Header */}
-            <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-300/40 dark:border-gray-800">
+            <div className="flex items-center justify-between pb-4 mb-4 border-b border-strong/40 dark:border-strong">
               <h3 className="text-base sm:text-lg font-medium tracking-wide">
                 {t('cvModal.title', 'Curriculum Vitae')}
               </h3>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-200/60 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors"
+                className="p-1.5 rounded-2xl border border-strong dark:border-strong hover:bg-surface/60 dark:hover:bg-background text-text dark:text-text-muted transition-colors"
                 aria-label="Close modal"
               >
                 <X size={18} />
@@ -111,20 +111,20 @@ const CvModal = () => {
                 transition={{ duration: 0.2 }}
                 className="py-2 text-center"
               >
-                <p className="text-sm sm:text-base text-gray-700 dark:text-gray-200 mb-6 font-normal">
+                <p className="text-sm sm:text-base text-text dark:text-text-muted mb-6 font-normal">
                   {t('cvModal.lang-question', 'In which language do you want it?')}
                 </p>
 
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 max-w-xs mx-auto">
                   <button
                     onClick={() => handleSelectLang('en')}
-                    className="py-3 px-5 rounded-xl bg-[#1a1a1a] text-white hover:bg-[#2e2e2e] dark:bg-white dark:text-black dark:hover:bg-gray-200 font-medium text-sm sm:text-base border border-gray-800 dark:border-gray-200 shadow-[0_3px_0_0_rgba(0,0,0,0.7)] dark:shadow-[0_3px_0_0_rgba(255,255,255,0.25)] active:translate-y-0.5 active:shadow-none transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer"
+                    className="py-3 px-5 rounded-2xl bg-[#1a1a1a] text-text hover:bg-[#2e2e2e] dark:bg-surface dark:text-text dark:hover:bg-surface font-medium text-sm sm:text-base border border-strong dark:border-strong shadow-[0_3px_0_0_rgba(0,0,0,0.7)] dark:shadow-[0_3px_0_0_rgba(255,255,255,0.25)] active:translate-y-0.5 active:shadow-none transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer"
                   >
                     {t('cvModal.english', 'English')}
                   </button>
                   <button
                     onClick={() => handleSelectLang('es')}
-                    className="py-3 px-5 rounded-xl bg-[#1a1a1a] text-white hover:bg-[#2e2e2e] dark:bg-white dark:text-black dark:hover:bg-gray-200 font-medium text-sm sm:text-base border border-gray-800 dark:border-gray-200 shadow-[0_3px_0_0_rgba(0,0,0,0.7)] dark:shadow-[0_3px_0_0_rgba(255,255,255,0.25)] active:translate-y-0.5 active:shadow-none transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer"
+                    className="py-3 px-5 rounded-2xl bg-[#1a1a1a] text-text hover:bg-[#2e2e2e] dark:bg-surface dark:text-text dark:hover:bg-surface font-medium text-sm sm:text-base border border-strong dark:border-strong shadow-[0_3px_0_0_rgba(0,0,0,0.7)] dark:shadow-[0_3px_0_0_rgba(255,255,255,0.25)] active:translate-y-0.5 active:shadow-none transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer"
                   >
                     {t('cvModal.spanish', 'Spanish')}
                   </button>
@@ -142,9 +142,9 @@ const CvModal = () => {
                 transition={{ duration: 0.2 }}
                 className="py-2 text-center"
               >
-                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">
+                <p className="text-xs sm:text-sm text-text dark:text-text-muted mb-3">
                   {t('cvModal.selected-lang', 'Selected language:')}{' '}
-                  <span className="font-medium text-gray-900 dark:text-white">{langName}</span>{' '}
+                  <span className="font-medium text-text dark:text-text">{langName}</span>{' '}
                   <button
                     onClick={() => setStep('lang')}
                     className="underline hover:text-blue-600 dark:hover:text-blue-400 transition-colors ml-1 cursor-pointer"
@@ -153,7 +153,7 @@ const CvModal = () => {
                   </button>
                 </p>
 
-                <p className="text-sm sm:text-base text-gray-700 dark:text-gray-200 mb-6 font-normal">
+                <p className="text-sm sm:text-base text-text dark:text-text-muted mb-6 font-normal">
                   {t(
                     'cvModal.format-question',
                     'Download my curriculum vitae in your preferred format:'
@@ -163,13 +163,13 @@ const CvModal = () => {
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 max-w-xs mx-auto">
                   <button
                     onClick={handleOpenMarkdown}
-                    className="py-3 px-5 rounded-xl bg-[#1a1a1a] text-white hover:bg-[#2e2e2e] dark:bg-white dark:text-black dark:hover:bg-gray-200 font-medium text-sm sm:text-base border border-gray-800 dark:border-gray-200 shadow-[0_3px_0_0_rgba(0,0,0,0.7)] dark:shadow-[0_3px_0_0_rgba(255,255,255,0.25)] active:translate-y-0.5 active:shadow-none transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer"
+                    className="py-3 px-5 rounded-2xl bg-[#1a1a1a] text-text hover:bg-[#2e2e2e] dark:bg-surface dark:text-text dark:hover:bg-surface font-medium text-sm sm:text-base border border-strong dark:border-strong shadow-[0_3px_0_0_rgba(0,0,0,0.7)] dark:shadow-[0_3px_0_0_rgba(255,255,255,0.25)] active:translate-y-0.5 active:shadow-none transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer"
                   >
                     {t('cvModal.markdown', 'Markdown')}
                   </button>
                   <button
                     onClick={handleDownloadPdf}
-                    className="py-3 px-5 rounded-xl bg-[#1a1a1a] text-white hover:bg-[#2e2e2e] dark:bg-white dark:text-black dark:hover:bg-gray-200 font-medium text-sm sm:text-base border border-gray-800 dark:border-gray-200 shadow-[0_3px_0_0_rgba(0,0,0,0.7)] dark:shadow-[0_3px_0_0_rgba(255,255,255,0.25)] active:translate-y-0.5 active:shadow-none transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer"
+                    className="py-3 px-5 rounded-2xl bg-[#1a1a1a] text-text hover:bg-[#2e2e2e] dark:bg-surface dark:text-text dark:hover:bg-surface font-medium text-sm sm:text-base border border-strong dark:border-strong shadow-[0_3px_0_0_rgba(0,0,0,0.7)] dark:shadow-[0_3px_0_0_rgba(255,255,255,0.25)] active:translate-y-0.5 active:shadow-none transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer"
                   >
                     {t('cvModal.pdf', 'PDF')}
                   </button>

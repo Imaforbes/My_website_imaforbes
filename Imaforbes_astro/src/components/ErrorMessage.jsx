@@ -47,7 +47,7 @@ const ErrorMessage = ({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.3 }}
-        className={`rounded-lg border p-4 ${getVariantStyles()} ${className}`}
+        className={`rounded-2xl border p-4 ${getVariantStyles()} ${className}`}
       >
         <div className="flex items-start">
           {showIcon && <div className="flex-shrink-0 mr-3">{getIcon()}</div>}
@@ -98,7 +98,7 @@ const ErrorMessage = ({
               <button
                 onClick={onDismiss}
                 aria-label="Cerrar mensaje de error"
-                className="hover:bg-black/10 rounded-full p-1 transition-colors"
+                className="hover:bg-background/10 rounded-full p-1 transition-colors"
               >
                 <FiX className="w-4 h-4" />
               </button>

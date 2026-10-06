@@ -48,8 +48,8 @@ import {
 
 const HeroBackground = () => (
   <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
-    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-light)' }} className="dark:hidden"></div>
-    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-dark)' }} className="hidden dark:block"></div>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg)' }} ></div>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg)' }} ></div>
     
     {/* Subtle animated gradient glow */}
     <motion.div 
@@ -323,9 +323,9 @@ const AboutPage = () => {
       name: "GitHub",
       icon: FaGithub,
       level: 90,
-      color: "text-gray-300",
-      bgColor: "bg-gray-300/20",
-      borderColor: "border-gray-300/50",
+      color: "text-text-muted",
+      bgColor: "bg-surface/20",
+      borderColor: "border-strong/50",
       category: "tools",
     },
     {
@@ -520,20 +520,20 @@ const AboutPage = () => {
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 style={{ 
-                  background: 'var(--color-surface-light)',
+                  background: 'var(--color-surface)',
                   padding: '0.75rem 1rem', borderRadius: '12px',
-                  border: '1px solid var(--color-border-light)',
+                  border: '1px solid var(--color-border)',
                   boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
                   display: 'flex', alignItems: 'center', gap: '0.5rem'
                 }}
-                className="absolute top-[10%] -left-2 md:-left-8 lg:-left-[15%] dark:bg-[#1a1a1a] dark:border-gray-800"
+                className="absolute top-[10%] -left-2 md:-left-8 lg:-left-[15%] dark:bg-[#1a1a1a] dark:border-strong"
               >
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'var(--color-bg-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-light)' }} className="dark:bg-[#0a0a0a] dark:text-white">
+                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'var(--color-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text)' }} className="dark:bg-[#0a0a0a] dark:text-text">
                   <FaReact size={18} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted-light)', fontWeight: 500, textTransform: 'uppercase' }}>Stack</span>
-                  <span style={{ fontSize: '0.85rem', color: 'var(--color-text-light)', fontWeight: 600 }} className="dark:text-white">MERN / PHP</span>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 500, textTransform: 'uppercase' }}>Stack</span>
+                  <span style={{ fontSize: '0.85rem', color: 'var(--color-text)', fontWeight: 600 }} className="dark:text-text">MERN / PHP</span>
                 </div>
               </motion.div>
 
@@ -542,17 +542,17 @@ const AboutPage = () => {
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                 style={{ 
-                  background: 'var(--color-surface-light)',
+                  background: 'var(--color-surface)',
                   padding: '0.75rem 1rem', borderRadius: '12px',
-                  border: '1px solid var(--color-border-light)',
+                  border: '1px solid var(--color-border)',
                   boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
                   display: 'flex', alignItems: 'center', gap: '0.5rem'
                 }}
-                className="absolute bottom-[15%] -right-2 md:-right-6 lg:-right-[10%] dark:bg-[#1a1a1a] dark:border-gray-800"
+                className="absolute bottom-[15%] -right-2 md:-right-6 lg:-right-[10%] dark:bg-[#1a1a1a] dark:border-strong"
               >
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                  <span style={{ fontSize: '1.2rem', color: 'var(--color-text-light)', fontWeight: 700 }} className="dark:text-white">{t("about.experience-years", "+3 Años")}</span>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted-light)' }}>{t("about.experience-label", "Experiencia Full Stack")}</span>
+                  <span style={{ fontSize: '1.2rem', color: 'var(--color-text)', fontWeight: 700 }} className="dark:text-text">{t("about.experience-years", "+3 Años")}</span>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{t("about.experience-label", "Experiencia Full Stack")}</span>
                 </div>
               </motion.div>
 
@@ -583,7 +583,7 @@ const AboutPage = () => {
                   openCvModal();
                 }}
                 className="btn-premium"
-                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0.75rem 1.75rem', borderRadius: '9999px', borderBottom: 'none', background: 'var(--color-surface-light)', cursor: 'pointer', minHeight: '46px' }}
+                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0.75rem 1.75rem', borderRadius: '9999px', borderBottom: 'none', background: 'var(--color-surface)', cursor: 'pointer', minHeight: '46px' }}
               >
                 {t("about.download-cv")}
               </button>
@@ -617,8 +617,8 @@ const AboutPage = () => {
                 className={`project-tag ${selectedCategory === category.id ? 'active' : ''}`}
                 style={{ 
                   cursor: 'pointer',
-                  background: selectedCategory === category.id ? 'var(--color-text-light)' : 'transparent',
-                  color: selectedCategory === category.id ? 'var(--color-bg-light)' : 'var(--color-text-muted-light)'
+                  background: selectedCategory === category.id ? 'var(--color-text)' : 'transparent',
+                  color: selectedCategory === category.id ? 'var(--color-bg)' : 'var(--color-text-muted)'
                 }}
               >
                 {category.icon} {category.name}
@@ -643,8 +643,8 @@ const AboutPage = () => {
                     variants={skillVariants}
                     className="skill-card"
                   >
-                    <IconComponent size={32} style={{ marginBottom: '1rem', color: 'var(--color-text-muted-light)' }} />
-                    <span style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--color-text-light)' }} className="dark:text-white">
+                    <IconComponent size={32} style={{ marginBottom: '1rem', color: 'var(--color-text-muted)' }} />
+                    <span style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--color-text)' }} className="dark:text-text">
                       {skill.name}
                     </span>
                     <div className="skill-progress-bar">
@@ -691,22 +691,22 @@ const AboutPage = () => {
                   transition={{ duration: 0.5 }}
                 >
                   <div className="timeline-content card-premium" style={{ padding: '2rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--color-text-muted-light)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--color-text-muted)' }}>
                       <Calendar size={16} />
                       <span style={{ fontSize: '0.9rem' }}>{exp.period}</span>
                     </div>
                     
-                    <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--color-text-light)' }} className="dark:text-white">
+                    <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--color-text)' }} className="dark:text-text">
                       {exp.title}
                     </h3>
                     
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--color-text-light)' }} className="dark:text-gray-300">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--color-text)' }} className="dark:text-text-muted">
                       <Briefcase size={16} />
                       <span style={{ fontWeight: 500 }}>{exp.company}</span>
                     </div>
 
                     {exp.location && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--color-text-muted-light)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--color-text-muted)' }}>
                         <MapPin size={16} />
                         <span style={{ fontSize: '0.9rem' }}>{exp.location}</span>
                       </div>

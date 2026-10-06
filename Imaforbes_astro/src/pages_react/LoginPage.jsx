@@ -19,7 +19,7 @@ import { safeLocalStorage } from "../utils/storage.js";
 
 // Minimal cinematic background
 const HeroBackground = () => (
-  <div className="absolute inset-0 -z-10 overflow-hidden bg-black">
+  <div className="absolute inset-0 -z-10 overflow-hidden bg-background">
     {/* Subtle dark gradient to simulate depth */}
     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-80"></div>
   </div>
@@ -70,13 +70,13 @@ const LoginPage = () => {
   // --- FIN DE LA LÓGICA AÑADIDA ---
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-black text-white p-4 sm:p-6">
+    <div className="relative min-h-screen flex items-center justify-center bg-background text-text p-4 sm:p-6">
       <HeroBackground />
       
       {/* Botón de Regresar (Cinemático y discreto) */}
       <a 
         href="/" 
-        className="absolute top-6 left-6 z-50 text-xs font-semibold tracking-widest uppercase text-gray-500 hover:text-white transition-colors duration-300 flex items-center gap-2"
+        className="absolute top-6 left-6 z-50 text-xs font-semibold tracking-widest uppercase text-text hover:text-text transition-colors duration-300 flex items-center gap-2"
       >
         <span style={{ fontSize: '1.2rem' }}>←</span> Regresar al sitio web
       </a>
@@ -96,10 +96,10 @@ const LoginPage = () => {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="text-center mb-12"
           >
-            <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 uppercase tracking-[0.1em] text-white" style={{ fontFamily: 'var(--font-serif)' }}>
+            <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 uppercase tracking-[0.1em] text-text" style={{ fontFamily: 'var(--font-sans)' }}>
               Login
             </h1>
-            <p className="text-xs uppercase tracking-widest text-gray-400 font-semibold mt-4">
+            <p className="text-xs uppercase tracking-widest text-text-muted font-semibold mt-4">
               Administración
             </p>
           </motion.div>
@@ -113,7 +113,7 @@ const LoginPage = () => {
             >
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
-                  <User className="w-4 h-4 text-gray-500 group-focus-within:text-white transition-colors" />
+                  <User className="w-4 h-4 text-text group-focus-within:text-text transition-colors" />
                 </div>
                 <input
                   type="text"
@@ -121,7 +121,7 @@ const LoginPage = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
-                  className="w-full pl-8 pr-4 py-3 bg-transparent border-b-2 border-gray-800 text-white placeholder-gray-600 focus:outline-none focus:border-white transition-all duration-300 text-sm tracking-wider"
+                  className="w-full pl-8 pr-4 py-3 bg-transparent border-b-2 border-strong text-text placeholder-gray-600 focus:outline-none focus:border-white transition-all duration-300 text-sm tracking-wider"
                   placeholder="CORREO (EMAIL)"
                 />
               </div>
@@ -135,7 +135,7 @@ const LoginPage = () => {
             >
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
-                  <Lock className="w-4 h-4 text-gray-500 group-focus-within:text-white transition-colors" />
+                  <Lock className="w-4 h-4 text-text group-focus-within:text-text transition-colors" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
@@ -143,13 +143,13 @@ const LoginPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-8 pr-12 py-3 bg-transparent border-b-2 border-gray-800 text-white placeholder-gray-600 focus:outline-none focus:border-white transition-all duration-300 text-sm tracking-wider"
+                  className="w-full pl-8 pr-12 py-3 bg-transparent border-b-2 border-strong text-text placeholder-gray-600 focus:outline-none focus:border-white transition-all duration-300 text-sm tracking-wider"
                   placeholder="CONTRASEÑA"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center text-gray-600 hover:text-white transition-colors duration-200 focus:outline-none"
+                  className="absolute inset-y-0 right-0 flex items-center text-text hover:text-text transition-colors duration-200 focus:outline-none"
                   aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                 >
                   {showPassword ? (
@@ -166,7 +166,7 @@ const LoginPage = () => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl"
+                className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl"
               >
                 <p className="text-sm text-red-600 dark:text-red-400 text-center font-medium">
                   {error}
@@ -180,7 +180,7 @@ const LoginPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              className="w-full mt-8 py-3 bg-transparent border-b-2 border-white text-white text-xs font-bold tracking-[0.15em] uppercase hover:opacity-70 transition-opacity"
+              className="w-full mt-8 py-3 bg-transparent border-b-2 border-white text-text text-xs font-bold tracking-[0.15em] uppercase hover:opacity-70 transition-opacity"
             >
               ENTRAR
             </motion.button>

@@ -298,19 +298,19 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-background bg-opacity-80 flex items-center justify-center z-50 p-4">
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="bg-white dark:bg-[#0f0f0f] rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col border border-gray-200 dark:border-gray-800"
+        className="bg-surface dark:bg-[#0f0f0f] rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col border border-strong dark:border-strong"
       >
         {/* Header */}
-        <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-800">
-          <h3 className="text-lg font-light text-gray-900 dark:text-white">{t('imageCropper.title')}</h3>
+        <div className="flex justify-between items-center p-4 border-b border-strong dark:border-strong">
+          <h3 className="text-lg font-light text-text dark:text-text">{t('imageCropper.title')}</h3>
           <button
             onClick={onCancel}
             aria-label={t('imageCropper.close')}
-            className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+            className="text-text dark:text-text-muted hover:text-text dark:hover:text-text transition-colors"
           >
             <X size={24} />
           </button>
@@ -320,7 +320,7 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
         <div className="flex-1 p-4 overflow-auto">
           <div
             ref={containerRef}
-            className="relative mx-auto bg-gray-100 dark:bg-[#1a1a1a] rounded-lg overflow-hidden"
+            className="relative mx-auto bg-surface dark:bg-[#1a1a1a] rounded-2xl overflow-hidden"
             style={{ 
               width: '100%', 
               maxWidth: '600px', 
@@ -355,18 +355,18 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
         </div>
 
         {/* Controls */}
-        <div className="p-4 border-t border-gray-200 dark:border-gray-800 space-y-4">
+        <div className="p-4 border-t border-strong dark:border-strong space-y-4">
           {/* Zoom Controls */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600 dark:text-gray-400 font-light">{t('imageCropper.zoom')}:</span>
-              <span className="text-sm font-medium text-gray-900 dark:text-white">{Math.round(zoom * 100)}%</span>
+              <span className="text-sm text-text dark:text-text-muted font-light">{t('imageCropper.zoom')}:</span>
+              <span className="text-sm font-medium text-text dark:text-text">{Math.round(zoom * 100)}%</span>
             </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={handleZoomOut}
                 disabled={zoom <= 0.5}
-                className="p-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515] rounded-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 title={t('imageCropper.zoomOut')}
                 aria-label={t('imageCropper.zoomOut')}
               >
@@ -374,7 +374,7 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
               </button>
               <button
                 onClick={handleReset}
-                className="px-3 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] rounded-lg transition-colors text-xs font-light"
+                className="px-3 py-2 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515] rounded-2xl transition-colors text-xs font-light"
                 title={t('imageCropper.reset')}
               >
                 {t('imageCropper.reset')}
@@ -382,7 +382,7 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
               <button
                 onClick={handleZoomIn}
                 disabled={zoom >= 5}
-                className="p-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="p-2 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515] rounded-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 title={t('imageCropper.zoomIn')}
                 aria-label={t('imageCropper.zoomIn')}
               >
@@ -393,27 +393,27 @@ const ImageCropper = ({ imageFile, onCropComplete, onCancel }) => {
 
           {/* Instructions */}
           <div className="flex flex-col gap-1">
-            <p className="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-2 font-light">
+            <p className="text-xs text-text dark:text-text-muted flex items-center gap-2 font-light">
               <Move size={14} />
               {t('imageCropper.drag')}
             </p>
-            <p className="text-xs text-gray-600 dark:text-gray-400 font-light">
+            <p className="text-xs text-text dark:text-text-muted font-light">
               {t('imageCropper.instructions')}
             </p>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="p-4 border-t border-gray-200 dark:border-gray-800 flex justify-end gap-3">
+        <div className="p-4 border-t border-strong dark:border-strong flex justify-end gap-3">
           <button
             onClick={onCancel}
-            className="px-6 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] rounded-xl transition-colors font-light"
+            className="px-6 py-2 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515] rounded-2xl transition-colors font-light"
           >
             {t('imageCropper.cancel')}
           </button>
           <button
             onClick={handleCrop}
-            className="px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 rounded-xl transition-colors flex items-center gap-2 font-light"
+            className="px-6 py-2 bg-background dark:bg-surface text-text dark:text-text hover:bg-background dark:hover:bg-surface rounded-2xl transition-colors flex items-center gap-2 font-light"
           >
             <Check size={18} />
             {t('imageCropper.apply')}

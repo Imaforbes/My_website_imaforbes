@@ -39,16 +39,16 @@ class ErrorBoundary extends React.Component {
       const { t } = this.props;
       return (
         <div className="min-h-screen bg-gray-50 dark:bg-[#0a0a0a] flex items-center justify-center px-4">
-          <div className="max-w-md w-full bg-white dark:bg-gray-800 dark:border dark:border-gray-700 rounded-lg shadow-lg p-6 text-center">
+          <div className="max-w-md w-full bg-surface dark:bg-background dark:border dark:border-strong rounded-2xl shadow-lg p-6 text-center">
             <div className="mb-4">
               <AlertTriangle className="w-16 h-16 text-red-500 mx-auto" />
             </div>
 
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <h2 className="text-2xl font-bold text-text dark:text-text mb-2">
               {t("errorBoundary.title")}
             </h2>
 
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
+            <p className="text-text dark:text-text-muted mb-6">
               {t("errorBoundary.message")}
             </p>
 
@@ -56,7 +56,7 @@ class ErrorBoundary extends React.Component {
               <button
                 onClick={this.handleReload}
                 aria-label={t("errorBoundary.reload")}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-text rounded-2xl hover:bg-blue-700 transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
                 {t("errorBoundary.reload")}
@@ -65,7 +65,7 @@ class ErrorBoundary extends React.Component {
               <button
                 onClick={this.handleGoHome}
                 aria-label={t("errorBoundary.home")}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-background text-text rounded-2xl hover:bg-background transition-colors"
               >
                 <Home className="w-4 h-4" />
                 {t("errorBoundary.home")}
@@ -74,7 +74,7 @@ class ErrorBoundary extends React.Component {
 
             {import.meta.env.DEV && this.state.error && (
               <details className="mt-6 text-left">
-                <summary className="cursor-pointer text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                <summary className="cursor-pointer text-sm text-text dark:text-text-muted hover:text-text dark:hover:text-text-muted">
                   {t("errorBoundary.details", "Detalles del error (solo en desarrollo)")}
                 </summary>
                 <pre className="mt-2 text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 p-2 rounded overflow-auto">

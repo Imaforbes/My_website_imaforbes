@@ -143,7 +143,7 @@ const StatisticsPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-[#0a0a0a] flex items-center justify-center text-gray-900 dark:text-white">
+      <div className="min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center text-text dark:text-text">
         <p className="font-light">Cargando estadísticas...</p>
       </div>
     );
@@ -213,7 +213,7 @@ const StatisticsPage = () => {
 
   return (
     <>
-      <div className="relative min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-white p-4 sm:p-8">
+      <div className="relative min-h-screen bg-surface dark:bg-[#0a0a0a] text-text dark:text-text p-4 sm:p-8">
         <HeroBackground />
         <div className="relative z-10 container mx-auto max-w-7xl">
           {/* Page Title Section - More Prominent */}
@@ -221,14 +221,14 @@ const StatisticsPage = () => {
             <div className="flex items-center gap-4">
               <motion.button
                 onClick={() => navigate("/admin")}
-                className="p-2 bg-white dark:bg-[#0f0f0f] border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-[#151515] rounded-lg transition-colors"
+                className="p-2 bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong hover:bg-gray-50 dark:hover:bg-[#151515] rounded-2xl transition-colors"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <ArrowLeft size={20} className="text-gray-900 dark:text-white" />
+                <ArrowLeft size={20} className="text-text dark:text-text" />
               </motion.button>
               <motion.h1
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight text-gray-900 dark:text-white"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight text-text dark:text-text"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
@@ -240,7 +240,7 @@ const StatisticsPage = () => {
 
           {/* Message Stats Cards */}
           <div className="mb-8">
-            <h2 className="text-xl font-light text-gray-900 dark:text-white mb-4">Estadísticas de Mensajes</h2>
+            <h2 className="text-xl font-light text-text dark:text-text mb-4">Estadísticas de Mensajes</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {messageStatCards.map((card, index) => {
                 const IconComponent = card.icon;
@@ -250,15 +250,15 @@ const StatisticsPage = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 * index }}
-                    className="bg-white dark:bg-[#0f0f0f] rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm"
+                    className="bg-surface dark:bg-[#0f0f0f] rounded-2xl p-6 border border-strong dark:border-strong shadow-sm"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="p-3 bg-gray-100 dark:bg-[#1a1a1a] rounded-lg">
-                        <IconComponent className="text-gray-700 dark:text-gray-300" size={24} />
+                      <div className="p-3 bg-surface dark:bg-[#1a1a1a] rounded-2xl">
+                        <IconComponent className="text-text dark:text-text-muted" size={24} />
                       </div>
                       <div>
-                        <p className="text-gray-600 dark:text-gray-400 text-sm font-light">{card.title}</p>
-                        <p className="text-2xl font-light text-gray-900 dark:text-white">{card.value}</p>
+                        <p className="text-text dark:text-text-muted text-sm font-light">{card.title}</p>
+                        <p className="text-2xl font-light text-text dark:text-text">{card.value}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -269,7 +269,7 @@ const StatisticsPage = () => {
 
           {/* Blog Stats Cards */}
           <div className="mb-8">
-            <h2 className="text-xl font-light text-gray-900 dark:text-white mb-4">Estadísticas del Blog</h2>
+            <h2 className="text-xl font-light text-text dark:text-text mb-4">Estadísticas del Blog</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {blogStatCards.map((card, index) => {
                 const IconComponent = card.icon;
@@ -279,15 +279,15 @@ const StatisticsPage = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 * (index + 4) }}
-                    className="bg-white dark:bg-[#0f0f0f] rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm"
+                    className="bg-surface dark:bg-[#0f0f0f] rounded-2xl p-6 border border-strong dark:border-strong shadow-sm"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="p-3 bg-gray-100 dark:bg-[#1a1a1a] rounded-lg">
-                        <IconComponent className="text-gray-700 dark:text-gray-300" size={24} />
+                      <div className="p-3 bg-surface dark:bg-[#1a1a1a] rounded-2xl">
+                        <IconComponent className="text-text dark:text-text-muted" size={24} />
                       </div>
                       <div>
-                        <p className="text-gray-600 dark:text-gray-400 text-sm font-light">{card.title}</p>
-                        <p className="text-2xl font-light text-gray-900 dark:text-white">{card.value}</p>
+                        <p className="text-text dark:text-text-muted text-sm font-light">{card.title}</p>
+                        <p className="text-2xl font-light text-text dark:text-text">{card.value}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -303,32 +303,32 @@ const StatisticsPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="bg-white dark:bg-[#0f0f0f] rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm"
+              className="bg-surface dark:bg-[#0f0f0f] rounded-2xl p-6 border border-strong dark:border-strong shadow-sm"
             >
-              <h3 className="text-xl font-light text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <BarChart3 size={20} className="text-gray-700 dark:text-gray-300" />
+              <h3 className="text-xl font-light text-text dark:text-text mb-4 flex items-center gap-2">
+                <BarChart3 size={20} className="text-text dark:text-text-muted" />
                 Mensajes por Mes
               </h3>
               <div className="space-y-3">
                 {stats.messagesByMonth.length > 0 ? (
                   stats.messagesByMonth.map((item) => (
                     <div key={item.month} className="flex items-center justify-between">
-                      <span className="text-gray-700 dark:text-gray-300 font-light">{item.month}</span>
+                      <span className="text-text dark:text-text-muted font-light">{item.month}</span>
                       <div className="flex items-center gap-2">
-                        <div className="w-32 bg-gray-200 dark:bg-gray-800 rounded-full h-2">
+                        <div className="w-32 bg-surface dark:bg-background rounded-full h-2">
                           <div
-                            className="bg-gray-900 dark:bg-white h-2 rounded-full transition-all duration-500"
+                            className="bg-background dark:bg-surface h-2 rounded-full transition-all duration-500"
                             style={{
                               width: `${(item.count / Math.max(...stats.messagesByMonth.map(m => m.count))) * 100}%`,
                             }}
                           />
                         </div>
-                        <span className="text-gray-900 dark:text-white font-light w-8 text-right">{item.count}</span>
+                        <span className="text-text dark:text-text font-light w-8 text-right">{item.count}</span>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p className="text-gray-600 dark:text-gray-400 font-light">No hay datos disponibles</p>
+                  <p className="text-text dark:text-text-muted font-light">No hay datos disponibles</p>
                 )}
               </div>
             </motion.div>
@@ -338,29 +338,29 @@ const StatisticsPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="bg-white dark:bg-[#0f0f0f] rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm"
+              className="bg-surface dark:bg-[#0f0f0f] rounded-2xl p-6 border border-strong dark:border-strong shadow-sm"
             >
-              <h3 className="text-xl font-light text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <Clock size={20} className="text-gray-700 dark:text-gray-300" />
+              <h3 className="text-xl font-light text-text dark:text-text mb-4 flex items-center gap-2">
+                <Clock size={20} className="text-text dark:text-text-muted" />
                 Actividad Reciente (Mensajes)
               </h3>
               <div className="space-y-3">
                 {stats.recentActivity.length > 0 ? (
                   stats.recentActivity.map((activity) => (
-                    <div key={activity.id ?? `${activity.created_at}-${activity.name}`} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-800">
-                      <div className="p-2 bg-gray-100 dark:bg-[#0a0a0a] rounded-lg">
-                        <Mail size={16} className="text-gray-700 dark:text-gray-300" />
+                    <div key={activity.id ?? `${activity.created_at}-${activity.name}`} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-[#1a1a1a] rounded-2xl border border-strong dark:border-strong">
+                      <div className="p-2 bg-surface dark:bg-[#0a0a0a] rounded-2xl">
+                        <Mail size={16} className="text-text dark:text-text-muted" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-gray-900 dark:text-white text-sm font-light">{activity.name}</p>
-                        <p className="text-gray-600 dark:text-gray-400 text-xs font-light">
+                        <p className="text-text dark:text-text text-sm font-light">{activity.name}</p>
+                        <p className="text-text dark:text-text-muted text-xs font-light">
                           {new Date(activity.created_at).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p className="text-gray-600 dark:text-gray-400 font-light">No hay actividad reciente</p>
+                  <p className="text-text dark:text-text-muted font-light">No hay actividad reciente</p>
                 )}
               </div>
             </motion.div>
@@ -373,24 +373,24 @@ const StatisticsPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="bg-white dark:bg-[#0f0f0f] rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm"
+              className="bg-surface dark:bg-[#0f0f0f] rounded-2xl p-6 border border-strong dark:border-strong shadow-sm"
             >
-              <h3 className="text-xl font-light text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <Eye size={20} className="text-gray-700 dark:text-gray-300" />
+              <h3 className="text-xl font-light text-text dark:text-text mb-4 flex items-center gap-2">
+                <Eye size={20} className="text-text dark:text-text-muted" />
                 Posts Más Vistos
               </h3>
               <div className="space-y-3">
                 {blogStats.mostViewed.length > 0 ? (
                   blogStats.mostViewed.map((post) => (
-                    <div key={post.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-800">
+                    <div key={post.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#1a1a1a] rounded-2xl border border-strong dark:border-strong">
                       <div className="flex-1">
-                        <p className="text-gray-900 dark:text-white text-sm font-light line-clamp-1">{post.title}</p>
+                        <p className="text-text dark:text-text text-sm font-light line-clamp-1">{post.title}</p>
                         <div className="flex items-center gap-3 mt-1">
-                          <span className="text-gray-600 dark:text-gray-400 text-xs flex items-center gap-1 font-light">
+                          <span className="text-text dark:text-text-muted text-xs flex items-center gap-1 font-light">
                             <Eye size={12} />
                             {post.views_count || 0}
                           </span>
-                          <span className="text-gray-600 dark:text-gray-400 text-xs flex items-center gap-1 font-light">
+                          <span className="text-text dark:text-text-muted text-xs flex items-center gap-1 font-light">
                             <Heart size={12} />
                             {post.likes_count || 0}
                           </span>
@@ -399,7 +399,7 @@ const StatisticsPage = () => {
                     </div>
                   ))
                 ) : (
-                  <p className="text-gray-600 dark:text-gray-400 font-light">No hay posts disponibles</p>
+                  <p className="text-text dark:text-text-muted font-light">No hay posts disponibles</p>
                 )}
               </div>
             </motion.div>
@@ -409,24 +409,24 @@ const StatisticsPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.7 }}
-              className="bg-white dark:bg-[#0f0f0f] rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm"
+              className="bg-surface dark:bg-[#0f0f0f] rounded-2xl p-6 border border-strong dark:border-strong shadow-sm"
             >
-              <h3 className="text-xl font-light text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <Heart size={20} className="text-gray-700 dark:text-gray-300" />
+              <h3 className="text-xl font-light text-text dark:text-text mb-4 flex items-center gap-2">
+                <Heart size={20} className="text-text dark:text-text-muted" />
                 Posts Más Liked
               </h3>
               <div className="space-y-3">
                 {blogStats.mostLiked.length > 0 ? (
                   blogStats.mostLiked.map((post) => (
-                    <div key={post.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#1a1a1a] rounded-lg border border-gray-200 dark:border-gray-800">
+                    <div key={post.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#1a1a1a] rounded-2xl border border-strong dark:border-strong">
                       <div className="flex-1">
-                        <p className="text-gray-900 dark:text-white text-sm font-light line-clamp-1">{post.title}</p>
+                        <p className="text-text dark:text-text text-sm font-light line-clamp-1">{post.title}</p>
                         <div className="flex items-center gap-3 mt-1">
-                          <span className="text-gray-600 dark:text-gray-400 text-xs flex items-center gap-1 font-light">
+                          <span className="text-text dark:text-text-muted text-xs flex items-center gap-1 font-light">
                             <Heart size={12} />
                             {post.likes_count || 0}
                           </span>
-                          <span className="text-gray-600 dark:text-gray-400 text-xs flex items-center gap-1 font-light">
+                          <span className="text-text dark:text-text-muted text-xs flex items-center gap-1 font-light">
                             <Eye size={12} />
                             {post.views_count || 0}
                           </span>
@@ -435,7 +435,7 @@ const StatisticsPage = () => {
                     </div>
                   ))
                 ) : (
-                  <p className="text-gray-600 dark:text-gray-400 font-light">No hay posts disponibles</p>
+                  <p className="text-text dark:text-text-muted font-light">No hay posts disponibles</p>
                 )}
               </div>
             </motion.div>
@@ -446,25 +446,25 @@ const StatisticsPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="bg-white dark:bg-[#0f0f0f] rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm"
+            className="bg-surface dark:bg-[#0f0f0f] rounded-2xl p-6 border border-strong dark:border-strong shadow-sm"
           >
-            <h3 className="text-xl font-light text-gray-900 dark:text-white mb-4">Resumen del Sistema</h3>
+            <h3 className="text-xl font-light text-text dark:text-text mb-4">Resumen del Sistema</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center">
-                <p className="text-3xl font-light text-gray-900 dark:text-white">{stats.totalMessages}</p>
-                <p className="text-gray-600 dark:text-gray-400 font-light">Total de Mensajes</p>
+                <p className="text-3xl font-light text-text dark:text-text">{stats.totalMessages}</p>
+                <p className="text-text dark:text-text-muted font-light">Total de Mensajes</p>
               </div>
               <div className="text-center">
-                <p className="text-3xl font-light text-gray-900 dark:text-white">
+                <p className="text-3xl font-light text-text dark:text-text">
                   {stats.totalMessages > 0 ? Math.round((stats.readMessages / stats.totalMessages) * 100) : 0}%
                 </p>
-                <p className="text-gray-600 dark:text-gray-400 font-light">Tasa de Lectura</p>
+                <p className="text-text dark:text-text-muted font-light">Tasa de Lectura</p>
               </div>
               <div className="text-center">
-                <p className="text-3xl font-light text-gray-900 dark:text-white">
+                <p className="text-3xl font-light text-text dark:text-text">
                   {stats.totalMessages > 0 ? Math.round((stats.repliedMessages / stats.totalMessages) * 100) : 0}%
                 </p>
-                <p className="text-gray-600 dark:text-gray-400 font-light">Tasa de Respuesta</p>
+                <p className="text-text dark:text-text-muted font-light">Tasa de Respuesta</p>
               </div>
             </div>
           </motion.div>

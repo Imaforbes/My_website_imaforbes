@@ -182,7 +182,7 @@ const BrowserSupport = () => {
               
               <button
                 onClick={handleDismiss}
-                className="flex-shrink-0 p-1 text-yellow-600 dark:text-yellow-400 hover:text-yellow-800 dark:hover:text-yellow-200 transition-colors rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-800/50"
+                className="flex-shrink-0 p-1 text-yellow-600 dark:text-yellow-400 hover:text-yellow-800 dark:hover:text-yellow-200 transition-colors rounded-2xl hover:bg-yellow-100 dark:hover:bg-yellow-800/50"
                 aria-label={t('browserSupport.dismiss')}
               >
                 <X className="w-5 h-5" />

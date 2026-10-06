@@ -1,4 +1,10 @@
 ---
+import '@fontsource/geist-sans/400.css';
+import '@fontsource/geist-sans/500.css';
+import '@fontsource/geist-sans/700.css';
+import '@fontsource/geist-mono/400.css';
+import '@fontsource/geist-mono/500.css';
+
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
 import Breadcrumbs from '../components/Breadcrumbs.jsx';
@@ -29,50 +35,7 @@ const { title = "Imaforbes Portfolio", description = "Portfolio profesional de I
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
     <link rel="icon" type="image/png" href="/img/Logo.png" />
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&family=Inter:wght@300;400;500;600&display=swap" as="style" />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
     <title>{title}</title>
-
-    <script is:inline>
-      // Apply theme immediately to prevent flash
-      (function () {
-        try {
-          var savedTheme = localStorage.getItem('app_theme');
-          var theme = 'dark'; // Default
-          
-          if (savedTheme === 'light') {
-            theme = 'light';
-          } else if (savedTheme === 'dark') {
-            theme = 'dark';
-          } else if (savedTheme === 'auto') {
-            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-          }
-          
-          var root = document.documentElement;
-          root.classList.add(theme);
-          root.classList.remove(theme === 'dark' ? 'light' : 'dark');
-          
-          var addBodyClass = function() {
-            document.body.classList.remove('light-theme', 'dark-theme', 'auto-theme');
-            document.body.classList.add(theme + '-theme');
-          };
-          
-          if (document.body) {
-            addBodyClass();
-          } else {
-            document.addEventListener('DOMContentLoaded', addBodyClass);
-          }
-        } catch (e) {
-          // Fallback if localStorage is blocked
-          document.documentElement.classList.add('dark');
-        }
-      })();
-    </script>
   </head>
   <body>
     <BrowserSupport client:only="react" />

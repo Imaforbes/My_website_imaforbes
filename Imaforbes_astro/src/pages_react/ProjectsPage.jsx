@@ -12,8 +12,8 @@ import { FiGithub, FiExternalLink, FiBriefcase, FiChevronLeft, FiChevronRight } 
  */
 const HeroBackground = () => (
   <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
-    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-light)' }} className="dark:hidden"></div>
-    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg-dark)' }} className="hidden dark:block"></div>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg)' }} ></div>
+    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg)' }} ></div>
     
     {/* Subtle animated gradient glow */}
     <motion.div 
@@ -68,7 +68,7 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
 
   return (
     <BorderBeam theme="dark" size="pulse-inner" duration={6} colorVariant="ocean" className="rounded-2xl h-full w-full relative">
-      <motion.div variants={cardVariants} className="project-card-premium h-full dark:bg-[#111] dark:border-gray-800" style={{ zIndex: 10, background: 'var(--color-surface-light)', borderRadius: '1rem', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid var(--color-border-light)' }}>
+      <motion.div variants={cardVariants} className="project-card-premium h-full dark:bg-[#111] dark:border-strong" style={{ zIndex: 10, background: 'var(--color-surface)', borderRadius: '1rem', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid var(--color-border)' }}>
       
       {/* Background Image / Carousel Container */}
       <div 
@@ -97,7 +97,7 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
           <>
             <button 
               onClick={prevImg}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-1.5 rounded-full z-20 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/60 hover:bg-background/80 text-text p-1.5 rounded-full z-20 opacity-0 group-hover:opacity-100 transition-opacity"
               style={{ border: '1px solid rgba(255,255,255,0.2)' }}
               title="Previous screenshot"
             >
@@ -105,7 +105,7 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
             </button>
             <button 
               onClick={nextImg}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-1.5 rounded-full z-20 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/60 hover:bg-background/80 text-text p-1.5 rounded-full z-20 opacity-0 group-hover:opacity-100 transition-opacity"
               style={{ border: '1px solid rgba(255,255,255,0.2)' }}
               title="Next screenshot"
             >
@@ -114,7 +114,7 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
 
             {/* Indicator Dots */}
             <div 
-              className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-20 bg-black/50 px-2.5 py-1 rounded-full backdrop-blur-sm"
+              className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-20 bg-background/50 px-2.5 py-1 rounded-full backdrop-blur-sm"
               style={{ border: '1px solid rgba(255,255,255,0.15)' }}
             >
               {images.map((_, idx) => (
@@ -142,11 +142,11 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
 
       {/* Content Container */}
       <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--color-text-light)' }} className="dark:text-white">
+        <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--color-text)' }} className="dark:text-text">
           {t(project.titleKey)}
         </h3>
         
-        <p className="text-gray-600 dark:text-gray-300" style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
+        <p className="text-text dark:text-text-muted" style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
           {t(project.descriptionKey)}
         </p>
         
@@ -154,7 +154,7 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
         {project.tags && project.tags.length > 0 && (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
             {project.tags.map((tag, i) => (
-              <span key={i} className="dark:bg-[#222] dark:text-gray-300 dark:border-gray-700" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem', borderRadius: '50px', background: 'var(--color-bg-light)', color: 'var(--color-text-muted-light)', border: '1px solid var(--color-border-light)' }}>
+              <span key={i} className="dark:bg-[#222] dark:text-text-muted dark:border-strong" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem', borderRadius: '50px', background: 'var(--color-bg)', color: 'var(--color-text-muted)', border: '1px solid var(--color-border)' }}>
                 {tag}
               </span>
             ))}
@@ -168,9 +168,9 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
                 href={project.repo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-premium dark:bg-[#111] dark:border-gray-800"
+                className="btn-premium dark:bg-[#111] dark:border-strong"
                 onClick={(e) => e.stopPropagation()}
-                style={{ padding: '0.6rem 1.2rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}
+                style={{ padding: '0.6rem 1.2rem', borderRadius: '9999px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}
               >
                 <FiGithub /> <span>{t("projects.view_code", "VIEW CODE")}</span>
               </a>
@@ -183,9 +183,9 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-premium dark:bg-[#111] dark:border-gray-800"
+                className="btn-premium dark:bg-[#111] dark:border-strong"
                 onClick={(e) => e.stopPropagation()}
-                style={{ padding: '0.6rem 1.2rem', borderRadius: '9999px', background: 'var(--color-surface-light)', border: '1px solid var(--color-border-light)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}
+                style={{ padding: '0.6rem 1.2rem', borderRadius: '9999px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}
               >
                 <FiExternalLink /> <span>{t("projects.discover", "DISCOVER")}</span>
               </a>
@@ -322,11 +322,11 @@ const ProjectsPage = () => {
         <motion.div 
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          style={{ position: 'absolute', top: '2%', right: '5%', zIndex: 20, opacity: 0.8, display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--color-surface-light)', padding: '0.5rem 1rem', borderRadius: '50px', border: '1px solid var(--color-border-light)' }}
-          className="dark:bg-[#1a1a1a] dark:border-gray-800"
+          style={{ position: 'absolute', top: '2%', right: '5%', zIndex: 20, opacity: 0.8, display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--color-surface)', padding: '0.5rem 1rem', borderRadius: '50px', border: '1px solid var(--color-border)' }}
+          className="dark:bg-[#1a1a1a] dark:border-strong"
         >
-          <FiBriefcase style={{ color: 'var(--color-text-muted-light)' }} />
-          <span style={{ fontSize: '0.8rem', color: 'var(--color-text-light)' }}>{projects.length} {t("projects.count-label", "Proyectos")}</span>
+          <FiBriefcase style={{ color: 'var(--color-text-muted)' }} />
+          <span style={{ fontSize: '0.8rem', color: 'var(--color-text)' }}>{projects.length} {t("projects.count-label", "Proyectos")}</span>
         </motion.div>
 
         <motion.div 
@@ -368,12 +368,12 @@ const ProjectsPage = () => {
               href="https://github.com/Imaforbes?tab=repositories&q=&type=&language=&sort="
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-premium dark:bg-[#111] dark:border-gray-800"
+              className="btn-premium dark:bg-[#111] dark:border-strong"
               style={{
                 padding: '1rem 2.5rem',
                 borderRadius: '9999px',
-                background: 'var(--color-surface-light)',
-                border: '1px solid var(--color-border-light)',
+                background: 'var(--color-surface)',
+                border: '1px solid var(--color-border)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '0.75rem',
@@ -408,7 +408,7 @@ const ProjectsPage = () => {
               <button
                 aria-label="Close preview"
                 onClick={() => setPreviewImage(null)}
-                style={{ position: 'absolute', top: 0, right: 0, padding: '0.5rem', background: 'var(--color-surface-light)', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                style={{ position: 'absolute', top: 0, right: 0, padding: '0.5rem', background: 'var(--color-surface)', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
               >
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
               </button>

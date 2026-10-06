@@ -444,10 +444,10 @@ const ConfigurationPage = () => {
 
   if (initialLoading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-[#0a0a0a] flex items-center justify-center text-gray-900 dark:text-white">
+      <div className="min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center text-text dark:text-text">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-white mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400 font-light">Cargando configuración...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-strong dark:border-white mx-auto mb-4"></div>
+          <p className="text-text dark:text-text-muted font-light">Cargando configuración...</p>
         </div>
       </div>
     );
@@ -455,7 +455,7 @@ const ConfigurationPage = () => {
 
   return (
     <>
-      <div className="relative min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-white p-4 sm:p-8">
+      <div className="relative min-h-screen bg-surface dark:bg-[#0a0a0a] text-text dark:text-text p-4 sm:p-8">
         <HeroBackground />
         <div className="relative z-10 container mx-auto max-w-7xl">
           {/* Page Title Section - More Prominent */}
@@ -463,14 +463,14 @@ const ConfigurationPage = () => {
             <div className="flex items-center gap-4">
               <motion.button
                 onClick={() => navigate("/admin")}
-                className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"
+                className="p-2 bg-background hover:bg-background rounded-2xl transition-colors"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <ArrowLeft size={20} />
               </motion.button>
               <motion.h1
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight text-gray-900 dark:text-white"
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight text-text dark:text-text"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
@@ -490,10 +490,10 @@ const ConfigurationPage = () => {
             <button
               onClick={handleSave}
               disabled={loading}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-light transition-all duration-300 ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-light transition-all duration-300 ${
                 loading
-                  ? "bg-gray-300 dark:bg-gray-700 cursor-not-allowed text-gray-500 dark:text-gray-400"
-                  : "bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100"
+                  ? "bg-surface dark:bg-background cursor-not-allowed text-text dark:text-text-muted"
+                  : "bg-background dark:bg-surface text-text dark:text-text hover:bg-background dark:hover:bg-surface"
               }`}
             >
               {loading ? (
@@ -525,17 +525,17 @@ const ConfigurationPage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 * sectionIndex }}
-                  className="bg-white dark:bg-[#0f0f0f] rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm"
+                  className="bg-surface dark:bg-[#0f0f0f] rounded-2xl p-6 border border-strong dark:border-strong shadow-sm"
                 >
-                  <h3 className="text-xl font-light text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                    <IconComponent size={20} className="text-gray-700 dark:text-gray-300" />
+                  <h3 className="text-xl font-light text-text dark:text-text mb-6 flex items-center gap-2">
+                    <IconComponent size={20} className="text-text dark:text-text-muted" />
                     {section.title}
                   </h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {section.fields.map((field) => (
                       <div key={field.key} className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <label className="block text-sm font-medium text-text dark:text-text-muted">
                           {field.label}
                         </label>
 
@@ -546,20 +546,20 @@ const ConfigurationPage = () => {
                             type={field.type}
                             value={field.value}
                             onChange={(e) => field.onChange(e.target.value)}
-                            className="w-full px-3 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:border-transparent transition-all duration-300"
+                            className="w-full px-3 py-2 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong rounded-2xl text-text dark:text-text focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:border-transparent transition-all duration-300"
                           />
                         ) : field.type === "textarea" ? (
                           <textarea
                             value={field.value}
                             onChange={(e) => field.onChange(e.target.value)}
                             rows={3}
-                            className="w-full px-3 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:border-transparent transition-all duration-300"
+                            className="w-full px-3 py-2 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong rounded-2xl text-text dark:text-text focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:border-transparent transition-all duration-300"
                           />
                         ) : field.type === "select" ? (
                           <select
                             value={field.value}
                             onChange={(e) => field.onChange(e.target.value)}
-                            className="w-full px-3 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:border-transparent transition-all duration-300"
+                            className="w-full px-3 py-2 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong rounded-2xl text-text dark:text-text focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white focus:border-transparent transition-all duration-300"
                           >
                             {field.options.map((option) => (
                               <option key={option.value} value={option.value}>
@@ -573,9 +573,9 @@ const ConfigurationPage = () => {
                               type="checkbox"
                               checked={field.value}
                               onChange={(e) => field.onChange(e.target.checked)}
-                              className="w-4 h-4 text-gray-900 dark:text-white bg-white dark:bg-[#0a0a0a] border-gray-300 dark:border-gray-700 rounded focus:ring-gray-900 dark:focus:ring-white focus:ring-2"
+                              className="w-4 h-4 text-text dark:text-text bg-surface dark:bg-[#0a0a0a] border-strong dark:border-strong rounded focus:ring-gray-900 dark:focus:ring-white focus:ring-2"
                             />
-                            <span className="text-gray-700 dark:text-gray-300">Habilitado</span>
+                            <span className="text-text dark:text-text-muted">Habilitado</span>
                           </div>
                         ) : null}
                       </div>
@@ -591,15 +591,15 @@ const ConfigurationPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-8 bg-white dark:bg-[#0f0f0f] rounded-xl p-6 border border-gray-200 dark:border-gray-800 shadow-sm"
+            className="mt-8 bg-surface dark:bg-[#0f0f0f] rounded-2xl p-6 border border-strong dark:border-strong shadow-sm"
           >
-            <h3 className="text-xl font-light text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <Database size={20} className="text-gray-700 dark:text-gray-300" />
+            <h3 className="text-xl font-light text-text dark:text-text mb-4 flex items-center gap-2">
+              <Database size={20} className="text-text dark:text-text-muted" />
               Estado del Sistema
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div
-                className={`flex items-center gap-3 p-3 rounded-lg border ${
+                className={`flex items-center gap-3 p-3 rounded-2xl border ${
                   systemStatus?.database === "connected"
                     ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
                     : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
@@ -612,7 +612,7 @@ const ConfigurationPage = () => {
                       : "bg-red-500"
                   }`}
                 ></div>
-                <span className="text-gray-900 dark:text-white font-light">
+                <span className="text-text dark:text-text font-light">
                   Base de Datos:{" "}
                   {systemStatus?.database === "connected"
                     ? "Conectada"
@@ -620,7 +620,7 @@ const ConfigurationPage = () => {
                 </span>
               </div>
               <div
-                className={`flex items-center gap-3 p-3 rounded-lg border ${
+                className={`flex items-center gap-3 p-3 rounded-2xl border ${
                   systemStatus?.api === "working"
                     ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
                     : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
@@ -633,13 +633,13 @@ const ConfigurationPage = () => {
                       : "bg-red-500"
                   }`}
                 ></div>
-                <span className="text-gray-900 dark:text-white font-light">
+                <span className="text-text dark:text-text font-light">
                   API:{" "}
                   {systemStatus?.api === "working" ? "Funcionando" : "Error"}
                 </span>
               </div>
               <div
-                className={`flex items-center gap-3 p-3 rounded-lg border ${
+                className={`flex items-center gap-3 p-3 rounded-2xl border ${
                   systemStatus?.backup === "pending"
                     ? "bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800"
                     : "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
@@ -652,7 +652,7 @@ const ConfigurationPage = () => {
                       : "bg-green-500"
                   }`}
                 ></div>
-                <span className="text-gray-900 dark:text-white font-light">
+                <span className="text-text dark:text-text font-light">
                   Respaldos:{" "}
                   {systemStatus?.backup === "pending"
                     ? "Pendiente"
@@ -663,14 +663,14 @@ const ConfigurationPage = () => {
             {systemStatus && (
               <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="text-center">
-                  <p className="text-2xl font-light text-gray-900 dark:text-white">
+                  <p className="text-2xl font-light text-text dark:text-text">
                     {systemStatus.message_count || 0}
                   </p>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm font-light">Total Mensajes</p>
+                  <p className="text-text dark:text-text-muted text-sm font-light">Total Mensajes</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-sm text-gray-600 dark:text-gray-400 font-light">Última verificación:</p>
-                  <p className="text-gray-900 dark:text-white text-sm font-light">
+                  <p className="text-sm text-text dark:text-text-muted font-light">Última verificación:</p>
+                  <p className="text-text dark:text-text text-sm font-light">
                     {systemStatus.last_check || "N/A"}
                   </p>
                 </div>

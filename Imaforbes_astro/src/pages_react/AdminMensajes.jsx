@@ -208,20 +208,20 @@ const AdminMensajes = () => {
 
   if (loading)
     return (
-      <div className="min-h-screen bg-white dark:bg-[#0a0a0a] flex items-center justify-center text-gray-900 dark:text-white">
+      <div className="min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center text-text dark:text-text">
         <p className="font-light">Cargando mensajes...</p>
       </div>
     );
   if (error)
     return (
-      <div className="min-h-screen bg-white dark:bg-[#0a0a0a] flex items-center justify-center text-red-600 dark:text-red-400">
+      <div className="min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center text-red-600 dark:text-red-400">
         <p className="font-light">Error: {error}</p>
       </div>
     );
 
   return (
     <>
-      <div className="relative min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-white p-2 sm:p-4 md:p-8">
+      <div className="relative min-h-screen bg-surface dark:bg-[#0a0a0a] text-text dark:text-text p-2 sm:p-4 md:p-8">
         <HeroBackground />
         <div className="relative z-10 container mx-auto max-w-7xl">
           {/* Page Title Section - More Prominent */}
@@ -230,14 +230,14 @@ const AdminMensajes = () => {
               <div className="flex items-center gap-4">
                 <motion.button
                   onClick={() => navigate("/admin")}
-                  className="p-2 bg-white dark:bg-[#0f0f0f] border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-[#151515] rounded-lg transition-colors"
+                  className="p-2 bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong hover:bg-gray-50 dark:hover:bg-[#151515] rounded-2xl transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <ArrowLeft size={20} className="text-gray-900 dark:text-white" />
+                  <ArrowLeft size={20} className="text-text dark:text-text" />
                 </motion.button>
                 <motion.h1
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight text-gray-900 dark:text-white"
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight text-text dark:text-text"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6 }}
@@ -248,7 +248,7 @@ const AdminMensajes = () => {
 
               <motion.button
                 onClick={handleLogout}
-                className="group flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-white dark:bg-[#0f0f0f] border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white text-xs sm:text-sm font-light rounded-xl transition-all duration-300 hover:bg-gray-50 dark:hover:bg-[#151515]"
+                className="group flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text text-xs sm:text-sm font-light rounded-2xl transition-all duration-300 hover:bg-gray-50 dark:hover:bg-[#151515]"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6 }}
@@ -265,34 +265,34 @@ const AdminMensajes = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-6 bg-white dark:bg-[#0f0f0f] rounded-xl p-4 border border-gray-200 dark:border-gray-800 shadow-sm"
+            className="mb-6 bg-surface dark:bg-[#0f0f0f] rounded-2xl p-4 border border-strong dark:border-strong shadow-sm"
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <User size={20} className="text-gray-700 dark:text-gray-300" />
-                  <span className="text-lg font-light text-gray-900 dark:text-white">
+                  <User size={20} className="text-text dark:text-text-muted" />
+                  <span className="text-lg font-light text-text dark:text-text">
                     {mensajes.length}
                   </span>
                 </div>
-                <p className="text-gray-600 dark:text-gray-400 text-sm font-light">Total Contactos</p>
+                <p className="text-text dark:text-text-muted text-sm font-light">Total Contactos</p>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <Mail size={20} className="text-gray-700 dark:text-gray-300" />
-                  <span className="text-lg font-light text-gray-900 dark:text-white">
+                  <Mail size={20} className="text-text dark:text-text-muted" />
+                  <span className="text-lg font-light text-text dark:text-text">
                     {
                       mensajes.filter((m) => !m.status || m.status === "new")
                         .length
                     }
                   </span>
                 </div>
-                <p className="text-gray-600 dark:text-gray-400 text-sm font-light">Mensajes Nuevos</p>
+                <p className="text-text dark:text-text-muted text-sm font-light">Mensajes Nuevos</p>
               </div>
               <div className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-2">
-                  <Calendar size={20} className="text-gray-700 dark:text-gray-300" />
-                  <span className="text-lg font-light text-gray-900 dark:text-white">
+                  <Calendar size={20} className="text-text dark:text-text-muted" />
+                  <span className="text-lg font-light text-text dark:text-text">
                     {mensajes.length > 0
                       ? formatDate(
                           mensajes.sort(
@@ -304,35 +304,35 @@ const AdminMensajes = () => {
                       : "N/A"}
                   </span>
                 </div>
-                <p className="text-gray-600 dark:text-gray-400 text-sm font-light">Último Contacto</p>
+                <p className="text-text dark:text-text-muted text-sm font-light">Último Contacto</p>
               </div>
             </div>
           </motion.div>
 
           {/* Desktop Table View */}
-          <div className="hidden md:block overflow-x-auto bg-white dark:bg-[#0f0f0f] rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
+          <div className="hidden md:block overflow-x-auto bg-surface dark:bg-[#0f0f0f] rounded-2xl shadow-sm border border-strong dark:border-strong">
             <table className="min-w-full text-sm">
-              <thead className="border-b border-gray-200 dark:border-gray-800">
+              <thead className="border-b border-strong dark:border-strong">
                 <tr>
-                  <th className="p-4 text-left font-medium text-gray-700 dark:text-gray-300">
+                  <th className="p-4 text-left font-medium text-text dark:text-text-muted">
                     ID
                   </th>
-                  <th className="p-4 text-left font-semibold text-gray-400">
+                  <th className="p-4 text-left font-semibold text-text-muted">
                     Fecha
                   </th>
-                  <th className="p-4 text-left font-semibold text-gray-400">
+                  <th className="p-4 text-left font-semibold text-text-muted">
                     Nombre
                   </th>
-                  <th className="p-4 text-left font-semibold text-gray-400">
+                  <th className="p-4 text-left font-semibold text-text-muted">
                     Email
                   </th>
-                  <th className="p-4 text-left font-semibold text-gray-400">
+                  <th className="p-4 text-left font-semibold text-text-muted">
                     Mensaje
                   </th>
-                  <th className="p-4 text-left font-semibold text-gray-400">
+                  <th className="p-4 text-left font-semibold text-text-muted">
                     IP / Navegador
                   </th>
-                  <th className="p-4 text-left font-semibold text-gray-400">
+                  <th className="p-4 text-left font-semibold text-text-muted">
                     Acciones
                   </th>
                 </tr>
@@ -342,14 +342,14 @@ const AdminMensajes = () => {
                   mensajes.map((mensaje) => (
                     <tr
                       key={mensaje.id}
-                      className="border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-[#151515] transition-colors"
+                      className="border-b border-strong dark:border-strong hover:bg-gray-50 dark:hover:bg-[#151515] transition-colors"
                     >
-                      <td className="p-4 whitespace-nowrap text-gray-600 dark:text-gray-400 font-light">
+                      <td className="p-4 whitespace-nowrap text-text dark:text-text-muted font-light">
                         #{mensaje.id}
                       </td>
-                      <td className="p-4 whitespace-nowrap text-gray-600 dark:text-gray-400 font-light">
+                      <td className="p-4 whitespace-nowrap text-text dark:text-text-muted font-light">
                         <div className="flex items-center gap-2">
-                          <Calendar size={14} className="text-gray-500 dark:text-gray-500" />
+                          <Calendar size={14} className="text-text dark:text-text" />
                           <span className="text-xs">
                             {formatDate(mensaje.created_at || mensaje.fecha)}
                           </span>
@@ -357,18 +357,18 @@ const AdminMensajes = () => {
                       </td>
                       <td className="p-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
-                          <User size={16} className="text-gray-500 dark:text-gray-500" />
-                          <span className="font-light text-gray-900 dark:text-white">
+                          <User size={16} className="text-text dark:text-text" />
+                          <span className="font-light text-text dark:text-text">
                             {mensaje.name || mensaje.nombre}
                           </span>
                         </div>
                       </td>
                       <td className="p-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
-                          <Mail size={16} className="text-gray-500 dark:text-gray-500" />
+                          <Mail size={16} className="text-text dark:text-text" />
                           <a
                             href={`mailto:${mensaje.email}`}
-                            className="text-gray-900 dark:text-white hover:underline text-sm font-light"
+                            className="text-text dark:text-text hover:underline text-sm font-light"
                           >
                             {mensaje.email}
                           </a>
@@ -379,7 +379,7 @@ const AdminMensajes = () => {
                                 `email-${mensaje.id}`
                               )
                             }
-                            className="text-gray-400 hover:text-white transition-colors"
+                            className="text-text-muted hover:text-text transition-colors"
                             title="Copiar email"
                           >
                             {copiedItem === `email-${mensaje.id}` ? (
@@ -390,21 +390,21 @@ const AdminMensajes = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="p-4 max-w-xs text-gray-600 dark:text-gray-400 whitespace-pre-wrap break-words font-light">
+                      <td className="p-4 max-w-xs text-text dark:text-text-muted whitespace-pre-wrap break-words font-light">
                         <div className="flex items-start gap-2">
                           <MessageSquare
                             size={16}
-                            className="text-gray-500 dark:text-gray-500 mt-0.5 flex-shrink-0"
+                            className="text-text dark:text-text mt-0.5 flex-shrink-0"
                           />
                           <span className="text-sm">
                             {mensaje.message || mensaje.mensaje}
                           </span>
                         </div>
                       </td>
-                      <td className="p-4 max-w-xs text-gray-600 dark:text-gray-400 font-light">
+                      <td className="p-4 max-w-xs text-text dark:text-text-muted font-light">
                         <div className="space-y-2">
                           <div className="flex items-center gap-2">
-                            <Globe size={14} className="text-gray-500 dark:text-gray-500" />
+                            <Globe size={14} className="text-text dark:text-text" />
                             <span className="text-xs font-mono">
                               {mensaje.ip_address || "N/A"}
                             </span>
@@ -415,7 +415,7 @@ const AdminMensajes = () => {
                                   `ip-${mensaje.id}`
                                 )
                               }
-                              className="text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+                              className="text-text dark:text-text hover:text-text dark:hover:text-text transition-colors"
                               title="Copiar IP"
                             >
                               {copiedItem === `ip-${mensaje.id}` ? (
@@ -429,7 +429,7 @@ const AdminMensajes = () => {
                             <div className="flex items-start gap-2">
                               <Monitor
                                 size={12}
-                                className="text-gray-500 dark:text-gray-500 mt-0.5 flex-shrink-0"
+                                className="text-text dark:text-text mt-0.5 flex-shrink-0"
                               />
                               <span
                                 className="text-xs truncate"
@@ -454,7 +454,7 @@ const AdminMensajes = () => {
                                 `full-${mensaje.id}`
                               )
                             }
-                            className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                            className="text-text dark:text-text-muted hover:text-text dark:hover:text-text transition-colors"
                             title="Copiar información completa"
                           >
                             {copiedItem === `full-${mensaje.id}` ? (
@@ -476,7 +476,7 @@ const AdminMensajes = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" className="text-center p-8 text-gray-600 dark:text-gray-400 font-light">
+                    <td colSpan="7" className="text-center p-8 text-text dark:text-text-muted font-light">
                       Aún no has recibido ningún mensaje.
                     </td>
                   </tr>
@@ -491,17 +491,17 @@ const AdminMensajes = () => {
               mensajes.map((mensaje) => (
                 <div
                   key={mensaje.id}
-                  className="bg-white dark:bg-[#0f0f0f] rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm p-4 space-y-3"
+                  className="bg-surface dark:bg-[#0f0f0f] rounded-2xl border border-strong dark:border-strong shadow-sm p-4 space-y-3"
                 >
                   <div className="flex justify-between items-start">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <User size={16} className="text-gray-500 dark:text-gray-500" />
-                        <h3 className="text-gray-900 dark:text-white font-light text-sm sm:text-base truncate">
+                        <User size={16} className="text-text dark:text-text" />
+                        <h3 className="text-text dark:text-text font-light text-sm sm:text-base truncate">
                           {mensaje.name || mensaje.nombre}
                         </h3>
                       </div>
-                      <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400 text-xs font-light">
+                      <div className="flex items-center gap-2 text-text dark:text-text-muted text-xs font-light">
                         <Calendar size={12} />
                         <span>
                           #{mensaje.id} •{" "}
@@ -519,7 +519,7 @@ const AdminMensajes = () => {
                             `full-${mensaje.id}`
                           )
                         }
-                        className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors p-1"
+                        className="text-text dark:text-text-muted hover:text-text dark:hover:text-text transition-colors p-1"
                         title="Copiar información completa"
                       >
                         {copiedItem === `full-${mensaje.id}` ? (
@@ -542,16 +542,16 @@ const AdminMensajes = () => {
                     <div className="flex items-center gap-2">
                       <Mail
                         size={16}
-                        className="text-gray-500 dark:text-gray-500 flex-shrink-0"
+                        className="text-text dark:text-text flex-shrink-0"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="text-gray-600 dark:text-gray-400 text-xs mb-1 font-light">
+                        <p className="text-text dark:text-text-muted text-xs mb-1 font-light">
                           Email de contacto:
                         </p>
                         <div className="flex items-center gap-2">
                           <a
                             href={`mailto:${mensaje.email}`}
-                            className="text-gray-900 dark:text-white hover:underline text-xs sm:text-sm break-all font-light"
+                            className="text-text dark:text-text hover:underline text-xs sm:text-sm break-all font-light"
                           >
                             {mensaje.email}
                           </a>
@@ -562,7 +562,7 @@ const AdminMensajes = () => {
                                 `email-${mensaje.id}`
                               )
                             }
-                            className="text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+                            className="text-text dark:text-text hover:text-text dark:hover:text-text transition-colors"
                             title="Copiar email"
                           >
                             {copiedItem === `email-${mensaje.id}` ? (
@@ -578,11 +578,11 @@ const AdminMensajes = () => {
                     <div className="flex items-start gap-2">
                       <MessageSquare
                         size={16}
-                        className="text-gray-500 dark:text-gray-500 flex-shrink-0 mt-0.5"
+                        className="text-text dark:text-text flex-shrink-0 mt-0.5"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="text-gray-600 dark:text-gray-400 text-xs mb-1 font-light">Mensaje:</p>
-                        <p className="text-gray-700 dark:text-gray-300 text-xs sm:text-sm whitespace-pre-wrap break-words font-light">
+                        <p className="text-text dark:text-text-muted text-xs mb-1 font-light">Mensaje:</p>
+                        <p className="text-text dark:text-text-muted text-xs sm:text-sm whitespace-pre-wrap break-words font-light">
                           {mensaje.message || mensaje.mensaje}
                         </p>
                       </div>
@@ -591,14 +591,14 @@ const AdminMensajes = () => {
                     <div className="flex items-center gap-2">
                       <Globe
                         size={16}
-                        className="text-gray-500 dark:text-gray-500 flex-shrink-0"
+                        className="text-text dark:text-text flex-shrink-0"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="text-gray-600 dark:text-gray-400 text-xs mb-1 font-light">
+                        <p className="text-text dark:text-text-muted text-xs mb-1 font-light">
                           IP Address:
                         </p>
                         <div className="flex items-center gap-2">
-                          <span className="text-gray-700 dark:text-gray-300 text-xs font-mono font-light">
+                          <span className="text-text dark:text-text-muted text-xs font-mono font-light">
                             {mensaje.ip_address || "N/A"}
                           </span>
                           <button
@@ -608,7 +608,7 @@ const AdminMensajes = () => {
                                 `ip-${mensaje.id}`
                               )
                             }
-                            className="text-gray-500 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+                            className="text-text dark:text-text hover:text-text dark:hover:text-text transition-colors"
                             title="Copiar IP"
                           >
                             {copiedItem === `ip-${mensaje.id}` ? (
@@ -625,14 +625,14 @@ const AdminMensajes = () => {
                       <div className="flex items-start gap-2">
                         <Monitor
                           size={16}
-                          className="text-gray-500 dark:text-gray-500 flex-shrink-0 mt-0.5"
+                          className="text-text dark:text-text flex-shrink-0 mt-0.5"
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-gray-600 dark:text-gray-400 text-xs mb-1 font-light">
+                          <p className="text-text dark:text-text-muted text-xs mb-1 font-light">
                             Navegador:
                           </p>
                           <p
-                            className="text-gray-700 dark:text-gray-300 text-xs break-words font-light"
+                            className="text-text dark:text-text-muted text-xs break-words font-light"
                             title={mensaje.user_agent}
                           >
                             {mensaje.user_agent.length > 50
@@ -646,7 +646,7 @@ const AdminMensajes = () => {
                 </div>
               ))
             ) : (
-              <div className="text-center p-8 text-gray-600 dark:text-gray-400 bg-white dark:bg-[#0f0f0f] rounded-xl border border-gray-200 dark:border-gray-800 font-light">
+              <div className="text-center p-8 text-text dark:text-text-muted bg-surface dark:bg-[#0f0f0f] rounded-2xl border border-strong dark:border-strong font-light">
                 Aún no has recibido ningún mensaje.
               </div>
             )}
@@ -660,31 +660,31 @@ const AdminMensajes = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-3 sm:p-4 z-50 backdrop-blur-sm"
+            className="fixed inset-0 bg-background bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-3 sm:p-4 z-50 backdrop-blur-sm"
           >
             <motion.div
               initial={{ scale: 0.7, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.7, opacity: 0 }}
-              className="bg-white dark:bg-[#0f0f0f] rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 max-w-sm w-full text-center border border-gray-200 dark:border-gray-800"
+              className="bg-surface dark:bg-[#0f0f0f] rounded-2xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 max-w-sm w-full text-center border border-strong dark:border-strong"
             >
               <AlertTriangle className="text-yellow-600 dark:text-yellow-400 text-3xl sm:text-4xl md:text-5xl mx-auto mb-3 sm:mb-4" />
-              <h2 className="text-lg sm:text-xl md:text-2xl font-light mb-2 text-gray-900 dark:text-white">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-light mb-2 text-text dark:text-text">
                 Confirmar Eliminación
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-4 sm:mb-6 md:mb-8 text-sm sm:text-base font-light">
+              <p className="text-text dark:text-text-muted mb-4 sm:mb-6 md:mb-8 text-sm sm:text-base font-light">
                 ¿Estás seguro? Esta acción no se puede deshacer.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
                 <button
                   onClick={cancelDelete}
-                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-[#151515] transition-colors font-light text-gray-900 dark:text-white text-sm sm:text-base order-2 sm:order-1"
+                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-2xl bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong hover:bg-gray-50 dark:hover:bg-[#151515] transition-colors font-light text-text dark:text-text text-sm sm:text-base order-2 sm:order-1"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={confirmDelete}
-                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors font-light text-sm sm:text-base order-1 sm:order-2"
+                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-2xl bg-background dark:bg-surface text-text dark:text-text hover:bg-background dark:hover:bg-surface transition-colors font-light text-sm sm:text-base order-1 sm:order-2"
                 >
                   Sí, eliminar
                 </button>

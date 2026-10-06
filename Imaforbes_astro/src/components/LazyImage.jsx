@@ -35,8 +35,8 @@ const LazyImage = ({ src, alt, className, ...props }) => {
   return (
     <div ref={imgRef} className={`relative overflow-hidden ${className}`}>
       {!isLoaded && (
-        <div className="absolute inset-0 bg-gray-300 animate-pulse flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+        <div className="absolute inset-0 bg-surface animate-pulse flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-strong border-t-transparent rounded-full animate-spin" />
         </div>
       )}
 

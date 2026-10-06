@@ -366,21 +366,21 @@ const AdminBlog = () => {
 
   if (loading)
     return (
-      <div className="min-h-screen bg-white dark:bg-[#0a0a0a] flex items-center justify-center text-gray-900 dark:text-white">
+      <div className="min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center text-text dark:text-text">
         <p className="font-light">Cargando posts...</p>
       </div>
     );
 
   if (error)
     return (
-      <div className="min-h-screen bg-white dark:bg-[#0a0a0a] flex items-center justify-center text-red-600 dark:text-red-400">
+      <div className="min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center text-red-600 dark:text-red-400">
         <p className="font-light">Error: {error}</p>
       </div>
     );
 
   return (
     <>
-      <div className="relative min-h-screen bg-white dark:bg-[#0a0a0a] text-gray-900 dark:text-white p-2 sm:p-4 md:p-8">
+      <div className="relative min-h-screen bg-surface dark:bg-[#0a0a0a] text-text dark:text-text p-2 sm:p-4 md:p-8">
         <HeroBackground />
         <div className="relative z-10 container mx-auto max-w-7xl">
           {/* Page Title Section - More Prominent */}
@@ -389,14 +389,14 @@ const AdminBlog = () => {
               <div className="flex items-center gap-4">
                 <motion.button
                   onClick={() => navigate("/admin")}
-                  className="p-2 bg-white dark:bg-[#0f0f0f] border border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-[#151515] rounded-lg transition-colors"
+                  className="p-2 bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong hover:bg-gray-50 dark:hover:bg-[#151515] rounded-2xl transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <ArrowLeft size={20} className="text-gray-900 dark:text-white" />
+                  <ArrowLeft size={20} className="text-text dark:text-text" />
                 </motion.button>
                 <motion.h1
-                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight text-gray-900 dark:text-white"
+                  className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight text-text dark:text-text"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6 }}
@@ -408,7 +408,7 @@ const AdminBlog = () => {
               <div className="flex items-center gap-2">
                 <motion.button
                   onClick={handleCreateNew}
-                  className="group flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs sm:text-sm font-light rounded-xl transition-all duration-300 hover:bg-gray-800 dark:hover:bg-gray-100"
+                  className="group flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-background dark:bg-surface text-text dark:text-text text-xs sm:text-sm font-light rounded-2xl transition-all duration-300 hover:bg-background dark:hover:bg-surface"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 }}
@@ -419,7 +419,7 @@ const AdminBlog = () => {
                 </motion.button>
                 <motion.button
                   onClick={handleLogout}
-                  className="group flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-white dark:bg-[#0f0f0f] border border-gray-200 dark:border-gray-800 text-gray-900 dark:text-white text-xs sm:text-sm font-light rounded-xl transition-all duration-300 hover:bg-gray-50 dark:hover:bg-[#151515]"
+                  className="group flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text text-xs sm:text-sm font-light rounded-2xl transition-all duration-300 hover:bg-gray-50 dark:hover:bg-[#151515]"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
@@ -440,26 +440,26 @@ const AdminBlog = () => {
             >
               {/* Status Filters */}
               <div className="flex flex-wrap items-center gap-2">
-                <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <div className="flex items-center gap-2 text-sm text-text dark:text-text-muted">
                   <Filter size={16} />
                   <span className="font-light">Estado:</span>
                 </div>
                 <button
                   onClick={() => setStatusFilter("all")}
-                  className={`px-4 py-2 rounded-xl text-sm font-light transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 ${
                     statusFilter === "all"
-                      ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                      : "bg-white dark:bg-[#0f0f0f] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515]"
+                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
                   Todos
                 </button>
                 <button
                   onClick={() => setStatusFilter("published")}
-                  className={`px-4 py-2 rounded-xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
+                  className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
                     statusFilter === "published"
-                      ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                      : "bg-white dark:bg-[#0f0f0f] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515]"
+                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
                   <CheckCircle size={14} />
@@ -467,10 +467,10 @@ const AdminBlog = () => {
                 </button>
                 <button
                   onClick={() => setStatusFilter("draft")}
-                  className={`px-4 py-2 rounded-xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
+                  className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
                     statusFilter === "draft"
-                      ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                      : "bg-white dark:bg-[#0f0f0f] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515]"
+                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
                   <FileEdit size={14} />
@@ -478,10 +478,10 @@ const AdminBlog = () => {
                 </button>
                 <button
                   onClick={() => setStatusFilter("archived")}
-                  className={`px-4 py-2 rounded-xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
+                  className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
                     statusFilter === "archived"
-                      ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                      : "bg-white dark:bg-[#0f0f0f] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515]"
+                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
                   <Archive size={14} />
@@ -491,26 +491,26 @@ const AdminBlog = () => {
 
               {/* Type Filters */}
               <div className="flex flex-wrap items-center gap-2">
-                <div className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <div className="flex items-center gap-2 text-sm text-text dark:text-text-muted">
                   <Filter size={16} />
                   <span className="font-light">Tipo:</span>
                 </div>
                 <button
                   onClick={() => setTypeFilter("all")}
-                  className={`px-4 py-2 rounded-xl text-sm font-light transition-all duration-200 ${
+                  className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 ${
                     typeFilter === "all"
-                      ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                      : "bg-white dark:bg-[#0f0f0f] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515]"
+                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
                   Todos
                 </button>
                 <button
                   onClick={() => setTypeFilter("poem")}
-                  className={`px-4 py-2 rounded-xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
+                  className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
                     typeFilter === "poem"
-                      ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                      : "bg-white dark:bg-[#0f0f0f] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515]"
+                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
                   <FileText size={14} />
@@ -518,10 +518,10 @@ const AdminBlog = () => {
                 </button>
                 <button
                   onClick={() => setTypeFilter("letter")}
-                  className={`px-4 py-2 rounded-xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
+                  className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
                     typeFilter === "letter"
-                      ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                      : "bg-white dark:bg-[#0f0f0f] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515]"
+                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
                   <Mail size={14} />
@@ -529,10 +529,10 @@ const AdminBlog = () => {
                 </button>
                 <button
                   onClick={() => setTypeFilter("article")}
-                  className={`px-4 py-2 rounded-xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
+                  className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
                     typeFilter === "article"
-                      ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                      : "bg-white dark:bg-[#0f0f0f] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515]"
+                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
                   <FileText size={14} />
@@ -541,7 +541,7 @@ const AdminBlog = () => {
               </div>
 
               {/* Results Count */}
-              <div className="text-sm text-gray-600 dark:text-gray-400 font-light">
+              <div className="text-sm text-text dark:text-text-muted font-light">
                 {posts.length > 0 ? (
                   <>
                     Mostrando {posts.length} {posts.length === 1 ? "post" : "posts"}
@@ -563,15 +563,15 @@ const AdminBlog = () => {
                   key={post.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-white dark:bg-[#0f0f0f] rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm p-4 sm:p-6 space-y-4"
+                  className="bg-surface dark:bg-[#0f0f0f] rounded-2xl border border-strong dark:border-strong shadow-sm p-4 sm:p-6 space-y-4"
                 >
                   {/* Blog Image Preview */}
                   {post.image_url && (
-                    <div className="mb-3 rounded-lg overflow-hidden">
+                    <div className="mb-3 rounded-2xl overflow-hidden">
                       <img
                         src={getImageUrl(post.image_url)}
                         alt={post.title}
-                        className="w-full h-32 object-cover rounded-lg"
+                        className="w-full h-32 object-cover rounded-2xl"
                         onError={(e) => {
                           e.target.style.display = 'none';
                         }}
@@ -583,35 +583,35 @@ const AdminBlog = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         {post.type === "poem" ? (
-                          <FileText size={16} className="text-gray-500 dark:text-gray-500" />
+                          <FileText size={16} className="text-text dark:text-text" />
                         ) : post.type === "letter" ? (
-                          <Mail size={16} className="text-gray-500 dark:text-gray-500" />
+                          <Mail size={16} className="text-text dark:text-text" />
                         ) : (
-                          <FileText size={16} className="text-gray-500 dark:text-gray-500" />
+                          <FileText size={16} className="text-text dark:text-text" />
                         )}
-                        <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-[#1a1a1a] rounded-full text-gray-700 dark:text-gray-300 font-light">
+                        <span className="text-xs px-2 py-1 bg-surface dark:bg-[#1a1a1a] rounded-full text-text dark:text-text-muted font-light">
                           {post.type === "poem" ? "Poema" : post.type === "letter" ? "Carta" : "Artículo"}
                         </span>
                         {post.status === "published" ? (
-                          <Eye size={14} className="text-gray-500 dark:text-gray-500" />
+                          <Eye size={14} className="text-text dark:text-text" />
                         ) : (
-                          <EyeOff size={14} className="text-gray-400 dark:text-gray-600" />
+                          <EyeOff size={14} className="text-text-muted dark:text-text" />
                         )}
                       </div>
-                      <h3 className="text-lg font-light text-gray-900 dark:text-white mb-2 line-clamp-2">
+                      <h3 className="text-lg font-light text-text dark:text-text mb-2 line-clamp-2">
                         {post.title}
                       </h3>
-                      <p className="text-gray-600 dark:text-gray-400 text-xs flex items-center gap-1 mb-2 font-light">
+                      <p className="text-text dark:text-text-muted text-xs flex items-center gap-1 mb-2 font-light">
                         <Calendar size={12} />
                         {formatDate(post.created_at)}
                       </p>
                       {/* Blog Statistics */}
-                      <div className="flex items-center gap-4 mt-2 pt-2 border-t border-gray-200 dark:border-gray-800">
-                        <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400 text-xs font-light">
+                      <div className="flex items-center gap-4 mt-2 pt-2 border-t border-strong dark:border-strong">
+                        <div className="flex items-center gap-1 text-text dark:text-text-muted text-xs font-light">
                           <Eye size={12} />
                           <span>{post.views_count || 0} vistas</span>
                         </div>
-                        <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400 text-xs font-light">
+                        <div className="flex items-center gap-1 text-text dark:text-text-muted text-xs font-light">
                           <Heart size={12} />
                           <span>{post.likes_count || 0} likes</span>
                         </div>
@@ -619,14 +619,14 @@ const AdminBlog = () => {
                     </div>
                   </div>
 
-                  <p className="text-gray-700 dark:text-gray-300 text-sm line-clamp-4 whitespace-pre-wrap font-light">
+                  <p className="text-text dark:text-text-muted text-sm line-clamp-4 whitespace-pre-wrap font-light">
                     {post.content}
                   </p>
 
-                  <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-800">
+                  <div className="flex items-center gap-2 pt-2 border-t border-strong dark:border-strong">
                     <button
                       onClick={() => handleEdit(post)}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] text-xs rounded-xl transition-colors font-light"
+                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515] text-xs rounded-2xl transition-colors font-light"
                     >
                       <Edit size={14} />
                       Editar
@@ -634,7 +634,7 @@ const AdminBlog = () => {
                     <button
                       onClick={() => handleDeleteClick(post)}
                       aria-label="Eliminar post"
-                      className="flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-[#151515] text-xs rounded-xl transition-colors font-light"
+                      className="flex items-center justify-center gap-2 px-3 py-2 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-[#151515] text-xs rounded-2xl transition-colors font-light"
                     >
                       <Trash2 size={14} />
                     </button>
@@ -642,7 +642,7 @@ const AdminBlog = () => {
                 </motion.div>
               ))
             ) : (
-              <div className="col-span-full text-center p-8 text-gray-600 dark:text-gray-400 bg-white dark:bg-[#0f0f0f] rounded-xl border border-gray-200 dark:border-gray-800 font-light">
+              <div className="col-span-full text-center p-8 text-text dark:text-text-muted bg-surface dark:bg-[#0f0f0f] rounded-2xl border border-strong dark:border-strong font-light">
                 No hay posts aún. Crea tu primer poema, carta o artículo.
               </div>
             )}
@@ -657,31 +657,31 @@ const AdminBlog = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-0 sm:p-4 z-50 backdrop-blur-sm"
+            className="fixed inset-0 bg-background/50 dark:bg-background/70 flex items-center justify-center p-0 sm:p-4 z-50 backdrop-blur-sm"
             onClick={() => setShowModal(false)}
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="bg-white dark:bg-[#0f0f0f] flex flex-col w-full h-full sm:h-auto sm:max-h-[95vh] sm:rounded-2xl shadow-2xl max-w-5xl border-0 sm:border border-gray-200 dark:border-gray-800 relative overflow-hidden"
+              className="bg-surface dark:bg-[#0f0f0f] flex flex-col w-full h-full sm:h-auto sm:max-h-[95vh] sm:rounded-2xl shadow-2xl max-w-5xl border-0 sm:border border-strong dark:border-strong relative overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Sticky Header */}
-              <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-100 dark:border-gray-800 shrink-0 bg-white dark:bg-[#0f0f0f] z-10">
-                <h2 className="text-xl sm:text-2xl font-light text-gray-900 dark:text-white">
+              <div className="flex justify-between items-center p-4 sm:p-6 border-b border-strong dark:border-strong shrink-0 bg-surface dark:bg-[#0f0f0f] z-10">
+                <h2 className="text-xl sm:text-2xl font-light text-text dark:text-text">
                   {editingPost ? "Editar Post" : "Nuevo Post"}
                 </h2>
                 <div className="flex items-center gap-2 sm:gap-3">
                   <button
                     onClick={() => setShowModal(false)}
-                    className="hidden sm:block px-4 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] rounded-xl transition-colors font-light text-sm"
+                    className="hidden sm:block px-4 py-2 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515] rounded-2xl transition-colors font-light text-sm"
                   >
                     Cancelar
                   </button>
                   <button
                     onClick={handleSave}
-                    className="px-4 sm:px-6 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 rounded-xl transition-colors flex items-center gap-2 font-light text-sm"
+                    className="px-4 sm:px-6 py-2 bg-background dark:bg-surface text-text dark:text-text hover:bg-background dark:hover:bg-surface rounded-2xl transition-colors flex items-center gap-2 font-light text-sm"
                   >
                     <Save size={16} />
                     Guardar
@@ -689,7 +689,7 @@ const AdminBlog = () => {
                   <button
                     onClick={() => setShowModal(false)}
                     aria-label="Cerrar modal"
-                    className="p-2 sm:hidden text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                    className="p-2 sm:hidden text-text dark:text-text-muted hover:text-text dark:hover:text-text transition-colors"
                   >
                     <X size={24} />
                   </button>
@@ -700,7 +700,7 @@ const AdminBlog = () => {
               <div className="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
+                    <label className="block text-sm font-medium text-text dark:text-text-muted mb-2 font-light">
                       Título
                     </label>
                     <input
@@ -709,13 +709,13 @@ const AdminBlog = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, title: e.target.value })
                       }
-                      className="w-full px-4 py-3 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light text-lg"
+                      className="w-full px-4 py-3 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong rounded-2xl text-text dark:text-text focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light text-lg"
                       placeholder="Título del poema, carta o artículo"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
+                    <label className="block text-sm font-medium text-text dark:text-text-muted mb-2 font-light">
                       Tipo
                     </label>
                     <select
@@ -723,7 +723,7 @@ const AdminBlog = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, type: e.target.value })
                       }
-                      className="w-full px-4 py-3 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light text-lg"
+                      className="w-full px-4 py-3 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong rounded-2xl text-text dark:text-text focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light text-lg"
                     >
                       <option value="poem">Poema</option>
                       <option value="letter">Carta</option>
@@ -733,7 +733,7 @@ const AdminBlog = () => {
                 </div>
 
                 <div className="flex-1 flex flex-col min-h-[45vh]">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
+                  <label className="block text-sm font-medium text-text dark:text-text-muted mb-2 font-light">
                     Contenido
                   </label>
                   <textarea
@@ -741,14 +741,14 @@ const AdminBlog = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, content: e.target.value })
                     }
-                    className="flex-1 w-full px-5 py-4 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white resize-none whitespace-pre-wrap transition-all duration-300 font-light text-lg leading-relaxed"
+                    className="flex-1 w-full px-5 py-4 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong rounded-2xl text-text dark:text-text focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white resize-none whitespace-pre-wrap transition-all duration-300 font-light text-lg leading-relaxed"
                     placeholder="Escribe tu poema, carta o artículo aquí. Toma todo el espacio que necesites..."
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-gray-100 dark:border-gray-800">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-strong dark:border-strong">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
+                    <label className="block text-sm font-medium text-text dark:text-text-muted mb-2 font-light">
                       Imagen (Opcional)
                     </label>
                     
@@ -763,7 +763,7 @@ const AdminBlog = () => {
                             className="hidden"
                             disabled={uploadingImage}
                           />
-                          <div className="flex items-center justify-center gap-2 px-4 py-3 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-[#151515] transition-colors duration-200 font-light">
+                          <div className="flex items-center justify-center gap-2 px-4 py-3 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong rounded-2xl text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515] transition-colors duration-200 font-light">
                             <Upload size={18} />
                             <span className="text-sm truncate max-w-[150px]">
                               {selectedFile ? selectedFile.name : "Seleccionar imagen"}
@@ -775,7 +775,7 @@ const AdminBlog = () => {
                             type="button"
                             onClick={handleUploadImage}
                             disabled={uploadingImage}
-                            className="px-4 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:cursor-not-allowed rounded-xl transition-colors duration-200 flex items-center gap-2 font-light"
+                            className="px-4 py-3 bg-background dark:bg-surface text-text dark:text-text hover:bg-background dark:hover:bg-surface disabled:bg-surface dark:disabled:bg-background disabled:cursor-not-allowed rounded-2xl transition-colors duration-200 flex items-center gap-2 font-light"
                           >
                             {uploadingImage ? (
                               <>
@@ -794,7 +794,7 @@ const AdminBlog = () => {
 
                       {/* Upload Error */}
                       {uploadError && (
-                        <div className="px-3 py-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-600 dark:text-red-400 text-sm font-light">
+                        <div className="px-3 py-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl text-red-600 dark:text-red-400 text-sm font-light">
                           {uploadError}
                         </div>
                       )}
@@ -802,11 +802,11 @@ const AdminBlog = () => {
                       {/* Selected File Info and Preview */}
                       {selectedFile && !uploadingImage && (
                         <div className="space-y-2">
-                          <div className="px-3 py-2 bg-gray-50 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-lg text-gray-700 dark:text-gray-300 text-xs font-light">
+                          <div className="px-3 py-2 bg-gray-50 dark:bg-[#1a1a1a] border border-strong dark:border-strong rounded-2xl text-text dark:text-text-muted text-xs font-light">
                             Archivo: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
                           </div>
                           {/* Preview of selected file */}
-                          <div className="relative rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700">
+                          <div className="relative rounded-2xl overflow-hidden border border-strong dark:border-strong">
                             <img
                               src={URL.createObjectURL(selectedFile)}
                               alt="Preview"
@@ -822,9 +822,9 @@ const AdminBlog = () => {
                     {/* Manual URL Input */}
                     <div className="relative">
                       <div className="flex items-center gap-2 mb-2">
-                        <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700"></div>
-                        <span className="text-xs text-gray-600 dark:text-gray-400 font-light">o</span>
-                        <div className="flex-1 h-px bg-gray-300 dark:bg-gray-700"></div>
+                        <div className="flex-1 h-px bg-surface dark:bg-background"></div>
+                        <span className="text-xs text-text dark:text-text-muted font-light">o</span>
+                        <div className="flex-1 h-px bg-surface dark:bg-background"></div>
                       </div>
                       <input
                         type="text"
@@ -833,20 +833,20 @@ const AdminBlog = () => {
                           setFormData({ ...formData, image_url: e.target.value });
                           setImageError(false);
                         }}
-                        className="w-full px-4 py-2 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light text-sm"
+                        className="w-full px-4 py-2 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong rounded-2xl text-text dark:text-text focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light text-sm"
                         placeholder="Pega una URL de imagen (/uploads/...)"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
+                    <label className="block text-sm font-medium text-text dark:text-text-muted mb-2 font-light">
                       Vista Previa de Imagen
                     </label>
                     {/* Image Preview */}
-                    <div className="relative rounded-xl overflow-hidden border border-gray-300 dark:border-gray-700 h-40 sm:h-full min-h-[10rem]">
+                    <div className="relative rounded-2xl overflow-hidden border border-strong dark:border-strong h-40 sm:h-full min-h-[10rem]">
                       {imageError || !formData.image_url ? (
-                        <div className="w-full h-full bg-gray-50 dark:bg-[#0a0a0a] flex items-center justify-center text-gray-400 dark:text-gray-600 text-sm font-light text-center p-4">
+                        <div className="w-full h-full bg-gray-50 dark:bg-[#0a0a0a] flex items-center justify-center text-text-muted dark:text-text text-sm font-light text-center p-4">
                           {formData.image_url ? "Imagen no disponible" : "No has seleccionado ninguna imagen principal"}
                         </div>
                       ) : (
@@ -865,7 +865,7 @@ const AdminBlog = () => {
                             setFormData({ ...formData, image_url: "" });
                             setImageError(false);
                           }}
-                          className="absolute top-2 right-2 p-1.5 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-[#151515] rounded-full transition-colors shadow-sm"
+                          className="absolute top-2 right-2 p-1.5 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong text-red-600 dark:text-red-400 hover:bg-gray-50 dark:hover:bg-[#151515] rounded-full transition-colors shadow-sm"
                           title="Eliminar imagen"
                         >
                           <X size={16} />
@@ -876,7 +876,7 @@ const AdminBlog = () => {
                 </div>
 
                 <div className="pt-2">
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 font-light">
+                  <label className="block text-sm font-medium text-text dark:text-text-muted mb-2 font-light">
                     Estado de Publicación
                   </label>
                   <select
@@ -884,7 +884,7 @@ const AdminBlog = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, status: e.target.value })
                     }
-                    className="w-full sm:w-1/2 px-4 py-3 bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light text-lg"
+                    className="w-full sm:w-1/2 px-4 py-3 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong rounded-2xl text-text dark:text-text focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-white transition-all duration-300 font-light text-lg"
                   >
                     <option value="draft">Borrador (Oculto)</option>
                     <option value="published">Publicado (Visible)</option>
@@ -904,19 +904,19 @@ const AdminBlog = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-3 sm:p-4 z-50 backdrop-blur-sm"
+            className="fixed inset-0 bg-background bg-opacity-50 dark:bg-opacity-70 flex items-center justify-center p-3 sm:p-4 z-50 backdrop-blur-sm"
           >
             <motion.div
               initial={{ scale: 0.7, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.7, opacity: 0 }}
-              className="bg-white dark:bg-[#0f0f0f] rounded-xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 max-w-sm w-full text-center border border-gray-200 dark:border-gray-800"
+              className="bg-surface dark:bg-[#0f0f0f] rounded-2xl sm:rounded-2xl shadow-2xl p-4 sm:p-6 md:p-8 max-w-sm w-full text-center border border-strong dark:border-strong"
             >
               <AlertTriangle className="text-yellow-600 dark:text-yellow-400 text-3xl sm:text-4xl md:text-5xl mx-auto mb-3 sm:mb-4" />
-              <h2 className="text-lg sm:text-xl md:text-2xl font-light mb-2 text-gray-900 dark:text-white">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-light mb-2 text-text dark:text-text">
                 Confirmar Eliminación
               </h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-4 sm:mb-6 md:mb-8 text-sm sm:text-base font-light">
+              <p className="text-text dark:text-text-muted mb-4 sm:mb-6 md:mb-8 text-sm sm:text-base font-light">
                 ¿Estás seguro? Esta acción no se puede deshacer.
               </p>
               <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
@@ -925,13 +925,13 @@ const AdminBlog = () => {
                     setShowDeleteModal(false);
                     setPostToDelete(null);
                   }}
-                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl bg-white dark:bg-[#0a0a0a] border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-[#151515] transition-colors font-light text-gray-900 dark:text-white text-sm sm:text-base order-2 sm:order-1"
+                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-2xl bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong hover:bg-gray-50 dark:hover:bg-[#151515] transition-colors font-light text-text dark:text-text text-sm sm:text-base order-2 sm:order-1"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={confirmDelete}
-                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors font-light text-sm sm:text-base order-1 sm:order-2"
+                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-2xl bg-background dark:bg-surface text-text dark:text-text hover:bg-background dark:hover:bg-surface transition-colors font-light text-sm sm:text-base order-1 sm:order-2"
                 >
                   Sí, eliminar
                 </button>
