@@ -207,6 +207,7 @@ const ProjectsPage = () => {
   const [previewImage, setPreviewImage] = useState(null);
 
   const projects = [
+    /*
     {
       id: 10,
       titleKey: "projects.getsoft.title",
@@ -222,6 +223,7 @@ const ProjectsPage = () => {
       repo: "https://github.com/Imaforbes/GETSOFT",
       tags: ["Python 3", "FastAPI", "React 19", "Vite", "SQLite", "Editorial UI", "RBAC"],
     },
+    */
     {
       id: 9,
       titleKey: "projects.worldcup-app.title",
