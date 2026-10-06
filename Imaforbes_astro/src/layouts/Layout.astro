@@ -4,6 +4,7 @@ import '@fontsource/geist-sans/500.css';
 import '@fontsource/geist-sans/700.css';
 import '@fontsource/geist-mono/400.css';
 import '@fontsource/geist-mono/500.css';
+import Analytics from '@vercel/analytics/astro';
 
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
@@ -51,5 +52,6 @@ const { title = "Imaforbes Portfolio", description = "Portfolio profesional de I
       {!isAdmin && <Footer client:visible currentPath={Astro.url.pathname} />}
       {!isAdmin && <ScrollToTopButton client:idle />}
     </div>
+    <Analytics />
   </body>
 </html>
