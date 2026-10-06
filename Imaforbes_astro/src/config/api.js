@@ -6,7 +6,9 @@ export const API_CONFIG = {
     BASE_URL: {
         // Development uses Vite proxy
         development: '',
-        production: 'https://www.imaforbes.com/api_db' 
+        // production used to point to the PHP backend ('https://www.imaforbes.com/api_db')
+        // Now that we serve everything through Astro/Supabase, root is sufficient
+        production: '' 
     },
 
     // Get the correct base URL based on environment
@@ -53,7 +55,9 @@ export const API_CONFIG = {
     CORS: {
         allowedOrigins: [
             'http://localhost:5173',
-            'https://www.imaforbes.com'
+            'http://localhost:4321',
+            'https://www.imaforbes.com',
+            'https://imaforbes.com'
         ]
     }
 };
