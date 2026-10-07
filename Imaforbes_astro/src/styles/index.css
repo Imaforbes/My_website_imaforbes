@@ -43,6 +43,7 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -622,6 +623,8 @@ button, a, input, select, textarea {
 @media (max-width: 768px) {
   .bento-item-half { grid-column: span 12; }
   .bento-item-small { grid-column: span 12; }
+  .bento-item { padding: 1.5rem; }
+  .bento-grid { gap: 1rem; }
 }
 
 @keyframes pulse-subtle {

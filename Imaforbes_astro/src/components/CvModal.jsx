@@ -85,7 +85,7 @@ const CvModal = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 16 }}
             transition={{ type: 'spring', duration: 0.35, bounce: 0.2 }}
-            className="relative w-full max-w-md overflow-hidden rounded-2xl bg-surface border border-border p-6 sm:p-8 shadow-2xl text-text"
+            className="relative w-full max-w-md max-h-[95vh] overflow-y-auto overflow-x-hidden rounded-2xl bg-surface border border-border p-6 sm:p-8 shadow-2xl text-text"
           >
             {/* Top Header */}
             <div className="flex items-center justify-between pb-4 mb-4 border-b border-strong/40 dark:border-strong">

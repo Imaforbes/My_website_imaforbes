@@ -150,7 +150,7 @@ const Header = memo(({ currentPath }) => {
 
             <motion.nav
               initial="hidden" animate="visible" exit="exit" variants={menuVariants}
-              style={{ position: 'fixed', top: '5rem', left: 0, right: 0, background: 'var(--color-bg)', zIndex: 50, borderTop: '1px solid var(--color-border)' }}
+              style={{ position: 'fixed', top: '5rem', left: 0, right: 0, background: 'var(--color-bg)', zIndex: 50, borderTop: '1px solid var(--color-border)', maxHeight: 'calc(100vh - 5rem)', overflowY: 'auto' }}
               className="lg:hidden dark:bg-dark"
               onTouchMove={(e) => e.stopPropagation()}
             >
