@@ -237,7 +237,7 @@ const CvPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f8fa] dark:bg-[#0d1117] text-text dark:text-[#c9d1d9] font-sans py-6 sm:py-10 px-3 sm:px-6 lg:px-8 transition-colors duration-300">
+    <div className="min-h-screen bg-background text-text font-sans py-6 sm:py-10 px-3 sm:px-6 lg:px-8 transition-colors duration-300">
       {/* Top Navigation & Action Bar - Optimized for Mobile & Desktop */}
       <div className="max-w-4xl mx-auto mb-6 sm:mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-strong dark:border-strong pb-5">
         {/* Top Row on Mobile: Back button + Language Switcher */}
@@ -251,13 +251,13 @@ const CvPage = () => {
           </a>
 
           {/* Language Switcher Pill */}
-          <div className="inline-flex items-center gap-1 bg-surface/80 dark:bg-[#161b22] p-1 rounded-full border border-strong dark:border-strong shadow-inner">
+          <div className="inline-flex items-center gap-1 bg-surface p-1 rounded-full border border-border shadow-inner">
             <button
               type="button"
               onClick={() => switchLang('en')}
               className={`px-3.5 py-1 text-xs font-bold rounded-full transition-all duration-200 cursor-pointer ${
                 lang === 'en'
-                  ? 'bg-background text-text dark:bg-[#238636] dark:text-text shadow-sm'
+                  ? 'bg-background text-text shadow-sm border border-border'
                   : 'text-text hover:text-text dark:text-text-muted dark:hover:text-text'
               }`}
             >
@@ -268,7 +268,7 @@ const CvPage = () => {
               onClick={() => switchLang('es')}
               className={`px-3.5 py-1 text-xs font-bold rounded-full transition-all duration-200 cursor-pointer ${
                 lang === 'es'
-                  ? 'bg-background text-text dark:bg-[#238636] dark:text-text shadow-sm'
+                  ? 'bg-background text-text shadow-sm border border-border'
                   : 'text-text hover:text-text dark:text-text-muted dark:hover:text-text'
               }`}
             >
@@ -285,7 +285,7 @@ const CvPage = () => {
             whileTap={{ scale: 0.95 }}
             type="button"
             onClick={handleCopy}
-            className="inline-flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2.5 rounded-full bg-surface dark:bg-[#21262d] hover:bg-surface dark:hover:bg-[#30363d] text-xs sm:text-sm font-semibold text-text dark:text-text border border-strong dark:border-strong shadow-sm transition-colors cursor-pointer min-h-[42px]"
+            className="btn-premium inline-flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2.5 rounded-full bg-surface hover:bg-background text-xs sm:text-sm font-semibold text-text border border-border shadow-sm transition-colors cursor-pointer min-h-[42px]"
             title="Copiar Markdown al portapapeles"
           >
             {copied ? <Check size={15} className="text-green-600 dark:text-green-400 shrink-0" /> : <Copy size={15} className="shrink-0" />}
@@ -298,7 +298,7 @@ const CvPage = () => {
             whileTap={{ scale: 0.95 }}
             type="button"
             onClick={handleDownloadMd}
-            className="inline-flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2.5 rounded-full bg-surface dark:bg-[#21262d] hover:bg-surface dark:hover:bg-[#30363d] text-xs sm:text-sm font-semibold text-text dark:text-text border border-strong dark:border-strong shadow-sm transition-colors cursor-pointer min-h-[42px]"
+            className="btn-premium inline-flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2.5 rounded-full bg-surface hover:bg-background text-xs sm:text-sm font-semibold text-text border border-border shadow-sm transition-colors cursor-pointer min-h-[42px]"
             title="Descargar archivo .md"
           >
             <Download size={15} className="shrink-0" />
@@ -311,7 +311,7 @@ const CvPage = () => {
             whileTap={{ scale: 0.95 }}
             type="button"
             onClick={handleDownloadPdf}
-            className="inline-flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2.5 rounded-full bg-background hover:bg-background text-text dark:bg-[#238636] dark:hover:bg-[#2ea043] text-xs sm:text-sm font-bold border border-strong dark:border-green-600 shadow-sm transition-colors cursor-pointer min-h-[42px]"
+            className="btn-premium inline-flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2.5 rounded-full bg-text hover:bg-text text-bg text-xs sm:text-sm font-bold border border-text shadow-sm transition-colors cursor-pointer min-h-[42px]" style={{ color: "var(--color-bg)", backgroundColor: "var(--color-text)" }}
             title="Descargar archivo PDF oficial"
           >
             <FileText size={15} className="shrink-0" />
@@ -326,14 +326,14 @@ const CvPage = () => {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="max-w-4xl mx-auto bg-surface dark:bg-[#161b22] border border-strong dark:border-strong rounded-2xl p-4 sm:p-8 lg:p-10 shadow-xl dark:shadow-2xl overflow-x-auto leading-relaxed"
+        className="max-w-4xl mx-auto bg-surface border border-border rounded-2xl p-4 sm:p-8 lg:p-10 shadow-xl overflow-x-auto leading-relaxed"
       >
         <div className="flex items-center justify-between mb-4 sm:mb-6 pb-3 border-b border-strong dark:border-strong text-xs font-semibold text-text dark:text-text-muted">
           <span className="truncate">{lang === 'es' ? 'imanol_perez_cv.es.md' : 'imanol_perez_cv.en.md'}</span>
           <span className="shrink-0">Markdown Document</span>
         </div>
 
-        <pre className="whitespace-pre-wrap break-words font-mono text-xs sm:text-sm md:text-base text-text dark:text-[#e6edf3] font-medium selection:bg-blue-100 dark:selection:bg-blue-900/40">
+        <pre className="whitespace-pre-wrap break-words font-mono text-xs sm:text-sm md:text-base text-text font-medium">
           {cvData[lang]}
         </pre>
       </motion.div>

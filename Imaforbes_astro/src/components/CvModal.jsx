@@ -85,7 +85,7 @@ const CvModal = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 16 }}
             transition={{ type: 'spring', duration: 0.35, bounce: 0.2 }}
-            className="relative w-full max-w-md overflow-hidden rounded-2xl bg-[#f5f3ef] dark:bg-[#161616] border border-strong/80 dark:border-strong p-6 sm:p-8 shadow-2xl text-text dark:text-text"
+            className="relative w-full max-w-md overflow-hidden rounded-2xl bg-surface border border-border p-6 sm:p-8 shadow-2xl text-text"
           >
             {/* Top Header */}
             <div className="flex items-center justify-between pb-4 mb-4 border-b border-strong/40 dark:border-strong">
@@ -118,13 +118,13 @@ const CvModal = () => {
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 max-w-xs mx-auto">
                   <button
                     onClick={() => handleSelectLang('en')}
-                    className="py-3 px-5 rounded-2xl bg-[#1a1a1a] text-text hover:bg-[#2e2e2e] dark:bg-surface dark:text-text dark:hover:bg-surface font-medium text-sm sm:text-base border border-strong dark:border-strong shadow-[0_3px_0_0_rgba(0,0,0,0.7)] dark:shadow-[0_3px_0_0_rgba(255,255,255,0.25)] active:translate-y-0.5 active:shadow-none transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer"
+                    className="btn-premium flex items-center justify-center py-3 px-5 rounded-2xl bg-surface hover:bg-background text-text font-medium text-sm sm:text-base border border-border transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer w-full"
                   >
                     {t('cvModal.english', 'English')}
                   </button>
                   <button
                     onClick={() => handleSelectLang('es')}
-                    className="py-3 px-5 rounded-2xl bg-[#1a1a1a] text-text hover:bg-[#2e2e2e] dark:bg-surface dark:text-text dark:hover:bg-surface font-medium text-sm sm:text-base border border-strong dark:border-strong shadow-[0_3px_0_0_rgba(0,0,0,0.7)] dark:shadow-[0_3px_0_0_rgba(255,255,255,0.25)] active:translate-y-0.5 active:shadow-none transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer"
+                    className="btn-premium flex items-center justify-center py-3 px-5 rounded-2xl bg-surface hover:bg-background text-text font-medium text-sm sm:text-base border border-border transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer w-full"
                   >
                     {t('cvModal.spanish', 'Spanish')}
                   </button>
@@ -163,13 +163,13 @@ const CvModal = () => {
                 <div className="grid grid-cols-2 gap-3 sm:gap-4 max-w-xs mx-auto">
                   <button
                     onClick={handleOpenMarkdown}
-                    className="py-3 px-5 rounded-2xl bg-[#1a1a1a] text-text hover:bg-[#2e2e2e] dark:bg-surface dark:text-text dark:hover:bg-surface font-medium text-sm sm:text-base border border-strong dark:border-strong shadow-[0_3px_0_0_rgba(0,0,0,0.7)] dark:shadow-[0_3px_0_0_rgba(255,255,255,0.25)] active:translate-y-0.5 active:shadow-none transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer"
+                    className="btn-premium flex items-center justify-center py-3 px-5 rounded-2xl bg-surface hover:bg-background text-text font-medium text-sm sm:text-base border border-border transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer w-full"
                   >
                     {t('cvModal.markdown', 'Markdown')}
                   </button>
                   <button
                     onClick={handleDownloadPdf}
-                    className="py-3 px-5 rounded-2xl bg-[#1a1a1a] text-text hover:bg-[#2e2e2e] dark:bg-surface dark:text-text dark:hover:bg-surface font-medium text-sm sm:text-base border border-strong dark:border-strong shadow-[0_3px_0_0_rgba(0,0,0,0.7)] dark:shadow-[0_3px_0_0_rgba(255,255,255,0.25)] active:translate-y-0.5 active:shadow-none transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer"
+                    className="btn-premium flex items-center justify-center py-3 px-5 rounded-2xl bg-surface hover:bg-background text-text font-medium text-sm sm:text-base border border-border transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer w-full"
                   >
                     {t('cvModal.pdf', 'PDF')}
                   </button>
