@@ -6,7 +6,6 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import LanguageToggle from "./LanguageToggle";
-import ThemeToggle from "./ThemeToggle";
 import CvModal from "./CvModal.jsx";
 import { openCvModal } from "../utils/cvModal.js";
 
@@ -120,7 +119,6 @@ const Header = memo(({ currentPath }) => {
 
           <div className="hidden lg:flex" style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', gap: '1rem', paddingRight: '1rem' }}>
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5, duration: 0.3 }}>
-              <ThemeToggle />
             </motion.div>
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.6, duration: 0.3 }}>
               <LanguageToggle />
@@ -178,7 +176,6 @@ const Header = memo(({ currentPath }) => {
 
                 <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem', paddingTop: '1rem' }}>
                   <LanguageToggle size="lg" />
-                  <ThemeToggle size="lg" direction="up" />
                 </motion.div>
               </div>
             </motion.nav>
