@@ -696,3 +696,27 @@ button, a, input, select, textarea {
   margin-top: 0.15rem;
   color: var(--color-text);
 }
+
+/* ============================================
+   PHASE 6: SMART IMAGE DIMMING (DARK MODE)
+   ============================================ */
+img {
+  transition: filter var(--transition-smooth);
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Dim all content images to reduce eye strain in dark mode */
+  img:not(.no-dim) {
+    filter: brightness(0.85) saturate(0.85) !important;
+  }
+  
+  /* Retain full color/brightness on hover so user can focus on it */
+  img:not(.no-dim):hover,
+  a:hover img:not(.no-dim),
+  button:hover img:not(.no-dim),
+  .protected-image-container:hover img:not(.no-dim),
+  .project-card-premium:hover img:not(.no-dim),
+  .bento-item:hover img:not(.no-dim) {
+    filter: brightness(1) saturate(1) !important;
+  }
+}
