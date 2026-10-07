@@ -17,7 +17,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BorderBeam } from "border-beam";
 import { useTranslation } from "react-i18next";
-import { Briefcase, Calendar, MapPin, ChevronRight, ChevronLeft } from "lucide-react";
+import { Briefcase, Calendar, MapPin, ChevronRight, ChevronLeft, Grid, LayoutTemplate, Server, Database, Cloud, Wrench } from "lucide-react";
 import { openCvModal } from "../utils/cvModal.js";
 import { api } from "../services/api.js";
 import {
@@ -358,12 +358,12 @@ const AboutPage = () => {
   ];
 
   const categories = [
-    { id: "all", name: t("about.skills-filter-all"), icon: "🔧" },
-    { id: "frontend", name: t("about.skills-filter-frontend"), icon: "🎨" },
-    { id: "backend", name: t("about.skills-filter-backend"), icon: "⚙️" },
-    { id: "database", name: t("about.skills-filter-database"), icon: "🗄️" },
-    { id: "devops", name: t("about.skills-filter-devops"), icon: "🚀" },
-    { id: "tools", name: t("about.skills-filter-tools"), icon: "🛠️" },
+    { id: "all", name: t("about.skills-filter-all"), icon: <Grid size={16} /> },
+    { id: "frontend", name: t("about.skills-filter-frontend"), icon: <LayoutTemplate size={16} /> },
+    { id: "backend", name: t("about.skills-filter-backend"), icon: <Server size={16} /> },
+    { id: "database", name: t("about.skills-filter-database"), icon: <Database size={16} /> },
+    { id: "devops", name: t("about.skills-filter-devops"), icon: <Cloud size={16} /> },
+    { id: "tools", name: t("about.skills-filter-tools"), icon: <Wrench size={16} /> },
   ];
 
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -617,6 +617,13 @@ const AboutPage = () => {
                 className={`project-tag ${selectedCategory === category.id ? 'active' : ''}`}
                 style={{ 
                   cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.6rem 1.2rem',
+                  fontSize: '0.95rem',
+                  fontWeight: 500,
+                  transition: 'all 0.3s ease',
                   background: selectedCategory === category.id ? 'var(--color-text)' : 'transparent',
                   color: selectedCategory === category.id ? 'var(--color-bg)' : 'var(--color-text-muted)'
                 }}
