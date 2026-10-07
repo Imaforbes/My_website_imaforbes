@@ -5,7 +5,7 @@ import { useSettings } from "../contexts/SettingsContext.jsx";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 
-const ThemeToggle = ({ className = "", size = "default" }) => {
+const ThemeToggle = ({ className = "", size = "default", direction = "down" }) => {
   const { theme, updateTheme } = useSettings();
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
@@ -76,11 +76,11 @@ const ThemeToggle = ({ className = "", size = "default" }) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            initial={{ opacity: 0, y: direction === "up" ? 10 : -10, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            exit={{ opacity: 0, y: direction === "up" ? 10 : -10, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
-            className="absolute left-1/2 -translate-x-1/2 mt-2 w-40 bg-surface dark:bg-background rounded-2xl shadow-lg border border-strong dark:border-strong z-50 overflow-hidden"
+            className={`absolute left-1/2 -translate-x-1/2 ${direction === "up" ? "bottom-full mb-2" : "top-full mt-2"} w-40 bg-surface dark:bg-background rounded-2xl shadow-lg border border-strong dark:border-strong z-50 overflow-hidden`}
           >
               {themes.map((themeOption) => {
                 const Icon = themeOption.icon;
