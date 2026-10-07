@@ -278,7 +278,7 @@ const CvPage = () => {
         </div>
 
         {/* Premium Action Buttons: 3-column symmetrical grid on Mobile, flex on Desktop */}
-        <div className="grid grid-cols-3 sm:flex sm:flex-wrap items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
+        <div className="flex flex-wrap justify-center sm:justify-end items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
           {/* Copy MD */}
           <motion.button
             whileHover={{ scale: 1.03 }}
@@ -289,7 +289,7 @@ const CvPage = () => {
             title="Copiar Markdown al portapapeles"
           >
             {copied ? <Check size={15} className="text-green-600 dark:text-green-400 shrink-0" /> : <Copy size={15} className="shrink-0" />}
-            <span className="truncate">{copied ? t('cvPage.copied', '¡Copiado!') : t('cvPage.copy-md', 'Copiar .md')}</span>
+            <span >{copied ? t('cvPage.copied', '¡Copiado!') : t('cvPage.copy-md', 'Copiar .md')}</span>
           </motion.button>
 
           {/* Download MD */}
@@ -302,7 +302,7 @@ const CvPage = () => {
             title="Descargar archivo .md"
           >
             <Download size={15} className="shrink-0" />
-            <span className="truncate">{t('cvPage.download-md', 'Descargar .md')}</span>
+            <span >{t('cvPage.download-md', 'Descargar .md')}</span>
           </motion.button>
 
           {/* Download PDF - Primary Accent */}
@@ -315,7 +315,7 @@ const CvPage = () => {
             title="Descargar archivo PDF oficial"
           >
             <FileText size={15} className="shrink-0" />
-            <span className="truncate">{t('cvPage.download-pdf', 'Descargar PDF')}</span>
+            <span >{t('cvPage.download-pdf', 'Descargar PDF')}</span>
           </motion.button>
         </div>
       </div>
@@ -329,7 +329,7 @@ const CvPage = () => {
         className="max-w-4xl mx-auto bg-surface border border-border rounded-2xl p-4 sm:p-8 lg:p-10 shadow-xl overflow-x-auto leading-relaxed"
       >
         <div className="flex items-center justify-between mb-4 sm:mb-6 pb-3 border-b border-strong dark:border-strong text-xs font-semibold text-text dark:text-text-muted">
-          <span className="truncate">{lang === 'es' ? 'imanol_perez_cv.es.md' : 'imanol_perez_cv.en.md'}</span>
+          <span >{lang === 'es' ? 'imanol_perez_cv.es.md' : 'imanol_perez_cv.en.md'}</span>
           <span className="shrink-0">Markdown Document</span>
         </div>
 
