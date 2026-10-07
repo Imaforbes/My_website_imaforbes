@@ -671,18 +671,4 @@ button, a, input, select, textarea {
   transform: scale(1.1);
 }
 
-/* Nav Item Underline Hover Effect */
-.nav-item-premium::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 2px;
-  bottom: -4px;
-  left: 0;
-  background-color: var(--color-text);
-  transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  border-radius: 2px;
-}
-.nav-item-premium:hover::after, .nav-item-premium.active::after {
-  width: 100%;
-}
+
