@@ -672,3 +672,27 @@ button, a, input, select, textarea {
 }
 
 
+
+/* ============================================
+   PHASE 5: EDITORIAL BLOG
+   ============================================ */
+.blog-content-premium {
+  color: var(--color-text);
+  white-space: pre-wrap;
+  line-height: 2;
+  font-size: 1.15rem;
+  font-weight: 400;
+  word-break: break-word;
+  padding-bottom: 3rem;
+  letter-spacing: -0.01em;
+}
+
+.blog-content-premium::first-letter {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+  float: left;
+  margin-right: 0.75rem;
+  margin-top: 0.15rem;
+  color: var(--color-text);
+}

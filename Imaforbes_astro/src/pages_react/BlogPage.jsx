@@ -1,6 +1,6 @@
 import withProviders from '../components/withProviders.jsx';
 import React, { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useSpring } from "framer-motion";
 import { BorderBeam } from "border-beam";
 import { useTranslation } from "react-i18next";
 import { api } from "../services/api.js";
@@ -53,6 +53,14 @@ const BlogPage = () => {
   const [viewedPosts, setViewedPosts] = useState(new Set());
   const [likingPosts, setLikingPosts] = useState(new Set());
   const [selectedPostId, setSelectedPostId] = useState(null);
+
+  // Reading progress
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   // Read URL query parameter for routing
   useEffect(() => {
@@ -306,6 +314,9 @@ const BlogPage = () => {
     return (
       <motion.section className="relative min-h-screen bg-surface dark:bg-[#0a0a0a] text-text dark:text-text overflow-hidden" variants={containerVariants} initial="hidden" animate="visible">
         <HeroBackground />
+          <motion.div 
+            style={{ scaleX, transformOrigin: "0%", position: "fixed", top: 0, left: 0, right: 0, height: "4px", background: "var(--color-text)", zIndex: 99999 }} 
+          />
         <div className="relative z-10 container mx-auto max-w-7xl py-12 sm:py-16 px-4 sm:px-6">
           <div className="max-w-4xl mx-auto space-y-8">
             <BlogPostSkeleton />
@@ -320,6 +331,9 @@ const BlogPage = () => {
     return (
       <div className="relative min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center">
         <HeroBackground />
+          <motion.div 
+            style={{ scaleX, transformOrigin: "0%", position: "fixed", top: 0, left: 0, right: 0, height: "4px", background: "var(--color-text)", zIndex: 99999 }} 
+          />
         <div className="relative z-10 text-center text-red-500"><p>{error}</p></div>
       </div>
     );
@@ -329,9 +343,15 @@ const BlogPage = () => {
   if (selectedPostId) {
     const selectedPost = posts.find(p => p.id == selectedPostId);
     if (selectedPost) {
+      // Calculate reading time (assuming 225 words per minute)
+      const wordCount = selectedPost.content ? selectedPost.content.trim().split(/\s+/).length : 0;
+      const readingTimeMin = Math.max(1, Math.ceil(wordCount / 225));
       return (
         <section className="relative min-h-screen bg-surface dark:bg-[#0a0a0a]" style={{ paddingTop: '6rem' }}>
           <HeroBackground />
+          <motion.div 
+            style={{ scaleX, transformOrigin: "0%", position: "fixed", top: 0, left: 0, right: 0, height: "4px", background: "var(--color-text)", zIndex: 99999 }} 
+          />
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -358,6 +378,8 @@ const BlogPage = () => {
                 <span style={{ fontWeight: 500 }}>México</span>
                 <span>•</span>
                 <span style={{ fontWeight: 400 }}>{formatDate(selectedPost.created_at)}</span>
+                <span>•</span>
+                <span style={{ fontWeight: 400 }}>{readingTimeMin} min de lectura</span>
                 {(selectedPost.views_count > 0) && (
                   <>
                     <span>•</span>
@@ -379,10 +401,7 @@ const BlogPage = () => {
               </div>
             )}
 
-            <div 
-              className="dark:text-text-muted" 
-              style={{ color: 'var(--color-text)', whiteSpace: 'pre-wrap', lineHeight: 1.8, fontSize: '1.15rem', fontWeight: 400, wordBreak: 'break-word', paddingBottom: '3rem' }}
-            >
+            <div className="blog-content-premium dark:text-text-muted">
               {selectedPost.content ? selectedPost.content.trim() : ''}
             </div>
             
