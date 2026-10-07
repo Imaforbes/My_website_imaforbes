@@ -1,7 +1,7 @@
 import withProviders from '../components/withProviders.jsx';
 // src/pages/HomePage.jsx
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { BorderBeam } from "border-beam";
 
 import { FiArrowRight, FiMail, FiCode, FiTerminal, FiLayout, FiServer, FiBriefcase } from "react-icons/fi";
@@ -43,7 +43,37 @@ const HeroBackground = () => (
   </div>
 );
 
+
+const DynamicText = ({ texts }) => {
+  const [index, React_useState] = React.useState(0);
+  
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      React_useState((prev) => (prev + 1) % texts.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [texts]);
+
+  return (
+    <span style={{ display: 'inline-flex', position: 'relative', height: '1.2em', overflow: 'hidden', verticalAlign: 'bottom', minWidth: '280px', justifyContent: 'center' }}>
+      <AnimatePresence mode="popLayout">
+        <motion.span
+          key={index}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -20, opacity: 0 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          style={{ position: 'absolute', whiteSpace: 'nowrap', color: 'var(--color-text)' }}
+        >
+          {texts[index]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+};
+
 const HomePage = () => {
+
   const { t } = useTranslation();
   
   const containerVariants = {
@@ -89,8 +119,14 @@ const HomePage = () => {
           {t("home.title")}
         </motion.h1>
 
-        <motion.h2 variants={itemVariants} className="hero-subtitle" style={{ fontSize: 'clamp(0.9rem, 2.8vw, 1.8rem)', marginTop: '1rem' }}>
-          {t("home.subtitle")}
+        <motion.h2 variants={itemVariants} className="hero-subtitle" style={{ fontSize: 'clamp(1rem, 2.8vw, 1.8rem)', marginTop: '1.5rem', display: 'flex', justifyContent: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+          <span style={{ color: 'var(--color-text-muted)' }}>Especializado en</span>
+          <DynamicText texts={[
+            t("home.subtitle_1", "Desarrollo Web Moderno."),
+            t("home.subtitle_2", "Diseño de Interfaces."),
+            t("home.subtitle_3", "Soluciones Full Stack."),
+            t("home.subtitle_4", "Arquitecturas Nube.")
+          ]} />
         </motion.h2>
 
         <motion.p variants={itemVariants} className="hero-description" style={{ marginTop: '1.5rem', fontSize: '1.1rem' }}>
@@ -123,29 +159,34 @@ const HomePage = () => {
           </BorderBeam>
         </motion.div>
 
-        {/* Floating Skills/Tags to add life */}
-        <motion.div 
-          variants={itemVariants} 
-          style={{ 
-            marginTop: '4rem', 
-            display: 'flex', 
-            justifyContent: 'center', 
-            gap: '1rem', 
-            flexWrap: 'wrap',
-            opacity: 0.7
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-            <FiTerminal size={14} /> <span>{t("home.tag_frontend", "Frontend")}</span>
-          </div>
-          <span style={{ color: 'var(--color-border)' }}>•</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-            <FiServer size={14} /> <span>{t("home.tag_backend", "Backend")}</span>
-          </div>
-          <span style={{ color: 'var(--color-border)' }}>•</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-            <FiLayout size={14} /> <span>{t("home.tag_uiux", "UI/UX Design")}</span>
-          </div>
+        {/* Floating Parallax Skills */}
+        <motion.div variants={itemVariants} style={{ marginTop: '5rem', display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+          <motion.div 
+            animate={{ y: [0, -8, 0] }} 
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--color-text)', background: 'var(--color-surface)', padding: '0.6rem 1.2rem', borderRadius: '16px', border: '1px solid var(--color-border)', boxShadow: '0 4px 20px -10px rgba(0,0,0,0.05)' }}
+            className="dark:bg-[#111] dark:border-strong"
+          >
+            <FiTerminal size={14} className="text-emerald-500" /> <span>{t("home.tag_frontend", "Frontend")}</span>
+          </motion.div>
+          
+          <motion.div 
+            animate={{ y: [0, -12, 0] }} 
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--color-text)', background: 'var(--color-surface)', padding: '0.6rem 1.2rem', borderRadius: '16px', border: '1px solid var(--color-border)', boxShadow: '0 4px 20px -10px rgba(0,0,0,0.05)' }}
+            className="dark:bg-[#111] dark:border-strong"
+          >
+            <FiServer size={14} className="text-blue-500" /> <span>{t("home.tag_backend", "Backend")}</span>
+          </motion.div>
+
+          <motion.div 
+            animate={{ y: [0, -10, 0] }} 
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--color-text)', background: 'var(--color-surface)', padding: '0.6rem 1.2rem', borderRadius: '16px', border: '1px solid var(--color-border)', boxShadow: '0 4px 20px -10px rgba(0,0,0,0.05)' }}
+            className="dark:bg-[#111] dark:border-strong"
+          >
+            <FiLayout size={14} className="text-purple-500" /> <span>{t("home.tag_uiux", "UI/UX Design")}</span>
+          </motion.div>
         </motion.div>
 
       </motion.div>
