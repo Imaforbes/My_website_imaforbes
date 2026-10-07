@@ -632,3 +632,57 @@ button, a, input, select, textarea {
 .skeleton-pulse {
   animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* ============================================
+   MICRO-INTERACTIONS & SPRING EFFECTS
+   ============================================ */
+
+/* Add spring-like feel to buttons */
+.btn-premium {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-premium:active {
+  transform: scale(0.95);
+  transition: transform 0.1s;
+}
+
+/* Subtle spotlight glow on hover for premium cards */
+.card-premium, .project-card-premium {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.05);
+}
+
+.card-premium:hover, .project-card-premium:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px -10px var(--color-border-strong);
+  border-color: var(--color-text-muted);
+}
+
+/* Make icons inside buttons subtly bounce */
+.btn-icon svg {
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-premium:hover .btn-icon svg:last-child {
+  transform: translateX(4px);
+}
+.btn-premium:hover .btn-icon svg:first-child:not(:last-child) {
+  transform: scale(1.1);
+}
+
+/* Nav Item Underline Hover Effect */
+.nav-item-premium::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: var(--color-text);
+  transition: width 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 2px;
+}
+.nav-item-premium:hover::after, .nav-item-premium.active::after {
+  width: 100%;
+}

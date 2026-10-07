@@ -13,6 +13,7 @@ import Breadcrumbs from '../components/Breadcrumbs.jsx';
 import BrowserSupport from '../components/BrowserSupport.jsx';
 import ScrollToTopButton from '../components/ScrollToTopButton.jsx';
 import '../styles/index.css';
+import { ClientRouter } from 'astro:transitions';
 import '../i18n.js';
 
 const { title = "Imaforbes Portfolio", description = "Portfolio profesional de Imaforbes - Desarrollo web y diseño", image = '/img/Logo.png', url = '', isAdmin = false } = Astro.props;
@@ -38,6 +39,7 @@ const { title = "Imaforbes Portfolio", description = "Portfolio profesional de I
     <meta name="twitter:image" content={image} />
     <link rel="icon" type="image/png" href="/img/Logo.png" />
     <title>{title}</title>
+    <ClientRouter />
   </head>
   <body>
     <BrowserSupport client:only="react" />
