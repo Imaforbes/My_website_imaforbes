@@ -117,7 +117,7 @@ const TrajectoryPage = () => {
                         {experience.location && <><span aria-hidden="true">·</span><MapPin size={14} /> {experience.location}</>}
                       </p>
                     )}
-                    {experience.description && <p className="text-muted" style={{ marginBottom: experience.technologies?.length ? '1rem' : 0, lineHeight: 1.7 }}>{experience.description}</p>}
+                    {experience.description && <p className="text-muted" style={{ marginBottom: experience.technologies?.length ? '1.5rem' : 0, lineHeight: 1.7 }}>{experience.description}</p>}
                     {Array.isArray(experience.technologies) && experience.technologies.length > 0 && (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
                         {experience.technologies.map((technology) => (

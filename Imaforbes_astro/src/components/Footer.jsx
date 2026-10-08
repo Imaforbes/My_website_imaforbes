@@ -77,7 +77,9 @@ const Footer = memo(({ currentPath }) => {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '0.5rem',
-                      transition: 'color 0.2s ease'
+                      transition: 'color 0.2s ease',
+                      padding: '0.5rem 0',
+                      minHeight: '44px' /* Fitts's Law: 44x44px minimum touch target */
                     }}
                     className={`dark:text-text-muted dark:hover:text-text ${location.pathname === item.path ? 'dark:!text-text' : ''}`}
                   >
@@ -96,7 +98,7 @@ const Footer = memo(({ currentPath }) => {
               {t("footer.get-in-touch") || "Get in Touch"}
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <a href="mailto:imanol@imaforbes.com" style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none', color: 'var(--color-text-muted)', fontSize: '0.95rem' }} className="dark:hover:text-text">
+              <a href="mailto:imanol@imaforbes.com" style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none', color: 'var(--color-text-muted)', fontSize: '0.95rem', padding: '0.5rem', margin: '-0.5rem', borderRadius: '8px', minHeight: '44px' }} className="dark:hover:text-text hover:bg-surface dark:hover:bg-[#111] transition-colors">
                 <div style={{ padding: '0.5rem', background: 'var(--color-surface)', borderRadius: '6px' }} className="dark:bg-background">
                   <Mail size={16} />
                 </div>
