@@ -37,7 +37,11 @@ const { title = "Imaforbes Portfolio", description = "Portfolio profesional de I
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
-    <link rel="icon" type="image/png" href="/img/Logo.png" />
+    <!-- Favicons and App Icons -->
+    <link rel="icon" type="image/png" href="/img/Logo.png?v=2" />
+    <link rel="shortcut icon" type="image/png" href="/img/Logo.png?v=2" />
+    <link rel="apple-touch-icon" href="/img/Logo.png?v=2" />
+    <meta name="apple-mobile-web-app-title" content="Imaforbes" />
     <title>{title}</title>
     <ClientRouter />
   </head>
