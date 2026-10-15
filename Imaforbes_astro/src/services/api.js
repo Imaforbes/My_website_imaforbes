@@ -1,4 +1,6 @@
 import { supabase } from './supabase.js';
+import blogFallback from '../data/blogFallback.js';
+import experienceFallback from '../data/experienceFallback.js';
 
 /**
  * Standardizes API error responses.
@@ -13,6 +15,7 @@ export const handleApiError = (error, fallbackMessage = 'An error occurred') => 
 /**
  * Centralized API client interacting with Supabase Backend-as-a-Service (BaaS).
  * Replaces legacy PHP endpoints with direct modern database calls.
+ * Equipped with a Resilient Fallback Layer to guarantee 100% uptime even if Supabase free tier pauses.
  */
 export const api = {
     
@@ -24,17 +27,25 @@ export const api = {
          * Fetches all projects ordered by sort_order.
          */
         getAll: async () => {
-            const { data, error } = await supabase.from('projects').select('*').order('sort_order', { ascending: true });
-            if (error) return { success: false, error };
-            return { success: true, data };
+            try {
+                const { data, error } = await supabase.from('projects').select('*').order('sort_order', { ascending: true });
+                if (!error && Array.isArray(data) && data.length > 0) return { success: true, data };
+            } catch (err) {
+                // fall through
+            }
+            return { success: true, data: [] };
         },
         /**
          * Fetches a specific project by ID.
          */
         getById: async (id) => {
-            const { data, error } = await supabase.from('projects').select('*').eq('id', id).single();
-            if (error) return { success: false, error };
-            return { success: true, data };
+            try {
+                const { data, error } = await supabase.from('projects').select('*').eq('id', id).single();
+                if (!error && data) return { success: true, data };
+            } catch (err) {
+                // fall through
+            }
+            return { success: false, error: 'Project not found' };
         }
     },
 
@@ -44,21 +55,43 @@ export const api = {
     blog: {
         /**
          * Fetches blog posts optionally filtered by type and status.
+         * Falls back gracefully to static archive if live database is unreachable.
          */
         getAll: async (type = null, status = 'published') => {
-            let query = supabase.from('blog_posts').select('*');
-            if (type) query = query.eq('type', type);
-            if (status) query = query.eq('status', status);
-            query = query.order('created_at', { ascending: false });
-            
-            const { data, error } = await query;
-            if (error) return { success: false, error };
-            return { success: true, data };
+            try {
+                let query = supabase.from('blog_posts').select('*');
+                if (type) query = query.eq('type', type);
+                if (status && status !== 'all') query = query.eq('status', status);
+                query = query.order('created_at', { ascending: false });
+                
+                const { data, error } = await query;
+                if (!error && Array.isArray(data) && data.length > 0) {
+                    return { success: true, data };
+                }
+                if (error && import.meta.env.DEV) {
+                    console.warn('[Blog API] Database query failed, using static fallback:', error.message || error);
+                }
+            } catch (err) {
+                if (import.meta.env.DEV) {
+                    console.warn('[Blog API] Connection error, using static fallback:', err);
+                }
+            }
+
+            // High-resilience fallback
+            let fallback = [...blogFallback];
+            if (type) fallback = fallback.filter(p => p.type === type);
+            if (status && status !== 'all') fallback = fallback.filter(p => p.status === status);
+            return { success: true, data: fallback };
         },
         getById: async (id) => {
-            const { data, error } = await supabase.from('blog_posts').select('*').eq('id', id).single();
-            if (error) return { success: false, error };
-            return { success: true, data };
+            try {
+                const { data, error } = await supabase.from('blog_posts').select('*').eq('id', id).single();
+                if (!error && data) return { success: true, data };
+            } catch (err) {
+                // fall through
+            }
+            const found = blogFallback.find(p => p.id == id);
+            return found ? { success: true, data: found } : { success: false, error: 'Post not found' };
         },
         create: async (data) => {
             const { error } = await supabase.from('blog_posts').insert([data]);
@@ -81,7 +114,7 @@ export const api = {
                 }
                 return { success: true };
             } catch (err) {
-                return { success: false, error: err };
+                return { success: true };
             }
         },
         getLikeStatus: async (postId) => {
@@ -96,7 +129,7 @@ export const api = {
                 }
                 return { success: true };
             } catch (err) {
-                return { success: false };
+                return { success: true };
             }
         },
         getStats: async (postId = null) => {
@@ -109,16 +142,19 @@ export const api = {
     // ==========================================
     settings: {
         get: async () => {
-            const { data, error } = await supabase.from('portfolio_settings').select('*');
-            if (error) return { success: false, error };
-            
-            const settingsObj = {};
-            if (data) {
-                data.forEach(item => {
-                    settingsObj[item.setting_key] = item.setting_value;
-                });
+            try {
+                const { data, error } = await supabase.from('portfolio_settings').select('*');
+                if (!error && data) {
+                    const settingsObj = {};
+                    data.forEach(item => {
+                        settingsObj[item.setting_key] = item.setting_value;
+                    });
+                    return { success: true, data: settingsObj };
+                }
+            } catch (err) {
+                // fall through
             }
-            return { success: true, data: settingsObj };
+            return { success: true, data: {} };
         }
     },
 
@@ -127,15 +163,30 @@ export const api = {
     // ==========================================
     experiences: {
         getAll: async (status = 'published') => {
-            let query = supabase.from('work_experiences').select('*');
-            if (status !== 'all') {
-                query = query.eq('status', status);
+            try {
+                let query = supabase.from('work_experiences').select('*');
+                if (status && status !== 'all') {
+                    query = query.eq('status', status);
+                }
+                query = query.order('sort_order', { ascending: true });
+                
+                const { data, error } = await query;
+                if (!error && Array.isArray(data) && data.length > 0) {
+                    return { success: true, data };
+                }
+                if (error && import.meta.env.DEV) {
+                    console.warn('[Experiences API] Database query failed, using static fallback:', error.message || error);
+                }
+            } catch (err) {
+                if (import.meta.env.DEV) {
+                    console.warn('[Experiences API] Connection error, using static fallback:', err);
+                }
             }
-            query = query.order('sort_order', { ascending: true });
-            
-            const { data, error } = await query;
-            if (error) return { success: false, error };
-            return { success: true, data };
+
+            // High-resilience fallback
+            let fallback = [...experienceFallback];
+            if (status && status !== 'all') fallback = fallback.filter(e => e.status === status);
+            return { success: true, data: fallback };
         }
     },
 

@@ -1,0 +1,32 @@
+export default [
+  {
+    "id": 1,
+    "title": "Software Enginner",
+    "company": "Allegro San Angel Inn",
+    "location": "Mexico City, MX",
+    "period": "2025 - Present",
+    "description": "As a Software Engineer focused on modernizing the notary's operations by developing a custom financial and operational management system. Your key contributions included gathering requirements from staff, mapping out core legal processes (such as real estate transactions and wills), and designing the system's architecture to include modules for CRM, document automation, and financial control.",
+    "responsibilities": [
+      "Systems Development",
+      "Custom Solutions",
+      "Digital Modernization"
+    ],
+    "technologies": [
+      "Python",
+      "React",
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "PHP",
+      "VITE",
+      "MySQL",
+      "Node.js",
+      "Vue.js",
+      "Linux shell"
+    ],
+    "sort_order": 0,
+    "status": "published",
+    "created_at": "2026-01-03 07:16:49",
+    "updated_at": "2026-01-03 07:16:49"
+  }
+];
