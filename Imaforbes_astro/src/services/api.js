@@ -134,6 +134,88 @@ export const api = {
         },
         getStats: async (postId = null) => {
             return { success: true, data: {} };
+        },
+        /**
+         * Fetches approved comments for a specific blog post.
+         */
+        getComments: async (postId) => {
+            try {
+                const { data, error } = await supabase
+                    .from('blog_comments')
+                    .select('*')
+                    .eq('post_id', postId)
+                    .eq('status', 'approved')
+                    .order('created_at', { ascending: false });
+
+                if (!error && Array.isArray(data)) {
+                    return { success: true, data };
+                }
+            } catch (err) {
+                if (import.meta.env?.DEV) {
+                    console.warn('[Comments API] Falling back to local storage:', err);
+                }
+            }
+
+            // Local fallback if table is not created yet or offline
+            if (typeof window !== 'undefined') {
+                try {
+                    const local = JSON.parse(localStorage.getItem('imaforbes_local_comments') || '[]');
+                    return {
+                        success: true,
+                        data: local.filter(c => String(c.post_id) === String(postId) && c.status !== 'hidden')
+                    };
+                } catch {
+                    // ignore
+                }
+            }
+            return { success: true, data: [] };
+        },
+        /**
+         * Adds a new comment to a blog post.
+         */
+        addComment: async (postId, authorName, content) => {
+            const payload = {
+                post_id: Number(postId),
+                author_name: authorName.trim(),
+                content: content.trim(),
+                status: 'approved'
+            };
+
+            try {
+                const { data, error } = await supabase
+                    .from('blog_comments')
+                    .insert([payload])
+                    .select()
+                    .single();
+
+                if (!error && data) {
+                    return { success: true, data };
+                }
+                if (error && import.meta.env?.DEV) {
+                    console.warn('[Comments API] Supabase insert error, using local fallback:', error.message);
+                }
+            } catch (err) {
+                if (import.meta.env?.DEV) {
+                    console.warn('[Comments API] Connection error on insert, using local fallback:', err);
+                }
+            }
+
+            // Resilient fallback in localStorage so UI always responds smoothly
+            const fallbackComment = {
+                id: Date.now(),
+                ...payload,
+                created_at: new Date().toISOString()
+            };
+            if (typeof window !== 'undefined') {
+                try {
+                    const local = JSON.parse(localStorage.getItem('imaforbes_local_comments') || '[]');
+                    local.unshift(fallbackComment);
+                    localStorage.setItem('imaforbes_local_comments', JSON.stringify(local));
+                } catch {
+                    // ignore
+                }
+            }
+            return { success: true, data: fallbackComment };
         }
     },
 
@@ -231,6 +313,13 @@ export const api = {
                 const { count: messagesCount } = await supabase.from('datos').select('*', { count: 'exact', head: true });
                 const { data: viewsData } = await supabase.from('blog_views').select('id');
                 const { data: likesData } = await supabase.from('blog_likes').select('id');
+                let commentsCount = 0;
+                try {
+                    const { count } = await supabase.from('blog_comments').select('*', { count: 'exact', head: true });
+                    commentsCount = count || 0;
+                } catch {
+                    // ignore if blog_comments table is not yet initialized
+                }
                 
                 return {
                     success: true,
@@ -238,7 +327,8 @@ export const api = {
                         total_posts: postsCount || 0,
                         total_messages: messagesCount || 0,
                         total_views: viewsData ? viewsData.length : 0,
-                        total_likes: likesData ? likesData.length : 0
+                        total_likes: likesData ? likesData.length : 0,
+                        total_comments: commentsCount
                     }
                 };
             } catch (error) {
@@ -261,6 +351,62 @@ export const api = {
             const { error } = await supabase.from('datos').delete().eq('id', id);
             if (error) return { success: false, error };
             return { success: true };
+        },
+        getAllComments: async () => {
+            try {
+                const { data, error } = await supabase
+                    .from('blog_comments')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (!error && Array.isArray(data)) {
+                    return { success: true, data };
+                }
+            } catch (err) {
+                if (import.meta.env?.DEV) {
+                    console.warn('[Admin Comments API] Falling back to local storage:', err);
+                }
+            }
+
+            if (typeof window !== 'undefined') {
+                try {
+                    const local = JSON.parse(localStorage.getItem('imaforbes_local_comments') || '[]');
+                    return { success: true, data: local };
+                } catch {
+                    // ignore
+                }
+            }
+            return { success: true, data: [] };
+        },
+        deleteComment: async (id) => {
+            try {
+                const { error } = await supabase.from('blog_comments').delete().eq('id', id);
+                if (!error) {
+                    // Also remove from localStorage if present
+                    if (typeof window !== 'undefined') {
+                        try {
+                            const local = JSON.parse(localStorage.getItem('imaforbes_local_comments') || '[]');
+                            localStorage.setItem('imaforbes_local_comments', JSON.stringify(local.filter(c => String(c.id) !== String(id))));
+                        } catch {
+                            // ignore
+                        }
+                    }
+                    return { success: true };
+                }
+            } catch {
+                // fall through to local cleanup
+            }
+
+            if (typeof window !== 'undefined') {
+                try {
+                    const local = JSON.parse(localStorage.getItem('imaforbes_local_comments') || '[]');
+                    localStorage.setItem('imaforbes_local_comments', JSON.stringify(local.filter(c => String(c.id) !== String(id))));
+                    return { success: true };
+                } catch {
+                    // ignore
+                }
+            }
+            return { success: false, error: 'Failed to delete comment' };
         }
     },
 

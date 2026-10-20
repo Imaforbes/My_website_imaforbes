@@ -17,6 +17,7 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import { motion } from "framer-motion";
 import { API_CONFIG } from "../config/api.js";
+import { api } from "../services/api.js";
 import { safeLocalStorage } from "../utils/storage.js";
 import {
   LogOut,
@@ -45,95 +46,37 @@ const Dashboard = () => {
   const [stats, setStats] = useState({
     totalMessages: 0,
     newMessages: 0,
-    totalUsers: 0,
+    totalUsers: 1,
+    totalComments: 0,
   });
   const [loading, setLoading] = useState(true);
   const navigate = (path) => { window.location.href = path; };
 
   const fetchStats = useCallback(async () => {
-    // Check if user is authenticated before making API call
     const authToken = safeLocalStorage.getItem('auth_token');
     if (!authToken) {
-      // No auth token, redirect to login
       navigate("/login");
       return;
     }
 
     try {
-      const baseURL = API_CONFIG.getBaseURL();
-
-      // Fetch messages to get stats
-      const response = await fetch(`${baseURL}/api/messages.php`, {
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
-
-      // Handle 401/403 errors silently (expected if session expired)
-      if (response.status === 401 || response.status === 403) {
-        // Only log in development mode
-        if (import.meta.env.DEV) {
-          console.warn("Dashboard: Authentication failed - redirecting to login");
-        }
-        navigate("/login");
-        return;
-      }
-
-      if (response.ok) {
-        const data = await response.json();
-        
-        if (data.success && data.data) {
-          // Handle paginated response
-          const messages = Array.isArray(data.data.items) ? data.data.items : [];
-          const pagination = data.data.pagination || {};
-          
-          const totalItems = pagination.total_items !== undefined ? pagination.total_items : messages.length;
-          
-          setStats({
-            totalMessages: totalItems || 0,
-            newMessages: totalItems || 0, // All messages are "new" since datos table doesn't have status column
-            totalUsers: 1, // You have 1 admin user
-          });
-        } else {
-          // Only log warnings in development mode
-          if (import.meta.env.DEV) {
-            console.warn("Unexpected API response format:", data);
-          }
-          // Set defaults if no data
-          setStats({
-            totalMessages: 0,
-            newMessages: 0,
-            totalUsers: 1,
-          });
-        }
-      } else {
-        // Only log errors in development mode
-        if (import.meta.env.DEV) {
-          try {
-            const errorText = await response.text();
-            console.warn("Dashboard API error:", response.status, errorText);
-          } catch {
-            // Ignore text parsing errors
-          }
-        }
-        // Even if there's an error, set loading to false so UI shows
+      const result = await api.admin.getStats();
+      if (result.success && result.data) {
         setStats({
-          totalMessages: 0,
-          newMessages: 0,
+          totalMessages: result.data.total_messages || 0,
+          newMessages: result.data.total_messages || 0,
           totalUsers: 1,
+          totalComments: result.data.total_comments || 0,
         });
       }
     } catch (error) {
-      // Only log errors in development mode (skip network errors)
-      if (import.meta.env.DEV && error.name !== 'TypeError') {
+      if (import.meta.env.DEV) {
         console.warn("Error fetching stats:", error);
       }
     } finally {
       setLoading(false);
     }
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     fetchStats();
@@ -165,6 +108,13 @@ const Dashboard = () => {
       icon: FileText,
       path: "/admin/blog",
       stats: "Poemas y cartas",
+    },
+    {
+      title: "Comentarios",
+      description: "Moderar y eliminar comentarios del blog",
+      icon: MessageSquare,
+      path: "/admin/blog?tab=comments",
+      stats: `${stats.totalComments} comentarios`,
     },
     {
       title: "Experiencias",

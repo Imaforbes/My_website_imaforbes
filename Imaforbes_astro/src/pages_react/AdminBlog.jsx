@@ -25,6 +25,7 @@ import {
   FileEdit,
   Archive,
   CheckCircle,
+  MessageSquare,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ImageCropper from "../components/ImageCropper";
@@ -46,6 +47,9 @@ const AdminBlog = () => {
   const [postToDelete, setPostToDelete] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all"); // 'all', 'draft', 'published', 'archived'
   const [typeFilter, setTypeFilter] = useState("all"); // 'all', 'poem', 'letter'
+  const [activeTab, setActiveTab] = useState("posts"); // 'posts' | 'comments'
+  const [allComments, setAllComments] = useState([]);
+  const [loadingComments, setLoadingComments] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -80,15 +84,18 @@ const AdminBlog = () => {
   const fetchPosts = useCallback(async () => {
     try {
       setLoading(true);
-      // Apply filters: typeFilter can be 'all', 'poem', or 'letter'
-      // statusFilter can be 'all', 'draft', 'published', or 'archived'
       const type = typeFilter !== "all" ? typeFilter : null;
       const status = statusFilter !== "all" ? statusFilter : "all";
       const result = await api.blog.getAll(type, status);
       
-      if (result.success && result.data?.success) {
-        const postsData = result.data.data || [];
-        setPosts(postsData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+      if (result.success) {
+        const postsData = Array.isArray(result.data)
+          ? result.data
+          : Array.isArray(result.data?.data)
+          ? result.data.data
+          : [];
+        setPosts([...postsData].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+        setError(null);
       } else {
         setError("Failed to load blog posts");
       }
@@ -100,16 +107,57 @@ const AdminBlog = () => {
     }
   }, [statusFilter, typeFilter]);
 
+  const fetchAllComments = useCallback(async () => {
+    try {
+      setLoadingComments(true);
+      const result = await api.admin.getAllComments();
+      if (result.success && Array.isArray(result.data)) {
+        setAllComments(result.data);
+      }
+    } catch (err) {
+      console.error("Error fetching comments:", err);
+    } finally {
+      setLoadingComments(false);
+    }
+  }, []);
+
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("tab") === "comments") {
+        setActiveTab("comments");
+      }
+    }
     fetchPosts();
-  }, [fetchPosts]);
+    fetchAllComments();
+  }, [fetchPosts, fetchAllComments]);
+
+  const handleDeleteComment = async (commentId) => {
+    if (!window.confirm("¿Estás seguro de que deseas eliminar este comentario permanentemente?")) {
+      return;
+    }
+    try {
+      const result = await api.admin.deleteComment(commentId);
+      if (result.success) {
+        setAllComments((prev) => prev.filter((c) => String(c.id) !== String(commentId)));
+      } else {
+        alert("No se pudo eliminar el comentario.");
+      }
+    } catch (err) {
+      console.error("Error deleting comment:", err);
+      alert("Error al eliminar el comentario.");
+    }
+  };
 
   const handleLogout = async () => {
-    const baseURL = API_CONFIG.getBaseURL();
-    await fetch(`${baseURL}/api/auth/logout.php`, {
-      method: "POST",
-      credentials: "include",
-    });
+    try {
+      const { supabase } = await import("../services/supabase.js");
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.error(err);
+    }
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
@@ -338,10 +386,10 @@ const AdminBlog = () => {
     if (!postToDelete) return;
     try {
       const result = await api.blog.delete(postToDelete.id);
-      if (result.success && result.data?.success) {
+      if (result.success) {
         setPosts(posts.filter((p) => p.id !== postToDelete.id));
       } else {
-        alert(`Error: ${result.data?.message || result.error || "Unknown error"}`);
+        alert(`Error: ${result.data?.message || result.error?.message || result.error || "Unknown error"}`);
       }
     } catch (error) {
       console.error("Delete error:", error);
@@ -431,7 +479,37 @@ const AdminBlog = () => {
               </div>
             </div>
 
-            {/* Filters Section */}
+            {/* Section Tabs: Publicaciones vs Moderación de Comentarios */}
+            <div className="flex flex-wrap items-center gap-3 mb-6 pb-4 border-b border-strong dark:border-strong">
+              <button
+                onClick={() => setActiveTab("posts")}
+                className={`px-5 py-2.5 rounded-2xl text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                  activeTab === "posts"
+                    ? "bg-text text-bg dark:bg-white dark:text-black shadow-sm"
+                    : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
+                }`}
+              >
+                <FileText size={16} />
+                <span>Publicaciones ({posts.length})</span>
+              </button>
+              <button
+                onClick={() => {
+                  setActiveTab("comments");
+                  fetchAllComments();
+                }}
+                className={`px-5 py-2.5 rounded-2xl text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                  activeTab === "comments"
+                    ? "bg-text text-bg dark:bg-white dark:text-black shadow-sm"
+                    : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
+                }`}
+              >
+                <MessageSquare size={16} />
+                <span>Comentarios ({allComments.length})</span>
+              </button>
+            </div>
+
+            {activeTab === "posts" && (
+            /* Filters Section */
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -553,9 +631,67 @@ const AdminBlog = () => {
                 )}
               </div>
             </motion.div>
+            )}
           </div>
 
-          {/* Posts Grid */}
+          {activeTab === "comments" ? (
+            /* Comments Moderation Panel */
+            <div className="space-y-4">
+              {loadingComments ? (
+                <div className="text-center p-8 text-text dark:text-text-muted bg-surface dark:bg-[#0f0f0f] rounded-2xl border border-strong dark:border-strong font-light">
+                  Cargando comentarios...
+                </div>
+              ) : allComments.length === 0 ? (
+                <div className="text-center p-10 text-text dark:text-text-muted bg-surface dark:bg-[#0f0f0f] rounded-2xl border border-strong dark:border-strong font-light">
+                  <MessageSquare size={32} className="mx-auto mb-3 opacity-50" />
+                  <p>No hay comentarios registrados en el blog todavía.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-4">
+                  {allComments.map((comment) => {
+                    const parentPost = posts.find((p) => String(p.id) === String(comment.post_id));
+                    return (
+                      <motion.div
+                        key={comment.id}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="bg-surface dark:bg-[#0f0f0f] rounded-2xl border border-strong dark:border-strong p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+                      >
+                        <div className="space-y-2 flex-1">
+                          <div className="flex flex-wrap items-center gap-2 text-xs text-text-muted">
+                            <span className="px-2.5 py-1 rounded-full bg-gray-100 dark:bg-[#1a1a1a] text-text font-medium">
+                              {parentPost ? parentPost.title : `Post #${comment.post_id}`}
+                            </span>
+                            <span>•</span>
+                            <span className="flex items-center gap-1">
+                              <Calendar size={12} />
+                              {formatDate(comment.created_at)}
+                            </span>
+                          </div>
+                          <div className="text-sm font-medium text-text dark:text-text">
+                            Autor: <span className="font-semibold">{comment.author_name}</span>
+                          </div>
+                          <p className="text-sm text-text dark:text-text-muted whitespace-pre-wrap break-words font-light">
+                            {comment.content}
+                          </p>
+                        </div>
+
+                        <button
+                          onClick={() => handleDeleteComment(comment.id)}
+                          className="flex items-center gap-2 px-4 py-2.5 bg-surface dark:bg-[#0a0a0a] border border-strong dark:border-strong text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 text-xs rounded-2xl transition-colors font-medium self-end sm:self-center"
+                          title="Eliminar comentario indebido"
+                        >
+                          <Trash2 size={15} />
+                          <span>Eliminar</span>
+                        </button>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          ) : (
+          /* Posts Grid */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {posts.length > 0 ? (
               posts.map((post) => (
@@ -647,6 +783,7 @@ const AdminBlog = () => {
               </div>
             )}
           </div>
+          )}
         </div>
       </div>
 

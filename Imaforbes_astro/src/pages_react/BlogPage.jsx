@@ -1,13 +1,14 @@
 import withProviders from '../components/withProviders.jsx';
 import React, { useState, useEffect, useCallback } from "react";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { BorderBeam } from "border-beam";
 import { useTranslation } from "react-i18next";
 import { api } from "../services/api.js";
 import { API_CONFIG } from "../config/api.js";
 import ProtectedImage from "../components/ProtectedImage.jsx";
 import BlogPostSkeleton from "../components/BlogPostSkeleton.jsx";
-import { FileText, Mail, Filter, Heart, Eye, ArrowLeft, ArrowRight, Search } from "lucide-react";
+import { validateComment, checkCommentCooldown, recordCommentTimestamp } from "../utils/commentModeration.js";
+import { FileText, Mail, Filter, Heart, Eye, ArrowLeft, ArrowRight, Search, MessageCircle, Send } from "lucide-react";
 
 const HeroBackground = () => (
   <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
@@ -53,6 +54,15 @@ const BlogPage = () => {
   const [viewedPosts, setViewedPosts] = useState(new Set());
   const [likingPosts, setLikingPosts] = useState(new Set());
   const [selectedPostId, setSelectedPostId] = useState(null);
+
+  // Comments state
+  const [comments, setComments] = useState([]);
+  const [loadingComments, setLoadingComments] = useState(false);
+  const [commentAuthor, setCommentAuthor] = useState("");
+  const [commentContent, setCommentContent] = useState("");
+  const [commentHoneypot, setCommentHoneypot] = useState("");
+  const [submittingComment, setSubmittingComment] = useState(false);
+  const [commentFeedback, setCommentFeedback] = useState(null); // { type: 'success' | 'error', text: string }
 
   // Reading progress
   const { scrollYProgress } = useScroll();
@@ -239,10 +249,80 @@ const BlogPage = () => {
           console.error('Blog operation failed:', error);
         }
       }
+
+      // 3. Load approved comments for the opened post
+      try {
+        setLoadingComments(true);
+        const commentsResult = await api.blog.getComments(selectedPostId);
+        if (commentsResult.success && Array.isArray(commentsResult.data)) {
+          setComments(commentsResult.data);
+        } else {
+          setComments([]);
+        }
+      } catch (error) {
+        console.error('Failed to load comments:', error);
+        setComments([]);
+      } finally {
+        setLoadingComments(false);
+      }
     };
 
+    setCommentFeedback(null);
     fetchPostData();
   }, [selectedPostId, hasViewedPost, markPostAsViewed]);
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedPostId || submittingComment) return;
+
+    // 1. Honeypot check (if filled by a bot, silently pretend success)
+    if (commentHoneypot && commentHoneypot.trim().length > 0) {
+      setCommentContent("");
+      setCommentFeedback({ type: "success", text: t("blog.comments-success") });
+      return;
+    }
+
+    // 2. Cooldown check (Rate limit)
+    const cooldown = checkCommentCooldown();
+    if (!cooldown.allowed) {
+      setCommentFeedback({
+        type: "error",
+        text: t("blog.comments-error-cooldown", { seconds: cooldown.remainingSeconds }),
+      });
+      return;
+    }
+
+    // 3. Content & Profanity validation
+    const validation = validateComment(commentAuthor, commentContent);
+    if (!validation.valid) {
+      let errorMsg = t("blog.comments-error-length");
+      if (validation.reason === "inappropriate_content") {
+        errorMsg = t("blog.comments-error-inappropriate");
+      } else if (validation.reason === "links_not_allowed") {
+        errorMsg = t("blog.comments-error-links");
+      }
+      setCommentFeedback({ type: "error", text: errorMsg });
+      return;
+    }
+
+    try {
+      setSubmittingComment(true);
+      setCommentFeedback(null);
+
+      const result = await api.blog.addComment(selectedPostId, commentAuthor, commentContent);
+      if (result.success && result.data) {
+        setComments((prev) => [result.data, ...prev]);
+        setCommentContent("");
+        recordCommentTimestamp();
+        setCommentFeedback({ type: "success", text: t("blog.comments-success") });
+      }
+    } catch (err) {
+      console.error("Error submitting comment:", err);
+      setCommentFeedback({ type: "error", text: t("blog.error") });
+    } finally {
+      setSubmittingComment(false);
+    }
+  };
 
   const handleLike = async (postId) => {
     if (likingPosts.has(postId)) return;
@@ -425,6 +505,216 @@ const BlogPage = () => {
                  <Heart size={20} className={likedPosts.has(selectedPost.id) ? "fill-current" : ""} />
                  <span style={{ fontWeight: 500 }}>{selectedPost.likes_count || 0} Likes</span>
                </button>
+            </div>
+
+            {/* --- COMMENTS SECTION --- */}
+            <div style={{ marginTop: '4rem', paddingTop: '3rem', borderTop: '1px solid var(--color-border)' }} className="dark:border-strong">
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div>
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--color-text)', display: 'flex', alignItems: 'center', gap: '0.6rem', margin: 0 }}>
+                    <MessageCircle size={22} />
+                    {t("blog.comments-title", "Comentarios")}
+                    <span style={{ fontSize: '0.9rem', fontWeight: 400, color: 'var(--color-text-muted)' }}>
+                      ({comments.length})
+                    </span>
+                  </h2>
+                  <p style={{ fontSize: '0.95rem', color: 'var(--color-text-muted)', marginTop: '0.35rem', marginBottom: 0 }}>
+                    {t("blog.comments-subtitle", "Comparte tus pensamientos sobre esta publicación")}
+                  </p>
+                </div>
+              </div>
+
+              {/* Comment Form */}
+              <form
+                onSubmit={handleCommentSubmit}
+                className="card-premium"
+                style={{ padding: 'clamp(1.25rem, 4vw, 2rem)', marginBottom: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
+              >
+                {/* Honeypot anti-bot field (hidden from humans) */}
+                <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', opacity: 0, pointerEvents: 'none', height: 0, overflow: 'hidden' }}>
+                  <label htmlFor="website_url">Website</label>
+                  <input
+                    id="website_url"
+                    name="website_url"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={commentHoneypot}
+                    onChange={(e) => setCommentHoneypot(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="comment-author" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-text)', marginBottom: '0.5rem' }}>
+                    {t("blog.comments-name-label", "Tu nombre o alias")}
+                  </label>
+                  <input
+                    id="comment-author"
+                    type="text"
+                    required
+                    maxLength={60}
+                    value={commentAuthor}
+                    onChange={(e) => setCommentAuthor(e.target.value)}
+                    placeholder={t("blog.comments-name-placeholder", "Ej. Ana, Lector anónimo...")}
+                    className="dark:bg-[#111] dark:border-strong dark:text-text"
+                    style={{
+                      width: '100%',
+                      padding: '0.8rem 1rem',
+                      borderRadius: '12px',
+                      border: '1px solid var(--color-border)',
+                      background: 'var(--color-bg)',
+                      color: 'var(--color-text)',
+                      fontSize: '0.95rem',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                    <label htmlFor="comment-content" style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-text)' }}>
+                      {t("blog.comments-content-label", "Tu comentario")}
+                    </label>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                      {commentContent.length}/500
+                    </span>
+                  </div>
+                  <textarea
+                    id="comment-content"
+                    required
+                    rows={3}
+                    maxLength={500}
+                    value={commentContent}
+                    onChange={(e) => setCommentContent(e.target.value)}
+                    placeholder={t("blog.comments-content-placeholder", "Escribe un mensaje respetuoso...")}
+                    className="dark:bg-[#111] dark:border-strong dark:text-text"
+                    style={{
+                      width: '100%',
+                      padding: '0.85rem 1rem',
+                      borderRadius: '12px',
+                      border: '1px solid var(--color-border)',
+                      background: 'var(--color-bg)',
+                      color: 'var(--color-text)',
+                      fontSize: '0.95rem',
+                      resize: 'vertical',
+                      outline: 'none',
+                      lineHeight: 1.6
+                    }}
+                  />
+                </div>
+
+                <AnimatePresence>
+                  {commentFeedback && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      style={{
+                        padding: '0.75rem 1rem',
+                        borderRadius: '10px',
+                        fontSize: '0.9rem',
+                        border: '1px solid var(--color-border)',
+                        background: 'var(--color-bg)',
+                        color: commentFeedback.type === 'error' ? '#ef4444' : 'var(--color-text)'
+                      }}
+                    >
+                      {commentFeedback.text}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <button
+                    type="submit"
+                    disabled={submittingComment}
+                    className="btn-premium"
+                    style={{
+                      padding: '0.75rem 1.75rem',
+                      borderRadius: '9999px',
+                      background: 'var(--color-text)',
+                      color: 'var(--color-bg)',
+                      fontSize: '0.9rem',
+                      fontWeight: 600,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      cursor: submittingComment ? 'not-allowed' : 'pointer',
+                      opacity: submittingComment ? 0.7 : 1,
+                      minHeight: '44px'
+                    }}
+                  >
+                    <Send size={16} />
+                    <span>
+                      {submittingComment
+                        ? t("blog.comments-submitting", "Publicando...")
+                        : t("blog.comments-submit", "Publicar comentario")}
+                    </span>
+                  </button>
+                </div>
+              </form>
+
+              {/* Comments List */}
+              {loadingComments ? (
+                <div style={{ textAlign: 'center', padding: '2rem 0', color: 'var(--color-text-muted)' }}>
+                  ...
+                </div>
+              ) : comments.length === 0 ? (
+                <div
+                  className="card-premium"
+                  style={{ padding: '2.5rem 1.5rem', textAlign: 'center', color: 'var(--color-text-muted)' }}
+                >
+                  <MessageCircle size={28} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
+                  <p style={{ margin: 0, fontSize: '0.95rem' }}>
+                    {t("blog.comments-empty", "Sé la primera persona en dejar un comentario.")}
+                  </p>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {comments.map((comment) => {
+                    const initial = (comment.author_name || "A").trim().charAt(0).toUpperCase();
+                    return (
+                      <motion.div
+                        key={comment.id}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="card-premium"
+                        style={{ padding: '1.25rem 1.5rem', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '1rem', alignItems: 'start' }}
+                      >
+                        <div
+                          aria-hidden="true"
+                          style={{
+                            width: '2.5rem',
+                            height: '2.5rem',
+                            borderRadius: '50%',
+                            background: 'var(--color-bg)',
+                            border: '1px solid var(--color-border)',
+                            color: 'var(--color-text)',
+                            display: 'grid',
+                            placeItems: 'center',
+                            fontWeight: 600,
+                            fontSize: '0.95rem'
+                          }}
+                        >
+                          {initial}
+                        </div>
+                        <div>
+                          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.4rem' }}>
+                            <strong style={{ fontSize: '0.95rem', color: 'var(--color-text)' }}>
+                              {comment.author_name}
+                            </strong>
+                            <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                              {formatDate(comment.created_at)}
+                            </span>
+                          </div>
+                          <p style={{ margin: 0, fontSize: '0.95rem', color: 'var(--color-text-muted)', lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                            {comment.content}
+                          </p>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </motion.div>
         </section>
