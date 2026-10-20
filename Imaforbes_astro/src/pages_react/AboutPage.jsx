@@ -355,7 +355,7 @@ const AboutPage = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const aboutImages = ["/img/me.webp", "/img/me2.webp", "/img/me3.png"];
+  const aboutImages = ["/img/me.webp", "/img/me2.webp", "/img/me3.webp", "/img/me4.webp"];
 
   const nextImage = (e) => {
     if (e) e.stopPropagation();

@@ -122,7 +122,7 @@ const BlogPage = () => {
   }, [setCookie]);
 
   const getImageUrl = (imagePath) => {
-    if (!imagePath) return '/img/placeholder-project.jpg';
+    if (!imagePath) return '/img/placeholder-project.webp';
     if (imagePath.startsWith('http')) return imagePath;
     
     const baseUrl = API_CONFIG.getBaseURL();
