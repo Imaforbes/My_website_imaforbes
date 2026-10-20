@@ -394,9 +394,6 @@ const BlogPage = () => {
     return (
       <motion.section className="relative min-h-screen bg-surface dark:bg-[#0a0a0a] text-text dark:text-text overflow-hidden" variants={containerVariants} initial="hidden" animate="visible">
         <HeroBackground />
-          <motion.div 
-            style={{ scaleX, transformOrigin: "0%", position: "fixed", top: 0, left: 0, right: 0, height: "4px", background: "var(--color-text)", zIndex: 99999 }} 
-          />
         <div className="relative z-10 container mx-auto max-w-7xl py-12 sm:py-16 px-4 sm:px-6">
           <div className="max-w-4xl mx-auto space-y-8">
             <BlogPostSkeleton />
@@ -411,9 +408,6 @@ const BlogPage = () => {
     return (
       <div className="relative min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center">
         <HeroBackground />
-          <motion.div 
-            style={{ scaleX, transformOrigin: "0%", position: "fixed", top: 0, left: 0, right: 0, height: "4px", background: "var(--color-text)", zIndex: 99999 }} 
-          />
         <div className="relative z-10 text-center text-red-500"><p>{error}</p></div>
       </div>
     );
@@ -429,9 +423,6 @@ const BlogPage = () => {
       return (
         <section className="relative min-h-screen bg-surface dark:bg-[#0a0a0a]" style={{ paddingTop: '6rem' }}>
           <HeroBackground />
-          <motion.div 
-            style={{ scaleX, transformOrigin: "0%", position: "fixed", top: 0, left: 0, right: 0, height: "4px", background: "var(--color-text)", zIndex: 99999 }} 
-          />
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

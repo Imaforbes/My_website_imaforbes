@@ -3,7 +3,7 @@ import withProviders from './withProviders.jsx';
 import React, { useState, useEffect, memo, useCallback } from "react";
 
 import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import LanguageToggle from "./LanguageToggle";
 import CvModal from "./CvModal.jsx";
@@ -14,6 +14,14 @@ const Header = memo(({ currentPath }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = { pathname: currentPath || (typeof window !== "undefined" ? window.location.pathname : "/") };
+
+  // Global scroll progress bar across the entire site
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
 
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 50);
@@ -72,6 +80,21 @@ const Header = memo(({ currentPath }) => {
 
   return (
     <>
+      <motion.div
+        aria-hidden="true"
+        style={{
+          scaleX,
+          transformOrigin: "0%",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "4px",
+          background: "var(--color-text)",
+          zIndex: 99999,
+          pointerEvents: "none",
+        }}
+      />
       <motion.header
         className={`header-premium ${scrolled && !isMenuOpen ? 'scrolled' : ''}`}
         style={{
