@@ -24,7 +24,7 @@ const Header = memo(({ currentPath }) => {
   });
 
   const handleScroll = useCallback(() => {
-    setScrolled(window.scrollY > 50);
+    setScrolled(window.scrollY > 15);
   }, []);
 
   useEffect(() => {
@@ -95,15 +95,12 @@ const Header = memo(({ currentPath }) => {
           pointerEvents: "none",
         }}
       />
-      <motion.header
+      <header
         className={`header-premium ${scrolled && !isMenuOpen ? 'scrolled' : ''}`}
         style={{
           background: isMenuOpen ? 'var(--color-bg)' : undefined,
           backdropFilter: isMenuOpen ? 'none' : undefined,
         }}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <div className="container-premium nav-premium">
           {/* Logo */}
@@ -158,7 +155,7 @@ const Header = memo(({ currentPath }) => {
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
-      </motion.header>
+      </header>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>

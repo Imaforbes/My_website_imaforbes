@@ -1,7 +1,6 @@
 import withProviders from '../components/withProviders.jsx';
 import React, { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
-import { BorderBeam } from "border-beam";
+import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { api } from "../services/api.js";
 import { API_CONFIG } from "../config/api.js";
@@ -63,14 +62,6 @@ const BlogPage = () => {
   const [commentHoneypot, setCommentHoneypot] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
   const [commentFeedback, setCommentFeedback] = useState(null); // { type: 'success' | 'error', text: string }
-
-  // Reading progress
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
 
   // Read URL query parameter for routing
   useEffect(() => {
@@ -823,7 +814,7 @@ const BlogPage = () => {
             animate="visible"
             style={{ 
               display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))', 
               gap: '2.5rem',
               maxWidth: '1200px', 
               margin: '0 auto',
@@ -837,8 +828,8 @@ const BlogPage = () => {
               };
 
               return (
-                <BorderBeam key={post.id} theme="dark" size="pulse-inner" duration={6} colorVariant="ocean" className="rounded-2xl relative w-full h-full">
                   <motion.article
+                    key={post.id}
                     variants={cardVariants}
                     className="card-premium h-full"
                     style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}
@@ -903,7 +894,6 @@ const BlogPage = () => {
                     </div>
                   )}
                   </motion.article>
-                </BorderBeam>
               );
             })}
           </motion.div>

@@ -2,7 +2,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { API_CONFIG } from '../config/api.js';
 import { safeLocalStorage, safeMatchMedia } from '../utils/storage.js';
 
 const SettingsContext = createContext();
@@ -139,54 +138,32 @@ export const SettingsProvider = ({ children }) => {
     }
 
     try {
-      const baseURL = API_CONFIG.getBaseURL();
-      const response = await fetch(`${baseURL}/api/settings.php`, {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      });
+      const { api } = await import('../services/api.js');
+      const result = await api.settings.get();
 
-      // Handle 401/403 errors silently (expected for non-authenticated users)
-      if (response.status === 401 || response.status === 403) {
-        // User is not authenticated, use localStorage values
-        setLoading(false);
-        return;
-      }
+      if (result.success && result.data) {
+        const apiSettings = result.data.settings || result.data;
+        
+        // Parse appearance settings
+        const rawAppearance = apiSettings.appearance?.value ?? apiSettings.appearance;
+        const appearance = rawAppearance
+          ? (typeof rawAppearance === 'string' 
+              ? JSON.parse(rawAppearance) 
+              : rawAppearance)
+          : null;
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.data?.settings) {
-          const apiSettings = data.data.settings;
-          
-          // Parse appearance settings
-          const appearance = apiSettings.appearance?.value 
-            ? (typeof apiSettings.appearance.value === 'string' 
-                ? JSON.parse(apiSettings.appearance.value) 
-                : apiSettings.appearance.value)
-            : null;
+        if (appearance) {
+          const hasLocalTheme = !!safeLocalStorage.getItem('app_theme');
+          const hasLocalLanguage = !!safeLocalStorage.getItem('app_language');
 
-          if (appearance) {
-            // Solo sobrescribimos si no hay una preferencia local ya guardada
-            // o si estamos forzando la sincronización.
-            const hasLocalTheme = !!safeLocalStorage.getItem('app_theme');
-            const hasLocalLanguage = !!safeLocalStorage.getItem('app_language');
-
-            if (appearance.theme && !hasLocalTheme) {
-              setTheme(appearance.theme);
-              safeLocalStorage.setItem('app_theme', appearance.theme);
-            }
-            if (appearance.language && !hasLocalLanguage) {
-              setLanguage(appearance.language);
-              safeLocalStorage.setItem('app_language', appearance.language);
-            }
+          if (appearance.theme && !hasLocalTheme) {
+            setTheme(appearance.theme);
+            safeLocalStorage.setItem('app_theme', appearance.theme);
           }
-        }
-      } else {
-        // Other errors (not 401/403) - log but don't break the app
-        if (import.meta.env.DEV) {
-          console.warn('Settings API returned non-ok status:', response.status);
+          if (appearance.language && !hasLocalLanguage) {
+            setLanguage(appearance.language);
+            safeLocalStorage.setItem('app_language', appearance.language);
+          }
         }
       }
     } catch (error) {

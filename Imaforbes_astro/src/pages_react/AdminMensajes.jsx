@@ -2,7 +2,9 @@ import withProviders from '../components/withProviders.jsx';
 // src/pages/AdminMensajes.jsx
 import React, { useState, useEffect } from "react";
 
-import { API_CONFIG } from "../config/api.js";
+import { api } from "../services/api.js";
+import { supabase } from "../services/supabase.js";
+import { safeLocalStorage } from "../utils/storage.js";
 // --> CAMBIO CLAVE: Se importan los iconos desde 'lucide-react' para mantener la consistencia del proyecto.
 import {
   LogOut,
@@ -43,50 +45,25 @@ const AdminMensajes = () => {
   useEffect(() => {
     const fetchMensajes = async () => {
       try {
-        const baseURL = API_CONFIG.getBaseURL();
+        const result = await api.admin.getMessages(1, 200);
 
-        const response = await fetch(`${baseURL}/api/messages.php`, {
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        });
-
-        if (response.status === 401 || response.status === 403) {
-          navigate("/login");
-          return;
-        }
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`HTTP ${response.status}: ${errorText}`);
-        }
-
-        const data = await response.json();
-
-        if (data.success && data.data) {
-          // Handle the new API response format with items and pagination
-          let messages = [];
-          if (data.data.items) {
-            messages = data.data.items;
-          } else {
-            messages = data.data;
-          }
-          // Sort messages by ID in descending order (newest first)
+        if (result.success && result.data) {
+          const messages = Array.isArray(result.data.items)
+            ? [...result.data.items]
+            : Array.isArray(result.data)
+            ? [...result.data]
+            : [];
           messages.sort((a, b) => parseInt(b.id) - parseInt(a.id));
           setMensajes(messages);
-        } else if (data.error) {
+        } else if (result.error) {
           if (
-            data.error.includes("Access denied") ||
-            data.error.includes("login")
+            result.error.includes("Access denied") ||
+            result.error.includes("login")
           ) {
             navigate("/login");
           } else {
-            setError(data.error);
+            setError(result.error);
           }
-        } else {
-          setMensajes(data);
         }
       } catch (error) {
         setError(error.message);
@@ -95,15 +72,13 @@ const AdminMensajes = () => {
       }
     };
     fetchMensajes();
-  }, [navigate]);
+  }, []);
 
   const handleLogout = async () => {
     try {
-      const baseURL = API_CONFIG.getBaseURL();
-      await fetch(`${baseURL}/api/auth/logout.php`, {
-        method: "POST",
-        credentials: "include",
-      });
+      await supabase.auth.signOut();
+      safeLocalStorage.removeItem("auth_token");
+      safeLocalStorage.removeItem("user_session");
     } catch (err) {
       console.error("Logout error:", err);
     } finally {
@@ -119,56 +94,14 @@ const AdminMensajes = () => {
   const confirmDelete = async () => {
     if (!messageToDelete) return;
     try {
-      const baseURL = API_CONFIG.getBaseURL();
+      const result = await api.admin.deleteMessage(messageToDelete);
 
-      // First, get the CSRF token
-      const tokenResponse = await fetch(
-        `${baseURL}/api/auth/csrf-token.php`,
-        {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }
-      );
-
-      let csrfToken = null;
-      if (tokenResponse.ok) {
-        const tokenData = await tokenResponse.json();
-        if (tokenData.success && tokenData.data?.csrf_token) {
-          csrfToken = tokenData.data.csrf_token;
-        }
-      }
-
-      // Now make the DELETE request with CSRF token
-      const headers = {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      };
-
-      if (csrfToken) {
-        headers["X-CSRF-Token"] = csrfToken;
-      }
-
-      const response = await fetch(
-        `${baseURL}/api/messages.php?id=${messageToDelete}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-          headers: headers,
-        }
-      );
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
+      if (result.success) {
         setMensajes((current) =>
           current.filter((m) => m.id !== messageToDelete)
         );
       } else {
-        alert(`Error al eliminar: ${result.message || "Error desconocido"}`);
+        alert(`Error al eliminar: ${result.error || "Error desconocido"}`);
       }
     } catch (error) {
       console.error("Delete error:", error);

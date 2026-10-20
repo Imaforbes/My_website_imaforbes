@@ -100,7 +100,7 @@ const HomePage = () => {
       >
         {/* Status Pill */}
         <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
-          <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
+          <BorderBeam theme="dark" size="sm" duration={3} colorVariant="mono" className="rounded-full">
             <div style={{ 
               display: 'flex', alignItems: 'center', gap: '0.5rem', 
               padding: '0.5rem 1rem', borderRadius: '50px', 
@@ -135,7 +135,7 @@ const HomePage = () => {
 
         <motion.div variants={itemVariants} className="hero-actions" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '1.25rem', marginTop: '3rem' }}>
           {/* Primary CTA: Von Restorff Effect (Isolation) */}
-          <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
+          <BorderBeam theme="dark" size="sm" duration={3} colorVariant="mono" className="rounded-full">
             <a href="/projects" className="btn-premium shadow-lg" style={{ padding: '0.85rem 2rem', borderRadius: '9999px', background: 'var(--color-text)', color: 'var(--color-bg)', border: 'none', fontWeight: 600 }}>
               <span className="btn-icon">
                 <FiCode /> {t("home.view-projects")} <FiArrowRight />

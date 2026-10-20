@@ -563,7 +563,7 @@ const AboutPage = () => {
               {t("about.hero-text-2")}
             </p>
 
-            <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full w-max">
+            <BorderBeam theme="dark" size="sm" duration={3} colorVariant="mono" className="rounded-full w-max">
               <button
                 onClick={(e) => {
                   e.preventDefault();

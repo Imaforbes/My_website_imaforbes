@@ -3,7 +3,6 @@ import withProviders from '../components/withProviders.jsx';
 import React, { useState, useEffect, useCallback } from "react";
 
 import { motion } from "framer-motion";
-import { API_CONFIG } from "../config/api.js";
 import { api } from "../services/api.js";
 import {
   ArrowLeft,
@@ -48,74 +47,62 @@ const StatisticsPage = () => {
 
   const fetchStatistics = useCallback(async () => {
     try {
-      const baseURL = API_CONFIG.getBaseURL();
+      const result = await api.admin.getMessages(1, 500);
 
-      const response = await fetch(`${baseURL}/api/messages.php`, {
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-      });
+      if (result.success && result.data) {
+        const messages = Array.isArray(result.data.items)
+          ? [...result.data.items]
+          : Array.isArray(result.data)
+          ? [...result.data]
+          : [];
 
-      if (response.status === 401 || response.status === 403) {
-        navigate("/login");
-        return;
-      }
+        // Calculate statistics
+        const totalMessages = messages.length;
+        const newMessages = messages.filter(msg => !msg.status || msg.status === "new").length;
+        const readMessages = messages.filter(msg => msg.status === "read").length;
+        const repliedMessages = messages.filter(msg => msg.status === "replied").length;
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.data) {
-          const messages = data.data.items || data.data;
-          
-          // Calculate statistics
-          const totalMessages = messages.length;
-          const newMessages = messages.filter(msg => !msg.status || msg.status === "new").length;
-          const readMessages = messages.filter(msg => msg.status === "read").length;
-          const repliedMessages = messages.filter(msg => msg.status === "replied").length;
-          
-          // Group messages by month
-          const messagesByMonth = messages.reduce((acc, msg) => {
-            const date = new Date(msg.created_at);
+        // Group messages by month
+        const messagesByMonth = messages.reduce((acc, msg) => {
+          const date = new Date(msg.created_at);
+          if (!isNaN(date.getTime())) {
             const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
             acc[month] = (acc[month] || 0) + 1;
-            return acc;
-          }, {});
+          }
+          return acc;
+        }, {});
 
-          // Recent activity (last 5 messages)
-          const recentActivity = messages
-            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-            .slice(0, 5);
+        // Recent activity (last 5 messages)
+        const recentActivity = [...messages]
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .slice(0, 5);
 
-          setStats({
-            totalMessages,
-            newMessages,
-            readMessages,
-            repliedMessages,
-            messagesByMonth: Object.entries(messagesByMonth).map(([month, count]) => ({
-              month,
-              count,
-            })),
-            recentActivity,
-          });
-        }
+        setStats({
+          totalMessages,
+          newMessages,
+          readMessages,
+          repliedMessages,
+          messagesByMonth: Object.entries(messagesByMonth).map(([month, count]) => ({
+            month,
+            count,
+          })),
+          recentActivity,
+        });
       }
     } catch (error) {
       console.error("Error fetching statistics:", error);
     }
-  }, [navigate]);
+  }, []);
 
   const fetchBlogStatistics = useCallback(async () => {
     try {
       const result = await api.blog.getStats();
       if (result.success && result.data) {
-        const apiResponse = result.data;
-        if (apiResponse.success && apiResponse.data) {
-          setBlogStats(prev => ({
-            ...prev,
-            ...apiResponse.data,
-          }));
-        }
+        const statsPayload = result.data.data || result.data;
+        setBlogStats(prev => ({
+          ...prev,
+          ...statsPayload,
+        }));
       }
     } catch (error) {
       if (import.meta.env.DEV) {

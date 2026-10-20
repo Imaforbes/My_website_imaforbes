@@ -67,7 +67,6 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
   };
 
   return (
-    <BorderBeam theme="dark" size="pulse-inner" duration={6} colorVariant="ocean" className="rounded-2xl h-full w-full relative">
       <motion.div variants={cardVariants} className="project-card-premium h-full dark:bg-[#111] dark:border-strong" style={{ zIndex: 10, background: 'var(--color-surface)', borderRadius: '1rem', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid var(--color-border)' }}>
       
       {/* Background Image / Carousel Container */}
@@ -178,7 +177,7 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
           )}
 
           {project.link && project.link !== "#" && (
-            <BorderBeam theme="dark" size="sm" duration={4} colorVariant="ocean" className="rounded-full">
+            <BorderBeam theme="dark" size="sm" duration={4} colorVariant="mono" className="rounded-full">
               <a
                 href={project.link}
                 target="_blank"
@@ -194,7 +193,6 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
         </div>
       </div>
       </motion.div>
-    </BorderBeam>
   );
 };
 
@@ -365,7 +363,7 @@ const ProjectsPage = () => {
           transition={{ duration: 0.5 }}
           style={{ display: 'flex', justifyContent: 'center', marginTop: '4rem', marginBottom: '2rem' }}
         >
-          <BorderBeam theme="dark" size="md" duration={5} colorVariant="ocean" className="rounded-full">
+          <BorderBeam theme="dark" size="md" duration={5} colorVariant="mono" className="rounded-full">
             <a
               href="https://github.com/Imaforbes?tab=repositories&q=&type=&language=&sort="
               target="_blank"

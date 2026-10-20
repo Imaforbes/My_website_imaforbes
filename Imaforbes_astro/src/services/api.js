@@ -133,7 +133,34 @@ export const api = {
             }
         },
         getStats: async (postId = null) => {
-            return { success: true, data: {} };
+            try {
+                const { data: posts, error } = await supabase.from('blog_posts').select('*');
+                const items = !error && Array.isArray(posts) && posts.length > 0 ? posts : blogFallback;
+                const totalPosts = items.length;
+                const publishedPosts = items.filter(p => p.status === 'published').length;
+                const draftPosts = items.filter(p => p.status === 'draft').length;
+                const totalViews = items.reduce((sum, p) => sum + (parseInt(p.views_count) || 0), 0);
+                const totalLikes = items.reduce((sum, p) => sum + (parseInt(p.likes_count) || 0), 0);
+                const mostViewed = [...items].sort((a, b) => (parseInt(b.views_count) || 0) - (parseInt(a.views_count) || 0)).slice(0, 5);
+                const mostLiked = [...items].sort((a, b) => (parseInt(b.likes_count) || 0) - (parseInt(a.likes_count) || 0)).slice(0, 5);
+
+                return {
+                    success: true,
+                    data: {
+                        totalPosts,
+                        publishedPosts,
+                        draftPosts,
+                        totalViews,
+                        totalLikes,
+                        viewsLast7Days: totalViews,
+                        viewsLast30Days: totalViews,
+                        mostViewed,
+                        mostLiked
+                    }
+                };
+            } catch {
+                return { success: true, data: {} };
+            }
         },
         /**
          * Fetches approved comments for a specific blog post.
@@ -269,6 +296,18 @@ export const api = {
             let fallback = [...experienceFallback];
             if (status && status !== 'all') fallback = fallback.filter(e => e.status === status);
             return { success: true, data: fallback };
+        },
+        create: async (data) => {
+            const { error } = await supabase.from('work_experiences').insert([data]);
+            return error ? { success: false, error: error.message || error } : { success: true };
+        },
+        update: async (id, data) => {
+            const { error } = await supabase.from('work_experiences').update(data).eq('id', id);
+            return error ? { success: false, error: error.message || error } : { success: true };
+        },
+        delete: async (id) => {
+            const { error } = await supabase.from('work_experiences').delete().eq('id', id);
+            return error ? { success: false, error: error.message || error } : { success: true };
         }
     },
 

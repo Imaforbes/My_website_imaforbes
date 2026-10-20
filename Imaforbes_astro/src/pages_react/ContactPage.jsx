@@ -109,7 +109,7 @@ const ContactPage = () => {
               viewport={{ once: true }}
               style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}
             >
-              <BorderBeam theme="dark" size="sm" duration={3} colorVariant="ocean" className="rounded-full">
+              <BorderBeam theme="dark" size="sm" duration={3} colorVariant="mono" className="rounded-full">
                 <div style={{ 
                   display: 'flex', alignItems: 'center', gap: '0.6rem', 
                   padding: '0.5rem 1.25rem', borderRadius: '9999px', 
