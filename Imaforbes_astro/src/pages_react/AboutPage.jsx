@@ -355,7 +355,7 @@ const AboutPage = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const aboutImages = ["/img/me.webp", "/img/me2.webp", "/img/me3.webp", "/img/me4.webp"];
+  const aboutImages = ["/img/me4.webp", "/img/me.webp", "/img/me2.webp", "/img/me3.webp"];
 
   const nextImage = (e) => {
     if (e) e.stopPropagation();
@@ -377,169 +377,214 @@ const AboutPage = () => {
       <HeroBackground />
       <div className="container-premium" style={{ position: 'relative', zIndex: 10 }}>
         
-        <div className="bento-grid" style={{ marginBottom: '6rem' }}>
+        <div className="bento-grid" style={{ marginBottom: '6rem', alignItems: 'stretch' }}>
           <motion.div
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="bento-item bento-item-small" style={{ position: 'relative', display: 'flex', justifyContent: 'center', padding: '0' }}
+            className="bento-item-small"
+            style={{
+              position: 'relative',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0.5rem',
+              overflow: 'visible',
+            }}
           >
-            {/* Image Container with subtle hover and premium styling */}
-            <div style={{ position: 'relative', width: '100%', maxWidth: '400px' }}>
-              <div style={{ 
-                position: 'absolute', 
-                inset: '-10px', 
-                background: 'linear-gradient(45deg, rgba(150,150,150,0.1), transparent, rgba(150,150,150,0.1))', 
-                borderRadius: '24px', 
-                filter: 'blur(15px)',
-                zIndex: -1
-              }}></div>
-              
+            {/* Single unified card container without double frame or clipped badges */}
+            <div style={{ position: 'relative', width: '100%', maxWidth: '380px', margin: '0 auto' }}>
               <div 
                 className="card-premium" 
-                style={{ padding: '0.5rem', borderRadius: '24px', overflow: 'hidden', cursor: 'pointer', position: 'relative' }}
+                style={{
+                  padding: '0.6rem',
+                  borderRadius: '2rem',
+                  background: 'var(--color-surface)',
+                  border: '1px solid var(--color-border)',
+                  boxShadow: 'var(--shadow-md)',
+                  cursor: 'pointer',
+                  position: 'relative',
+                }}
                 onClick={nextImage}
               >
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={currentImageIndex}
-                    src={aboutImages[currentImageIndex]}
-                    alt="Imanol Pérez Arteaga"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                    style={{ 
-                      width: '100%', 
-                      height: 'auto', 
-                      aspectRatio: '3 / 4',
-                      borderRadius: '18px', 
-                      display: 'block', 
-                      filter: 'contrast(1.05) saturate(1.1)',
-                      objectFit: 'cover'
-                    }}
-                  />
-                </AnimatePresence>
-                
-                {/* Navigation Arrows */}
-                <button 
-                  onClick={prevImage}
-                  aria-label="Anterior imagen"
+                {/* Inner image viewport with clean rounded clipping */}
+                <div
                   style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '10px',
-                    transform: 'translateY(-50%)',
-                    background: 'rgba(0,0,0,0.4)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: '36px',
-                    height: '36px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    zIndex: 3,
-                    backdropFilter: 'blur(4px)'
+                    position: 'relative',
+                    width: '100%',
+                    aspectRatio: '3 / 4',
+                    borderRadius: '1.5rem',
+                    overflow: 'hidden',
+                    background: '#0a0907',
                   }}
                 >
-                  <ChevronLeft size={20} />
-                </button>
-
-                <button 
-                  onClick={nextImage}
-                  aria-label="Siguiente imagen"
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    right: '10px',
-                    transform: 'translateY(-50%)',
-                    background: 'rgba(0,0,0,0.4)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: '36px',
-                    height: '36px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    zIndex: 3,
-                    backdropFilter: 'blur(4px)'
-                  }}
-                >
-                  <ChevronRight size={20} />
-                </button>
-
-                {/* Gradient overlay for better indicator visibility */}
-                <div style={{
-                  position: 'absolute',
-                  bottom: 0, left: 0, right: 0,
-                  height: '60px',
-                  background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%)',
-                  borderRadius: '0 0 18px 18px',
-                  pointerEvents: 'none',
-                  zIndex: 1
-                }}></div>
-
-                {/* Carousel Indicators */}
-                <div style={{ position: 'absolute', bottom: '1rem', left: '0', right: '0', display: 'flex', justifyContent: 'center', gap: '0.5rem', zIndex: 2 }}>
-                  {aboutImages.map((_, idx) => (
-                    <div 
-                      key={idx}
-                      style={{
-                        width: idx === currentImageIndex ? '20px' : '8px',
-                        height: '8px',
-                        borderRadius: '4px',
-                        background: idx === currentImageIndex ? '#ffffff' : 'rgba(255, 255, 255, 0.5)',
-                        transition: 'all 0.3s ease',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.5)'
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={currentImageIndex}
+                      src={aboutImages[currentImageIndex]}
+                      alt="Imanol Pérez Arteaga"
+                      initial={{ opacity: 0, scale: 1.02 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
+                      style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        display: 'block', 
+                        filter: 'contrast(1.04) saturate(1.05)',
+                        objectFit: 'cover',
+                        objectPosition: 'center top',
                       }}
                     />
-                  ))}
+                  </AnimatePresence>
+                  
+                  {/* Navigation Arrows */}
+                  <button 
+                    onClick={prevImage}
+                    aria-label="Anterior imagen"
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '12px',
+                      transform: 'translateY(-50%)',
+                      background: 'rgba(10, 9, 7, 0.55)',
+                      color: '#ffffff',
+                      border: '1px solid rgba(255, 255, 255, 0.18)',
+                      borderRadius: '50%',
+                      width: '36px',
+                      height: '36px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      zIndex: 3,
+                      backdropFilter: 'blur(6px)',
+                      WebkitBackdropFilter: 'blur(6px)',
+                      transition: 'background 0.2s ease',
+                    }}
+                  >
+                    <ChevronLeft size={18} />
+                  </button>
+
+                  <button 
+                    onClick={nextImage}
+                    aria-label="Siguiente imagen"
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      right: '12px',
+                      transform: 'translateY(-50%)',
+                      background: 'rgba(10, 9, 7, 0.55)',
+                      color: '#ffffff',
+                      border: '1px solid rgba(255, 255, 255, 0.18)',
+                      borderRadius: '50%',
+                      width: '36px',
+                      height: '36px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      zIndex: 3,
+                      backdropFilter: 'blur(6px)',
+                      WebkitBackdropFilter: 'blur(6px)',
+                      transition: 'background 0.2s ease',
+                    }}
+                  >
+                    <ChevronRight size={18} />
+                  </button>
+
+                  {/* Gradient overlay contained strictly inside the inner image viewport */}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: '72px',
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%)',
+                    pointerEvents: 'none',
+                    zIndex: 1,
+                  }} />
+
+                  {/* Carousel Indicators */}
+                  <div style={{ position: 'absolute', bottom: '1rem', left: '0', right: '0', display: 'flex', justifyContent: 'center', gap: '0.5rem', zIndex: 3 }}>
+                    {aboutImages.map((_, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        aria-label={`Ver foto ${idx + 1}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCurrentImageIndex(idx);
+                        }}
+                        style={{
+                          width: idx === currentImageIndex ? '22px' : '8px',
+                          height: '8px',
+                          padding: 0,
+                          border: 'none',
+                          borderRadius: '4px',
+                          background: idx === currentImageIndex ? '#ffffff' : 'rgba(255, 255, 255, 0.5)',
+                          transition: 'all 0.3s ease',
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.4)',
+                          cursor: 'pointer',
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              {/* Floating Element 1 */}
+              {/* Floating Badge 1 - Top Left (never clipped) */}
               <motion.div 
-                animate={{ y: [0, -10, 0] }}
+                animate={{ y: [0, -6, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                 style={{ 
+                  position: 'absolute',
+                  top: '1.25rem',
+                  left: '1rem',
+                  zIndex: 4,
                   background: 'var(--color-surface)',
-                  padding: '0.75rem 1rem', borderRadius: '12px',
-                  border: '1px solid var(--color-border)',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
-                  display: 'flex', alignItems: 'center', gap: '0.5rem'
+                  padding: '0.6rem 0.9rem',
+                  borderRadius: '14px',
+                  border: '1px solid var(--color-border-strong)',
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.18)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.6rem',
+                  pointerEvents: 'none',
                 }}
-                className="absolute top-[10%] -left-2 md:-left-8 lg:-left-[15%] dark:bg-[#1a1a1a] dark:border-strong"
               >
-                <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'var(--color-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text)' }} className="dark:bg-[#0a0a0a] dark:text-text">
-                  <FaReact size={18} />
+                <div style={{ width: '30px', height: '30px', borderRadius: '8px', background: 'var(--color-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text)', flexShrink: 0 }}>
+                  <FaReact size={16} />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 500, textTransform: 'uppercase' }}>Stack</span>
-                  <span style={{ fontSize: '0.85rem', color: 'var(--color-text)', fontWeight: 600 }} className="dark:text-text">MERN / PHP</span>
+                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Stack</span>
+                  <span style={{ fontSize: '0.82rem', color: 'var(--color-text)', fontWeight: 600, whiteSpace: 'nowrap' }}>MERN / PHP</span>
                 </div>
               </motion.div>
 
-              {/* Floating Element 2 */}
+              {/* Floating Badge 2 - Bottom Right (never clipped) */}
               <motion.div 
-                animate={{ y: [0, 10, 0] }}
+                animate={{ y: [0, 6, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                 style={{ 
+                  position: 'absolute',
+                  bottom: '2.75rem',
+                  right: '1rem',
+                  zIndex: 4,
                   background: 'var(--color-surface)',
-                  padding: '0.75rem 1rem', borderRadius: '12px',
-                  border: '1px solid var(--color-border)',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
-                  display: 'flex', alignItems: 'center', gap: '0.5rem'
+                  padding: '0.65rem 1rem',
+                  borderRadius: '14px',
+                  border: '1px solid var(--color-border-strong)',
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.18)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  pointerEvents: 'none',
                 }}
-                className="absolute bottom-[15%] -right-2 md:-right-6 lg:-right-[10%] dark:bg-[#1a1a1a] dark:border-strong"
               >
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                  <span style={{ fontSize: '1.2rem', color: 'var(--color-text)', fontWeight: 700 }} className="dark:text-text">{t("about.experience-years", "+3 Años")}</span>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{t("about.experience-label", "Experiencia Full Stack")}</span>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.2 }}>
+                  <span style={{ fontSize: '1.05rem', color: 'var(--color-text)', fontWeight: 700, whiteSpace: 'nowrap' }}>{t("about.experience-years", "+3 Años")}</span>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', whiteSpace: 'nowrap' }}>{t("about.experience-label", "Experiencia Full Stack")}</span>
                 </div>
               </motion.div>
 

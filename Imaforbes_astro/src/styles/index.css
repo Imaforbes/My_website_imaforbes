@@ -621,7 +621,7 @@ button, a, input, select, textarea {
 
 @media (max-width: 1024px) {
   .bento-item-medium { grid-column: span 12; }
-  .bento-item-small { grid-column: span 6; }
+  .bento-item-small { grid-column: span 12; }
 }
 
 @media (max-width: 768px) {
