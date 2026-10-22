@@ -1,11 +1,11 @@
 [
   {
     "id": 1,
-    "title": "Software Enginner",
+    "title": "Software Engineer",
     "company": "Allegro San Angel Inn",
     "location": "Mexico City, MX",
     "period": "2025 - Present",
-    "description": "As a Software Engineer focused on modernizing the notary's operations by developing a custom financial and operational management system. Your key contributions included gathering requirements from staff, mapping out core legal processes (such as real estate transactions and wills), and designing the system's architecture to include modules for CRM, document automation, and financial control.",
+    "description": "As a Software Engineer focused on modernizing the notary's operations by developing a custom financial and operational management system. Key contributions included gathering requirements from staff, mapping out core legal processes (such as real estate transactions and wills), and designing the system's architecture to include modules for CRM, document automation, and financial control.",
     "responsibilities": [
       "Systems Development",
       "Custom Solutions",

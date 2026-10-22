@@ -107,18 +107,20 @@ const BlogPage = () => {
   }, []);
 
   const hasViewedPost = useCallback((postId) => {
-    const cookieName = `blog_viewed_${postId}`;
+    const numericId = Number(postId);
+    const cookieName = `blog_viewed_${numericId}`;
     const cookieValue = getCookie(cookieName);
     if (cookieValue === 'true') {
       return true;
     }
-    return viewedPosts.has(postId);
+    return viewedPosts.has(numericId) || viewedPosts.has(postId);
   }, [getCookie, viewedPosts]);
 
   const markPostAsViewed = useCallback((postId) => {
-    const cookieName = `blog_viewed_${postId}`;
+    const numericId = Number(postId);
+    const cookieName = `blog_viewed_${numericId}`;
     setCookie(cookieName, 'true', 365);
-    setViewedPosts(prev => new Set([...prev, postId]));
+    setViewedPosts(prev => new Set([...prev, numericId]));
   }, [setCookie]);
 
   const getImageUrl = (imagePath) => {
@@ -202,13 +204,13 @@ const BlogPage = () => {
         const result = await api.blog.getLikeStatus(selectedPostId);
         if (result.success && result.data) {
           const apiData = result.data.data || result.data;
-          if (apiData?.liked === true) {
-            setLikedPosts((prev) => {
-              const newSet = new Set(prev);
-              newSet.add(selectedPostId);
-              return newSet;
-            });
-          }
+          const isLiked = apiData?.liked === true || apiData?.hasLiked === true;
+          setLikedPosts((prev) => {
+            const newSet = new Set(prev);
+            if (isLiked) newSet.add(Number(selectedPostId));
+            else newSet.delete(Number(selectedPostId));
+            return newSet;
+          });
           if (apiData?.likes_count !== undefined) {
             setPosts((prevPosts) =>
               prevPosts.map((p) =>

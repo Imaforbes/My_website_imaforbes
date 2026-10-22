@@ -64,7 +64,7 @@ const StatisticsPage = () => {
 
         // Group messages by month
         const messagesByMonth = messages.reduce((acc, msg) => {
-          const date = new Date(msg.created_at);
+          const date = new Date(msg.created_at || msg.fecha);
           if (!isNaN(date.getTime())) {
             const month = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
             acc[month] = (acc[month] || 0) + 1;
@@ -74,7 +74,7 @@ const StatisticsPage = () => {
 
         // Recent activity (last 5 messages)
         const recentActivity = [...messages]
-          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .sort((a, b) => new Date(b.created_at || b.fecha) - new Date(a.created_at || a.fecha))
           .slice(0, 5);
 
         setStats({
@@ -334,14 +334,14 @@ const StatisticsPage = () => {
               <div className="space-y-3">
                 {stats.recentActivity.length > 0 ? (
                   stats.recentActivity.map((activity) => (
-                    <div key={activity.id ?? `${activity.created_at}-${activity.name}`} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-[#1a1a1a] rounded-2xl border border-strong dark:border-strong">
+                    <div key={activity.id ?? `${activity.created_at || activity.fecha}-${activity.name || activity.nombre}`} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-[#1a1a1a] rounded-2xl border border-strong dark:border-strong">
                       <div className="p-2 bg-surface dark:bg-[#0a0a0a] rounded-2xl">
                         <Mail size={16} className="text-text dark:text-text-muted" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-text dark:text-text text-sm font-light">{activity.name}</p>
+                        <p className="text-text dark:text-text text-sm font-light">{activity.name || activity.nombre}</p>
                         <p className="text-text dark:text-text-muted text-xs font-light">
-                          {new Date(activity.created_at).toLocaleDateString()}
+                          {new Date(activity.created_at || activity.fecha).toLocaleDateString()}
                         </p>
                       </div>
                     </div>

@@ -12,26 +12,5 @@ export default defineConfig({
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'hover'
-  },
-  vite: {
-    server: {
-      proxy: {
-        '/api': {
-          target: 'http://localhost:8888/My_website_imaforbes/api_db',
-          changeOrigin: true,
-          secure: false,
-        },
-        '/api_db_portfolio': {
-          target: 'http://localhost:8888',
-          changeOrigin: true,
-          secure: false,
-        },
-        '/uploads': {
-          target: 'http://localhost:8888/My_website_imaforbes/api_db',
-          changeOrigin: true,
-          secure: false,
-        }
-      }
-    }
   }
 });

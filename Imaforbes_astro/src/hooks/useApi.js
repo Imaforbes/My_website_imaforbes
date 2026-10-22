@@ -122,7 +122,7 @@ export const useContact = () => {
                     });
                 } else {
                     setStatus({
-                        message: `Error: ${result.error}`,
+                        message: `Error: ${typeof result.error === "object" ? (result.error?.message || "Error al enviar el mensaje") : (result.error || "Error al enviar el mensaje")}`,
                         type: 'error',
                         sending: false,
                     });
