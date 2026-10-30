@@ -108,7 +108,7 @@ const TrajectoryPage = () => {
                   </div>
                   <div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: '0.6rem', marginBottom: '0.55rem' }}>
-                      <h2 style={{ margin: 0, fontFamily: 'var(--font-serif)', fontWeight: 400, fontSize: 'clamp(1.55rem, 3vw, 2rem)', lineHeight: 1.06, color: 'var(--color-text)' }}>
+                      <h2 style={{ margin: 0, fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: 'clamp(1.15rem, 3vw, 1.45rem)', lineHeight: 1.2, color: 'var(--color-text)' }}>
                         {experience.title}
                       </h2>
                       {experience.period && (
@@ -118,7 +118,7 @@ const TrajectoryPage = () => {
                       )}
                     </div>
                     {(experience.company || experience.location) && (
-                      <p className="text-muted" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.45rem', marginBottom: '1rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                      <p className="text-muted" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.45rem', marginBottom: '1rem', fontFamily: 'var(--font-sans)', fontSize: '0.95rem' }}>
                         {experience.company && <strong style={{ color: 'var(--color-text)' }}>{experience.company}</strong>}
                         {experience.location && <><span aria-hidden="true">·</span><MapPin size={13} /> {experience.location}</>}
                       </p>

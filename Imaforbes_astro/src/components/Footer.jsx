@@ -57,7 +57,7 @@ const Footer = memo(({ currentPath }) => {
               />
               <span>IMAFORBES</span>
             </a>
-            <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', lineHeight: 1.15, color: 'var(--color-text)', maxWidth: '300px', margin: '0.5rem 0 0.85rem' }}>
+            <p className="text-muted" style={{ fontFamily: 'var(--font-sans)', fontSize: '0.95rem', lineHeight: 1.6, maxWidth: '300px', margin: '0.5rem 0 0.85rem' }}>
               {t("footer.description") || "Building digital experiences with passion and precision."}
             </p>
             <span className="section-label" style={{ marginBottom: 0 }}>
@@ -82,12 +82,10 @@ const Footer = memo(({ currentPath }) => {
                     }}
                     style={{ 
                       textDecoration: 'none', 
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.74rem',
-                      letterSpacing: '0.08em',
-                      textTransform: 'uppercase',
+                      fontFamily: 'var(--font-sans)',
+                      fontSize: '0.9rem',
                       color: location.pathname === item.path ? 'var(--color-text)' : 'var(--color-text-muted)',
-                      fontWeight: location.pathname === item.path ? 700 : 500,
+                      fontWeight: location.pathname === item.path ? 500 : 400,
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '0.45rem',
@@ -119,12 +117,12 @@ const Footer = memo(({ currentPath }) => {
                 <span className="ecosystem-icon" style={{ width: '32px', height: '32px' }}>
                   <Mail size={14} />
                 </span>
-                <span style={{ textTransform: 'none', letterSpacing: '0.02em', fontSize: '0.85rem', fontWeight: 600 }}>imanol@imaforbes.com</span>
+                <span style={{ textTransform: 'none', letterSpacing: '0.01em', fontSize: '0.9rem', fontWeight: 500 }}>imanol@imaforbes.com</span>
                 <ArrowUpRight size={14} />
               </a>
               
               <div>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text-muted)', margin: 0 }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: 0 }}>
                   {t("footer.response-time") || "Usually responds within 24 hours"}
                 </p>
               </div>
@@ -134,10 +132,10 @@ const Footer = memo(({ currentPath }) => {
         </div>
 
         <motion.div variants={itemVariants} style={{ paddingTop: '1.75rem', borderTop: '1px solid var(--color-border)', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text-muted)', margin: 0 }}>
+          <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0 }}>
             © {currentYear} Imanol Pérez Arteaga. {t("footer.copyright")}
           </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'var(--font-sans)', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
             <span>{t("footer.made-with")}</span>
           </div>
         </motion.div>

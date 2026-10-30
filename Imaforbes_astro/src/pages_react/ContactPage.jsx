@@ -153,7 +153,7 @@ const ContactPage = () => {
             >
               <div>
                 <span className="section-label" style={{ marginBottom: '0.5rem' }}>DIRECT CHANNELS</span>
-                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.85rem, 3vw, 2.35rem)', fontWeight: 400, lineHeight: 1.05, color: 'var(--color-text)', margin: 0 }}>
+                <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.5rem', fontWeight: 300, lineHeight: 1.2, color: 'var(--color-text)', margin: 0 }}>
                   {t("contact.contact-info")}
                 </h3>
               </div>
@@ -164,7 +164,7 @@ const ContactPage = () => {
                     <FiMail size={18} />
                   </span>
                   <div style={{ minWidth: 0 }}>
-                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-text-muted)', margin: '0 0 0.25rem' }}>Email</p>
+                    <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0 0 0.25rem' }}>Email</p>
                     <p style={{ fontSize: '0.95rem', fontWeight: 500, color: 'var(--color-text)', wordBreak: 'break-word', margin: 0 }}>imanol@imaforbes.com</p>
                   </div>
                 </a>
@@ -174,7 +174,7 @@ const ContactPage = () => {
                     <FiMapPin size={18} />
                   </span>
                   <div style={{ minWidth: 0 }}>
-                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-text-muted)', margin: '0 0 0.25rem' }}>{t("contact.location-label", "Location")}</p>
+                    <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0 0 0.25rem' }}>{t("contact.location-label", "Location")}</p>
                     <p style={{ fontSize: '0.95rem', fontWeight: 500, color: 'var(--color-text)', wordBreak: 'break-word', margin: 0 }}>{t("contact.location-value", "Mexico City, MX")}</p>
                   </div>
                 </div>
@@ -184,7 +184,7 @@ const ContactPage = () => {
                     <FiClock size={18} />
                   </span>
                   <div style={{ minWidth: 0 }}>
-                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-text-muted)', margin: '0 0 0.25rem' }}>{t("contact.available-label", "Available")}</p>
+                    <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0 0 0.25rem' }}>{t("contact.available-label", "Available")}</p>
                     <p style={{ fontSize: '0.95rem', fontWeight: 500, color: 'var(--color-text)', wordBreak: 'break-word', margin: 0 }}>{t("contact.available-hours", "Mon - Fri, 9AM - 5PM")}</p>
                   </div>
                 </div>
@@ -238,7 +238,7 @@ const ContactPage = () => {
               style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', padding: 'clamp(1.75rem, 5vw, 2.5rem)' }}
             >
               <div>
-                <label htmlFor="name" style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.55rem', color: 'var(--color-text)' }}>
+                <label htmlFor="name" style={{ display: 'block', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.55rem', color: 'var(--color-text)' }}>
                   {t("contact.name")}
                 </label>
                 <input
@@ -268,7 +268,7 @@ const ContactPage = () => {
               </div>
               
               <div>
-                <label htmlFor="email" style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.55rem', color: 'var(--color-text)' }}>
+                <label htmlFor="email" style={{ display: 'block', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.55rem', color: 'var(--color-text)' }}>
                   {t("contact.email")}
                 </label>
                 <input
@@ -298,7 +298,7 @@ const ContactPage = () => {
               </div>
               
               <div>
-                <label htmlFor="message" style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.55rem', color: 'var(--color-text)' }}>
+                <label htmlFor="message" style={{ display: 'block', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.55rem', color: 'var(--color-text)' }}>
                   {t("contact.message")}
                 </label>
                 <textarea
@@ -327,7 +327,7 @@ const ContactPage = () => {
                   {validationErrors.message ? (
                     <p style={{ color: '#ef4444', fontSize: '0.8rem' }}>{validationErrors.message}</p>
                   ) : <div></div>}
-                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>
+                  <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
                     {formData.message.length}/2000
                   </p>
                 </div>

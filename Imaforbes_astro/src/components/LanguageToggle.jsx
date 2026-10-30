@@ -35,8 +35,8 @@ const LanguageToggle = ({ className = "", size = "default" }) => {
       <button
         onClick={() => handleLanguageChange("es")}
         style={{
-          fontFamily: "var(--font-mono)",
-          letterSpacing: "0.08em",
+          fontFamily: "var(--font-sans)",
+          letterSpacing: "0.06em",
           borderRadius: "999px",
           background: (i18n.language || "es").startsWith("es") ? "var(--color-surface)" : "transparent",
           color: (i18n.language || "es").startsWith("es") ? "var(--color-text)" : "var(--color-text-muted)",
@@ -44,7 +44,7 @@ const LanguageToggle = ({ className = "", size = "default" }) => {
           border: "none",
           cursor: "pointer",
         }}
-        className={`${sizeClasses[size]} font-bold transition-all duration-200`}
+        className={`${sizeClasses[size]} font-semibold transition-all duration-200`}
         aria-label={t("language.switchToSpanish") || "Switch to Spanish"}
         aria-pressed={(i18n.language || "es").startsWith("es")}
       >
@@ -53,8 +53,8 @@ const LanguageToggle = ({ className = "", size = "default" }) => {
       <button
         onClick={() => handleLanguageChange("en")}
         style={{
-          fontFamily: "var(--font-mono)",
-          letterSpacing: "0.08em",
+          fontFamily: "var(--font-sans)",
+          letterSpacing: "0.06em",
           borderRadius: "999px",
           background: (i18n.language || "es").startsWith("en") ? "var(--color-surface)" : "transparent",
           color: (i18n.language || "es").startsWith("en") ? "var(--color-text)" : "var(--color-text-muted)",
@@ -62,7 +62,7 @@ const LanguageToggle = ({ className = "", size = "default" }) => {
           border: "none",
           cursor: "pointer",
         }}
-        className={`${sizeClasses[size]} font-bold transition-all duration-200`}
+        className={`${sizeClasses[size]} font-semibold transition-all duration-200`}
         aria-label={t("language.switchToEnglish") || "Switch to English"}
         aria-pressed={(i18n.language || "es").startsWith("en")}
       >

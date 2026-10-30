@@ -121,24 +121,21 @@ const HomePage = () => {
           variants={itemVariants}
           className="hero-subtitle"
           style={{
-            fontSize: 'clamp(1.15rem, 2.6vw, 1.65rem)',
-            marginTop: '1.25rem',
+            fontSize: 'clamp(1rem, 2.8vw, 1.8rem)',
+            marginTop: '1.5rem',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: ' baseline',
-            gap: '0.45rem',
+            gap: '0.4rem',
             flexWrap: 'wrap',
           }}
         >
           <span style={{ color: 'var(--color-text-muted)' }}>Especializado en</span>
-          <span style={{ fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontSize: '1.18em', color: 'var(--color-text)' }}>
-            <DynamicText texts={[
-              t("home.subtitle_1", "Desarrollo Web Moderno."),
-              t("home.subtitle_2", "Diseño de Interfaces."),
-              t("home.subtitle_3", "Soluciones Full Stack."),
-              t("home.subtitle_4", "Arquitecturas Nube.")
-            ]} />
-          </span>
+          <DynamicText texts={[
+            t("home.subtitle_1", "Desarrollo Web Moderno."),
+            t("home.subtitle_2", "Diseño de Interfaces."),
+            t("home.subtitle_3", "Soluciones Full Stack."),
+            t("home.subtitle_4", "Arquitecturas Nube.")
+          ]} />
         </motion.h2>
 
         <motion.p variants={itemVariants} className="hero-description" style={{ marginTop: '1.25rem' }}>
@@ -198,7 +195,7 @@ const HomePage = () => {
             <span className="ecosystem-icon" style={{ width: '34px', height: '34px' }}>
               <FiTerminal size={15} />
             </span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', fontWeight: 700, letterSpacing: '0.09em', textTransform: 'uppercase', color: 'var(--color-text)' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-text)' }}>
               {t("home.tag_frontend", "Frontend")}
             </span>
           </motion.div>
@@ -218,7 +215,7 @@ const HomePage = () => {
             <span className="ecosystem-icon" style={{ width: '34px', height: '34px' }}>
               <FiServer size={15} />
             </span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', fontWeight: 700, letterSpacing: '0.09em', textTransform: 'uppercase', color: 'var(--color-text)' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-text)' }}>
               {t("home.tag_backend", "Backend")}
             </span>
           </motion.div>
@@ -238,7 +235,7 @@ const HomePage = () => {
             <span className="ecosystem-icon" style={{ width: '34px', height: '34px' }}>
               <FiLayout size={15} />
             </span>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', fontWeight: 700, letterSpacing: '0.09em', textTransform: 'uppercase', color: 'var(--color-text)' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-text)' }}>
               {t("home.tag_uiux", "UI/UX Design")}
             </span>
           </motion.div>

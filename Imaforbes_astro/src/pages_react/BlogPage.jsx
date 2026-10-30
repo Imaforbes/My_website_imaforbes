@@ -435,10 +435,10 @@ const BlogPage = () => {
               <span className="project-tag" style={{ marginBottom: '1.25rem', display: 'inline-block' }}>
                 {selectedPost.type === "poem" ? t("blog.type-poem") : selectedPost.type === "letter" ? t("blog.type-letter") : t("blog.type-article")}
               </span>
-              <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.5rem, 6vw, 4.25rem)', fontWeight: 400, color: 'var(--color-text)', marginBottom: '1.25rem', lineHeight: 1.02, wordBreak: 'break-word' }}>
+              <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 700, color: 'var(--color-text)', marginBottom: '1.25rem', lineHeight: 1.2, wordBreak: 'break-word' }}>
                 {selectedPost.title}
               </h1>
-              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '0.65rem', color: 'var(--color-text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '0.65rem', color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.95rem' }}>
                 <span style={{ fontWeight: 700, color: 'var(--color-text)' }}>México</span>
                 <span>·</span>
                 <span>{formatDate(selectedPost.created_at)}</span>
@@ -884,7 +884,7 @@ const BlogPage = () => {
                         </span>
                       </div>
 
-                      <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.75rem, 3vw, 2.25rem)', fontWeight: 400, color: 'var(--color-text)', marginBottom: '0.85rem', lineHeight: 1.05, wordBreak: 'break-word' }}>
+                      <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(1.3rem, 5vw, 1.6rem)', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.85rem', lineHeight: 1.3, wordBreak: 'break-word' }}>
                         {post.title}
                       </h2>
 
@@ -895,8 +895,8 @@ const BlogPage = () => {
                       </div>
 
                       <div style={{ paddingTop: '1.25rem', borderTop: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>
-                          MÉXICO
+                        <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', fontWeight: 500, color: 'var(--color-text-muted)' }}>
+                          México
                         </span>
                         <button onClick={() => openPost(post.id)} className="ecosystem-cta" style={{ cursor: 'pointer' }}>
                           {t("blog.read-more")} <ArrowRight size={14} />

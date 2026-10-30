@@ -145,12 +145,12 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
           <span className="ecosystem-kicker">
             {project.tags?.[0] || "PROJECT"}
           </span>
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--color-text-muted)', letterSpacing: '0.08em' }}>
+          <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)', letterSpacing: '0.04em' }}>
             #{String(project.id).padStart(2, '0')}
           </span>
         </div>
 
-        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.65rem, 2.2vw, 2rem)', fontWeight: 400, lineHeight: 1.06, marginBottom: '0.85rem', color: 'var(--color-text)' }}>
+        <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.4rem', fontWeight: 700, lineHeight: 1.2, marginBottom: '0.75rem', color: 'var(--color-text)' }}>
           {t(project.titleKey)}
         </h3>
         

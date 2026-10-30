@@ -715,7 +715,7 @@ const AboutPage = () => {
                     <span className="ecosystem-icon" style={{ marginBottom: '0.85rem' }}>
                       <IconComponent size={20} />
                     </span>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text)' }}>
+                    <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 500, color: 'var(--color-text)' }}>
                       {skill.name}
                     </span>
                     <div className="skill-progress-bar">
@@ -774,12 +774,12 @@ const AboutPage = () => {
                       </span>
                     </div>
                     
-                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.5rem, 2.5vw, 1.9rem)', fontWeight: 400, lineHeight: 1.08, marginBottom: '0.5rem', color: 'var(--color-text)' }}>
+                    <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.25rem', fontWeight: 600, lineHeight: 1.2, marginBottom: '0.5rem', color: 'var(--color-text)' }}>
                       {exp.title}
                     </h3>
                     
-                    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>
-                      <span style={{ fontWeight: 700, color: 'var(--color-text)' }}>{exp.company}</span>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
+                      <span style={{ fontWeight: 500, color: 'var(--color-text)' }}>{exp.company}</span>
                       {exp.location && (
                         <>
                           <span>·</span>
