@@ -5,8 +5,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Geist Sans', 'Arial', 'Helvetica', 'sans-serif'],
-        mono: ['Geist Mono', 'monospace'],
+        sans: ['Geist Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        display: ['Plus Jakarta Sans', 'Geist Sans', '-apple-system', 'sans-serif'],
+        mono: ['Geist Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       colors: {
         background: 'var(--color-bg)',

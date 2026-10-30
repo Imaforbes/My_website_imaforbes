@@ -8,9 +8,10 @@
    ============================================ */
 
 :root {
-  /* Fonts */
-  --font-sans: 'Geist Sans', Arial, Helvetica, sans-serif;
-  --font-mono: 'Geist Mono', monospace;
+  /* Premium Font Triad: Plus Jakarta Sans (Display) + Geist Sans (UI/Body) + Geist Mono (Technical/Pills) */
+  --font-display: 'Plus Jakarta Sans', 'Geist Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'Geist Sans', -apple-system, BlinkMacSystemFont, Arial, Helvetica, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   /* Light Theme (Warm Editorial Paper + Crisp Ink) */
   --color-bg: #fafaf7;
@@ -70,6 +71,7 @@ html.dark {
 
 body {
   font-family: var(--font-sans);
+  font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
   background-color: var(--color-bg);
   color: var(--color-text);
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -78,30 +80,32 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* Typography styles */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  font-family: var(--font-display);
+  font-feature-settings: "cv01" 1, "cv02" 1, "ss01" 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
 }
 
 h1 {
-  font-family: var(--font-sans);
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-weight: 700;
   letter-spacing: -0.04em;
   text-wrap: balance;
 }
 
 .section-label {
   color: var(--color-text-muted);
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.15em;
   margin: 0 0 1.15rem;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 600;
   line-height: 1.2;
   display: inline-block;
@@ -122,9 +126,9 @@ h1 {
 }
 
 .brand-name {
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   font-size: 0.72rem;
   font-weight: 700;
   line-height: 1;
@@ -169,10 +173,10 @@ html {
   justify-content: center;
   gap: 0.55rem;
   padding: 0.65rem 1.35rem;
-  font-family: var(--font-sans);
-  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   transition: var(--transition-fast);
   cursor: pointer;
@@ -195,7 +199,7 @@ html {
   max-width: 100%;
   min-height: 40px;
   color: var(--color-text);
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -207,7 +211,7 @@ html {
   align-items: center;
   gap: 0.5rem;
   padding: 0 1.1rem;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   line-height: 1;
   transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
@@ -359,10 +363,10 @@ html.dark .pill-nav.scrolled {
 }
 
 .logo-premium {
-  font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-text);
   text-decoration: none;
@@ -396,10 +400,10 @@ html.dark .pill-nav.scrolled {
   min-height: 38px;
   padding: 0 14px;
   border-radius: 999px;
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-text-muted);
   text-decoration: none;
@@ -421,7 +425,7 @@ html.dark .pill-nav.scrolled {
 
 .ecosystem-kicker {
   margin: 0;
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-size: 0.72rem;
   font-weight: 600;
   line-height: 1.2;
@@ -453,29 +457,31 @@ html.dark .pill-nav.scrolled {
 }
 
 .hero-title {
-  font-family: var(--font-sans);
-  font-size: clamp(2.5rem, 8vw, 5.5rem);
-  font-weight: 300;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  font-family: var(--font-display);
+  font-size: clamp(2.65rem, 7.5vw, 5.25rem);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.04em;
   margin-bottom: 1.5rem;
   color: var(--color-text);
   text-wrap: balance;
 }
 
 .hero-subtitle {
-  font-size: clamp(1.1rem, 3vw, 1.5rem);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.6vw, 1.55rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
   color: var(--color-text-muted);
   margin-bottom: 1.5rem;
 }
 
 .hero-description {
   font-size: 1.1rem;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--color-text-muted);
   margin-bottom: 2.5rem;
-  max-width: 600px;
+  max-width: 620px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -517,11 +523,11 @@ html.dark .pill-nav.scrolled {
 }
 
 .projects-title {
-  font-family: var(--font-sans);
-  font-weight: 500;
-  font-size: clamp(2rem, 5vw, 4rem);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
   margin-bottom: 1rem;
   color: var(--color-text);
   text-wrap: balance;
@@ -600,10 +606,11 @@ html.dark .pill-nav.scrolled {
 }
 
 .project-tag {
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 0.25rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.28rem 0.75rem;
   border-radius: 9999px;
   background: var(--color-faint);
   border: 1px solid var(--color-border);

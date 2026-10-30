@@ -108,7 +108,7 @@ const TrajectoryPage = () => {
                   </div>
                   <div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: '0.6rem', marginBottom: '0.55rem' }}>
-                      <h2 style={{ margin: 0, fontFamily: 'var(--font-sans)', fontWeight: 600, fontSize: 'clamp(1.15rem, 3vw, 1.45rem)', lineHeight: 1.2, color: 'var(--color-text)' }}>
+                      <h2 style={{ margin: 0, fontFamily: 'var(--font-display)', fontWeight: 700, letterSpacing: '-0.025em', fontSize: 'clamp(1.2rem, 3vw, 1.5rem)', lineHeight: 1.2, color: 'var(--color-text)' }}>
                         {experience.title}
                       </h2>
                       {experience.period && (

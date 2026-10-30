@@ -435,7 +435,7 @@ const BlogPage = () => {
               <span className="project-tag" style={{ marginBottom: '1.25rem', display: 'inline-block' }}>
                 {selectedPost.type === "poem" ? t("blog.type-poem") : selectedPost.type === "letter" ? t("blog.type-letter") : t("blog.type-article")}
               </span>
-              <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 700, color: 'var(--color-text)', marginBottom: '1.25rem', lineHeight: 1.2, wordBreak: 'break-word' }}>
+              <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--color-text)', marginBottom: '1.25rem', lineHeight: 1.15, wordBreak: 'break-word' }}>
                 {selectedPost.title}
               </h1>
               <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '0.65rem', color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.95rem' }}>
@@ -884,7 +884,7 @@ const BlogPage = () => {
                         </span>
                       </div>
 
-                      <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(1.3rem, 5vw, 1.6rem)', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.85rem', lineHeight: 1.3, wordBreak: 'break-word' }}>
+                      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.3rem, 5vw, 1.55rem)', fontWeight: 700, letterSpacing: '-0.025em', color: 'var(--color-text)', marginBottom: '0.85rem', lineHeight: 1.25, wordBreak: 'break-word' }}>
                         {post.title}
                       </h2>
 

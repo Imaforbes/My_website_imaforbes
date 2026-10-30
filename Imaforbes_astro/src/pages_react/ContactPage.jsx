@@ -153,7 +153,7 @@ const ContactPage = () => {
             >
               <div>
                 <span className="section-label" style={{ marginBottom: '0.5rem' }}>DIRECT CHANNELS</span>
-                <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.5rem', fontWeight: 300, lineHeight: 1.2, color: 'var(--color-text)', margin: 0 }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.2, color: 'var(--color-text)', margin: 0 }}>
                   {t("contact.contact-info")}
                 </h3>
               </div>

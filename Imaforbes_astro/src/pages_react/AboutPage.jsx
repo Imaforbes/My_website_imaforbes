@@ -774,7 +774,7 @@ const AboutPage = () => {
                       </span>
                     </div>
                     
-                    <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.25rem', fontWeight: 600, lineHeight: 1.2, marginBottom: '0.5rem', color: 'var(--color-text)' }}>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: '0.5rem', color: 'var(--color-text)' }}>
                       {exp.title}
                     </h3>
                     
