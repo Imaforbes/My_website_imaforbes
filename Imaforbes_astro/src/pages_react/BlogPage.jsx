@@ -425,30 +425,30 @@ const BlogPage = () => {
           >
             <button 
               onClick={closePost} 
-              className="btn-premium" 
-              style={{ marginBottom: '2.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'transparent', color: 'var(--color-text)', padding: '0.5rem 0' }}
+              className="ecosystem-cta" 
+              style={{ marginBottom: '2.5rem', cursor: 'pointer' }}
             >
-              <ArrowLeft size={18} /> {t("blog.back", "Volver")}
+              <ArrowLeft size={15} /> {t("blog.back", "Volver")}
             </button>
             
             <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-              <span className="project-tag" style={{ textTransform: 'uppercase', fontSize: '0.85rem', padding: '0.3rem 0.8rem', marginBottom: '1.5rem', display: 'inline-block' }}>
+              <span className="project-tag" style={{ marginBottom: '1.25rem', display: 'inline-block' }}>
                 {selectedPost.type === "poem" ? t("blog.type-poem") : selectedPost.type === "letter" ? t("blog.type-letter") : t("blog.type-article")}
               </span>
-              <h1 style={{ fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 700, color: 'var(--color-text)', marginBottom: '1.5rem', lineHeight: 1.2, wordBreak: 'break-word' }} className="dark:text-text">
+              <h1 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(2.5rem, 6vw, 4.25rem)', fontWeight: 400, color: 'var(--color-text)', marginBottom: '1.25rem', lineHeight: 1.02, wordBreak: 'break-word' }}>
                 {selectedPost.title}
               </h1>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', color: 'var(--color-text-muted)', fontSize: '1rem' }}>
-                <span style={{ fontWeight: 500 }}>México</span>
-                <span>•</span>
-                <span style={{ fontWeight: 400 }}>{formatDate(selectedPost.created_at)}</span>
-                <span>•</span>
-                <span style={{ fontWeight: 400 }}>{readingTimeMin} min de lectura</span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '0.65rem', color: 'var(--color-text-muted)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                <span style={{ fontWeight: 700, color: 'var(--color-text)' }}>México</span>
+                <span>·</span>
+                <span>{formatDate(selectedPost.created_at)}</span>
+                <span>·</span>
+                <span>{readingTimeMin} min de lectura</span>
                 {(selectedPost.views_count > 0) && (
                   <>
-                    <span>•</span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                      <Eye size={16} /> {selectedPost.views_count}
+                    <span>·</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <Eye size={14} /> {selectedPost.views_count}
                     </span>
                   </>
                 )}
@@ -711,7 +711,24 @@ const BlogPage = () => {
     <section className="projects-section" style={{ minHeight: '100svh' }}>
       <div className="container-premium" style={{ position: 'relative', zIndex: 10 }}>
         
-        <div className="projects-header" style={{ position: 'relative', paddingTop: '0rem' }}>
+        <div className="projects-header" style={{ position: 'relative', paddingTop: '0rem', marginBottom: '2.5rem' }}>
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.75rem' }}
+          >
+            <div className="brand-lockup">
+              <span className="brand-name">
+                <FileText size={13} /> EDITORIAL
+              </span>
+              <span className="brand-context">
+                {posts.length} {t("blog.title", "Publicaciones")}
+              </span>
+            </div>
+          </motion.div>
+
           <motion.h1
             variants={itemVariants}
             initial="hidden"
@@ -727,7 +744,7 @@ const BlogPage = () => {
             whileInView="visible"
             viewport={{ once: true }}
             className="text-muted"
-            style={{ maxWidth: '600px', margin: '0 auto', fontSize: '1.1rem', lineHeight: 1.6 }}
+            style={{ maxWidth: '640px', margin: '0 auto', fontSize: 'clamp(1rem, 1.45vw, 1.2rem)', lineHeight: 1.7 }}
           >
             {t("blog.subtitle")}
           </motion.p>
@@ -738,17 +755,34 @@ const BlogPage = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          style={{ maxWidth: '580px', margin: '0 auto 1.25rem', position: 'relative' }}
+          style={{
+            maxWidth: '560px',
+            margin: '0 auto 1.25rem',
+            position: 'relative',
+            borderRadius: '999px',
+            border: '1px solid var(--color-border-strong)',
+            background: 'var(--color-surface)',
+            boxShadow: 'var(--shadow-pill)',
+            padding: '0.25rem',
+          }}
         >
-          <Search size={18} aria-hidden="true" style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }} />
+          <Search size={17} aria-hidden="true" style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }} />
           <input
             type="search"
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.target.value)}
             placeholder={t('blog.search-placeholder')}
             aria-label={t('blog.search-label')}
-            className="dark:bg-[#111] dark:border-strong dark:text-text"
-            style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 2.8rem', borderRadius: '999px', border: '1px solid var(--color-border)', background: 'var(--color-surface)', color: 'var(--color-text)', outline: 'none' }}
+            style={{
+              width: '100%',
+              padding: '0.75rem 1.25rem 0.75rem 2.85rem',
+              borderRadius: '999px',
+              border: 'none',
+              background: 'transparent',
+              color: 'var(--color-text)',
+              fontSize: '0.95rem',
+              outline: 'none',
+            }}
           />
         </motion.div>
 
@@ -757,56 +791,49 @@ const BlogPage = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          style={{ display: 'flex', justifyContent: 'center', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '4rem' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '0.45rem',
+            flexWrap: 'wrap',
+            marginBottom: '3.5rem',
+            padding: '0.45rem',
+            borderRadius: '999px',
+            border: '1px solid var(--color-border)',
+            background: 'var(--color-surface)',
+            width: 'fit-content',
+            maxWidth: '100%',
+            marginInline: 'auto',
+            boxShadow: 'var(--shadow-pill)',
+          }}
         >
-          <button
-            onClick={() => setFilter("all")}
-            className={`project-tag ${filter === "all" ? 'active' : ''}`}
-            style={{ 
-              cursor: 'pointer', padding: '0.6rem 1.25rem', fontSize: '0.95rem',
-              display: 'flex', alignItems: 'center', gap: '0.4rem', whiteSpace: 'nowrap',
-              background: filter === "all" ? 'var(--color-text)' : 'transparent',
-              color: filter === "all" ? 'var(--color-bg)' : 'var(--color-text-muted)'
-            }}
-          >
-            <Filter size={16} /> <span>{t("blog.filter-all")}</span>
-          </button>
-          <button
-            onClick={() => setFilter("poem")}
-            className={`project-tag ${filter === "poem" ? 'active' : ''}`}
-            style={{ 
-              cursor: 'pointer', padding: '0.6rem 1.25rem', fontSize: '0.95rem',
-              display: 'flex', alignItems: 'center', gap: '0.4rem', whiteSpace: 'nowrap',
-              background: filter === "poem" ? 'var(--color-text)' : 'transparent',
-              color: filter === "poem" ? 'var(--color-bg)' : 'var(--color-text-muted)'
-            }}
-          >
-            <FileText size={16} /> <span>{t("blog.filter-poems")}</span>
-          </button>
-          <button
-            onClick={() => setFilter("letter")}
-            className={`project-tag ${filter === "letter" ? 'active' : ''}`}
-            style={{ 
-              cursor: 'pointer', padding: '0.6rem 1.25rem', fontSize: '0.95rem',
-              display: 'flex', alignItems: 'center', gap: '0.4rem', whiteSpace: 'nowrap',
-              background: filter === "letter" ? 'var(--color-text)' : 'transparent',
-              color: filter === "letter" ? 'var(--color-bg)' : 'var(--color-text-muted)'
-            }}
-          >
-            <Mail size={16} /> <span>{t("blog.filter-letters")}</span>
-          </button>
-          <button
-            onClick={() => setFilter("article")}
-            className={`project-tag ${filter === "article" ? 'active' : ''}`}
-            style={{ 
-              cursor: 'pointer', padding: '0.6rem 1.25rem', fontSize: '0.95rem',
-              display: 'flex', alignItems: 'center', gap: '0.4rem', whiteSpace: 'nowrap',
-              background: filter === "article" ? 'var(--color-text)' : 'transparent',
-              color: filter === "article" ? 'var(--color-bg)' : 'var(--color-text-muted)'
-            }}
-          >
-            <FileText size={16} /> <span>{t("blog.filter-articles")}</span>
-          </button>
+          {[
+            { id: "all", label: t("blog.filter-all"), icon: <Filter size={13} /> },
+            { id: "poem", label: t("blog.filter-poems"), icon: <FileText size={13} /> },
+            { id: "letter", label: t("blog.filter-letters"), icon: <Mail size={13} /> },
+            { id: "article", label: t("blog.filter-articles"), icon: <FileText size={13} /> },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setFilter(tab.id)}
+              className={`project-tag ${filter === tab.id ? 'active' : ''}`}
+              style={{ 
+                cursor: 'pointer',
+                padding: '0.5rem 1.05rem',
+                fontSize: '0.72rem',
+                fontWeight: 700,
+                border: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                whiteSpace: 'nowrap',
+                background: filter === tab.id ? 'var(--color-text)' : 'transparent',
+                color: filter === tab.id ? 'var(--color-bg)' : 'var(--color-text-muted)'
+              }}
+            >
+              {tab.icon} <span>{tab.label}</span>
+            </button>
+          ))}
         </motion.div>
 
         {filteredPosts.length > 0 ? (
@@ -816,9 +843,9 @@ const BlogPage = () => {
             animate="visible"
             style={{ 
               display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))', 
-              gap: '2.5rem',
-              maxWidth: '1200px', 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', 
+              gap: '1.5rem',
+              maxWidth: '1180px', 
               margin: '0 auto',
               alignItems: 'stretch'
             }}
@@ -826,8 +853,9 @@ const BlogPage = () => {
             {filteredPosts.map((post, index) => {
               const cardVariants = {
                 hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut", delay: index * 0.05 } }
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut", delay: index * 0.05 } }
               };
+              const typeLabel = post.type === "poem" ? t("blog.type-poem") : post.type === "letter" ? t("blog.type-letter") : t("blog.type-article");
 
               return (
                   <motion.article
@@ -836,9 +864,8 @@ const BlogPage = () => {
                     className="card-premium h-full"
                     style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}
                   >
-                  {post.image_url ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                      <div style={{ width: '100%', height: '220px', position: 'relative', overflow: 'hidden' }}>
+                    {post.image_url && (
+                      <div style={{ width: '100%', height: '210px', position: 'relative', overflow: 'hidden', borderBottom: '1px solid var(--color-border)' }}>
                         <ProtectedImage
                           src={getImageUrl(post.image_url)}
                           alt={post.title}
@@ -846,55 +873,36 @@ const BlogPage = () => {
                           loading="lazy"
                         />
                       </div>
-                      <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'left' }}>
-                        <div style={{ marginBottom: '1rem' }}>
-                          <h2 style={{ fontSize: 'clamp(1.3rem, 5vw, 1.6rem)', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.5rem', lineHeight: 1.3, wordBreak: 'break-word' }} className="dark:text-text">
-                            {post.title}
-                          </h2>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
-                            <span style={{ fontWeight: 500 }}>México</span>
-                            <span>•</span>
-                            <span style={{ fontWeight: 400 }}>{formatDate(post.created_at)}</span>
-                          </div>
-                        </div>
-                        <div style={{ marginBottom: '1.5rem', flex: 1 }}>
-                          <div style={{ color: 'var(--color-text)', whiteSpace: 'pre-wrap', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 400, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} className="dark:text-text-muted">
-                            {post.content ? post.content.trim() : ''}
-                          </div>
-                        </div>
-                        <div style={{ paddingTop: '1.25rem', borderTop: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }} className="dark:border-strong">
-                          <button onClick={() => openPost(post.id)} className="btn-premium" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.9rem', padding: '0.4rem 0.8rem', background: 'transparent', color: 'var(--color-text)' }}>
-                            {t("blog.read-more")} <ArrowRight size={16} />
-                          </button>
+                    )}
+                    <div style={{ padding: '1.85rem', display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'left' }}>
+                      <div className="ecosystem-card-top" style={{ marginBottom: '1.1rem' }}>
+                        <span className="ecosystem-icon" style={{ width: '38px', height: '38px' }}>
+                          <FileText size={16} />
+                        </span>
+                        <span className="ecosystem-kicker">
+                          {typeLabel} · {formatDate(post.created_at)}
+                        </span>
+                      </div>
+
+                      <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.75rem, 3vw, 2.25rem)', fontWeight: 400, color: 'var(--color-text)', marginBottom: '0.85rem', lineHeight: 1.05, wordBreak: 'break-word' }}>
+                        {post.title}
+                      </h2>
+
+                      <div style={{ marginBottom: '1.75rem', flex: 1 }}>
+                        <div style={{ color: 'var(--color-text-muted)', whiteSpace: 'pre-wrap', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 400, display: '-webkit-box', WebkitLineClamp: post.image_url ? 3 : 4, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                          {post.content ? post.content.trim() : ''}
                         </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div style={{ padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                      <div style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: 'clamp(1.3rem, 5vw, 1.6rem)', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.5rem', lineHeight: 1.3, wordBreak: 'break-word' }} className="dark:text-text">
-                          {post.title}
-                        </h2>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
-                          <span style={{ fontWeight: 500 }}>México</span>
-                          <span>•</span>
-                          <span style={{ fontWeight: 400 }}>{formatDate(post.created_at)}</span>
-                        </div>
-                      </div>
-                      <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '1.5rem', flex: 1 }}>
-                        <div style={{ width: '100%' }}>
-                          <div style={{ color: 'var(--color-text)', whiteSpace: 'pre-wrap', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 400, textAlign: 'left', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', overflow: 'hidden' }} className="dark:text-text-muted">
-                            {post.content ? post.content.trim() : ''}
-                          </div>
-                        </div>
-                      </div>
-                      <div style={{ paddingTop: '1.25rem', borderTop: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }} className="dark:border-strong">
-                        <button onClick={() => openPost(post.id)} className="btn-premium" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.9rem', padding: '0.4rem 0.8rem', background: 'transparent', color: 'var(--color-text)' }}>
-                          {t("blog.read-more")} <ArrowRight size={16} />
+
+                      <div style={{ paddingTop: '1.25rem', borderTop: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>
+                          MÉXICO
+                        </span>
+                        <button onClick={() => openPost(post.id)} className="ecosystem-cta" style={{ cursor: 'pointer' }}>
+                          {t("blog.read-more")} <ArrowRight size={14} />
                         </button>
                       </div>
                     </div>
-                  )}
                   </motion.article>
               );
             })}
@@ -902,7 +910,7 @@ const BlogPage = () => {
         ) : (
           <motion.div variants={itemVariants} style={{ textAlign: 'center', padding: '4rem 2rem' }} className="card-premium">
             <FileText size={48} style={{ margin: '0 auto 1.5rem', color: 'var(--color-text-muted)' }} />
-            <p style={{ fontSize: '1.1rem', color: 'var(--color-text-muted)', fontWeight: 300 }}>
+            <p style={{ fontSize: '1.1rem', color: 'var(--color-text-muted)', fontWeight: 400 }}>
               {normalizedSearch ? t('blog.no-search-results') : filter === "all" ? t("blog.no-posts") : t("blog.no-posts-filter")}
             </p>
           </motion.div>

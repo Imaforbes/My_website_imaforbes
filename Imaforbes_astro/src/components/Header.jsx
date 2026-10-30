@@ -89,31 +89,36 @@ const Header = memo(({ currentPath }) => {
           top: 0,
           left: 0,
           right: 0,
-          height: "4px",
+          height: "3px",
           background: "var(--color-text)",
           zIndex: 99999,
           pointerEvents: "none",
         }}
       />
-      <header
-        className={`header-premium ${scrolled && !isMenuOpen ? 'scrolled' : ''}`}
-        style={{
-          background: isMenuOpen ? 'var(--color-bg)' : undefined,
-          backdropFilter: isMenuOpen ? 'none' : undefined,
-        }}
-      >
-        <div className="container-premium nav-premium">
-          {/* Logo */}
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-            <a href="/" className="logo-premium" onClick={handleNavLinkClick}>
-              IMAFORBES
-            </a>
-          </div>
+      <header className="site-header">
+        <nav
+          aria-label="Navegación principal"
+          className={`pill-nav ${scrolled && !isMenuOpen ? 'scrolled' : ''}`}
+        >
+          {/* Brand Mark */}
+          <a href="/" className="logo-premium" onClick={handleNavLinkClick}>
+            <span
+              aria-hidden="true"
+              style={{
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                background: "var(--color-text)",
+                display: "inline-block",
+              }}
+            />
+            <span>IMAFORBES</span>
+          </a>
 
-          {/* Desktop Navigation */}
-          <nav className="nav-links-premium">
+          {/* Desktop Navigation Pills */}
+          <ul className="nav-links-premium">
             {navItems.map((link) => (
-              <motion.div key={link.path} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+              <li key={link.path}>
                 <a 
                   href={link.path}
                   onClick={(e) => {
@@ -125,36 +130,38 @@ const Header = memo(({ currentPath }) => {
                   className={`nav-item-premium ${location.pathname === link.path ? 'active' : ''}`}
                 >
                   {t(link.label)}
-                  {location.pathname === link.path && (
-                    <motion.div
-                      className="nav-active-indicator"
-                      layoutId="activeTab"
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    />
-                  )}
                 </a>
-              </motion.div>
+              </li>
             ))}
-          </nav>
+          </ul>
 
-          <div className="hidden lg:flex" style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', gap: '1rem', paddingRight: '1rem' }}>
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5, duration: 0.3 }}>
-            </motion.div>
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.6, duration: 0.3 }}>
-              <LanguageToggle />
-            </motion.div>
+          {/* Desktop Language Switcher */}
+          <div className="hidden lg:flex" style={{ alignItems: 'center', gap: '0.5rem' }}>
+            <LanguageToggle />
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="lg:hidden"
-            style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--color-text)' }}
+            style={{
+              background: isMenuOpen ? 'var(--color-text)' : 'var(--color-faint)',
+              color: isMenuOpen ? 'var(--color-bg)' : 'var(--color-text)',
+              border: '1px solid var(--color-border)',
+              borderRadius: '999px',
+              width: '38px',
+              height: '38px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.18s ease',
+            }}
             aria-label={isMenuOpen ? t("header.close-menu", "Cerrar menú") : t("header.open-menu", "Abrir menú")}
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
-        </div>
+        </nav>
       </header>
 
       {/* Mobile Menu Overlay */}
@@ -164,14 +171,26 @@ const Header = memo(({ currentPath }) => {
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
-              style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.2)', backdropFilter: 'blur(4px)', zIndex: 40 }}
+              style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.28)', backdropFilter: 'blur(6px)', zIndex: 90 }}
               className="lg:hidden"
             />
 
             <motion.nav
               initial="hidden" animate="visible" exit="exit" variants={menuVariants}
-              style={{ position: 'fixed', top: '5rem', left: 0, right: 0, background: 'var(--color-bg)', zIndex: 50, borderTop: '1px solid var(--color-border)', maxHeight: 'calc(100vh - 5rem)', overflowY: 'auto' }}
-              className="lg:hidden dark:bg-dark"
+              style={{
+                position: 'fixed',
+                top: '4.75rem',
+                left: '12px',
+                right: '12px',
+                background: 'var(--color-surface)',
+                zIndex: 95,
+                border: '1px solid var(--color-border-strong)',
+                borderRadius: '22px',
+                boxShadow: 'var(--shadow-ambient-hover)',
+                maxHeight: 'calc(100vh - 5.5rem)',
+                overflowY: 'auto',
+              }}
+              className="lg:hidden"
               onTouchMove={(e) => e.stopPropagation()}
             >
               <div style={{ display: 'flex', flexDirection: 'column', padding: '1rem' }}>
@@ -187,14 +206,31 @@ const Header = memo(({ currentPath }) => {
                   }}>
                     <a 
                       href={link.path}
-                      style={{ display: 'block', padding: '1rem', color: location.pathname === link.path ? 'var(--color-text)' : 'var(--color-text-muted)', textDecoration: 'none', borderBottom: '1px solid var(--color-border)' }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0.9rem 1rem',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.78rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                        borderRadius: '12px',
+                        background: location.pathname === link.path ? 'var(--color-faint)' : 'transparent',
+                        color: location.pathname === link.path ? 'var(--color-text)' : 'var(--color-text-muted)',
+                        textDecoration: 'none',
+                      }}
                     >
-                      {t(link.label)}
+                      <span>{t(link.label)}</span>
+                      {location.pathname === link.path && (
+                        <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--color-text)' }} />
+                      )}
                     </a>
                   </motion.div>
                 ))}
 
-                <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '1rem', paddingTop: '1rem' }}>
+                <motion.div variants={itemVariants} style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '0.75rem', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }}>
                   <LanguageToggle size="lg" />
                 </motion.div>
               </div>

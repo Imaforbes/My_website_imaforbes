@@ -100,27 +100,24 @@ const ContactPage = () => {
         <HeroBackground />
         <div className="container-premium" style={{ position: 'relative', zIndex: 10 }}>
           
-          <div className="projects-header" style={{ position: 'relative', paddingTop: '1rem' }}>
-            {/* Available Badge - Perfectly centered above title, zero crowding or overlapping */}
+          <div className="projects-header" style={{ position: 'relative', paddingTop: '0rem' }}>
+            {/* Available Badge - Brand Lockup + BorderBeam */}
             <motion.div 
               variants={itemVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}
+              style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.75rem' }}
             >
               <BorderBeam theme="dark" size="sm" duration={3} colorVariant="mono" className="rounded-full">
-                <div style={{ 
-                  display: 'flex', alignItems: 'center', gap: '0.6rem', 
-                  padding: '0.5rem 1.25rem', borderRadius: '9999px', 
-                  background: 'var(--color-surface)',
-                  border: '1px solid var(--color-border)',
-                  fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-text-muted)',
-                  boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
-                  position: 'relative'
-                }} className="dark:bg-[#111] dark:border-strong">
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }}></span>
-                  {t("contact.available-badge", "Available for new opportunities")}
+                <div className="brand-lockup">
+                  <span className="brand-name">
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }} />
+                    CONTACTO
+                  </span>
+                  <span className="brand-context">
+                    {t("contact.available-badge", "Available for new opportunities")}
+                  </span>
                 </div>
               </BorderBeam>
             </motion.div>
@@ -140,7 +137,7 @@ const ContactPage = () => {
               whileInView="visible"
               viewport={{ once: true }}
               className="text-muted"
-              style={{ maxWidth: '600px', margin: '0 auto', fontSize: '1.1rem', lineHeight: 1.6 }}
+              style={{ maxWidth: '640px', margin: '0 auto', fontSize: 'clamp(1rem, 1.45vw, 1.2rem)', lineHeight: 1.7 }}
             >
               {t("contact.description")}
             </motion.p>
@@ -152,57 +149,59 @@ const ContactPage = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
             >
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 300, color: 'var(--color-text)' }} className="dark:text-text">
-                {t("contact.contact-info")}
-              </h3>
+              <div>
+                <span className="section-label" style={{ marginBottom: '0.5rem' }}>DIRECT CHANNELS</span>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.85rem, 3vw, 2.35rem)', fontWeight: 400, lineHeight: 1.05, color: 'var(--color-text)', margin: 0 }}>
+                  {t("contact.contact-info")}
+                </h3>
+              </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
-                <a href="mailto:imanol@imaforbes.com" className="card-premium" style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none' }}>
-                  <div style={{ padding: '0.75rem', background: 'var(--color-bg)', borderRadius: '8px', flexShrink: 0 }} className="dark:bg-background">
-                    <FiMail size={20} style={{ color: 'var(--color-text)' }} className="dark:text-text-muted" />
-                  </div>
+                <a href="mailto:imanol@imaforbes.com" className="card-premium" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.35rem 1.5rem', textDecoration: 'none' }}>
+                  <span className="ecosystem-icon">
+                    <FiMail size={18} />
+                  </span>
                   <div style={{ minWidth: 0 }}>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Email</p>
-                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text)', wordBreak: 'break-word' }} className="dark:text-text">imanol@imaforbes.com</p>
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-text-muted)', margin: '0 0 0.25rem' }}>Email</p>
+                    <p style={{ fontSize: '0.95rem', fontWeight: 500, color: 'var(--color-text)', wordBreak: 'break-word', margin: 0 }}>imanol@imaforbes.com</p>
                   </div>
                 </a>
 
-                <div className="card-premium" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <div style={{ padding: '0.75rem', background: 'var(--color-bg)', borderRadius: '8px', flexShrink: 0 }} className="dark:bg-background">
-                    <FiMapPin size={20} style={{ color: 'var(--color-text)' }} className="dark:text-text-muted" />
-                  </div>
+                <div className="card-premium" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.35rem 1.5rem' }}>
+                  <span className="ecosystem-icon">
+                    <FiMapPin size={18} />
+                  </span>
                   <div style={{ minWidth: 0 }}>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>{t("contact.location-label", "Location")}</p>
-                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text)', wordBreak: 'break-word' }} className="dark:text-text">{t("contact.location-value", "Mexico City, MX")}</p>
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-text-muted)', margin: '0 0 0.25rem' }}>{t("contact.location-label", "Location")}</p>
+                    <p style={{ fontSize: '0.95rem', fontWeight: 500, color: 'var(--color-text)', wordBreak: 'break-word', margin: 0 }}>{t("contact.location-value", "Mexico City, MX")}</p>
                   </div>
                 </div>
 
-                <div className="card-premium" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <div style={{ padding: '0.75rem', background: 'var(--color-bg)', borderRadius: '8px', flexShrink: 0 }} className="dark:bg-background">
-                    <FiClock size={20} style={{ color: 'var(--color-text)' }} className="dark:text-text-muted" />
-                  </div>
+                <div className="card-premium" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.35rem 1.5rem' }}>
+                  <span className="ecosystem-icon">
+                    <FiClock size={18} />
+                  </span>
                   <div style={{ minWidth: 0 }}>
-                    <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>{t("contact.available-label", "Available")}</p>
-                    <p style={{ fontSize: '0.95rem', color: 'var(--color-text)', wordBreak: 'break-word' }} className="dark:text-text">{t("contact.available-hours", "Mon - Fri, 9AM - 5PM")}</p>
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-text-muted)', margin: '0 0 0.25rem' }}>{t("contact.available-label", "Available")}</p>
+                    <p style={{ fontSize: '0.95rem', fontWeight: 500, color: 'var(--color-text)', wordBreak: 'break-word', margin: 0 }}>{t("contact.available-hours", "Mon - Fri, 9AM - 5PM")}</p>
                   </div>
                 </div>
               </div>
 
-              <div style={{ marginTop: '1rem' }}>
-                <h4 style={{ fontSize: '1rem', fontWeight: 500, color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
+              <div style={{ marginTop: '0.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border)' }}>
+                <h4 className="section-label" style={{ marginBottom: '1rem' }}>
                   Connect with me
                 </h4>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                   <a
                     href="https://www.linkedin.com/in/imanol-pérez-arteaga-a72a08235"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-premium"
-                    style={{ background: 'transparent', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                    className="ecosystem-cta"
                   >
-                    <FiLinkedin size={18} />
+                    <FiLinkedin size={15} />
                     <span>LinkedIn</span>
                   </a>
 
@@ -210,10 +209,9 @@ const ContactPage = () => {
                     href="https://github.com/Imaforbes"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-premium"
-                    style={{ background: 'transparent', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                    className="ecosystem-cta"
                   >
-                    <FiGithub size={18} />
+                    <FiGithub size={15} />
                     <span>GitHub</span>
                   </a>
 
@@ -221,10 +219,9 @@ const ContactPage = () => {
                     href="https://twitter.com/imaforbes"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-premium"
-                    style={{ background: 'transparent', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                    className="ecosystem-cta"
                   >
-                    <FiTwitter size={18} />
+                    <FiTwitter size={15} />
                     <span>Twitter</span>
                   </a>
                 </div>
@@ -238,10 +235,10 @@ const ContactPage = () => {
               viewport={{ once: true }}
               onSubmit={handleSubmit}
               className="card-premium"
-              style={{ display: 'flex', flexDirection: 'column', gap: '2rem', padding: 'clamp(1.5rem, 5vw, 2.5rem)' }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', padding: 'clamp(1.75rem, 5vw, 2.5rem)' }}
             >
               <div>
-                <label htmlFor="name" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--color-text)' }} className="dark:text-text">
+                <label htmlFor="name" style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.55rem', color: 'var(--color-text)' }}>
                   {t("contact.name")}
                 </label>
                 <input
@@ -254,12 +251,15 @@ const ContactPage = () => {
                   maxLength={200}
                   style={{ 
                     width: '100%', 
-                    padding: '1rem 1.25rem', 
-                    borderRadius: '12px',
-                    fontSize: '1rem',
-                    transition: 'all 0.3s ease'
+                    padding: '0.95rem 1.15rem', 
+                    borderRadius: '14px',
+                    fontSize: '0.98rem',
+                    background: 'var(--color-bg)',
+                    border: `1px solid ${validationErrors.name ? '#ef4444' : 'var(--color-border-strong)'}`,
+                    color: 'var(--color-text)',
+                    outline: 'none',
+                    transition: 'border-color 0.2s ease'
                   }}
-                  className={`bg-gray-50 border ${validationErrors.name ? 'border-red-500' : 'border-strong'} focus:border-strong focus:ring-2 focus:ring-gray-900/20 text-text dark:bg-[#151515] dark:${validationErrors.name ? 'border-red-500' : 'border-strong'} dark:focus:border-white dark:focus:ring-white/20 dark:text-text outline-none`}
                   placeholder="Tu nombre completo"
                 />
                 {validationErrors.name && (
@@ -268,7 +268,7 @@ const ContactPage = () => {
               </div>
               
               <div>
-                <label htmlFor="email" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--color-text)' }} className="dark:text-text">
+                <label htmlFor="email" style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.55rem', color: 'var(--color-text)' }}>
                   {t("contact.email")}
                 </label>
                 <input
@@ -281,12 +281,15 @@ const ContactPage = () => {
                   maxLength={200}
                   style={{ 
                     width: '100%', 
-                    padding: '1rem 1.25rem', 
-                    borderRadius: '12px',
-                    fontSize: '1rem',
-                    transition: 'all 0.3s ease'
+                    padding: '0.95rem 1.15rem', 
+                    borderRadius: '14px',
+                    fontSize: '0.98rem',
+                    background: 'var(--color-bg)',
+                    border: `1px solid ${validationErrors.email ? '#ef4444' : 'var(--color-border-strong)'}`,
+                    color: 'var(--color-text)',
+                    outline: 'none',
+                    transition: 'border-color 0.2s ease'
                   }}
-                  className={`bg-gray-50 border ${validationErrors.email ? 'border-red-500' : 'border-strong'} focus:border-strong focus:ring-2 focus:ring-gray-900/20 text-text dark:bg-[#151515] dark:${validationErrors.email ? 'border-red-500' : 'border-strong'} dark:focus:border-white dark:focus:ring-white/20 dark:text-text outline-none`}
                   placeholder="tu@correo.com"
                 />
                 {validationErrors.email && (
@@ -295,7 +298,7 @@ const ContactPage = () => {
               </div>
               
               <div>
-                <label htmlFor="message" style={{ display: 'block', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.5rem', color: 'var(--color-text)' }} className="dark:text-text">
+                <label htmlFor="message" style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.55rem', color: 'var(--color-text)' }}>
                   {t("contact.message")}
                 </label>
                 <textarea
@@ -308,41 +311,44 @@ const ContactPage = () => {
                   maxLength={2000}
                   style={{ 
                     width: '100%', 
-                    padding: '1rem 1.25rem', 
-                    borderRadius: '12px',
-                    fontSize: '1rem',
+                    padding: '0.95rem 1.15rem', 
+                    borderRadius: '14px',
+                    fontSize: '0.98rem',
                     resize: 'none',
-                    transition: 'all 0.3s ease'
+                    background: 'var(--color-bg)',
+                    border: `1px solid ${validationErrors.message ? '#ef4444' : 'var(--color-border-strong)'}`,
+                    color: 'var(--color-text)',
+                    outline: 'none',
+                    transition: 'border-color 0.2s ease'
                   }}
-                  className={`bg-gray-50 border ${validationErrors.message ? 'border-red-500' : 'border-strong'} focus:border-strong focus:ring-2 focus:ring-gray-900/20 text-text dark:bg-[#151515] dark:${validationErrors.message ? 'border-red-500' : 'border-strong'} dark:focus:border-white dark:focus:ring-white/20 dark:text-text outline-none`}
                   placeholder="¿En qué te puedo ayudar?"
                 ></textarea>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem' }}>
                   {validationErrors.message ? (
                     <p style={{ color: '#ef4444', fontSize: '0.8rem' }}>{validationErrors.message}</p>
                   ) : <div></div>}
-                  <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>
                     {formData.message.length}/2000
                   </p>
                 </div>
               </div>
 
               {/* Privacy Policy Checkbox */}
-              <div className="flex items-start gap-3 p-4 rounded-2xl bg-gray-50 border border-strong dark:bg-[#151515] dark:border-strong">
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '1rem', borderRadius: '14px', background: 'var(--color-bg)', border: '1px solid var(--color-border)' }}>
                 <div className="flex items-center h-5 mt-0.5">
                   <input
                     id="privacy"
                     name="privacy"
                     type="checkbox"
                     required
-                    className="w-4 h-4 rounded border-strong text-text focus:ring-gray-900 dark:border-strong dark:bg-background dark:checked:bg-surface dark:focus:ring-white transition-colors cursor-pointer"
+                    className="w-4 h-4 rounded cursor-pointer"
                   />
                 </div>
                 <div className="flex flex-col">
-                  <label htmlFor="privacy" className="text-sm font-medium text-text dark:text-text cursor-pointer">
+                  <label htmlFor="privacy" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', cursor: 'pointer' }}>
                     {t("contact.privacy-title")}
                   </label>
-                  <p className="text-xs text-text dark:text-text-muted mt-1">
+                  <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', marginTop: '0.25rem', marginBottom: 0 }}>
                     {t("contact.privacy-text")}
                   </p>
                 </div>
@@ -351,22 +357,28 @@ const ContactPage = () => {
               <button
                 type="submit"
                 disabled={status.sending}
-                className="group relative flex items-center justify-center gap-2 w-full py-4 px-6 rounded-2xl overflow-hidden transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed bg-background text-text dark:bg-surface dark:text-text"
+                className="btn-premium"
+                style={{
+                  width: '100%',
+                  minHeight: '54px',
+                  borderRadius: '999px',
+                  background: 'var(--color-text)',
+                  color: 'var(--color-bg)',
+                  borderColor: 'var(--color-text)',
+                  fontSize: '0.78rem',
+                }}
               >
-                <div className="absolute inset-0 bg-surface/20 dark:bg-background/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
-                <div className="relative z-10 flex items-center gap-2 font-medium">
-                  {status.sending ? (
-                    <>
-                      <FiLoader className="animate-spin" />
-                      <span>{t("contact.sending")}</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>{t("contact.send")}</span>
-                      <FiSend className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-                    </>
-                  )}
-                </div>
+                {status.sending ? (
+                  <>
+                    <FiLoader className="animate-spin" size={16} />
+                    <span>{t("contact.sending")}</span>
+                  </>
+                ) : (
+                  <>
+                    <span>{t("contact.send")}</span>
+                    <FiSend size={15} />
+                  </>
+                )}
               </button>
             </motion.form>
           </div>

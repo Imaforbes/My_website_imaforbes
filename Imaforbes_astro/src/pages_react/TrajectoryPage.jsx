@@ -41,13 +41,13 @@ const TrajectoryPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
           className="projects-header"
-          style={{ paddingTop: 0 }}
+          style={{ paddingTop: 0, marginBottom: '2.25rem' }}
         >
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '1rem' }}>
+          <span className="section-label">
             {t('trajectory.eyebrow')}
-          </p>
+          </span>
           <h1 className="projects-title">{t('trajectory.title')}</h1>
-          <p className="text-muted" style={{ maxWidth: '680px', margin: '0 auto', fontSize: '1.1rem', lineHeight: 1.7 }}>
+          <p className="text-muted" style={{ maxWidth: '640px', margin: '0 auto', fontSize: 'clamp(1rem, 1.45vw, 1.2rem)', lineHeight: 1.7 }}>
             {t('trajectory.description')}
           </p>
         </motion.header>
@@ -56,17 +56,17 @@ const TrajectoryPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 0.1 }}
-          style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.75rem', marginBottom: '3.5rem' }}
+          style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.85rem', marginBottom: '3.5rem' }}
         >
           <button
             onClick={() => openCvModal()}
             className="btn-premium"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}
+            style={{ background: 'var(--color-text)', color: 'var(--color-bg)', borderColor: 'var(--color-text)', padding: '0.8rem 1.65rem' }}
           >
-            <Download size={16} /> {t('trajectory.download-cv')}
+            <Download size={15} /> {t('trajectory.download-cv')}
           </button>
-          <a href="/contact" className="btn-premium" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-            {t('trajectory.contact')} <ArrowUpRight size={16} />
+          <a href="/contact" className="btn-premium" style={{ background: 'var(--color-surface)', padding: '0.8rem 1.65rem' }}>
+            {t('trajectory.contact')} <ArrowUpRight size={15} />
           </a>
         </motion.div>
 
@@ -93,7 +93,7 @@ const TrajectoryPage = () => {
               <p className="text-muted">{t('trajectory.empty')}</p>
             </div>
           ) : (
-            <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: '1.25rem' }}>
+            <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: '1.35rem' }}>
               {experiences.map((experience, index) => (
                 <motion.li
                   key={experience.id}
@@ -101,27 +101,33 @@ const TrajectoryPage = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.35, delay: index * 0.06 }}
                   className="card-premium"
-                  style={{ padding: 'clamp(1.25rem, 4vw, 2rem)', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '1rem' }}
+                  style={{ padding: 'clamp(1.5rem, 4vw, 2.25rem)', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '1.25rem' }}
                 >
-                  <div aria-hidden="true" style={{ width: '2.5rem', height: '2.5rem', borderRadius: '50%', display: 'grid', placeItems: 'center', background: 'var(--color-bg)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }} className="dark:bg-[#151515] dark:text-text dark:border-strong">
+                  <div aria-hidden="true" className="ecosystem-icon">
                     <BriefcaseBusiness size={18} />
                   </div>
                   <div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '0.6rem', marginBottom: '0.45rem' }}>
-                      <h2 style={{ margin: 0, fontSize: 'clamp(1.15rem, 3vw, 1.45rem)', color: 'var(--color-text)' }} className="dark:text-text">{experience.title}</h2>
-                      {experience.period && <span className="text-muted" style={{ fontSize: '0.85rem' }}>{experience.period}</span>}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: '0.6rem', marginBottom: '0.55rem' }}>
+                      <h2 style={{ margin: 0, fontFamily: 'var(--font-serif)', fontWeight: 400, fontSize: 'clamp(1.55rem, 3vw, 2rem)', lineHeight: 1.06, color: 'var(--color-text)' }}>
+                        {experience.title}
+                      </h2>
+                      {experience.period && (
+                        <span className="ecosystem-kicker" style={{ padding: '0.28rem 0.7rem', borderRadius: '999px', background: 'var(--color-faint)', border: '1px solid var(--color-border)' }}>
+                          {experience.period}
+                        </span>
+                      )}
                     </div>
                     {(experience.company || experience.location) && (
-                      <p className="text-muted" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.45rem', marginBottom: '0.9rem' }}>
-                        {experience.company && <strong style={{ color: 'var(--color-text)' }} className="dark:text-text-muted">{experience.company}</strong>}
-                        {experience.location && <><span aria-hidden="true">·</span><MapPin size={14} /> {experience.location}</>}
+                      <p className="text-muted" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.45rem', marginBottom: '1rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                        {experience.company && <strong style={{ color: 'var(--color-text)' }}>{experience.company}</strong>}
+                        {experience.location && <><span aria-hidden="true">·</span><MapPin size={13} /> {experience.location}</>}
                       </p>
                     )}
                     {experience.description && <p className="text-muted" style={{ marginBottom: experience.technologies?.length ? '1.5rem' : 0, lineHeight: 1.7 }}>{experience.description}</p>}
                     {Array.isArray(experience.technologies) && experience.technologies.length > 0 && (
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem' }}>
                         {experience.technologies.map((technology) => (
-                          <span key={technology} style={{ fontSize: '0.75rem', padding: '0.28rem 0.65rem', border: '1px solid var(--color-border)', borderRadius: '999px', color: 'var(--color-text-muted)' }} className="dark:border-strong">{technology}</span>
+                          <span key={technology} className="project-tag">{technology}</span>
                         ))}
                       </div>
                     )}

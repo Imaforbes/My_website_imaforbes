@@ -597,14 +597,16 @@ const AboutPage = () => {
             whileInView="visible"
             viewport={{ once: true }}
             className="bento-item bento-item-medium"
+            style={{ justifyContent: 'center' }}
           >
-            <h1 className="hero-title" style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)', marginBottom: '1.5rem', textAlign: 'left', lineHeight: 1.1 }}>
+            <span className="section-label">ABOUT · PERFIL EDITORIAL</span>
+            <h1 className="hero-title" style={{ fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)', marginBottom: '1.5rem', textAlign: 'left', lineHeight: 1.02 }}>
               {t("about.hero-title")}
             </h1>
-            <p className="text-muted" style={{ fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '1.5rem', fontWeight: 300 }}>
+            <p className="text-muted" style={{ fontSize: '1.08rem', lineHeight: 1.75, marginBottom: '1.25rem', fontWeight: 400 }}>
               {t("about.hero-text-1")}
             </p>
-            <p className="text-muted" style={{ fontSize: '1.1rem', lineHeight: 1.8, marginBottom: '2.5rem', fontWeight: 300 }}>
+            <p className="text-muted" style={{ fontSize: '1.08rem', lineHeight: 1.75, marginBottom: '2.25rem', fontWeight: 400 }}>
               {t("about.hero-text-2")}
             </p>
 
@@ -615,7 +617,18 @@ const AboutPage = () => {
                   openCvModal();
                 }}
                 className="btn-premium"
-                style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '0.75rem 1.75rem', borderRadius: '9999px', borderBottom: 'none', background: 'var(--color-surface)', cursor: 'pointer', minHeight: '46px' }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0.85rem 1.85rem',
+                  borderRadius: '9999px',
+                  background: 'var(--color-text)',
+                  color: 'var(--color-bg)',
+                  border: '1px solid var(--color-text)',
+                  cursor: 'pointer',
+                  minHeight: '46px',
+                }}
               >
                 {t("about.download-cv")}
               </button>
@@ -624,23 +637,40 @@ const AboutPage = () => {
         </div>
 
         <div className="skills-container" id="habilidades">
-          <motion.h2
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="hero-title"
-            style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', textAlign: 'center', marginBottom: '2rem' }}
-          >
-            {t("about.skills-title")}
-          </motion.h2>
+          <div style={{ textAlign: 'center', marginBottom: '2.25rem' }}>
+            <span className="section-label">STACK & CAPABILITIES</span>
+            <motion.h2
+              variants={itemVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="hero-title"
+              style={{ fontSize: 'clamp(2.2rem, 4vw, 3.4rem)', textAlign: 'center', marginBottom: 0 }}
+            >
+              {t("about.skills-title")}
+            </motion.h2>
+          </div>
 
           <motion.div
             variants={itemVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="bento-item bento-item-large" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.5rem', marginBottom: '3rem' }}
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: '0.5rem',
+              marginBottom: '2.5rem',
+              padding: '0.5rem',
+              borderRadius: '999px',
+              border: '1px solid var(--color-border)',
+              background: 'var(--color-surface)',
+              width: 'fit-content',
+              maxWidth: '100%',
+              marginInline: 'auto',
+              boxShadow: 'var(--shadow-pill)',
+            }}
           >
             {categories.map((category) => (
               <button
@@ -649,13 +679,13 @@ const AboutPage = () => {
                 className={`project-tag ${selectedCategory === category.id ? 'active' : ''}`}
                 style={{ 
                   cursor: 'pointer',
-                  display: 'flex',
+                  display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.5rem',
-                  padding: '0.6rem 1.2rem',
-                  fontSize: '0.95rem',
-                  fontWeight: 500,
-                  transition: 'all 0.3s ease',
+                  gap: '0.45rem',
+                  padding: '0.55rem 1.1rem',
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  border: 'none',
                   background: selectedCategory === category.id ? 'var(--color-text)' : 'transparent',
                   color: selectedCategory === category.id ? 'var(--color-bg)' : 'var(--color-text-muted)'
                 }}
@@ -682,8 +712,10 @@ const AboutPage = () => {
                     variants={skillVariants}
                     className="skill-card"
                   >
-                    <IconComponent size={32} style={{ marginBottom: '1rem', color: 'var(--color-text-muted)' }} />
-                    <span style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--color-text)' }} className="dark:text-text">
+                    <span className="ecosystem-icon" style={{ marginBottom: '0.85rem' }}>
+                      <IconComponent size={20} />
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text)' }}>
                       {skill.name}
                     </span>
                     <div className="skill-progress-bar">
@@ -703,18 +735,21 @@ const AboutPage = () => {
         </div>
 
         <div className="timeline-container" id="experiencia">
-          <motion.h2
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="hero-title"
-            style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', textAlign: 'center', marginBottom: '4rem' }}
-          >
-            {t("about.experience-title")}
-          </motion.h2>
+          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
+            <span className="section-label">CAREER LOG</span>
+            <motion.h2
+              variants={itemVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="hero-title"
+              style={{ fontSize: 'clamp(2.2rem, 4vw, 3.4rem)', textAlign: 'center', marginBottom: 0 }}
+            >
+              {t("about.experience-title")}
+            </motion.h2>
+          </div>
 
-          <div style={{ position: 'relative', maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ position: 'relative', maxWidth: '840px', margin: '0 auto' }}>
             {loadingExperiences ? (
               <p className="text-muted" style={{ textAlign: 'center' }}>{t("about.experience-loading")}</p>
             ) : experiences.length === 0 ? (
@@ -730,28 +765,32 @@ const AboutPage = () => {
                   transition={{ duration: 0.5 }}
                 >
                   <div className="timeline-content card-premium" style={{ padding: '2rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--color-text-muted)' }}>
-                      <Calendar size={16} />
-                      <span style={{ fontSize: '0.9rem' }}>{exp.period}</span>
+                    <div className="ecosystem-card-top" style={{ marginBottom: '1rem' }}>
+                      <span className="ecosystem-icon" style={{ width: '38px', height: '38px' }}>
+                        <Briefcase size={16} />
+                      </span>
+                      <span className="ecosystem-kicker" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                        <Calendar size={13} /> {exp.period}
+                      </span>
                     </div>
                     
-                    <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', color: 'var(--color-text)' }} className="dark:text-text">
+                    <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.5rem, 2.5vw, 1.9rem)', fontWeight: 400, lineHeight: 1.08, marginBottom: '0.5rem', color: 'var(--color-text)' }}>
                       {exp.title}
                     </h3>
                     
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--color-text)' }} className="dark:text-text-muted">
-                      <Briefcase size={16} />
-                      <span style={{ fontWeight: 500 }}>{exp.company}</span>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>
+                      <span style={{ fontWeight: 700, color: 'var(--color-text)' }}>{exp.company}</span>
+                      {exp.location && (
+                        <>
+                          <span>·</span>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                            <MapPin size={12} /> {exp.location}
+                          </span>
+                        </>
+                      )}
                     </div>
 
-                    {exp.location && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: 'var(--color-text-muted)' }}>
-                        <MapPin size={16} />
-                        <span style={{ fontSize: '0.9rem' }}>{exp.location}</span>
-                      </div>
-                    )}
-
-                    <p className="text-muted" style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                    <p className="text-muted" style={{ fontSize: '0.95rem', lineHeight: 1.68, marginBottom: '1.5rem' }}>
                       {exp.description}
                     </p>
 

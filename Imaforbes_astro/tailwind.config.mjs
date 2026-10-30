@@ -7,6 +7,8 @@ export default {
       fontFamily: {
         sans: ['Geist Sans', 'Arial', 'Helvetica', 'sans-serif'],
         mono: ['Geist Mono', 'monospace'],
+        serif: ['Instrument Serif', 'Georgia', 'serif'],
+        instrument: ['Instrument Serif', 'Georgia', 'serif'],
       },
       colors: {
         background: 'var(--color-bg)',

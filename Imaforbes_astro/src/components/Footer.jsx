@@ -33,7 +33,7 @@ const Footer = memo(({ currentPath }) => {
   };
 
   return (
-    <footer style={{ background: 'var(--color-bg)', borderTop: '1px solid var(--color-border)', padding: '4rem 0 2rem' }} className="dark:bg-[#0a0a0a] dark:border-strong">
+    <footer style={{ background: 'var(--color-surface)', borderTop: '1px solid var(--color-border)', padding: '4.5rem 0 2.5rem' }}>
       <motion.div
         className="container-premium"
         variants={containerVariants}
@@ -41,24 +41,35 @@ const Footer = memo(({ currentPath }) => {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
       >
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '3rem', marginBottom: '4rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '3rem', marginBottom: '3.5rem' }}>
           
           <motion.div variants={itemVariants}>
-            <a href="/" style={{ display: 'inline-block', marginBottom: '1.5rem', textDecoration: 'none' }}>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 300, letterSpacing: '0.1em', color: 'var(--color-text)' }} className="dark:text-text">
-                IMAFORBES
-              </h3>
+            <a href="/" className="logo-premium" style={{ marginBottom: '1rem' }}>
+              <span
+                aria-hidden="true"
+                style={{
+                  width: "8px",
+                  height: "8px",
+                  borderRadius: "50%",
+                  background: "var(--color-text)",
+                  display: "inline-block",
+                }}
+              />
+              <span>IMAFORBES</span>
             </a>
-            <p className="text-muted" style={{ maxWidth: '300px', fontSize: '0.95rem', lineHeight: 1.6 }}>
+            <p style={{ fontFamily: 'var(--font-serif)', fontSize: '1.5rem', lineHeight: 1.15, color: 'var(--color-text)', maxWidth: '300px', margin: '0.5rem 0 0.85rem' }}>
               {t("footer.description") || "Building digital experiences with passion and precision."}
             </p>
+            <span className="section-label" style={{ marginBottom: 0 }}>
+              CDMX · FULL STACK & UI
+            </span>
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <h4 style={{ fontSize: '0.85rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-text)', marginBottom: '1.5rem' }} className="dark:text-text">
+            <h4 className="section-label" style={{ marginBottom: '1.25rem' }}>
               {t("footer.navigation") || "Navigation"}
             </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.4rem 1rem' }}>
               {navItems.map((item) => (
                 <li key={item.path}>
                   <a 
@@ -71,21 +82,23 @@ const Footer = memo(({ currentPath }) => {
                     }}
                     style={{ 
                       textDecoration: 'none', 
-                      fontSize: '0.95rem',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.74rem',
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
                       color: location.pathname === item.path ? 'var(--color-text)' : 'var(--color-text-muted)',
-                      fontWeight: location.pathname === item.path ? 500 : 300,
-                      display: 'flex',
+                      fontWeight: location.pathname === item.path ? 700 : 500,
+                      display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '0.5rem',
+                      gap: '0.45rem',
                       transition: 'color 0.2s ease',
-                      padding: '0.5rem 0',
-                      minHeight: '44px' /* Fitts's Law: 44x44px minimum touch target */
+                      padding: '0.4rem 0',
+                      minHeight: '38px'
                     }}
-                    className={`dark:text-text-muted dark:hover:text-text ${location.pathname === item.path ? 'dark:!text-text' : ''}`}
                   >
                     <span>{t(item.label)}</span>
                     {location.pathname === item.path && (
-                      <motion.div layoutId="footerActive" style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--color-text)' }} className="dark:bg-surface" />
+                      <motion.div layoutId="footerActive" style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--color-text)' }} />
                     )}
                   </a>
                 </li>
@@ -94,20 +107,24 @@ const Footer = memo(({ currentPath }) => {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <h4 style={{ fontSize: '0.85rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--color-text)', marginBottom: '1.5rem' }} className="dark:text-text">
+            <h4 className="section-label" style={{ marginBottom: '1.25rem' }}>
               {t("footer.get-in-touch") || "Get in Touch"}
             </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <a href="mailto:imanol@imaforbes.com" style={{ display: 'flex', alignItems: 'center', gap: '1rem', textDecoration: 'none', color: 'var(--color-text-muted)', fontSize: '0.95rem', padding: '0.5rem', margin: '-0.5rem', borderRadius: '8px', minHeight: '44px' }} className="dark:hover:text-text hover:bg-surface dark:hover:bg-[#111] transition-colors">
-                <div style={{ padding: '0.5rem', background: 'var(--color-surface)', borderRadius: '6px' }} className="dark:bg-background">
-                  <Mail size={16} />
-                </div>
-                <span>imanol@imaforbes.com</span>
-                <ArrowUpRight size={14} style={{ opacity: 0.5 }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+              <a
+                href="mailto:imanol@imaforbes.com"
+                className="ecosystem-cta"
+                style={{ justifyContent: 'space-between', width: 'fit-content', padding: '0.5rem 1.15rem 0.5rem 0.65rem', minHeight: '46px' }}
+              >
+                <span className="ecosystem-icon" style={{ width: '32px', height: '32px' }}>
+                  <Mail size={14} />
+                </span>
+                <span style={{ textTransform: 'none', letterSpacing: '0.02em', fontSize: '0.85rem', fontWeight: 600 }}>imanol@imaforbes.com</span>
+                <ArrowUpRight size={14} />
               </a>
               
-              <div style={{ marginTop: '0.5rem' }}>
-                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+              <div>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text-muted)', margin: 0 }}>
                   {t("footer.response-time") || "Usually responds within 24 hours"}
                 </p>
               </div>
@@ -116,11 +133,11 @@ const Footer = memo(({ currentPath }) => {
 
         </div>
 
-        <motion.div variants={itemVariants} style={{ paddingTop: '2rem', borderTop: '1px solid var(--color-border)', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }} className="dark:border-strong">
-          <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+        <motion.div variants={itemVariants} style={{ paddingTop: '1.75rem', borderTop: '1px solid var(--color-border)', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text-muted)', margin: 0 }}>
             © {currentYear} Imanol Pérez Arteaga. {t("footer.copyright")}
           </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.72rem', letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>
             <span>{t("footer.made-with")}</span>
           </div>
         </motion.div>

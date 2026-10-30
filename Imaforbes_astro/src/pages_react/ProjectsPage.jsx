@@ -67,12 +67,12 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
   };
 
   return (
-      <motion.div variants={cardVariants} className="project-card-premium h-full dark:bg-[#111] dark:border-strong" style={{ zIndex: 10, background: 'var(--color-surface)', borderRadius: '1rem', overflow: 'hidden', display: 'flex', flexDirection: 'column', border: '1px solid var(--color-border)' }}>
+      <motion.div variants={cardVariants} className="project-card-premium h-full" style={{ zIndex: 10 }}>
       
       {/* Background Image / Carousel Container */}
       <div 
         className="cursor-pointer group relative"
-        style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative', background: '#0B0C0F' }}
+        style={{ width: '100%', height: '220px', overflow: 'hidden', position: 'relative', background: '#0B0C0F', borderBottom: '1px solid var(--color-border)' }}
         onClick={() => setPreviewImage && setPreviewImage(currentImg)}
       >
         <AnimatePresence mode="wait">
@@ -87,7 +87,7 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             loading="lazy"
             decoding="async"
-            className="hover:scale-105 transition-transform duration-500"
+            className="grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
           />
         </AnimatePresence>
 
@@ -127,7 +127,7 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
                     width: idx === currentImgIdx ? '16px' : '6px',
                     height: '6px',
                     borderRadius: '4px',
-                    background: idx === currentImgIdx ? 'var(--color-primary-light, #00F090)' : 'rgba(255,255,255,0.4)',
+                    background: idx === currentImgIdx ? '#ffffff' : 'rgba(255,255,255,0.4)',
                     transition: 'all 0.3s ease',
                     cursor: 'pointer',
                     display: 'inline-block'
@@ -140,38 +140,46 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
       </div>
 
       {/* Content Container */}
-      <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <h3 style={{ fontSize: '1.4rem', fontWeight: 700, marginBottom: '0.75rem', color: 'var(--color-text)' }} className="dark:text-text">
+      <div style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <div className="ecosystem-card-top" style={{ marginBottom: '0.85rem' }}>
+          <span className="ecosystem-kicker">
+            {project.tags?.[0] || "PROJECT"}
+          </span>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--color-text-muted)', letterSpacing: '0.08em' }}>
+            #{String(project.id).padStart(2, '0')}
+          </span>
+        </div>
+
+        <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(1.65rem, 2.2vw, 2rem)', fontWeight: 400, lineHeight: 1.06, marginBottom: '0.85rem', color: 'var(--color-text)' }}>
           {t(project.titleKey)}
         </h3>
         
-        <p className="text-text dark:text-text-muted" style={{ fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1.5rem', flexGrow: 1 }}>
+        <p className="text-muted" style={{ fontSize: '0.95rem', lineHeight: 1.68, marginBottom: '1.5rem', flexGrow: 1 }}>
           {t(project.descriptionKey)}
         </p>
         
         {/* Tags */}
         {project.tags && project.tags.length > 0 && (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginBottom: '1.5rem' }}>
             {project.tags.map((tag, i) => (
-              <span key={i} className="dark:bg-[#222] dark:text-text-muted dark:border-strong" style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem', borderRadius: '50px', background: 'var(--color-bg)', color: 'var(--color-text-muted)', border: '1px solid var(--color-border)' }}>
+              <span key={i} className="project-tag">
                 {tag}
               </span>
             ))}
           </div>
         )}
 
-        <div className="project-actions" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        <div className="project-actions" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', paddingTop: '1rem', borderTop: '1px solid var(--color-border)' }}>
           {project.repo && project.repo !== "#" && (
             <BorderBeam theme="dark" size="sm" duration={4} colorVariant="mono" className="rounded-full">
               <a
                 href={project.repo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-premium dark:bg-[#111] dark:border-strong"
+                className="ecosystem-cta"
                 onClick={(e) => e.stopPropagation()}
-                style={{ padding: '0.6rem 1.2rem', borderRadius: '9999px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}
               >
-                <FiGithub /> <span>{t("projects.view_code", "VIEW CODE")}</span>
+                <FiGithub size={14} /> <span>{t("projects.view_code", "VIEW CODE")}</span>
               </a>
             </BorderBeam>
           )}
@@ -182,11 +190,10 @@ const ProjectCard = ({ project, t, setPreviewImage }) => {
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-premium dark:bg-[#111] dark:border-strong"
+                className="ecosystem-cta"
                 onClick={(e) => e.stopPropagation()}
-                style={{ padding: '0.6rem 1.2rem', borderRadius: '9999px', background: 'var(--color-surface)', border: '1px solid var(--color-border)', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}
               >
-                <FiExternalLink /> <span>{t("projects.discover", "DISCOVER")}</span>
+                <FiExternalLink size={14} /> <span>{t("projects.discover", "DISCOVER")}</span>
               </a>
             </BorderBeam>
           )}
@@ -301,17 +308,6 @@ const ProjectsPage = () => {
       <HeroBackground />
       <div className="container-premium" style={{ position: 'relative', zIndex: 10 }}>
         
-        {/* Floating Background Widgets */}
-        <motion.div 
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          style={{ position: 'absolute', top: '2%', right: '5%', zIndex: 20, opacity: 0.8, display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--color-surface)', padding: '0.5rem 1rem', borderRadius: '50px', border: '1px solid var(--color-border)' }}
-          className="dark:bg-[#1a1a1a] dark:border-strong"
-        >
-          <FiBriefcase style={{ color: 'var(--color-text-muted)' }} />
-          <span style={{ fontSize: '0.8rem', color: 'var(--color-text)' }}>{projects.length} {t("projects.count-label", "Proyectos")}</span>
-        </motion.div>
-
         <motion.div 
           className="projects-header"
           initial={{ opacity: 0, y: 20 }}
@@ -319,10 +315,21 @@ const ProjectsPage = () => {
           transition={{ duration: 0.6 }}
           style={{ position: 'relative', paddingTop: '0rem' }}
         >
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.75rem' }}>
+            <div className="brand-lockup">
+              <span className="brand-name">
+                <FiBriefcase size={13} /> PORTFOLIO
+              </span>
+              <span className="brand-context">
+                {projects.length} {t("projects.count-label", "Proyectos")}
+              </span>
+            </div>
+          </div>
+
           <h1 className="projects-title">
             {t("projects.title")}
           </h1>
-          <p className="text-muted" style={{ maxWidth: '600px', margin: '0 auto', fontSize: '1.1rem', lineHeight: 1.6 }}>
+          <p className="text-muted" style={{ maxWidth: '640px', margin: '0 auto', fontSize: 'clamp(1rem, 1.45vw, 1.2rem)', lineHeight: 1.7 }}>
             {t("projects.description")}
           </p>
         </motion.div>
@@ -351,20 +358,16 @@ const ProjectsPage = () => {
               href="https://github.com/Imaforbes?tab=repositories&q=&type=&language=&sort="
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-premium dark:bg-[#111] dark:border-strong"
+              className="btn-premium"
               style={{
-                padding: '1rem 2.5rem',
+                padding: '0.95rem 2.2rem',
                 borderRadius: '9999px',
-                background: 'var(--color-surface)',
-                border: '1px solid var(--color-border)',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                fontSize: '1rem',
-                fontWeight: 600
+                background: 'var(--color-text)',
+                color: 'var(--color-bg)',
+                border: '1px solid var(--color-text)',
               }}
             >
-              <FiGithub size={20} />
+              <FiGithub size={16} />
               <span>{t("projects.view_all_repos", "VIEW ALL REPOSITORIES ON GITHUB")}</span>
             </a>
           </BorderBeam>

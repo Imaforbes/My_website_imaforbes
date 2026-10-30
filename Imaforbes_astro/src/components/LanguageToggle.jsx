@@ -15,41 +15,58 @@ const LanguageToggle = ({ className = "", size = "default" }) => {
 
   const sizeClasses = {
     sm: "px-2 py-1 text-xs",
-    default: "px-3 py-1 text-sm",
-    lg: "px-4 py-2 text-base",
+    default: "px-2.5 py-1 text-xs",
+    lg: "px-4 py-2 text-sm",
   };
 
   return (
     <div
-      className={`flex items-center p-1 bg-surface dark:bg-background rounded-full ${className}`}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "2px",
+        padding: "3px",
+        borderRadius: "999px",
+        background: "var(--color-faint)",
+        border: "1px solid var(--color-border)",
+      }}
+      className={className}
     >
       <button
         onClick={() => handleLanguageChange("es")}
-        className={`${
-          sizeClasses[size]
-        } font-semibold rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-          (i18n.language || "es").startsWith("es")
-            ? "bg-surface text-text shadow dark:bg-background dark:text-text"
-            : "bg-transparent text-text hover:text-text dark:text-text-muted dark:hover:text-text"
-        }`}
+        style={{
+          fontFamily: "var(--font-mono)",
+          letterSpacing: "0.08em",
+          borderRadius: "999px",
+          background: (i18n.language || "es").startsWith("es") ? "var(--color-surface)" : "transparent",
+          color: (i18n.language || "es").startsWith("es") ? "var(--color-text)" : "var(--color-text-muted)",
+          boxShadow: (i18n.language || "es").startsWith("es") ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
+          border: "none",
+          cursor: "pointer",
+        }}
+        className={`${sizeClasses[size]} font-bold transition-all duration-200`}
         aria-label={t("language.switchToSpanish") || "Switch to Spanish"}
         aria-pressed={(i18n.language || "es").startsWith("es")}
       >
-        🇲🇽
+        ES
       </button>
       <button
         onClick={() => handleLanguageChange("en")}
-        className={`${
-          sizeClasses[size]
-        } font-semibold rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
-          (i18n.language || "es").startsWith("en")
-            ? "bg-surface text-text shadow dark:bg-background dark:text-text"
-            : "bg-transparent text-text hover:text-text dark:text-text-muted dark:hover:text-text"
-        }`}
+        style={{
+          fontFamily: "var(--font-mono)",
+          letterSpacing: "0.08em",
+          borderRadius: "999px",
+          background: (i18n.language || "es").startsWith("en") ? "var(--color-surface)" : "transparent",
+          color: (i18n.language || "es").startsWith("en") ? "var(--color-text)" : "var(--color-text-muted)",
+          boxShadow: (i18n.language || "es").startsWith("en") ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
+          border: "none",
+          cursor: "pointer",
+        }}
+        className={`${sizeClasses[size]} font-bold transition-all duration-200`}
         aria-label={t("language.switchToEnglish") || "Switch to English"}
         aria-pressed={(i18n.language || "es").startsWith("en")}
       >
-        🇬🇧
+        EN
       </button>
     </div>
   );

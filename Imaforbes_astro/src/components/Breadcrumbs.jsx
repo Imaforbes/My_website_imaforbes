@@ -30,16 +30,33 @@ const Breadcrumbs = ({ currentPath }) => {
 
   return (
     <nav
-      className="bg-transparent px-4 sm:px-6 lg:px-8 py-3 mt-[80px] md:mt-[100px] relative z-10"
+      className="bg-transparent px-4 sm:px-6 lg:px-8 pt-6 pb-2 mt-[68px] relative z-10"
       aria-label="Breadcrumb"
     >
-      <div className="max-w-7xl mx-auto">
-        <ol className="flex items-center space-x-2 text-sm">
+      <div className="container-premium">
+        <ol
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            padding: '0.35rem 0.85rem',
+            borderRadius: '999px',
+            border: '1px solid var(--color-border)',
+            background: 'var(--color-surface)',
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.7rem',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            margin: 0,
+            listStyle: 'none',
+          }}
+        >
           <li>
-            <a               href="/"
-              className="text-text dark:text-text-muted hover:text-text dark:hover:text-text-muted transition-colors duration-200 flex items-center"
+            <a
+              href="/"
+              className="text-text-muted hover:text-text transition-colors duration-200 flex items-center"
             >
-              <Home className="w-4 h-4" />
+              <Home className="w-3.5 h-3.5" />
               <span className="sr-only">{t("breadcrumbs.home") || "Home"}</span>
             </a>
           </li>
@@ -49,14 +66,15 @@ const Breadcrumbs = ({ currentPath }) => {
 
             return (
               <li key={name} className="flex items-center shrink-0">
-                <ChevronRight className="w-4 h-4 text-text-muted dark:text-text mx-2" />
+                <ChevronRight className="w-3.5 h-3.5 text-text-muted mx-1" />
                 {isLast ? (
-                  <span className="text-text dark:text-text-muted font-medium truncate" aria-current="page">
+                  <span className="text-text font-bold truncate" aria-current="page">
                     {getBreadcrumbName(name)}
                   </span>
                 ) : (
-                  <a                     href={routeTo}
-                    className="text-text dark:text-text-muted hover:text-text dark:hover:text-text-muted transition-colors duration-200"
+                  <a
+                    href={routeTo}
+                    className="text-text-muted hover:text-text transition-colors duration-200"
                   >
                     {getBreadcrumbName(name)}
                   </a>
