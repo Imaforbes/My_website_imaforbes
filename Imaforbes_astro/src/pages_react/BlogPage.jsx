@@ -443,7 +443,7 @@ const BlogPage = () => {
                 <span>·</span>
                 <span>{formatDate(selectedPost.created_at)}</span>
                 <span>·</span>
-                <span>{readingTimeMin} min de lectura</span>
+                <span>{readingTimeMin} {t("blog.reading-time", "min read")}</span>
                 {(selectedPost.views_count > 0) && (
                   <>
                     <span>·</span>
@@ -724,7 +724,7 @@ const BlogPage = () => {
                 <FileText size={13} /> EDITORIAL
               </span>
               <span className="brand-context">
-                {posts.length} {t("blog.title", "Publicaciones")}
+                {posts.length} {t("blog.posts-count-label", "Publicaciones")}
               </span>
             </div>
           </motion.div>

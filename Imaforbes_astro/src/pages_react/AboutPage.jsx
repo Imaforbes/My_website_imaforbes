@@ -599,7 +599,7 @@ const AboutPage = () => {
             className="bento-item bento-item-medium"
             style={{ justifyContent: 'center' }}
           >
-            <span className="section-label">ABOUT · PERFIL EDITORIAL</span>
+            <span className="section-label">{t("about.section-label", "ABOUT · EDITORIAL PROFILE")}</span>
             <h1 className="hero-title" style={{ fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)', marginBottom: '1.5rem', textAlign: 'left', lineHeight: 1.02 }}>
               {t("about.hero-title")}
             </h1>
@@ -638,7 +638,7 @@ const AboutPage = () => {
 
         <div className="skills-container" id="habilidades">
           <div style={{ textAlign: 'center', marginBottom: '2.25rem' }}>
-            <span className="section-label">STACK & CAPABILITIES</span>
+            <span className="section-label">{t("about.skills-eyebrow", "STACK & CAPABILITIES")}</span>
             <motion.h2
               variants={itemVariants}
               initial="hidden"
@@ -736,7 +736,7 @@ const AboutPage = () => {
 
         <div className="timeline-container" id="experiencia">
           <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <span className="section-label">CAREER LOG</span>
+            <span className="section-label">{t("about.career-eyebrow", "CAREER LOG")}</span>
             <motion.h2
               variants={itemVariants}
               initial="hidden"

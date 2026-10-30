@@ -113,7 +113,7 @@ const ContactPage = () => {
                 <div className="brand-lockup">
                   <span className="brand-name">
                     <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }} />
-                    CONTACTO
+                    {t("contact.badge-title", "CONTACT")}
                   </span>
                   <span className="brand-context">
                     {t("contact.available-badge", "Available for new opportunities")}
@@ -152,7 +152,7 @@ const ContactPage = () => {
               style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
             >
               <div>
-                <span className="section-label" style={{ marginBottom: '0.5rem' }}>DIRECT CHANNELS</span>
+                <span className="section-label" style={{ marginBottom: '0.5rem' }}>{t("contact.channels-eyebrow", "DIRECT CHANNELS")}</span>
                 <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 700, letterSpacing: '-0.025em', lineHeight: 1.2, color: 'var(--color-text)', margin: 0 }}>
                   {t("contact.contact-info")}
                 </h3>
@@ -192,7 +192,7 @@ const ContactPage = () => {
 
               <div style={{ marginTop: '0.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--color-border)' }}>
                 <h4 className="section-label" style={{ marginBottom: '1rem' }}>
-                  Connect with me
+                  {t("contact.connect", "Connect with me")}
                 </h4>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                   <a
@@ -260,7 +260,7 @@ const ContactPage = () => {
                     outline: 'none',
                     transition: 'border-color 0.2s ease'
                   }}
-                  placeholder="Tu nombre completo"
+                  placeholder={t("contact.name-placeholder", "Your full name")}
                 />
                 {validationErrors.name && (
                   <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.5rem' }}>{validationErrors.name}</p>
@@ -290,7 +290,7 @@ const ContactPage = () => {
                     outline: 'none',
                     transition: 'border-color 0.2s ease'
                   }}
-                  placeholder="tu@correo.com"
+                  placeholder={t("contact.email-placeholder", "you@example.com")}
                 />
                 {validationErrors.email && (
                   <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.5rem' }}>{validationErrors.email}</p>
@@ -321,7 +321,7 @@ const ContactPage = () => {
                     outline: 'none',
                     transition: 'border-color 0.2s ease'
                   }}
-                  placeholder="¿En qué te puedo ayudar?"
+                  placeholder={t("contact.message-placeholder", "How can I help you?")}
                 ></textarea>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem' }}>
                   {validationErrors.message ? (

@@ -55,15 +55,28 @@ const DynamicText = ({ texts }) => {
   }, [texts]);
 
   return (
-    <span style={{ display: 'inline-flex', position: 'relative', height: '1.2em', overflow: 'hidden', verticalAlign: 'bottom', minWidth: '280px', justifyContent: 'center' }}>
-      <AnimatePresence mode="popLayout">
+    <span
+      style={{
+        display: 'inline-grid',
+        alignItems: 'center',
+        justifyItems: 'center',
+        verticalAlign: 'bottom',
+        overflow: 'visible',
+      }}
+    >
+      <AnimatePresence mode="wait">
         <motion.span
-          key={index}
-          initial={{ y: 20, opacity: 0 }}
+          key={`${index}-${texts[index]}`}
+          initial={{ y: 14, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: -20, opacity: 0 }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-          style={{ position: 'absolute', whiteSpace: 'nowrap', color: 'var(--color-text)' }}
+          exit={{ y: -14, opacity: 0 }}
+          transition={{ duration: 0.35, ease: "easeInOut" }}
+          style={{
+            gridArea: '1 / 1',
+            display: 'inline-block',
+            whiteSpace: 'nowrap',
+            color: 'var(--color-text)',
+          }}
         >
           {texts[index]}
         </motion.span>
@@ -125,16 +138,19 @@ const HomePage = () => {
             marginTop: '1.5rem',
             display: 'flex',
             justifyContent: 'center',
-            gap: '0.4rem',
+            alignItems: 'baseline',
+            gap: '0.45rem',
             flexWrap: 'wrap',
           }}
         >
-          <span style={{ color: 'var(--color-text-muted)' }}>Especializado en</span>
+          <span style={{ color: 'var(--color-text-muted)' }}>
+            {t("home.specialized_in", "Specialized in")}
+          </span>
           <DynamicText texts={[
-            t("home.subtitle_1", "Desarrollo Web Moderno."),
-            t("home.subtitle_2", "Diseño de Interfaces."),
-            t("home.subtitle_3", "Soluciones Full Stack."),
-            t("home.subtitle_4", "Arquitecturas Nube.")
+            t("home.subtitle_1", "Modern Web Development."),
+            t("home.subtitle_2", "Interface Design."),
+            t("home.subtitle_3", "Full Stack Solutions."),
+            t("home.subtitle_4", "Cloud Architectures.")
           ]} />
         </motion.h2>
 

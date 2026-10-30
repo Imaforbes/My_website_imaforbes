@@ -91,26 +91,66 @@ export const SettingsProvider = ({ children }) => {
   }, []);
 
   // Define applyLanguage function
-  const applyLanguage = React.useCallback((newLanguage) => {
-    if (i18n.language !== newLanguage) {
-      i18n.changeLanguage(newLanguage);
+  const applyLanguage = React.useCallback((newLanguage, persist = false) => {
+    const normalized = newLanguage && newLanguage.startsWith('en') ? 'en' : 'es';
+    if (i18n.language !== normalized) {
+      i18n.changeLanguage(normalized);
     }
-    safeLocalStorage.setItem('app_language', newLanguage);
+    if (typeof document !== 'undefined' && document.documentElement) {
+      document.documentElement.lang = normalized;
+    }
+    if (persist) {
+      safeLocalStorage.setItem('app_language', normalized);
+    }
   }, [i18n]);
 
-  // Initialize language from localStorage on client-side to prevent hydration mismatch
+  // Initialize language from localStorage on client-side and sync across Astro islands
   useEffect(() => {
     const savedLang = safeLocalStorage.getItem('app_language');
     let browserLang = 'es';
     if (typeof navigator !== 'undefined' && navigator.language) {
       browserLang = navigator.language.startsWith('en') ? 'en' : 'es';
     }
-    const targetLang = savedLang || browserLang;
-    
-    if (targetLang !== 'es') {
-      setLanguage(targetLang);
+    const rawLang = savedLang || (i18n.language && i18n.language !== 'es' ? i18n.language : browserLang);
+    const targetLang = rawLang && rawLang.startsWith('en') ? 'en' : 'es';
+
+    setLanguage(targetLang);
+    applyLanguage(targetLang, !!savedLang);
+
+    const handleI18nLangChanged = (lng) => {
+      const next = lng && lng.startsWith('en') ? 'en' : 'es';
+      setLanguage((prev) => (prev === next ? prev : next));
+      if (typeof document !== 'undefined' && document.documentElement) {
+        document.documentElement.lang = next;
+      }
+    };
+
+    const handleWindowLangChange = (e) => {
+      if (e?.detail) {
+        handleI18nLangChanged(e.detail);
+      }
+    };
+
+    const handleWindowThemeChange = (e) => {
+      if (e?.detail) {
+        setTheme((prev) => (prev === e.detail ? prev : e.detail));
+      }
+    };
+
+    i18n.on('languageChanged', handleI18nLangChanged);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('app:language-change', handleWindowLangChange);
+      window.addEventListener('app:theme-change', handleWindowThemeChange);
     }
-  }, []);
+
+    return () => {
+      i18n.off('languageChanged', handleI18nLangChanged);
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('app:language-change', handleWindowLangChange);
+        window.removeEventListener('app:theme-change', handleWindowThemeChange);
+      }
+    };
+  }, [i18n, applyLanguage]);
 
   // Load settings from API on mount
   useEffect(() => {
@@ -121,11 +161,6 @@ export const SettingsProvider = ({ children }) => {
   useEffect(() => {
     applyTheme(theme);
   }, [theme, applyTheme]);
-
-  // Apply language to i18n when it changes
-  useEffect(() => {
-    applyLanguage(language);
-  }, [language, applyLanguage]);
 
   const loadSettingsFromAPI = async () => {
     // Check if user is authenticated before making API call
@@ -162,7 +197,7 @@ export const SettingsProvider = ({ children }) => {
           }
           if (appearance.language && !hasLocalLanguage) {
             setLanguage(appearance.language);
-            safeLocalStorage.setItem('app_language', appearance.language);
+            applyLanguage(appearance.language, true);
           }
         }
       }
@@ -180,6 +215,9 @@ export const SettingsProvider = ({ children }) => {
   const updateTheme = async (newTheme) => {
     setTheme(newTheme);
     applyTheme(newTheme);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('app:theme-change', { detail: newTheme }));
+    }
     
     // Si el usuario está autenticado, sincronizar el tema con la base de datos
     // para que no se sobrescriba al recargar la página.
@@ -196,15 +234,19 @@ export const SettingsProvider = ({ children }) => {
   };
 
   const updateLanguage = async (newLanguage) => {
-    setLanguage(newLanguage);
-    applyLanguage(newLanguage);
+    const normalized = newLanguage && newLanguage.startsWith('en') ? 'en' : 'es';
+    setLanguage(normalized);
+    applyLanguage(normalized, true);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('app:language-change', { detail: normalized }));
+    }
     
     // Si el usuario está autenticado, sincronizar el idioma con la base de datos
     const authToken = safeLocalStorage.getItem('auth_token');
     if (authToken) {
       try {
         const { api } = await import('../services/api.js');
-        await api.settings.update({ appearance: { theme, language: newLanguage } });
+        await api.settings.update({ appearance: { theme, language: normalized } });
       } catch (error) {
         console.warn('Failed to sync language with API:', error);
       }
