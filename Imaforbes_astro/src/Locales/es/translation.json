@@ -53,6 +53,7 @@
     "no-letters": "No hay cartas disponibles",
     "no-poems": "No hay poemas disponibles",
     "no-posts": "No hay publicaciones disponibles",
+    "no-posts-filter": "No hay publicaciones en esta categoría",
     "no-search-results": "No se encontraron publicaciones con esa búsqueda",
     "posts-count-label": "Publicaciones",
     "read-more": "Leer más",
@@ -118,7 +119,9 @@
     "home": "Inicio",
     "about-me": "Sobre mí",
     "blog": "Blog",
+    "close-menu": "Cerrar menú",
     "contact": "Contacto",
+    "open-menu": "Abrir menú",
     "projects": "Proyectos",
     "trajectory": "Trayectoria",
     "cv": "CV"

@@ -53,6 +53,7 @@
     "no-letters": "No letters available",
     "no-poems": "No poems available",
     "no-posts": "No posts available",
+    "no-posts-filter": "No posts available in this category",
     "no-search-results": "No posts matched your search",
     "posts-count-label": "Posts",
     "read-more": "Read more",
@@ -118,7 +119,9 @@
     "home": "Home",
     "about-me": "About Me",
     "blog": "Blog",
+    "close-menu": "Close menu",
     "contact": "Contact",
+    "open-menu": "Open menu",
     "projects": "Projects",
     "trajectory": "Trajectory",
     "cv": "CV"

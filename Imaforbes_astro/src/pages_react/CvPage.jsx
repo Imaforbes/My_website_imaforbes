@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Copy, Check, Download, FileText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useSettings } from '../contexts/SettingsContext.jsx';
 import withProviders from '../components/withProviders.jsx';
 
 const cvData = {
@@ -160,6 +161,7 @@ Mi código busca dejar huella, más allá de la pantalla.
 
 const CvPage = () => {
   const { t, i18n } = useTranslation();
+  const { language, updateLanguage } = useSettings();
   const [lang, setLang] = useState('en');
   const [copied, setCopied] = useState(false);
 
@@ -169,14 +171,14 @@ const CvPage = () => {
     if (paramLang === 'es' || paramLang === 'en') {
       setLang(paramLang);
       if (i18n.language !== paramLang) {
-        i18n.changeLanguage(paramLang);
+        updateLanguage(paramLang);
       }
-    } else if (i18n.language && i18n.language.startsWith('es')) {
+    } else if (language && language.startsWith('es')) {
       setLang('es');
     } else {
       setLang('en');
     }
-  }, [i18n]);
+  }, [i18n, language, updateLanguage]);
 
   const handleCopy = async () => {
     const textToCopy = cvData[lang];
@@ -228,9 +230,7 @@ const CvPage = () => {
 
   const switchLang = (newLang) => {
     setLang(newLang);
-    if (i18n.changeLanguage) {
-      i18n.changeLanguage(newLang);
-    }
+    updateLanguage(newLang);
     const url = new URL(window.location);
     url.searchParams.set('lang', newLang);
     window.history.pushState({}, '', url);
