@@ -2,7 +2,7 @@
 import React, { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const ProtectedImage = ({ src, alt, className, ...props }) => {
+const ProtectedImage = ({ src, alt, className, priority = false, ...props }) => {
   const imageRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -126,7 +126,7 @@ const ProtectedImage = ({ src, alt, className, ...props }) => {
           touchAction: 'none',
           WebkitTouchCallout: 'none',
         }}
-        loading="lazy"
+        {...(priority ? { fetchPriority: "high" } : { loading: "lazy" })}
         decoding="async"
         {...props}
       />

@@ -460,6 +460,7 @@ const BlogPage = () => {
                 <ProtectedImage
                   src={getImageUrl(selectedPost.image_url)}
                   alt={selectedPost.title}
+                  priority
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </div>

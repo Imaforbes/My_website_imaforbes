@@ -238,68 +238,81 @@ const ContactPage = () => {
               style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', padding: 'clamp(1.75rem, 5vw, 2.5rem)' }}
             >
               <div>
-                <label htmlFor="name" style={{ display: 'block', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.55rem', color: 'var(--color-text)' }}>
-                  {t("contact.name")}
+                <label htmlFor="name" style={{ display: 'block', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.45rem', color: 'var(--color-text)' }}>
+                  {t("contact.name")} <span aria-hidden="true">*</span>
                 </label>
                 <input
                   type="text"
                   id="name"
                   name="name"
+                  autoComplete="name"
+                  enterKeyHint="next"
                   value={formData.name}
                   onChange={handleChange}
                   required
                   maxLength={200}
+                  aria-invalid={Boolean(validationErrors.name) || undefined}
+                  aria-describedby={validationErrors.name ? "name-error" : undefined}
                   style={{ 
                     width: '100%', 
+                    minHeight: '48px',
                     padding: '0.95rem 1.15rem', 
                     borderRadius: '14px',
-                    fontSize: '0.98rem',
+                    font: 'inherit',
+                    fontSize: 'max(1rem, 1em)',
                     background: 'var(--color-bg)',
                     border: `1px solid ${validationErrors.name ? '#ef4444' : 'var(--color-border-strong)'}`,
                     color: 'var(--color-text)',
-                    outline: 'none',
                     transition: 'border-color 0.2s ease'
                   }}
                   placeholder={t("contact.name-placeholder", "Your full name")}
                 />
                 {validationErrors.name && (
-                  <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.5rem' }}>{validationErrors.name}</p>
+                  <p id="name-error" role="alert" style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.5rem' }}>{validationErrors.name}</p>
                 )}
               </div>
               
               <div>
-                <label htmlFor="email" style={{ display: 'block', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.55rem', color: 'var(--color-text)' }}>
-                  {t("contact.email")}
+                <label htmlFor="email" style={{ display: 'block', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.45rem', color: 'var(--color-text)' }}>
+                  {t("contact.email")} <span aria-hidden="true">*</span>
                 </label>
                 <input
                   type="email"
                   id="email"
                   name="email"
+                  autoComplete="email"
+                  autoCorrect="off"
+                  autoCapitalize="none"
+                  spellCheck={false}
+                  enterKeyHint="next"
                   value={formData.email}
                   onChange={handleChange}
                   required
                   maxLength={200}
+                  aria-invalid={Boolean(validationErrors.email) || undefined}
+                  aria-describedby={validationErrors.email ? "email-error" : undefined}
                   style={{ 
                     width: '100%', 
+                    minHeight: '48px',
                     padding: '0.95rem 1.15rem', 
                     borderRadius: '14px',
-                    fontSize: '0.98rem',
+                    font: 'inherit',
+                    fontSize: 'max(1rem, 1em)',
                     background: 'var(--color-bg)',
                     border: `1px solid ${validationErrors.email ? '#ef4444' : 'var(--color-border-strong)'}`,
                     color: 'var(--color-text)',
-                    outline: 'none',
                     transition: 'border-color 0.2s ease'
                   }}
                   placeholder={t("contact.email-placeholder", "you@example.com")}
                 />
                 {validationErrors.email && (
-                  <p style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.5rem' }}>{validationErrors.email}</p>
+                  <p id="email-error" role="alert" style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.5rem' }}>{validationErrors.email}</p>
                 )}
               </div>
               
               <div>
-                <label htmlFor="message" style={{ display: 'block', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.55rem', color: 'var(--color-text)' }}>
-                  {t("contact.message")}
+                <label htmlFor="message" style={{ display: 'block', fontFamily: 'var(--font-sans)', fontSize: '0.9rem', fontWeight: 500, marginBottom: '0.45rem', color: 'var(--color-text)' }}>
+                  {t("contact.message")} <span aria-hidden="true">*</span>
                 </label>
                 <textarea
                   id="message"
@@ -309,25 +322,27 @@ const ContactPage = () => {
                   required
                   rows="5"
                   maxLength={2000}
+                  aria-invalid={Boolean(validationErrors.message) || undefined}
+                  aria-describedby={validationErrors.message ? "message-error message-counter" : "message-counter"}
                   style={{ 
                     width: '100%', 
                     padding: '0.95rem 1.15rem', 
                     borderRadius: '14px',
-                    fontSize: '0.98rem',
-                    resize: 'none',
+                    font: 'inherit',
+                    fontSize: 'max(1rem, 1em)',
+                    resize: 'vertical',
                     background: 'var(--color-bg)',
                     border: `1px solid ${validationErrors.message ? '#ef4444' : 'var(--color-border-strong)'}`,
                     color: 'var(--color-text)',
-                    outline: 'none',
                     transition: 'border-color 0.2s ease'
                   }}
                   placeholder={t("contact.message-placeholder", "How can I help you?")}
                 ></textarea>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem' }}>
                   {validationErrors.message ? (
-                    <p style={{ color: '#ef4444', fontSize: '0.8rem' }}>{validationErrors.message}</p>
+                    <p id="message-error" role="alert" style={{ color: '#ef4444', fontSize: '0.8rem' }}>{validationErrors.message}</p>
                   ) : <div></div>}
-                  <p style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                  <p id="message-counter" style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
                     {formData.message.length}/2000
                   </p>
                 </div>
@@ -341,14 +356,15 @@ const ContactPage = () => {
                     name="privacy"
                     type="checkbox"
                     required
+                    aria-describedby="privacy-description"
                     className="w-4 h-4 rounded cursor-pointer"
                   />
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="privacy" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', cursor: 'pointer' }}>
-                    {t("contact.privacy-title")}
+                    {t("contact.privacy-title")} <span aria-hidden="true">*</span>
                   </label>
-                  <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', marginTop: '0.25rem', marginBottom: 0 }}>
+                  <p id="privacy-description" style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', marginTop: '0.25rem', marginBottom: 0 }}>
                     {t("contact.privacy-text")}
                   </p>
                 </div>
@@ -385,7 +401,7 @@ const ContactPage = () => {
         </div>
       </section>
 
-      <div style={{ position: 'fixed', top: '6rem', left: '50%', transform: 'translateX(-50%)', width: '90%', maxWidth: '500px', zIndex: 60, pointerEvents: 'none' }}>
+      <div role="status" aria-live="polite" style={{ position: 'fixed', top: '6rem', left: '50%', transform: 'translateX(-50%)', width: '90%', maxWidth: '500px', zIndex: 60, pointerEvents: 'none' }}>
         <AnimatePresence>
           {status.message && (
             <motion.div
@@ -409,6 +425,8 @@ const ContactPage = () => {
                 <p style={{ fontWeight: 500 }}>{status.message}</p>
               </div>
               <button
+                type="button"
+                aria-label={t("contact.dismiss", "Dismiss notification")}
                 onClick={clearStatus}
                 style={{ background: 'transparent', border: 'none', color: 'white', cursor: 'pointer', padding: '0.25rem' }}
               >

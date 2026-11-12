@@ -1,4 +1,5 @@
 import React from 'react';
+import { MotionConfig } from 'framer-motion';
 import { SettingsProvider, useSettings } from '../contexts/SettingsContext.jsx';
 import '../i18n.js';
 
@@ -11,7 +12,9 @@ export default function withProviders(Component) {
   return function WrappedComponent(props) {
     return (
       <SettingsProvider>
-        <LanguageAwareConsumer Component={Component} componentProps={props} />
+        <MotionConfig reducedMotion="user">
+          <LanguageAwareConsumer Component={Component} componentProps={props} />
+        </MotionConfig>
       </SettingsProvider>
     );
   };
