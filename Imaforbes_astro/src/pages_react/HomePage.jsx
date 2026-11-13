@@ -161,7 +161,7 @@ const HomePage = () => {
         <motion.div variants={itemVariants} className="hero-actions" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '2.5rem' }}>
           {/* Primary CTA: Von Restorff Effect (Isolation) */}
           <BorderBeam theme="dark" size="sm" duration={3} colorVariant="mono" className="rounded-full">
-            <a href="/projects" className="btn-premium shadow-lg" style={{ padding: '0.9rem 1.85rem', borderRadius: '9999px', background: 'var(--color-text)', color: 'var(--color-bg)', border: '1px solid var(--color-text)' }}>
+            <a href="/projects" className="btn-premium btn-premium-solid shadow-lg" style={{ padding: '0.9rem 1.85rem', borderRadius: '9999px' }}>
               <span className="btn-icon">
                 <FiCode size={15} /> {t("home.view-projects")} <FiArrowRight size={15} />
               </span>
@@ -169,14 +169,14 @@ const HomePage = () => {
           </BorderBeam>
           
           {/* Secondary CTA */}
-          <a href="/contact" className="btn-premium" style={{ padding: '0.9rem 1.6rem', borderRadius: '9999px', background: 'var(--color-surface)' }}>
+          <a href="/contact" className="btn-premium btn-premium-surface" style={{ padding: '0.9rem 1.6rem', borderRadius: '9999px' }}>
             <span className="btn-icon">
               <FiMail size={15} /> {t("home.contact")}
             </span>
           </a>
 
           {/* Tertiary CTA */}
-          <a href="/trajectory" className="btn-premium" style={{ padding: '0.9rem 1.6rem', borderRadius: '9999px', background: 'var(--color-surface)' }}>
+          <a href="/trajectory" className="btn-premium btn-premium-surface" style={{ padding: '0.9rem 1.6rem', borderRadius: '9999px' }}>
             <span className="btn-icon">
               <FiBriefcase size={15} /> {t("home.view-trajectory")}
             </span>

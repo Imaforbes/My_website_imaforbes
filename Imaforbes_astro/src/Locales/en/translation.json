@@ -197,6 +197,7 @@
     "message": "Page not found"
   },
   "projects": {
+    "badge": "PORTFOLIO",
     "count-label": "Projects",
     "description": "A selection of my most recent projects",
     "title": "Projects",
@@ -260,6 +261,15 @@
     "empty": "More professional experience will be shared here soon.",
     "eyebrow": "Professional profile",
     "loading": "Loading trajectory...",
-    "title": "Trajectory"
+    "title": "Trajectory",
+    "items": {
+      "allegro": {
+        "title": "Software Engineer",
+        "company": "Allegro San Ángel Inn",
+        "location": "Mexico City, MX",
+        "period": "2025 - PRESENT",
+        "description": "As a Software Engineer focused on modernizing the notary's operations by developing a custom financial and operational management system. Key contributions included gathering requirements from staff, mapping out core legal processes (such as real estate transactions and wills), and designing the system's architecture to include modules for CRM, document automation, and financial control."
+      }
+    }
   }
 }

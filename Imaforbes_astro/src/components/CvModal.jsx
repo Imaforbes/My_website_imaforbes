@@ -107,7 +107,8 @@ const CvModal = () => {
         <form method="dialog">
           <button
             type="submit"
-            className="p-1.5 rounded-2xl border border-strong dark:border-strong hover:bg-surface/60 dark:hover:bg-background text-text dark:text-text-muted transition-colors"
+            className="btn-premium btn-premium-surface p-2 rounded-full cursor-pointer"
+            style={{ minWidth: '36px', minHeight: '36px', padding: '0.4rem' }}
             aria-label={t('cvModal.close', 'Close modal')}
           >
             <X size={18} />
@@ -133,14 +134,14 @@ const CvModal = () => {
               type="button"
               autoFocus
               onClick={() => handleSelectLang('en')}
-              className="btn-premium flex items-center justify-center py-3 px-5 rounded-2xl bg-surface hover:bg-background text-text font-medium text-sm sm:text-base border border-border transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer w-full"
+              className="btn-premium btn-premium-surface flex items-center justify-center py-3 px-5 rounded-2xl font-medium text-sm sm:text-base min-h-[46px] sm:min-h-[48px] cursor-pointer w-full"
             >
               {t('cvModal.english', 'English')}
             </button>
             <button
               type="button"
               onClick={() => handleSelectLang('es')}
-              className="btn-premium flex items-center justify-center py-3 px-5 rounded-2xl bg-surface hover:bg-background text-text font-medium text-sm sm:text-base border border-border transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer w-full"
+              className="btn-premium btn-premium-surface flex items-center justify-center py-3 px-5 rounded-2xl font-medium text-sm sm:text-base min-h-[46px] sm:min-h-[48px] cursor-pointer w-full"
             >
               {t('cvModal.spanish', 'Spanish')}
             </button>
@@ -180,14 +181,14 @@ const CvModal = () => {
             <button
               type="button"
               onClick={handleOpenMarkdown}
-              className="btn-premium flex items-center justify-center py-3 px-5 rounded-2xl bg-surface hover:bg-background text-text font-medium text-sm sm:text-base border border-border transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer w-full"
+              className="btn-premium btn-premium-surface flex items-center justify-center py-3 px-5 rounded-2xl font-medium text-sm sm:text-base min-h-[46px] sm:min-h-[48px] cursor-pointer w-full"
             >
               {t('cvModal.markdown', 'Markdown')}
             </button>
             <button
               type="button"
               onClick={handleDownloadPdf}
-              className="btn-premium flex items-center justify-center py-3 px-5 rounded-2xl bg-surface hover:bg-background text-text font-medium text-sm sm:text-base border border-border transition-all duration-150 min-h-[46px] sm:min-h-[48px] cursor-pointer w-full"
+              className="btn-premium btn-premium-surface flex items-center justify-center py-3 px-5 rounded-2xl font-medium text-sm sm:text-base min-h-[46px] sm:min-h-[48px] cursor-pointer w-full"
             >
               {t('cvModal.pdf', 'PDF')}
             </button>

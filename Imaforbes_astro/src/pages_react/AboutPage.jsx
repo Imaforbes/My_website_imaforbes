@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { Briefcase, Calendar, MapPin, ChevronRight, ChevronLeft, Grid, LayoutTemplate, Server, Database, Cloud, Wrench } from "lucide-react";
 import { openCvModal } from "../utils/cvModal.js";
 import { api } from "../services/api.js";
+import { localizeExperience } from "../utils/experienceLocalization.js";
 import {
   FaHtml5,
   FaCss3Alt,
@@ -83,9 +84,13 @@ const HeroBackground = () => (
 );
 
 const AboutPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [experiences, setExperiences] = useState([]);
   const [loadingExperiences, setLoadingExperiences] = useState(true);
+
+  const localizedExperiences = experiences.map((exp) =>
+    localizeExperience(exp, i18n.language, t)
+  );
 
   // Fetch experiences from API
   useEffect(() => {
@@ -616,16 +621,13 @@ const AboutPage = () => {
                   e.preventDefault();
                   openCvModal();
                 }}
-                className="btn-premium"
+                className="btn-premium btn-premium-solid"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   padding: '0.85rem 1.85rem',
                   borderRadius: '9999px',
-                  background: 'var(--color-text)',
-                  color: 'var(--color-bg)',
-                  border: '1px solid var(--color-text)',
                   cursor: 'pointer',
                   minHeight: '46px',
                 }}
@@ -685,9 +687,6 @@ const AboutPage = () => {
                   padding: '0.55rem 1.1rem',
                   fontSize: '0.72rem',
                   fontWeight: 700,
-                  border: 'none',
-                  background: selectedCategory === category.id ? 'var(--color-text)' : 'transparent',
-                  color: selectedCategory === category.id ? 'var(--color-bg)' : 'var(--color-text-muted)'
                 }}
               >
                 {category.icon} {category.name}
@@ -752,10 +751,10 @@ const AboutPage = () => {
           <div style={{ position: 'relative', maxWidth: '840px', margin: '0 auto' }}>
             {loadingExperiences ? (
               <p className="text-muted" style={{ textAlign: 'center' }}>{t("about.experience-loading")}</p>
-            ) : experiences.length === 0 ? (
+            ) : localizedExperiences.length === 0 ? (
               <p className="text-muted" style={{ textAlign: 'center' }}>{t("about.experience-empty")}</p>
             ) : (
-              experiences.map((exp, index) => (
+              localizedExperiences.map((exp, index) => (
                 <motion.div
                   key={index}
                   className="timeline-item"

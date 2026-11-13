@@ -1,32 +1,30 @@
-export default [
+// Static Fallback Data for Work Experiences
+// Ensures the Trajectory and About pages always render even if Supabase is paused or offline.
+export const experienceFallback = [
   {
-    "id": 1,
-    "title": "Software Engineer",
-    "company": "Allegro San Angel Inn",
-    "location": "Mexico City, MX",
-    "period": "2025 - Present",
-    "description": "As a Software Engineer focused on modernizing the notary's operations by developing a custom financial and operational management system. Key contributions included gathering requirements from staff, mapping out core legal processes (such as real estate transactions and wills), and designing the system's architecture to include modules for CRM, document automation, and financial control.",
-    "responsibilities": [
-      "Systems Development",
-      "Custom Solutions",
-      "Digital Modernization"
-    ],
-    "technologies": [
-      "Python",
-      "React",
-      "JavaScript",
-      "HTML",
-      "CSS",
-      "PHP",
-      "VITE",
-      "MySQL",
-      "Node.js",
-      "Vue.js",
-      "Linux shell"
-    ],
-    "sort_order": 0,
-    "status": "published",
-    "created_at": "2026-01-03 07:16:49",
-    "updated_at": "2026-01-03 07:16:49"
+    id: 1,
+    title: "Software Engineer",
+    title_es: "Ingeniero de Software",
+    title_en: "Software Engineer",
+    company: "Allegro San Ángel Inn",
+    location: "Mexico City, MX",
+    location_es: "Ciudad de México, MX",
+    location_en: "Mexico City, MX",
+    period: "2025 - PRESENT",
+    period_es: "2025 - PRESENTE",
+    period_en: "2025 - PRESENT",
+    description:
+      "As a Software Engineer focused on modernizing the notary's operations by developing a custom financial and operational management system. Key contributions included gathering requirements from staff, mapping out core legal processes (such as real estate transactions and wills), and designing the system's architecture to include modules for CRM, document automation, and financial control.",
+    description_es:
+      "Como Ingeniero de Software enfocado en modernizar las operaciones de la notaría mediante el desarrollo de un sistema integral de gestión financiera y operativa a medida. Mis contribuciones clave incluyeron el levantamiento de requerimientos con el personal, el mapeo de procesos legales centrales (como operaciones inmobiliarias y testamentos) y el diseño de la arquitectura del sistema con módulos de CRM, automatización documental y control financiero.",
+    description_en:
+      "As a Software Engineer focused on modernizing the notary's operations by developing a custom financial and operational management system. Key contributions included gathering requirements from staff, mapping out core legal processes (such as real estate transactions and wills), and designing the system's architecture to include modules for CRM, document automation, and financial control.",
+    technologies: ["Python", "React", "JavaScript", "HTML", "CSS", "PHP", "VITE", "MySQL", "Node.js", "Vue.js", "Linux shell"],
+    sort_order: 1,
+    status: "published",
+    created_at: "2025-10-21T01:57:49+00:00",
+    updated_at: "2025-10-21T16:40:27+00:00"
   }
 ];
+
+export default experienceFallback;

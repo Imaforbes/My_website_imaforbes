@@ -1,15 +1,21 @@
 import withProviders from '../components/withProviders.jsx';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, BriefcaseBusiness, Download, MapPin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { openCvModal } from '../utils/cvModal.js';
 import { api } from '../services/api.js';
+import { localizeExperience } from '../utils/experienceLocalization.js';
 
 const TrajectoryPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [experiences, setExperiences] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const localizedExperiences = useMemo(
+    () => experiences.map((exp) => localizeExperience(exp, i18n.language, t)),
+    [experiences, i18n.language, t]
+  );
 
   useEffect(() => {
     const loadExperiences = async () => {
@@ -60,12 +66,12 @@ const TrajectoryPage = () => {
         >
           <button
             onClick={() => openCvModal()}
-            className="btn-premium"
-            style={{ background: 'var(--color-text)', color: 'var(--color-bg)', borderColor: 'var(--color-text)', padding: '0.8rem 1.65rem' }}
+            className="btn-premium btn-premium-solid"
+            style={{ padding: '0.8rem 1.65rem' }}
           >
             <Download size={15} /> {t('trajectory.download-cv')}
           </button>
-          <a href="/contact" className="btn-premium" style={{ background: 'var(--color-surface)', padding: '0.8rem 1.65rem' }}>
+          <a href="/contact" className="btn-premium btn-premium-surface" style={{ padding: '0.8rem 1.65rem' }}>
             {t('trajectory.contact')} <ArrowUpRight size={15} />
           </a>
         </motion.div>
@@ -87,14 +93,14 @@ const TrajectoryPage = () => {
                 </div>
               ))}
             </div>
-          ) : experiences.length === 0 ? (
+          ) : localizedExperiences.length === 0 ? (
             <div className="card-premium" style={{ textAlign: 'center', padding: '3rem 1.5rem' }}>
               <BriefcaseBusiness size={36} style={{ margin: '0 auto 1rem', color: 'var(--color-text-muted)' }} />
               <p className="text-muted">{t('trajectory.empty')}</p>
             </div>
           ) : (
             <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: '1.35rem' }}>
-              {experiences.map((experience, index) => (
+              {localizedExperiences.map((experience, index) => (
                 <motion.li
                   key={experience.id}
                   initial={{ opacity: 0, y: 16 }}

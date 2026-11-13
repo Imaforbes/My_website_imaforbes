@@ -221,6 +221,7 @@ const ProjectsPage = () => {
       repo: "https://github.com/Imaforbes/Quiniela_Mundial_2026",
       tags: ["React", "Vite", "Supabase", "PostgreSQL", "Vanilla CSS"],
     },
+    /* Ocultado temporalmente por actualización:
     {
       id: 8,
       titleKey: "projects.notary-system.title",
@@ -230,6 +231,7 @@ const ProjectsPage = () => {
       repo: "https://github.com/Imaforbes/Sistema_Notarial_CRM",
       tags: ["React 19", "Flask", "MySQL", "Chart.js", "React-PDF"],
     },
+    */
     {
       id: 7,
       titleKey: "projects.restaurant-system.title",
@@ -318,7 +320,7 @@ const ProjectsPage = () => {
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.75rem' }}>
             <div className="brand-lockup">
               <span className="brand-name">
-                <FiBriefcase size={13} /> PORTFOLIO
+                <FiBriefcase size={13} /> {t("projects.badge", "PORTAFOLIO")}
               </span>
               <span className="brand-context">
                 {projects.length} {t("projects.count-label", "Proyectos")}
@@ -358,13 +360,10 @@ const ProjectsPage = () => {
               href="https://github.com/Imaforbes?tab=repositories&q=&type=&language=&sort="
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-premium"
+              className="btn-premium btn-premium-solid"
               style={{
                 padding: '0.95rem 2.2rem',
                 borderRadius: '9999px',
-                background: 'var(--color-text)',
-                color: 'var(--color-bg)',
-                border: '1px solid var(--color-text)',
               }}
             >
               <FiGithub size={16} />

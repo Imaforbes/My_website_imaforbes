@@ -373,14 +373,11 @@ const ContactPage = () => {
               <button
                 type="submit"
                 disabled={status.sending}
-                className="btn-premium"
+                className="btn-premium btn-premium-solid"
                 style={{
                   width: '100%',
                   minHeight: '54px',
                   borderRadius: '999px',
-                  background: 'var(--color-text)',
-                  color: 'var(--color-bg)',
-                  borderColor: 'var(--color-text)',
                   fontSize: '0.78rem',
                 }}
               >

@@ -285,11 +285,11 @@ const CvPage = () => {
             whileTap={{ scale: 0.95 }}
             type="button"
             onClick={handleCopy}
-            className="btn-premium inline-flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2.5 rounded-full bg-surface hover:bg-background text-xs sm:text-sm font-semibold text-text border border-border shadow-sm transition-colors cursor-pointer min-h-[42px]"
+            className="btn-premium btn-premium-surface inline-flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2.5 rounded-full text-xs sm:text-sm font-semibold shadow-sm cursor-pointer min-h-[42px]"
             title="Copiar Markdown al portapapeles"
           >
             {copied ? <Check size={15} className="text-green-600 dark:text-green-400 shrink-0" /> : <Copy size={15} className="shrink-0" />}
-            <span >{copied ? t('cvPage.copied', '¡Copiado!') : t('cvPage.copy-md', 'Copiar .md')}</span>
+            <span>{copied ? t('cvPage.copied', '¡Copiado!') : t('cvPage.copy-md', 'Copiar .md')}</span>
           </motion.button>
 
           {/* Download MD */}
@@ -298,11 +298,11 @@ const CvPage = () => {
             whileTap={{ scale: 0.95 }}
             type="button"
             onClick={handleDownloadMd}
-            className="btn-premium inline-flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2.5 rounded-full bg-surface hover:bg-background text-xs sm:text-sm font-semibold text-text border border-border shadow-sm transition-colors cursor-pointer min-h-[42px]"
+            className="btn-premium btn-premium-surface inline-flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2.5 rounded-full text-xs sm:text-sm font-semibold shadow-sm cursor-pointer min-h-[42px]"
             title="Descargar archivo .md"
           >
             <Download size={15} className="shrink-0" />
-            <span >{t('cvPage.download-md', 'Descargar .md')}</span>
+            <span>{t('cvPage.download-md', 'Descargar .md')}</span>
           </motion.button>
 
           {/* Download PDF - Primary Accent */}
@@ -311,11 +311,11 @@ const CvPage = () => {
             whileTap={{ scale: 0.95 }}
             type="button"
             onClick={handleDownloadPdf}
-            className="btn-premium inline-flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2.5 rounded-full bg-text hover:bg-text text-bg text-xs sm:text-sm font-bold border border-text shadow-sm transition-colors cursor-pointer min-h-[42px]" style={{ color: "var(--color-bg)", backgroundColor: "var(--color-text)" }}
+            className="btn-premium btn-premium-solid inline-flex items-center justify-center gap-1 sm:gap-2 px-2.5 sm:px-4 py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-sm cursor-pointer min-h-[42px]"
             title="Descargar archivo PDF oficial"
           >
             <FileText size={15} className="shrink-0" />
-            <span >{t('cvPage.download-pdf', 'Descargar PDF')}</span>
+            <span>{t('cvPage.download-pdf', 'Descargar PDF')}</span>
           </motion.button>
         </div>
       </div>

@@ -965,12 +965,10 @@ const BlogPage = () => {
                   <button
                     type="submit"
                     disabled={submittingComment}
-                    className="btn-premium"
+                    className="btn-premium btn-premium-solid"
                     style={{
                       padding: "0.7rem 1.5rem",
                       borderRadius: "9999px",
-                      background: "var(--color-text)",
-                      color: "var(--color-bg)",
                       fontSize: "0.82rem",
                       fontWeight: 600,
                       minBlockSize: "44px",

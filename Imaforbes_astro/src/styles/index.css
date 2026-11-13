@@ -253,19 +253,47 @@ html {
   font-weight: 600;
   letter-spacing: 0.09em;
   text-transform: uppercase;
+  text-decoration: none;
   transition: var(--transition-fast);
   cursor: pointer;
-  background: var(--color-faint);
+  background-color: var(--color-faint);
   color: var(--color-text);
   border: 1px solid var(--color-border-strong);
   border-radius: 999px;
 }
 
-.btn-premium:hover {
-  background: var(--color-text);
+.btn-premium:hover,
+.btn-premium:focus-visible {
+  background-color: var(--color-text);
   color: var(--color-bg);
   border-color: var(--color-text);
   transform: translateY(-1px);
+}
+
+.btn-premium-surface {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+}
+
+.btn-premium-surface:hover,
+.btn-premium-surface:focus-visible {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  border-color: var(--color-text);
+}
+
+.btn-premium-solid {
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  border: 1px solid var(--color-text);
+}
+
+.btn-premium-solid:hover,
+.btn-premium-solid:focus-visible {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-text);
 }
 
 /* Ecosystem CTA Pill (aibuilders.lat card action) */
