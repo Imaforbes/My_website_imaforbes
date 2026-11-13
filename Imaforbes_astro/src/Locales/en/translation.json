@@ -66,7 +66,19 @@
     "type-letter": "Letter",
     "type-poem": "Poem",
     "view-singular": "View",
-    "views": "Views"
+    "views": "Views",
+    "most-popular": "Most Popular",
+    "recent-posts": "Recent posts",
+    "view-all": "View all",
+    "see-all": "See all posts",
+    "archive": "Archive",
+    "sort-latest": "Latest",
+    "sort-top": "Top",
+    "sections-title": "Sections",
+    "sections-desc": "Short essays, personal letters, poems, and notes on software engineering, design, and everyday reflections.",
+    "share": "Share",
+    "copied-link": "Link copied",
+    "author-byline": "Imanol Pérez Arteaga"
   },
   "breadcrumbs": {
     "home": "Home"

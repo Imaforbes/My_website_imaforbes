@@ -1,5 +1,5 @@
 import withProviders from '../components/withProviders.jsx';
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { api } from "../services/api.js";
@@ -7,52 +7,35 @@ import { API_CONFIG } from "../config/api.js";
 import ProtectedImage from "../components/ProtectedImage.jsx";
 import BlogPostSkeleton from "../components/BlogPostSkeleton.jsx";
 import { validateComment, checkCommentCooldown, recordCommentTimestamp } from "../utils/commentModeration.js";
-import { FileText, Mail, Filter, Heart, Eye, ArrowLeft, ArrowRight, Search, MessageCircle, Send } from "lucide-react";
-
-const HeroBackground = () => (
-  <div style={{ position: 'absolute', inset: 0, zIndex: 0, overflow: 'hidden' }}>
-    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg)' }} ></div>
-    <div style={{ position: 'absolute', inset: 0, background: 'var(--color-bg)' }} ></div>
-    
-    <motion.div 
-      initial={{ opacity: 0.1, scale: 0.9 }}
-      animate={{ opacity: [0.1, 0.3, 0.1], scale: [0.9, 1.1, 0.9] }}
-      transition={{ duration: 20, repeat: Infinity, ease: "linear", delay: 2 }}
-      style={{ 
-        position: 'absolute', 
-        top: '15%', 
-        right: '10%', 
-        width: '50vw', 
-        height: '50vw', 
-        background: 'radial-gradient(circle, rgba(150,150,150,0.03) 0%, rgba(0,0,0,0) 60%)',
-        borderRadius: '50%',
-        pointerEvents: 'none'
-      }}
-    />
-    
-    <div style={{
-      position: 'absolute',
-      inset: 0,
-      backgroundImage: 'linear-gradient(rgba(100,100,100,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(100,100,100,0.03) 1px, transparent 1px)',
-      backgroundSize: '40px 40px',
-      pointerEvents: 'none',
-      maskImage: 'radial-gradient(circle at center, black, transparent 80%)',
-      WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)'
-    }} />
-  </div>
-);
+import {
+  FileText,
+  Heart,
+  Eye,
+  ArrowLeft,
+  ArrowRight,
+  Search,
+  MessageCircle,
+  Send,
+  Share2,
+  Check,
+  X,
+} from "lucide-react";
 
 const BlogPage = () => {
   const { t, i18n } = useTranslation();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState("all"); // 'all' | 'article' | 'letter' | 'poem'
+  const [isArchiveView, setIsArchiveView] = useState(false);
+  const [sortBy, setSortBy] = useState("latest"); // 'latest' | 'top'
+  const [searchOpen, setSearchOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [likedPosts, setLikedPosts] = useState(new Set());
   const [viewedPosts, setViewedPosts] = useState(new Set());
   const [likingPosts, setLikingPosts] = useState(new Set());
   const [selectedPostId, setSelectedPostId] = useState(null);
+  const [copiedPostId, setCopiedPostId] = useState(null);
 
   // Comments state
   const [comments, setComments] = useState([]);
@@ -61,79 +44,108 @@ const BlogPage = () => {
   const [commentContent, setCommentContent] = useState("");
   const [commentHoneypot, setCommentHoneypot] = useState("");
   const [submittingComment, setSubmittingComment] = useState(false);
-  const [commentFeedback, setCommentFeedback] = useState(null); // { type: 'success' | 'error', text: string }
+  const [commentFeedback, setCommentFeedback] = useState(null);
 
   // Read URL query parameter for routing
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const postParam = params.get('post');
+    const postParam = params.get("post");
     if (postParam) {
       setSelectedPostId(postParam);
     }
 
     const handlePopState = () => {
       const currentParams = new URLSearchParams(window.location.search);
-      setSelectedPostId(currentParams.get('post'));
+      setSelectedPostId(currentParams.get("post"));
     };
 
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
   }, []);
 
   const openPost = (id) => {
     setSelectedPostId(id);
-    window.history.pushState({}, '', `?post=${id}`);
+    window.history.pushState({}, "", `?post=${id}`);
     window.scrollTo(0, 0);
   };
 
   const closePost = () => {
     setSelectedPostId(null);
-    window.history.pushState({}, '', window.location.pathname);
+    window.history.pushState({}, "", window.location.pathname);
     window.scrollTo(0, 0);
+  };
+
+  const handleSharePost = async (e, post) => {
+    if (e) e.stopPropagation();
+    const shareUrl = `${window.location.origin}${window.location.pathname}?post=${post.id}`;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: post.title,
+          url: shareUrl,
+        });
+        return;
+      } catch {
+        // Fallback to clipboard copy if user cancels or share fails
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopiedPostId(post.id);
+      setTimeout(() => setCopiedPostId(null), 2000);
+    } catch {
+      // Ignore clipboard failure
+    }
   };
 
   const getCookie = useCallback((name) => {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
+    if (parts.length === 2) return parts.pop().split(";").shift();
     return null;
   }, []);
 
   const setCookie = useCallback((name, value, days = 365) => {
     const date = new Date();
-    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
     const expires = `expires=${date.toUTCString()}`;
     document.cookie = `${name}=${value};${expires};path=/;SameSite=Lax`;
   }, []);
 
-  const hasViewedPost = useCallback((postId) => {
-    const numericId = Number(postId);
-    const cookieName = `blog_viewed_${numericId}`;
-    const cookieValue = getCookie(cookieName);
-    if (cookieValue === 'true') {
-      return true;
-    }
-    return viewedPosts.has(numericId) || viewedPosts.has(postId);
-  }, [getCookie, viewedPosts]);
+  const hasViewedPost = useCallback(
+    (postId) => {
+      const numericId = Number(postId);
+      const cookieName = `blog_viewed_${numericId}`;
+      const cookieValue = getCookie(cookieName);
+      if (cookieValue === "true") {
+        return true;
+      }
+      return viewedPosts.has(numericId) || viewedPosts.has(postId);
+    },
+    [getCookie, viewedPosts]
+  );
 
-  const markPostAsViewed = useCallback((postId) => {
-    const numericId = Number(postId);
-    const cookieName = `blog_viewed_${numericId}`;
-    setCookie(cookieName, 'true', 365);
-    setViewedPosts(prev => new Set([...prev, numericId]));
-  }, [setCookie]);
+  const markPostAsViewed = useCallback(
+    (postId) => {
+      const numericId = Number(postId);
+      const cookieName = `blog_viewed_${numericId}`;
+      setCookie(cookieName, "true", 365);
+      setViewedPosts((prev) => new Set([...prev, numericId]));
+    },
+    [setCookie]
+  );
 
   const getImageUrl = (imagePath) => {
-    if (!imagePath) return '/img/placeholder-project.webp';
-    if (imagePath.startsWith('http')) return imagePath;
-    
+    if (!imagePath) return "/img/placeholder-project.webp";
+    if (imagePath.startsWith("http")) return imagePath;
+
     const baseUrl = API_CONFIG.getBaseURL();
-    const cleanPath = imagePath.startsWith('/') ? imagePath.substring(1) : imagePath;
-    
-    if (cleanPath.startsWith('uploads/')) {
-        return `${baseUrl}/${cleanPath}`;
+    const cleanPath = imagePath.startsWith("/") ? imagePath.substring(1) : imagePath;
+
+    if (cleanPath.startsWith("uploads/")) {
+      return `${baseUrl}/${cleanPath}`;
     }
-    
+
     return `${baseUrl}/uploads/images/${cleanPath}`;
   };
 
@@ -141,8 +153,7 @@ const BlogPage = () => {
     try {
       setLoading(true);
       setError(null);
-      const type = filter !== "all" ? filter : null;
-      const result = await api.blog.getAll(type, "published");
+      const result = await api.blog.getAll(null, "published");
 
       if (result.success) {
         let postsData = [];
@@ -162,16 +173,14 @@ const BlogPage = () => {
         setPosts(postsData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
         setError(null);
       } else {
-        if (import.meta.env.DEV) console.error("API returned error:", result);
         setError(t("blog.failed-load"));
       }
-    } catch (error) {
-      if (import.meta.env.DEV) console.error("Error fetching posts:", error);
+    } catch {
       setError(t("blog.failed-load"));
     } finally {
       setLoading(false);
     }
-  }, [filter, t]);
+  }, [t]);
 
   useEffect(() => {
     fetchPosts();
@@ -180,11 +189,11 @@ const BlogPage = () => {
   useEffect(() => {
     if (posts && posts.length > 0) {
       const viewedFromCookies = new Set();
-      posts.forEach(post => {
+      posts.forEach((post) => {
         if (post && post.id) {
           const cookieName = `blog_viewed_${post.id}`;
           const cookieValue = getCookie(cookieName);
-          if (cookieValue === 'true') {
+          if (cookieValue === "true") {
             viewedFromCookies.add(post.id);
           }
         }
@@ -199,7 +208,6 @@ const BlogPage = () => {
     if (!selectedPostId) return;
 
     const fetchPostData = async () => {
-      // 1. Get like status for the opened post
       try {
         const result = await api.blog.getLikeStatus(selectedPostId);
         if (result.success && result.data) {
@@ -219,11 +227,10 @@ const BlogPage = () => {
             );
           }
         }
-      } catch (error) {
-        console.error('Blog operation failed:', error);
+      } catch (err) {
+        console.error("Blog operation failed:", err);
       }
 
-      // 2. Track view for the opened post
       if (!hasViewedPost(selectedPostId)) {
         try {
           const result = await api.blog.trackView(selectedPostId);
@@ -233,17 +240,18 @@ const BlogPage = () => {
               markPostAsViewed(selectedPostId);
               if (apiData?.views_count !== undefined) {
                 setPosts((prevPosts) =>
-                  prevPosts.map((p) => (p.id == selectedPostId ? { ...p, views_count: parseInt(apiData.views_count) || 0 } : p))
+                  prevPosts.map((p) =>
+                    p.id == selectedPostId ? { ...p, views_count: parseInt(apiData.views_count) || 0 } : p
+                  )
                 );
               }
             }
           }
-        } catch (error) {
-          console.error('Blog operation failed:', error);
+        } catch (err) {
+          console.error("Blog operation failed:", err);
         }
       }
 
-      // 3. Load approved comments for the opened post
       try {
         setLoadingComments(true);
         const commentsResult = await api.blog.getComments(selectedPostId);
@@ -252,8 +260,8 @@ const BlogPage = () => {
         } else {
           setComments([]);
         }
-      } catch (error) {
-        console.error('Failed to load comments:', error);
+      } catch (err) {
+        console.error("Failed to load comments:", err);
         setComments([]);
       } finally {
         setLoadingComments(false);
@@ -268,14 +276,12 @@ const BlogPage = () => {
     e.preventDefault();
     if (!selectedPostId || submittingComment) return;
 
-    // 1. Honeypot check (if filled by a bot, silently pretend success)
     if (commentHoneypot && commentHoneypot.trim().length > 0) {
       setCommentContent("");
       setCommentFeedback({ type: "success", text: t("blog.comments-success") });
       return;
     }
 
-    // 2. Cooldown check (Rate limit)
     const cooldown = checkCommentCooldown();
     if (!cooldown.allowed) {
       setCommentFeedback({
@@ -285,7 +291,6 @@ const BlogPage = () => {
       return;
     }
 
-    // 3. Content & Profanity validation
     const validation = validateComment(commentAuthor, commentContent);
     if (!validation.valid) {
       let errorMsg = t("blog.comments-error-length");
@@ -317,44 +322,48 @@ const BlogPage = () => {
     }
   };
 
-  const handleLike = async (postId) => {
+  const handleLike = async (postId, e) => {
+    if (e) e.stopPropagation();
     if (likingPosts.has(postId)) return;
 
     try {
-      setLikingPosts(prev => new Set(prev).add(postId));
-
+      setLikingPosts((prev) => new Set(prev).add(postId));
       const result = await api.blog.like(postId);
 
       if (result.success && result.data) {
         const apiData = result.data.data || result.data;
         const { liked, likes_count } = apiData || {};
-        
-        setLikedPosts(prev => {
+
+        setLikedPosts((prev) => {
           const newSet = new Set(prev);
           if (liked === true) newSet.add(postId);
           else if (liked === false) newSet.delete(postId);
           return newSet;
         });
-        
+
         if (likes_count !== undefined) {
-          setPosts(prevPosts => 
-            prevPosts.map(post => 
-              post.id === postId 
-                ? { ...post, likes_count: parseInt(likes_count) || 0 }
-                : post
+          setPosts((prevPosts) =>
+            prevPosts.map((post) =>
+              post.id === postId ? { ...post, likes_count: parseInt(likes_count) || 0 } : post
             )
           );
         }
       }
-    } catch (error) {
-      console.error('[Like Button] Error liking post:', error);
+    } catch (err) {
+      console.error("[Like Button] Error liking post:", err);
     } finally {
-      setLikingPosts(prev => {
+      setLikingPosts((prev) => {
         const newSet = new Set(prev);
         newSet.delete(postId);
         return newSet;
       });
     }
+  };
+
+  const toIsoDate = (dateString) => {
+    if (!dateString) return undefined;
+    const d = new Date(dateString);
+    return Number.isNaN(d.getTime()) ? undefined : d.toISOString();
   };
 
   const formatDate = (dateString) => {
@@ -368,155 +377,480 @@ const BlogPage = () => {
     });
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+  const formatShortDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const locale = i18n.language === "en" ? "en-US" : "es-ES";
+    return date
+      .toLocaleDateString(locale, {
+        month: "short",
+        day: "numeric",
+      })
+      .replace(".", "")
+      .toUpperCase();
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  const formatMonthYear = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const locale = i18n.language === "en" ? "en-US" : "es-ES";
+    return date
+      .toLocaleDateString(locale, {
+        month: "long",
+        year: "numeric",
+      })
+      .toUpperCase();
+  };
+
+  const getTypeLabel = (type) => {
+    if (type === "poem") return t("blog.type-poem");
+    if (type === "letter") return t("blog.type-letter");
+    return t("blog.type-article");
+  };
+
+  const getExcerpt = (content) => {
+    if (!content) return "";
+    return content.replace(/\s+/g, " ").trim();
   };
 
   const normalizedSearch = searchTerm.trim().toLocaleLowerCase();
-  const filteredPosts = normalizedSearch
-    ? posts.filter((post) => `${post.title || ''} ${post.content || ''}`.toLocaleLowerCase().includes(normalizedSearch))
-    : posts;
+
+  // Filter posts by category & search query
+  const categoryFilteredPosts = useMemo(() => {
+    const byCategory =
+      filter === "all" ? posts : posts.filter((p) => p.type === filter);
+    if (!normalizedSearch) return byCategory;
+    return byCategory.filter((post) =>
+      `${post.title || ""} ${post.content || ""}`
+        .toLocaleLowerCase()
+        .includes(normalizedSearch)
+    );
+  }, [posts, filter, normalizedSearch]);
+
+  // Hero / Left / Right newspaper selection for the main homepage view
+  const { heroPost, leftColumnPosts, mostPopularPosts, feedPosts } = useMemo(() => {
+    const allSortedByDate = [...posts].sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
+    // Prefer the newest post that has an image as the central newspaper cover story
+    const featured =
+      allSortedByDate.find((p) => Boolean(p.image_url)) || allSortedByDate[0] || null;
+    const remainingByDate = featured
+      ? allSortedByDate.filter((p) => p.id !== featured.id)
+      : allSortedByDate;
+
+    // Prefer posts with images for the 2 left-column visual story cards if available
+    const withImages = remainingByDate.filter((p) => Boolean(p.image_url));
+    const withoutImages = remainingByDate.filter((p) => !p.image_url);
+    const leftStories = [...withImages, ...withoutImages].slice(0, 2);
+
+    // Most Popular sidebar: sorted by engagement (likes + views)
+    const popular = [...posts]
+      .sort(
+        (a, b) =>
+          (b.likes_count || 0) * 4 +
+          (b.views_count || 0) -
+          ((a.likes_count || 0) * 4 + (a.views_count || 0))
+      )
+      .slice(0, 5);
+
+    // Feed list (sorted by latest or top)
+    const listSource = [...categoryFilteredPosts].sort((a, b) => {
+      if (sortBy === "top") {
+        return (
+          (b.likes_count || 0) * 4 +
+          (b.views_count || 0) -
+          ((a.likes_count || 0) * 4 + (a.views_count || 0))
+        );
+      }
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+
+    return {
+      heroPost: featured,
+      leftColumnPosts: leftStories,
+      mostPopularPosts: popular,
+      feedPosts: listSource,
+    };
+  }, [posts, categoryFilteredPosts, sortBy]);
+
+  // Group feed posts by Month + Year when viewing archive or sorted by latest
+  const groupedFeedPosts = useMemo(() => {
+    const groups = [];
+    let currentLabel = null;
+    for (const post of feedPosts) {
+      const label = sortBy === "latest" ? formatMonthYear(post.created_at) : null;
+      if (!groups.length || groups[groups.length - 1].label !== label) {
+        groups.push({ label, items: [post] });
+        currentLabel = label;
+      } else {
+        groups[groups.length - 1].items.push(post);
+      }
+    }
+    return groups;
+  }, [feedPosts, sortBy, i18n.language]);
+
+  const showNewspaperHero =
+    filter === "all" && !isArchiveView && !normalizedSearch && posts.length >= 3;
+
+  const renderEngagementRow = (post, centered = false) => {
+    const isLiked = likedPosts.has(post.id);
+    const isCopied = copiedPostId === post.id;
+    return (
+      <div
+        className="substack-engagement-bar"
+        style={{ justifyContent: centered ? "center" : "flex-start" }}
+      >
+        <button
+          type="button"
+          onClick={(e) => handleLike(post.id, e)}
+          disabled={likingPosts.has(post.id)}
+          className={`substack-action-pill ${isLiked ? "active" : ""}`}
+          aria-label={`${t("blog.like")} (${post.likes_count || 0})`}
+        >
+          <Heart size={13} className={isLiked ? "fill-current" : ""} />
+          <span>{post.likes_count || 0}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => openPost(post.id)}
+          className="substack-action-pill"
+          aria-label={`${t("blog.comments-title")}`}
+        >
+          <MessageCircle size={13} />
+          {post.views_count > 0 && (
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
+              <Eye size={12} /> {post.views_count}
+            </span>
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={(e) => handleSharePost(e, post)}
+          className="substack-action-pill"
+          aria-label={t("blog.share", "Compartir")}
+        >
+          {isCopied ? <Check size={13} /> : <Share2 size={13} />}
+          {isCopied && <span>{t("blog.copied-link", "Copiado")}</span>}
+        </button>
+      </div>
+    );
+  };
 
   if (loading) {
     return (
-      <motion.section className="relative min-h-screen bg-surface dark:bg-[#0a0a0a] text-text dark:text-text overflow-hidden" variants={containerVariants} initial="hidden" animate="visible">
-        <HeroBackground />
-        <div className="relative z-10 container mx-auto max-w-7xl py-12 sm:py-16 px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto space-y-8">
-            <BlogPostSkeleton />
+      <section className="projects-section" style={{ minHeight: "100svh" }}>
+        <div className="substack-shell" style={{ paddingTop: "2rem" }}>
+          <BlogPostSkeleton />
+          <div style={{ marginTop: "2rem" }}>
             <BlogPostSkeleton />
           </div>
         </div>
-      </motion.section>
+      </section>
     );
   }
 
   if (error) {
     return (
-      <div className="relative min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center">
-        <HeroBackground />
-        <div className="relative z-10 text-center text-red-500"><p>{error}</p></div>
-      </div>
+      <section className="projects-section" style={{ minHeight: "100svh", display: "grid", placeItems: "center" }}>
+        <div className="substack-shell" style={{ textAlign: "center", color: "#ef4444" }}>
+          <p>{error}</p>
+        </div>
+      </section>
     );
   }
 
-  // --- DETAIL VIEW ---
+  // ============================================================================
+  // INDIVIDUAL POST READER VIEW (Substack Article Layout)
+  // ============================================================================
   if (selectedPostId) {
-    const selectedPost = posts.find(p => p.id == selectedPostId);
+    const selectedPost = posts.find((p) => p.id == selectedPostId);
     if (selectedPost) {
-      // Calculate reading time (assuming 225 words per minute)
-      const wordCount = selectedPost.content ? selectedPost.content.trim().split(/\s+/).length : 0;
+      const wordCount = selectedPost.content
+        ? selectedPost.content.trim().split(/\s+/).length
+        : 0;
       const readingTimeMin = Math.max(1, Math.ceil(wordCount / 225));
+      const isLiked = likedPosts.has(selectedPost.id);
+      const isCopied = copiedPostId === selectedPost.id;
+
       return (
-        <section className="relative min-h-screen bg-surface dark:bg-[#0a0a0a]" style={{ paddingTop: '6rem' }}>
-          <HeroBackground />
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="container-premium" 
-            style={{ position: 'relative', zIndex: 10, maxWidth: '800px', margin: '0 auto', padding: '0 1.5rem 4rem' }}
+        <section className="projects-section" style={{ minHeight: "100svh", paddingTop: "2.5rem" }}>
+          <article
+            className="substack-shell"
+            style={{ maxInlineSize: "740px", marginInline: "auto", paddingBottom: "4rem" }}
           >
-            <button 
-              onClick={closePost} 
-              className="ecosystem-cta" 
-              style={{ marginBottom: '2.5rem', cursor: 'pointer' }}
+            {/* Minimalist Top Publication Bar */}
+            <header
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "1rem",
+                paddingBlockEnd: "1.25rem",
+                marginBlockEnd: "2.25rem",
+                borderBlockEnd: "1px solid var(--color-border)",
+              }}
             >
-              <ArrowLeft size={15} /> {t("blog.back", "Volver")}
-            </button>
-            
-            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-              <span className="project-tag" style={{ marginBottom: '1.25rem', display: 'inline-block' }}>
-                {selectedPost.type === "poem" ? t("blog.type-poem") : selectedPost.type === "letter" ? t("blog.type-letter") : t("blog.type-article")}
-              </span>
-              <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem, 6vw, 3.5rem)', fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--color-text)', marginBottom: '1.25rem', lineHeight: 1.15, wordBreak: 'break-word' }}>
+              <button
+                type="button"
+                onClick={closePost}
+                className="substack-action-pill"
+                style={{ padding: "0.45rem 0.95rem", fontSize: "0.8rem" }}
+              >
+                <ArrowLeft size={14} />
+                <span>{t("blog.back", "Volver")}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={closePost}
+                style={{
+                  fontFamily: "var(--font-editorial-serif)",
+                  fontSize: "1.25rem",
+                  fontWeight: 600,
+                  color: "var(--color-text)",
+                  background: "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                {t("blog.title")}
+              </button>
+
+              <button
+                type="button"
+                onClick={(e) => handleSharePost(e, selectedPost)}
+                className="substack-action-pill"
+                style={{ padding: "0.45rem 0.95rem", fontSize: "0.8rem" }}
+              >
+                {isCopied ? <Check size={14} /> : <Share2 size={14} />}
+                <span>{isCopied ? t("blog.copied-link", "Copiado") : t("blog.share", "Compartir")}</span>
+              </button>
+            </header>
+
+            {/* Article Header */}
+            <div style={{ marginBlockEnd: "2rem" }}>
+              <div className="substack-kicker" style={{ marginBlockEnd: "0.75rem" }}>
+                {getTypeLabel(selectedPost.type)}
+              </div>
+
+              <h1
+                className="substack-serif-title"
+                style={{
+                  fontSize: "clamp(2rem, 5vw, 3.1rem)",
+                  lineHeight: 1.15,
+                  marginBlockEnd: "1.5rem",
+                  wordBreak: "break-word",
+                }}
+              >
                 {selectedPost.title}
               </h1>
-              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '0.65rem', color: 'var(--color-text-muted)', fontFamily: 'var(--font-sans)', fontSize: '0.95rem' }}>
-                <span style={{ fontWeight: 700, color: 'var(--color-text)' }}>México</span>
-                <span>·</span>
-                <span>{formatDate(selectedPost.created_at)}</span>
-                <span>·</span>
-                <span>{readingTimeMin} {t("blog.reading-time", "min read")}</span>
-                {(selectedPost.views_count > 0) && (
-                  <>
-                    <span>·</span>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
-                      <Eye size={14} /> {selectedPost.views_count}
+
+              {/* Substack Author Byline & Engagement Toolbar */}
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "1rem",
+                  paddingBlock: "0.95rem",
+                  borderBlock: "1px solid var(--color-border)",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <div
+                    aria-hidden="true"
+                    style={{
+                      inlineSize: "40px",
+                      blockSize: "40px",
+                      borderRadius: "50%",
+                      background: "var(--color-text)",
+                      color: "var(--color-bg)",
+                      display: "grid",
+                      placeItems: "center",
+                      fontFamily: "var(--font-editorial-serif)",
+                      fontWeight: 700,
+                      fontSize: "1rem",
+                    }}
+                  >
+                    I
+                  </div>
+                  <div>
+                    <div
+                      style={{
+                        fontFamily: "var(--font-sans)",
+                        fontSize: "0.76rem",
+                        fontWeight: 700,
+                        letterSpacing: "0.06em",
+                        textTransform: "uppercase",
+                        color: "var(--color-text)",
+                      }}
+                    >
+                      {t("blog.author-byline", "Imanol Pérez Arteaga")}
+                    </div>
+                    <div className="substack-meta" style={{ marginTop: "0.15rem" }}>
+                      <time dateTime={toIsoDate(selectedPost.created_at)}>
+                        {formatDate(selectedPost.created_at)}
+                      </time>
+                      <span>·</span>
+                      <span>
+                        {readingTimeMin} {t("blog.reading-time", "min read")}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.5rem" }}>
+                  <button
+                    type="button"
+                    onClick={(e) => handleLike(selectedPost.id, e)}
+                    disabled={likingPosts.has(selectedPost.id)}
+                    className={`substack-action-pill ${isLiked ? "active" : ""}`}
+                    style={{ padding: "0.4rem 0.85rem" }}
+                  >
+                    <Heart size={15} className={isLiked ? "fill-current" : ""} />
+                    <span>{selectedPost.likes_count || 0}</span>
+                  </button>
+
+                  <a
+                    href="#comments-section"
+                    className="substack-action-pill"
+                    style={{ padding: "0.4rem 0.85rem", textDecoration: "none" }}
+                  >
+                    <MessageCircle size={15} />
+                    <span>{comments.length}</span>
+                  </a>
+
+                  {selectedPost.views_count > 0 && (
+                    <span className="substack-action-pill" style={{ padding: "0.4rem 0.85rem", cursor: "default" }}>
+                      <Eye size={15} />
+                      <span>{selectedPost.views_count}</span>
                     </span>
-                  </>
-                )}
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={(e) => handleSharePost(e, selectedPost)}
+                    className="substack-action-pill"
+                    style={{ padding: "0.4rem 0.85rem" }}
+                  >
+                    {isCopied ? <Check size={15} /> : <Share2 size={15} />}
+                    <span>{isCopied ? t("blog.copied-link", "Copiado") : t("blog.share", "Compartir")}</span>
+                  </button>
+                </div>
               </div>
             </div>
 
+            {/* Featured Article Image */}
             {selectedPost.image_url && (
-              <div style={{ width: '100%', height: 'auto', maxHeight: '500px', marginBottom: '3.5rem', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.3)' }}>
+              <figure style={{ margin: "0 0 2.5rem", borderRadius: "8px", overflow: "clip", border: "1px solid var(--color-border)" }}>
                 <ProtectedImage
                   src={getImageUrl(selectedPost.image_url)}
                   alt={selectedPost.title}
                   priority
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  style={{ inlineSize: "100%", blockSize: "auto", maxBlockSize: "520px", objectFit: "cover", display: "block" }}
                 />
-              </div>
+              </figure>
             )}
 
-            <div className="blog-content-premium dark:text-text-muted">
-              {selectedPost.content ? selectedPost.content.trim() : ''}
+            {/* Editorial Reading Body */}
+            <div className="blog-content-premium">
+              {selectedPost.content ? selectedPost.content.trim() : ""}
             </div>
-            
-            <div style={{ paddingTop: '2.5rem', borderTop: '1px solid var(--color-border)', display: 'flex', justifyContent: 'center' }} className="dark:border-strong">
-               <button
-                 onClick={() => handleLike(selectedPost.id)}
-                 disabled={likingPosts.has(selectedPost.id)}
-                 className="btn-premium"
-                 style={{ 
-                   background: likedPosts.has(selectedPost.id) ? 'var(--color-text)' : 'transparent',
-                   color: likedPosts.has(selectedPost.id) ? 'var(--color-bg)' : 'var(--color-text)',
-                   padding: '0.75rem 2.5rem',
-                   fontSize: '1.1rem',
-                   borderRadius: '30px',
-                   display: 'flex',
-                   alignItems: 'center',
-                   gap: '0.5rem',
-                   border: '1px solid var(--color-border)'
-                 }}
-               >
-                 <Heart size={20} className={likedPosts.has(selectedPost.id) ? "fill-current" : ""} />
-                 <span style={{ fontWeight: 500 }}>{selectedPost.likes_count || 0} Likes</span>
-               </button>
+
+            {/* Bottom Article Interaction Bar */}
+            <div
+              style={{
+                paddingBlock: "1.25rem",
+                borderBlock: "1px solid var(--color-border)",
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "1rem",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                <button
+                  type="button"
+                  onClick={(e) => handleLike(selectedPost.id, e)}
+                  disabled={likingPosts.has(selectedPost.id)}
+                  className={`substack-action-pill ${isLiked ? "active" : ""}`}
+                  style={{ padding: "0.5rem 1.1rem", fontSize: "0.85rem" }}
+                >
+                  <Heart size={16} className={isLiked ? "fill-current" : ""} />
+                  <span>
+                    {selectedPost.likes_count || 0} {t("blog.likes", "Me gusta")}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => handleSharePost(e, selectedPost)}
+                  className="substack-action-pill"
+                  style={{ padding: "0.5rem 1.1rem", fontSize: "0.85rem" }}
+                >
+                  {isCopied ? <Check size={16} /> : <Share2 size={16} />}
+                  <span>{isCopied ? t("blog.copied-link", "Copiado") : t("blog.share", "Compartir")}</span>
+                </button>
+              </div>
+
+              <button
+                type="button"
+                onClick={closePost}
+                className="substack-action-pill"
+                style={{ padding: "0.5rem 1.1rem", fontSize: "0.85rem" }}
+              >
+                <ArrowLeft size={15} />
+                <span>{t("blog.see-all", "Ver todas las publicaciones")}</span>
+              </button>
             </div>
 
             {/* --- COMMENTS SECTION --- */}
-            <div style={{ marginTop: '4rem', paddingTop: '3rem', borderTop: '1px solid var(--color-border)' }} className="dark:border-strong">
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                <div>
-                  <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: 'var(--color-text)', display: 'flex', alignItems: 'center', gap: '0.6rem', margin: 0 }}>
-                    <MessageCircle size={22} />
-                    {t("blog.comments-title", "Comentarios")}
-                    <span style={{ fontSize: '0.9rem', fontWeight: 400, color: 'var(--color-text-muted)' }}>
-                      ({comments.length})
-                    </span>
-                  </h2>
-                  <p style={{ fontSize: '0.95rem', color: 'var(--color-text-muted)', marginTop: '0.35rem', marginBottom: 0 }}>
-                    {t("blog.comments-subtitle", "Comparte tus pensamientos sobre esta publicación")}
-                  </p>
-                </div>
+            <section id="comments-section" style={{ marginBlockStart: "3rem" }}>
+              <div style={{ marginBlockEnd: "1.5rem" }}>
+                <h2
+                  className="substack-serif-title"
+                  style={{ fontSize: "1.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}
+                >
+                  <span>{t("blog.comments-title", "Comentarios")}</span>
+                  <span style={{ fontSize: "0.95rem", fontWeight: 400, color: "var(--color-text-muted)" }}>
+                    ({comments.length})
+                  </span>
+                </h2>
+                <p style={{ fontSize: "0.92rem", color: "var(--color-text-muted)", marginBlock: "0.35rem 0" }}>
+                  {t("blog.comments-subtitle", "Comparte tus pensamientos sobre esta publicación")}
+                </p>
               </div>
 
               {/* Comment Form */}
               <form
                 onSubmit={handleCommentSubmit}
-                className="card-premium"
-                style={{ padding: 'clamp(1.25rem, 4vw, 2rem)', marginBottom: '2.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
+                style={{
+                  padding: "1.5rem",
+                  borderRadius: "12px",
+                  border: "1px solid var(--color-border)",
+                  background: "var(--color-surface)",
+                  marginBlockEnd: "2rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1.1rem",
+                }}
               >
-                {/* Honeypot anti-bot field (hidden from humans) */}
-                <div aria-hidden="true" style={{ position: 'absolute', left: '-9999px', opacity: 0, pointerEvents: 'none', height: 0, overflow: 'hidden' }}>
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    left: "-9999px",
+                    opacity: 0,
+                    pointerEvents: "none",
+                    height: 0,
+                    overflow: "hidden",
+                  }}
+                >
                   <label htmlFor="website_url">Website</label>
                   <input
                     id="website_url"
@@ -530,105 +864,119 @@ const BlogPage = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="comment-author" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-text)', marginBottom: '0.5rem' }}>
-                    {t("blog.comments-name-label", "Tu nombre o alias")}
+                  <label
+                    htmlFor="comment-author"
+                    style={{
+                      display: "block",
+                      fontSize: "0.85rem",
+                      fontWeight: 500,
+                      color: "var(--color-text)",
+                      marginBlockEnd: "0.4rem",
+                    }}
+                  >
+                    {t("blog.comments-name-label", "Tu nombre o alias")} <span aria-hidden="true">*</span>
                   </label>
                   <input
                     id="comment-author"
+                    name="author"
                     type="text"
+                    autoComplete="name"
                     required
                     maxLength={60}
                     value={commentAuthor}
                     onChange={(e) => setCommentAuthor(e.target.value)}
                     placeholder={t("blog.comments-name-placeholder", "Ej. Ana, Lector anónimo...")}
-                    className="dark:bg-[#111] dark:border-strong dark:text-text"
                     style={{
-                      width: '100%',
-                      padding: '0.8rem 1rem',
-                      borderRadius: '12px',
-                      border: '1px solid var(--color-border)',
-                      background: 'var(--color-bg)',
-                      color: 'var(--color-text)',
-                      fontSize: '0.95rem',
-                      outline: 'none'
+                      inlineSize: "100%",
+                      minBlockSize: "48px",
+                      padding: "0.75rem 1rem",
+                      borderRadius: "8px",
+                      border: "1px solid var(--color-border-strong)",
+                      background: "var(--color-bg)",
+                      color: "var(--color-text)",
+                      font: "inherit",
+                      fontSize: "max(1rem, 1em)",
                     }}
                   />
                 </div>
 
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <label htmlFor="comment-content" style={{ fontSize: '0.85rem', fontWeight: 500, color: 'var(--color-text)' }}>
-                      {t("blog.comments-content-label", "Tu comentario")}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBlockEnd: "0.4rem",
+                    }}
+                  >
+                    <label
+                      htmlFor="comment-content"
+                      style={{ fontSize: "0.85rem", fontWeight: 500, color: "var(--color-text)" }}
+                    >
+                      {t("blog.comments-content-label", "Tu comentario")} <span aria-hidden="true">*</span>
                     </label>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                    <span id="comment-char-count" style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>
                       {commentContent.length}/500
                     </span>
                   </div>
                   <textarea
                     id="comment-content"
+                    name="comment"
                     required
                     rows={3}
                     maxLength={500}
+                    aria-describedby="comment-char-count"
                     value={commentContent}
                     onChange={(e) => setCommentContent(e.target.value)}
                     placeholder={t("blog.comments-content-placeholder", "Escribe un mensaje respetuoso...")}
-                    className="dark:bg-[#111] dark:border-strong dark:text-text"
                     style={{
-                      width: '100%',
-                      padding: '0.85rem 1rem',
-                      borderRadius: '12px',
-                      border: '1px solid var(--color-border)',
-                      background: 'var(--color-bg)',
-                      color: 'var(--color-text)',
-                      fontSize: '0.95rem',
-                      resize: 'vertical',
-                      outline: 'none',
-                      lineHeight: 1.6
+                      inlineSize: "100%",
+                      padding: "0.8rem 1rem",
+                      borderRadius: "8px",
+                      border: "1px solid var(--color-border-strong)",
+                      background: "var(--color-bg)",
+                      color: "var(--color-text)",
+                      font: "inherit",
+                      fontSize: "max(1rem, 1em)",
+                      resize: "vertical",
+                      lineHeight: 1.6,
                     }}
                   />
                 </div>
 
-                <AnimatePresence>
+                <div role="status" aria-live="polite">
                   {commentFeedback && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
+                    <div
                       style={{
-                        padding: '0.75rem 1rem',
-                        borderRadius: '10px',
-                        fontSize: '0.9rem',
-                        border: '1px solid var(--color-border)',
-                        background: 'var(--color-bg)',
-                        color: commentFeedback.type === 'error' ? '#ef4444' : 'var(--color-text)'
+                        padding: "0.75rem 1rem",
+                        borderRadius: "8px",
+                        fontSize: "0.9rem",
+                        border: "1px solid var(--color-border)",
+                        background: "var(--color-bg)",
+                        color: commentFeedback.type === "error" ? "#ef4444" : "var(--color-text)",
                       }}
                     >
                       {commentFeedback.text}
-                    </motion.div>
+                    </div>
                   )}
-                </AnimatePresence>
+                </div>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
                   <button
                     type="submit"
                     disabled={submittingComment}
                     className="btn-premium"
                     style={{
-                      padding: '0.75rem 1.75rem',
-                      borderRadius: '9999px',
-                      background: 'var(--color-text)',
-                      color: 'var(--color-bg)',
-                      fontSize: '0.9rem',
+                      padding: "0.7rem 1.5rem",
+                      borderRadius: "9999px",
+                      background: "var(--color-text)",
+                      color: "var(--color-bg)",
+                      fontSize: "0.82rem",
                       fontWeight: 600,
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      cursor: submittingComment ? 'not-allowed' : 'pointer',
-                      opacity: submittingComment ? 0.7 : 1,
-                      minHeight: '44px'
+                      minBlockSize: "44px",
                     }}
                   >
-                    <Send size={16} />
+                    <Send size={15} />
                     <span>
                       {submittingComment
                         ? t("blog.comments-submitting", "Publicando...")
@@ -640,282 +988,758 @@ const BlogPage = () => {
 
               {/* Comments List */}
               {loadingComments ? (
-                <div style={{ textAlign: 'center', padding: '2rem 0', color: 'var(--color-text-muted)' }}>
+                <div style={{ textAlign: "center", padding: "2rem 0", color: "var(--color-text-muted)" }}>
                   ...
                 </div>
               ) : comments.length === 0 ? (
                 <div
-                  className="card-premium"
-                  style={{ padding: '2.5rem 1.5rem', textAlign: 'center', color: 'var(--color-text-muted)' }}
+                  style={{
+                    padding: "2rem 1.5rem",
+                    textAlign: "center",
+                    color: "var(--color-text-muted)",
+                    borderTop: "1px solid var(--color-border)",
+                  }}
                 >
-                  <MessageCircle size={28} style={{ margin: '0 auto 0.75rem', opacity: 0.5 }} />
-                  <p style={{ margin: 0, fontSize: '0.95rem' }}>
+                  <p style={{ margin: 0, fontSize: "0.92rem" }}>
                     {t("blog.comments-empty", "Sé la primera persona en dejar un comentario.")}
                   </p>
                 </div>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ display: "flex", flexDirection: "column" }}>
                   {comments.map((comment) => {
                     const initial = (comment.author_name || "A").trim().charAt(0).toUpperCase();
                     return (
-                      <motion.div
+                      <div
                         key={comment.id}
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="card-premium"
-                        style={{ padding: '1.25rem 1.5rem', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '1rem', alignItems: 'start' }}
+                        style={{
+                          paddingBlock: "1.25rem",
+                          borderBlockStart: "1px solid var(--color-border)",
+                          display: "grid",
+                          gridTemplateColumns: "auto 1fr",
+                          gap: "0.9rem",
+                          alignItems: "start",
+                        }}
                       >
                         <div
                           aria-hidden="true"
                           style={{
-                            width: '2.5rem',
-                            height: '2.5rem',
-                            borderRadius: '50%',
-                            background: 'var(--color-bg)',
-                            border: '1px solid var(--color-border)',
-                            color: 'var(--color-text)',
-                            display: 'grid',
-                            placeItems: 'center',
+                            inlineSize: "2.25rem",
+                            blockSize: "2.25rem",
+                            borderRadius: "50%",
+                            background: "var(--color-faint)",
+                            border: "1px solid var(--color-border)",
+                            color: "var(--color-text)",
+                            display: "grid",
+                            placeItems: "center",
                             fontWeight: 600,
-                            fontSize: '0.95rem'
+                            fontSize: "0.85rem",
                           }}
                         >
                           {initial}
                         </div>
                         <div>
-                          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.4rem' }}>
-                            <strong style={{ fontSize: '0.95rem', color: 'var(--color-text)' }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexWrap: "wrap",
+                              alignItems: "baseline",
+                              gap: "0.5rem",
+                              marginBlockEnd: "0.35rem",
+                            }}
+                          >
+                            <strong style={{ fontSize: "0.9rem", color: "var(--color-text)" }}>
                               {comment.author_name}
                             </strong>
-                            <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                            <time
+                              dateTime={toIsoDate(comment.created_at)}
+                              style={{ fontSize: "0.76rem", color: "var(--color-text-muted)" }}
+                            >
                               {formatDate(comment.created_at)}
-                            </span>
+                            </time>
                           </div>
-                          <p style={{ margin: 0, fontSize: '0.95rem', color: 'var(--color-text-muted)', lineHeight: 1.6, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                          <p
+                            style={{
+                              margin: 0,
+                              fontSize: "0.95rem",
+                              color: "var(--color-text)",
+                              lineHeight: 1.6,
+                              whiteSpace: "pre-wrap",
+                              wordBreak: "break-word",
+                            }}
+                          >
                             {comment.content}
                           </p>
                         </div>
-                      </motion.div>
+                      </div>
                     );
                   })}
                 </div>
               )}
-            </div>
-          </motion.div>
+            </section>
+          </article>
         </section>
       );
     }
   }
 
-  // --- LIST VIEW ---
+  // ============================================================================
+  // SUBSTACK NEWSPAPER / MAGAZINE HOME & ARCHIVE VIEW
+  // ============================================================================
+  const navTabs = [
+    { id: "home", label: t("blog.filter-all", "Todos"), filterValue: "all", archive: false },
+    { id: "article", label: t("blog.filter-articles", "Artículos"), filterValue: "article", archive: false },
+    { id: "letter", label: t("blog.filter-letters", "Cartas"), filterValue: "letter", archive: false },
+    { id: "poem", label: t("blog.filter-poems", "Poemas"), filterValue: "poem", archive: false },
+    { id: "archive", label: t("blog.archive", "Archivo"), filterValue: "all", archive: true },
+  ];
+
+  const activeTabId = isArchiveView ? "archive" : filter === "all" ? "home" : filter;
+
   return (
-    <section className="projects-section" style={{ minHeight: '100svh' }}>
-      <div className="container-premium" style={{ position: 'relative', zIndex: 10 }}>
-        
-        <div className="projects-header" style={{ position: 'relative', paddingTop: '0rem', marginBottom: '2.5rem' }}>
-          <motion.div
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.75rem' }}
-          >
-            <div className="brand-lockup">
-              <span className="brand-name">
-                <FileText size={13} /> EDITORIAL
-              </span>
-              <span className="brand-context">
-                {posts.length} {t("blog.posts-count-label", "Publicaciones")}
-              </span>
-            </div>
-          </motion.div>
-
-          <motion.h1
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="projects-title"
-          >
-            {t("blog.title")}
-          </motion.h1>
-          <motion.p
-            variants={itemVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="text-muted"
-            style={{ maxWidth: '640px', margin: '0 auto', fontSize: 'clamp(1rem, 1.45vw, 1.2rem)', lineHeight: 1.7 }}
-          >
-            {t("blog.subtitle")}
-          </motion.p>
-        </div>
-
-        <motion.div
-          variants={itemVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          style={{
-            maxWidth: '560px',
-            margin: '0 auto 1.25rem',
-            position: 'relative',
-            borderRadius: '999px',
-            border: '1px solid var(--color-border-strong)',
-            background: 'var(--color-surface)',
-            boxShadow: 'var(--shadow-pill)',
-            padding: '0.25rem',
-          }}
-        >
-          <Search size={17} aria-hidden="true" style={{ position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }} />
-          <input
-            type="search"
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-            placeholder={t('blog.search-placeholder')}
-            aria-label={t('blog.search-label')}
-            style={{
-              width: '100%',
-              padding: '0.75rem 1.25rem 0.75rem 2.85rem',
-              borderRadius: '999px',
-              border: 'none',
-              background: 'transparent',
-              color: 'var(--color-text)',
-              fontSize: '0.95rem',
-              outline: 'none',
-            }}
-          />
-        </motion.div>
-
-        <motion.div
-          variants={itemVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '0.45rem',
-            flexWrap: 'wrap',
-            marginBottom: '3.5rem',
-            padding: '0.45rem',
-            borderRadius: '999px',
-            border: '1px solid var(--color-border)',
-            background: 'var(--color-surface)',
-            width: 'fit-content',
-            maxWidth: '100%',
-            marginInline: 'auto',
-            boxShadow: 'var(--shadow-pill)',
-          }}
-        >
-          {[
-            { id: "all", label: t("blog.filter-all"), icon: <Filter size={13} /> },
-            { id: "poem", label: t("blog.filter-poems"), icon: <FileText size={13} /> },
-            { id: "letter", label: t("blog.filter-letters"), icon: <Mail size={13} /> },
-            { id: "article", label: t("blog.filter-articles"), icon: <FileText size={13} /> },
-          ].map((tab) => (
+    <section className="projects-section" style={{ minHeight: "100svh", paddingTop: "2rem" }}>
+      <div className="substack-shell">
+        {/* 1. Top Publication Masthead */}
+        <header className="substack-masthead">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
             <button
-              key={tab.id}
-              onClick={() => setFilter(tab.id)}
-              className={`project-tag ${filter === tab.id ? 'active' : ''}`}
-              style={{ 
-                cursor: 'pointer',
-                padding: '0.5rem 1.05rem',
-                fontSize: '0.72rem',
+              type="button"
+              onClick={() => {
+                setFilter("all");
+                setIsArchiveView(false);
+                setSearchTerm("");
+              }}
+              aria-label={t("blog.title")}
+              style={{
+                inlineSize: "38px",
+                blockSize: "38px",
+                borderRadius: "8px",
+                background: "var(--color-text)",
+                color: "var(--color-bg)",
+                border: "none",
+                display: "grid",
+                placeItems: "center",
+                fontFamily: "var(--font-editorial-serif)",
+                fontSize: "1.15rem",
                 fontWeight: 700,
-                border: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.4rem',
-                whiteSpace: 'nowrap',
-                background: filter === tab.id ? 'var(--color-text)' : 'transparent',
-                color: filter === tab.id ? 'var(--color-bg)' : 'var(--color-text-muted)'
+                cursor: "pointer",
               }}
             >
-              {tab.icon} <span>{tab.label}</span>
+              I
             </button>
-          ))}
-        </motion.div>
+          </div>
 
-        {filteredPosts.length > 0 ? (
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', 
-              gap: '1.5rem',
-              maxWidth: '1180px', 
-              margin: '0 auto',
-              alignItems: 'stretch'
-            }}
-          >
-            {filteredPosts.map((post, index) => {
-              const cardVariants = {
-                hidden: { opacity: 0, y: 20 },
-                visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut", delay: index * 0.05 } }
-              };
-              const typeLabel = post.type === "poem" ? t("blog.type-poem") : post.type === "letter" ? t("blog.type-letter") : t("blog.type-article");
+          <div style={{ textAlign: "center" }}>
+            <h1 className="substack-pub-title">{t("blog.title")}</h1>
+            <p
+              style={{
+                margin: "0.35rem 0 0",
+                fontSize: "0.88rem",
+                color: "var(--color-text-muted)",
+                fontFamily: "var(--font-sans)",
+              }}
+            >
+              {t("blog.subtitle")}
+            </p>
+          </div>
 
-              return (
-                  <motion.article
-                    key={post.id}
-                    variants={cardVariants}
-                    className="card-premium h-full"
-                    style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%' }}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5rem" }}>
+            <button
+              type="button"
+              onClick={() => setSearchOpen((prev) => !prev)}
+              className="substack-action-pill"
+              aria-expanded={searchOpen}
+              aria-controls="blog-search-region"
+              aria-label={t("blog.search-label")}
+              style={{ padding: "0.45rem 0.7rem" }}
+            >
+              {searchOpen ? <X size={16} /> : <Search size={16} />}
+            </button>
+
+            <a
+              href="/contact"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                padding: "0.45rem 1rem",
+                borderRadius: "9999px",
+                background: "var(--color-editorial-accent)",
+                color: "#ffffff",
+                fontFamily: "var(--font-sans)",
+                fontSize: "0.78rem",
+                fontWeight: 600,
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <span>{t("contact.title", "Contacto")}</span>
+            </a>
+          </div>
+        </header>
+
+        {/* 2. Substack Navigation Tabs Bar */}
+        <nav className="substack-nav-bar" aria-label={t("blog.sections-title", "Secciones")}>
+          <ul className="substack-nav-tabs">
+            {navTabs.map((tab) => (
+              <li key={tab.id}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFilter(tab.filterValue);
+                    setIsArchiveView(tab.archive);
+                  }}
+                  className={`substack-tab-btn ${activeTabId === tab.id ? "active" : ""}`}
+                >
+                  {tab.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Expandable Semantic <search> Region */}
+        <AnimatePresence>
+          {(searchOpen || normalizedSearch) && (
+            <motion.div
+              id="blog-search-region"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              style={{ maxInlineSize: "640px", marginInline: "auto", marginBlockEnd: "2.25rem" }}
+            >
+              <search>
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                    borderRadius: "999px",
+                    border: "1px solid var(--color-border-strong)",
+                    background: "var(--color-surface)",
+                    padding: "0.2rem 0.75rem",
+                  }}
+                >
+                  <Search size={16} aria-hidden="true" style={{ color: "var(--color-text-muted)", flexShrink: 0 }} />
+                  <input
+                    type="search"
+                    value={searchTerm}
+                    onChange={(event) => setSearchTerm(event.target.value)}
+                    placeholder={t("blog.search-placeholder")}
+                    aria-label={t("blog.search-label")}
+                    autoFocus
+                    style={{
+                      inlineSize: "100%",
+                      minBlockSize: "42px",
+                      padding: "0.45rem 0.75rem",
+                      border: "none",
+                      background: "transparent",
+                      color: "var(--color-text)",
+                      font: "inherit",
+                      fontSize: "max(1rem, 1em)",
+                      outline: "none",
+                    }}
+                  />
+                  {searchTerm && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchTerm("")}
+                      className="substack-action-pill"
+                      style={{ border: "none", padding: "0.25rem" }}
+                      aria-label="Clear search"
+                    >
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
+              </search>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* 3. Above-the-Fold 3-Column Newspaper Hero Grid */}
+        {showNewspaperHero && heroPost && (
+          <div className="substack-hero-grid">
+            {/* LEFT COLUMN (~25%): Stacked Secondary Stories */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.85rem" }}>
+              {leftColumnPosts.map((post, idx) => (
+                <article
+                  key={post.id}
+                  style={{
+                    paddingBlockEnd: idx === 0 && leftColumnPosts.length > 1 ? "1.5rem" : 0,
+                    borderBlockEnd:
+                      idx === 0 && leftColumnPosts.length > 1
+                        ? "1px solid var(--color-border)"
+                        : "none",
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => openPost(post.id)}
+                    className="substack-story-trigger"
                   >
                     {post.image_url && (
-                      <div style={{ width: '100%', height: '210px', position: 'relative', overflow: 'hidden', borderBottom: '1px solid var(--color-border)' }}>
+                      <div
+                        style={{
+                          inlineSize: "100%",
+                          aspectRatio: "16 / 10",
+                          borderRadius: "8px",
+                          overflow: "clip",
+                          marginBlockEnd: "0.75rem",
+                          border: "1px solid var(--color-border)",
+                          background: "var(--color-faint)",
+                        }}
+                      >
                         <ProtectedImage
                           src={getImageUrl(post.image_url)}
                           alt={post.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                          loading="lazy"
+                          style={{ inlineSize: "100%", blockSize: "100%", objectFit: "cover" }}
                         />
                       </div>
                     )}
-                    <div style={{ padding: '1.85rem', display: 'flex', flexDirection: 'column', flex: 1, textAlign: 'left' }}>
-                      <div className="ecosystem-card-top" style={{ marginBottom: '1.1rem' }}>
-                        <span className="ecosystem-icon" style={{ width: '38px', height: '38px' }}>
-                          <FileText size={16} />
-                        </span>
-                        <span className="ecosystem-kicker">
-                          {typeLabel} · {formatDate(post.created_at)}
-                        </span>
-                      </div>
 
-                      <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.3rem, 5vw, 1.55rem)', fontWeight: 700, letterSpacing: '-0.025em', color: 'var(--color-text)', marginBottom: '0.85rem', lineHeight: 1.25, wordBreak: 'break-word' }}>
-                        {post.title}
-                      </h2>
+                    <div className="substack-kicker" style={{ marginBlockEnd: "0.3rem" }}>
+                      {getTypeLabel(post.type)}
+                    </div>
 
-                      <div style={{ marginBottom: '1.75rem', flex: 1 }}>
-                        <div style={{ color: 'var(--color-text-muted)', whiteSpace: 'pre-wrap', lineHeight: 1.7, fontSize: '0.95rem', fontWeight: 400, display: '-webkit-box', WebkitLineClamp: post.image_url ? 3 : 4, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                          {post.content ? post.content.trim() : ''}
-                        </div>
-                      </div>
+                    <h2
+                      className="substack-serif-title"
+                      style={{ fontSize: "1.2rem", marginBlockEnd: "0.4rem" }}
+                    >
+                      {post.title}
+                    </h2>
 
-                      <div style={{ paddingTop: '1.25rem', borderTop: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-                        <span style={{ fontFamily: 'var(--font-sans)', fontSize: '0.8rem', fontWeight: 500, color: 'var(--color-text-muted)' }}>
-                          México
-                        </span>
-                        <button onClick={() => openPost(post.id)} className="ecosystem-cta" style={{ cursor: 'pointer' }}>
-                          {t("blog.read-more")} <ArrowRight size={14} />
-                        </button>
+                    <p
+                      className="substack-clamp-2"
+                      style={{
+                        fontSize: "0.9rem",
+                        lineHeight: 1.5,
+                        color: "var(--color-text-muted)",
+                        margin: "0 0 0.55rem",
+                      }}
+                    >
+                      {getExcerpt(post.content)}
+                    </p>
+                  </button>
+
+                  <div className="substack-meta">
+                    <time dateTime={toIsoDate(post.created_at)}>
+                      {formatShortDate(post.created_at)}
+                    </time>
+                    <span>·</span>
+                    <span>IMANOL</span>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            {/* CENTER COLUMN (~50%): Featured Hero Cover Story */}
+            <article style={{ textAlign: "center" }}>
+              <button
+                type="button"
+                onClick={() => openPost(heroPost.id)}
+                className="substack-story-trigger"
+                style={{ textAlign: "center" }}
+              >
+                {heroPost.image_url && (
+                  <div
+                    style={{
+                      inlineSize: "100%",
+                      aspectRatio: "16 / 10",
+                      borderRadius: "8px",
+                      overflow: "clip",
+                      marginBlockEnd: "1.25rem",
+                      border: "1px solid var(--color-border)",
+                      background: "var(--color-faint)",
+                    }}
+                  >
+                    <ProtectedImage
+                      src={getImageUrl(heroPost.image_url)}
+                      alt={heroPost.title}
+                      priority
+                      style={{ inlineSize: "100%", blockSize: "100%", objectFit: "cover" }}
+                    />
+                  </div>
+                )}
+
+                <div className="substack-kicker" style={{ marginBlockEnd: "0.5rem" }}>
+                  {getTypeLabel(heroPost.type)}
+                </div>
+
+                <h2
+                  className="substack-serif-title"
+                  style={{
+                    fontSize: "clamp(1.75rem, 3.2vw, 2.4rem)",
+                    marginBlockEnd: "0.75rem",
+                    maxInlineSize: "24ch",
+                    marginInline: "auto",
+                  }}
+                >
+                  {heroPost.title}
+                </h2>
+
+                <p
+                  className="substack-clamp-3"
+                  style={{
+                    fontSize: "1rem",
+                    lineHeight: 1.6,
+                    color: "var(--color-text-muted)",
+                    maxInlineSize: "52ch",
+                    margin: "0 auto 0.85rem",
+                  }}
+                >
+                  {getExcerpt(heroPost.content)}
+                </p>
+              </button>
+
+              <div className="substack-meta" style={{ justifyContent: "center" }}>
+                <time dateTime={toIsoDate(heroPost.created_at)}>
+                  {formatShortDate(heroPost.created_at)}
+                </time>
+                <span>·</span>
+                <span>IMANOL</span>
+              </div>
+
+              {renderEngagementRow(heroPost, true)}
+            </article>
+
+            {/* RIGHT COLUMN (~25%): "Most Popular" Sidebar */}
+            <aside className="substack-hero-sidebar-right" aria-label={t("blog.most-popular", "Más populares")}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "baseline",
+                  justifyContent: "space-between",
+                  gap: "0.5rem",
+                  marginBlockEnd: "1rem",
+                  paddingBlockEnd: "0.6rem",
+                  borderBlockEnd: "1px solid var(--color-border)",
+                }}
+              >
+                <h2 className="substack-serif-title" style={{ fontSize: "1.15rem" }}>
+                  {t("blog.most-popular", "Más populares")}
+                </h2>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSortBy("top");
+                    setIsArchiveView(true);
+                  }}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "0.68rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                    color: "var(--color-text-muted)",
+                    cursor: "pointer",
+                  }}
+                >
+                  {t("blog.view-all", "Ver todo")}
+                </button>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                {mostPopularPosts.map((post, idx) => (
+                  <article
+                    key={post.id}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      gap: "0.85rem",
+                      paddingBlock: "0.85rem",
+                      borderBlockEnd:
+                        idx < mostPopularPosts.length - 1
+                          ? "1px solid var(--color-border)"
+                          : "none",
+                    }}
+                  >
+                    <div style={{ flex: "1 1 auto", minInlineSize: 0 }}>
+                      <button
+                        type="button"
+                        onClick={() => openPost(post.id)}
+                        className="substack-story-trigger"
+                      >
+                        <h3
+                          className="substack-serif-title substack-clamp-2"
+                          style={{ fontSize: "0.96rem", marginBlockEnd: "0.3rem" }}
+                        >
+                          {post.title}
+                        </h3>
+                      </button>
+                      <div className="substack-meta">
+                        <time dateTime={toIsoDate(post.created_at)}>
+                          {formatShortDate(post.created_at)}
+                        </time>
+                        <span>·</span>
+                        <span>IMANOL</span>
                       </div>
                     </div>
-                  </motion.article>
-              );
-            })}
-          </motion.div>
-        ) : (
-          <motion.div variants={itemVariants} style={{ textAlign: 'center', padding: '4rem 2rem' }} className="card-premium">
-            <FileText size={48} style={{ margin: '0 auto 1.5rem', color: 'var(--color-text-muted)' }} />
-            <p style={{ fontSize: '1.1rem', color: 'var(--color-text-muted)', fontWeight: 400 }}>
-              {normalizedSearch ? t('blog.no-search-results') : filter === "all" ? t("blog.no-posts") : t("blog.no-posts-filter")}
-            </p>
-          </motion.div>
+
+                    {post.image_url && (
+                      <button
+                        type="button"
+                        onClick={() => openPost(post.id)}
+                        aria-label={post.title}
+                        style={{
+                          flex: "0 0 64px",
+                          inlineSize: "64px",
+                          blockSize: "64px",
+                          borderRadius: "8px",
+                          overflow: "clip",
+                          border: "1px solid var(--color-border)",
+                          padding: 0,
+                          background: "var(--color-faint)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <ProtectedImage
+                          src={getImageUrl(post.image_url)}
+                          alt={post.title}
+                          style={{ inlineSize: "100%", blockSize: "100%", objectFit: "cover" }}
+                        />
+                      </button>
+                    )}
+                  </article>
+                ))}
+              </div>
+            </aside>
+          </div>
         )}
+
+        {/* 4. Lower Section: 2-Column Editorial Feed / Archive */}
+        <div
+          className={showNewspaperHero ? "substack-feed-layout" : ""}
+          style={
+            !showNewspaperHero
+              ? { maxInlineSize: "760px", marginInline: "auto" }
+              : undefined
+          }
+        >
+          {/* Left Publication Directory Column (visible on main newspaper view) */}
+          {showNewspaperHero && (
+            <aside style={{ position: "sticky", top: "6.5rem" }}>
+              <h2
+                className="substack-serif-title"
+                style={{
+                  fontSize: "1.2rem",
+                  paddingBlockEnd: "0.65rem",
+                  marginBlockEnd: "1rem",
+                  borderBlockEnd: "1px solid var(--color-border)",
+                }}
+              >
+                {t("blog.sections-title", "Secciones")}
+              </h2>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBlockEnd: "2rem" }}>
+                {[
+                  { id: "article", title: t("blog.filter-articles", "Artículos") },
+                  { id: "letter", title: t("blog.filter-letters", "Cartas") },
+                  { id: "poem", title: t("blog.filter-poems", "Poemas") },
+                ].map((sec) => {
+                  const count = posts.filter((p) => p.type === sec.id).length;
+                  return (
+                    <button
+                      key={sec.id}
+                      type="button"
+                      onClick={() => {
+                        setFilter(sec.id);
+                        setIsArchiveView(false);
+                      }}
+                      className="substack-story-trigger"
+                      style={{
+                        display: "flex",
+                        alignItems: "baseline",
+                        justifyContent: "space-between",
+                        paddingBlockEnd: "0.75rem",
+                        borderBlockEnd: "1px solid var(--color-border)",
+                      }}
+                    >
+                      <span className="substack-serif-title" style={{ fontSize: "1.05rem" }}>
+                        {sec.title}
+                      </span>
+                      <span className="substack-meta">{count}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div
+                style={{
+                  padding: "1.25rem",
+                  borderRadius: "12px",
+                  border: "1px solid var(--color-border)",
+                  background: "var(--color-surface)",
+                }}
+              >
+                <h3 className="substack-serif-title" style={{ fontSize: "1.25rem", marginBlockEnd: "0.5rem" }}>
+                  {t("blog.title")}
+                </h3>
+                <p style={{ fontSize: "0.88rem", lineHeight: 1.6, color: "var(--color-text-muted)", margin: 0 }}>
+                  {t("blog.sections-desc")}
+                </p>
+              </div>
+            </aside>
+          )}
+
+          {/* Right / Main Chronological Feed Column */}
+          <div>
+            {/* Feed Header with Segmented [Latest | Top] Control & Search */}
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: "1rem",
+                paddingBlockEnd: "0.85rem",
+                borderBlockEnd: "1px solid var(--color-border)",
+              }}
+            >
+              <h2 className="substack-serif-title" style={{ fontSize: "1.35rem" }}>
+                {isArchiveView
+                  ? t("blog.archive", "Archivo")
+                  : filter === "all"
+                  ? t("blog.recent-posts", "Publicaciones recientes")
+                  : navTabs.find((tab) => tab.id === filter)?.label}
+              </h2>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
+                <div className="substack-segmented" role="group" aria-label="Sort posts">
+                  <button
+                    type="button"
+                    onClick={() => setSortBy("latest")}
+                    className={`substack-segmented-btn ${sortBy === "latest" ? "active" : ""}`}
+                  >
+                    {t("blog.sort-latest", "Recientes")}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSortBy("top")}
+                    className={`substack-segmented-btn ${sortBy === "top" ? "active" : ""}`}
+                  >
+                    {t("blog.sort-top", "Populares")}
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setSearchOpen((prev) => !prev)}
+                  className="substack-action-pill"
+                  aria-label={t("blog.search-label")}
+                  style={{ padding: "0.4rem 0.6rem" }}
+                >
+                  <Search size={15} />
+                </button>
+              </div>
+            </div>
+
+            {/* Feed Items Grouped by Month/Year */}
+            {feedPosts.length > 0 ? (
+              <div>
+                {groupedFeedPosts.map((group, groupIdx) => (
+                  <div key={group.label || `group-${groupIdx}`}>
+                    {group.label && <h3 className="substack-month-header">{group.label}</h3>}
+
+                    {group.items.map((post) => (
+                      <article key={post.id} className="substack-row-card">
+                        <div className="substack-row-body">
+                          <button
+                            type="button"
+                            onClick={() => openPost(post.id)}
+                            className="substack-story-trigger"
+                          >
+                            <div className="substack-kicker" style={{ marginBlockEnd: "0.3rem" }}>
+                              {getTypeLabel(post.type)}
+                            </div>
+
+                            <h3
+                              className="substack-serif-title"
+                              style={{
+                                fontSize: "clamp(1.2rem, 2.2vw, 1.45rem)",
+                                marginBlockEnd: "0.4rem",
+                              }}
+                            >
+                              {post.title}
+                            </h3>
+
+                            <p
+                              className="substack-clamp-2"
+                              style={{
+                                fontSize: "0.95rem",
+                                lineHeight: 1.55,
+                                color: "var(--color-text-muted)",
+                                margin: "0 0 0.65rem",
+                              }}
+                            >
+                              {getExcerpt(post.content)}
+                            </p>
+                          </button>
+
+                          <div className="substack-meta">
+                            <time dateTime={toIsoDate(post.created_at)}>
+                              {formatShortDate(post.created_at)}
+                            </time>
+                            <span>·</span>
+                            <span>IMANOL</span>
+                          </div>
+
+                          {renderEngagementRow(post, false)}
+                        </div>
+
+                        {post.image_url && (
+                          <button
+                            type="button"
+                            onClick={() => openPost(post.id)}
+                            className="substack-row-thumb"
+                            aria-label={post.title}
+                            style={{ padding: 0, cursor: "pointer" }}
+                          >
+                            <ProtectedImage
+                              src={getImageUrl(post.image_url)}
+                              alt={post.title}
+                              style={{ inlineSize: "100%", blockSize: "100%", objectFit: "cover" }}
+                            />
+                          </button>
+                        )}
+                      </article>
+                    ))}
+                  </div>
+                ))}
+
+                {!isArchiveView && (
+                  <div style={{ marginBlockStart: "2rem" }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsArchiveView(true);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className="substack-action-pill"
+                      style={{ padding: "0.65rem 1.35rem", fontSize: "0.85rem", fontWeight: 600 }}
+                    >
+                      <span>{t("blog.see-all", "Ver todas las publicaciones")}</span>
+                      <ArrowRight size={15} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div style={{ textAlign: "center", padding: "4rem 1.5rem", color: "var(--color-text-muted)" }}>
+                <FileText size={38} style={{ margin: "0 auto 1rem", opacity: 0.6 }} />
+                <p style={{ fontSize: "1rem", margin: 0 }}>
+                  {normalizedSearch
+                    ? t("blog.no-search-results")
+                    : filter === "all"
+                    ? t("blog.no-posts")
+                    : t("blog.no-posts-filter")}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </section>
   );

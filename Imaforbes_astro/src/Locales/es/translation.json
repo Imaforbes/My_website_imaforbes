@@ -66,7 +66,19 @@
     "type-letter": "Carta",
     "type-poem": "Poema",
     "view-singular": "Vista",
-    "views": "Vistas"
+    "views": "Vistas",
+    "most-popular": "Más populares",
+    "recent-posts": "Publicaciones recientes",
+    "view-all": "Ver todo",
+    "see-all": "Ver todas las publicaciones",
+    "archive": "Archivo",
+    "sort-latest": "Recientes",
+    "sort-top": "Populares",
+    "sections-title": "Secciones",
+    "sections-desc": "Ensayos breves, cartas personales, poemas y notas sobre ingeniería de software, diseño y reflexiones cotidianas.",
+    "share": "Compartir",
+    "copied-link": "Enlace copiado",
+    "author-byline": "Imanol Pérez Arteaga"
   },
   "breadcrumbs": {
     "home": "Inicio"
