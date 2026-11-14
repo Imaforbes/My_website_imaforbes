@@ -33,14 +33,15 @@ const LanguageToggle = ({ className = "", size = "default" }) => {
       className={className}
     >
       <button
+        type="button"
         onClick={() => handleLanguageChange("es")}
         style={{
           fontFamily: "var(--font-sans)",
           letterSpacing: "0.06em",
           borderRadius: "999px",
-          background: (i18n.language || "es").startsWith("es") ? "var(--color-surface)" : "transparent",
-          color: (i18n.language || "es").startsWith("es") ? "var(--color-text)" : "var(--color-text-muted)",
-          boxShadow: (i18n.language || "es").startsWith("es") ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
+          background: (i18n.language || "es").startsWith("es") ? "var(--color-text)" : "transparent",
+          color: (i18n.language || "es").startsWith("es") ? "var(--color-bg)" : "var(--color-text-muted)",
+          boxShadow: (i18n.language || "es").startsWith("es") ? "0 2px 8px rgba(0,0,0,0.12)" : "none",
           border: "none",
           cursor: "pointer",
         }}
@@ -51,14 +52,15 @@ const LanguageToggle = ({ className = "", size = "default" }) => {
         ES
       </button>
       <button
+        type="button"
         onClick={() => handleLanguageChange("en")}
         style={{
           fontFamily: "var(--font-sans)",
           letterSpacing: "0.06em",
           borderRadius: "999px",
-          background: (i18n.language || "es").startsWith("en") ? "var(--color-surface)" : "transparent",
-          color: (i18n.language || "es").startsWith("en") ? "var(--color-text)" : "var(--color-text-muted)",
-          boxShadow: (i18n.language || "es").startsWith("en") ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
+          background: (i18n.language || "es").startsWith("en") ? "var(--color-text)" : "transparent",
+          color: (i18n.language || "es").startsWith("en") ? "var(--color-bg)" : "var(--color-text-muted)",
+          boxShadow: (i18n.language || "es").startsWith("en") ? "0 2px 8px rgba(0,0,0,0.12)" : "none",
           border: "none",
           cursor: "pointer",
         }}

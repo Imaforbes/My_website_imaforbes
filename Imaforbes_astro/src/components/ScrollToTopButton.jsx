@@ -32,8 +32,8 @@ const ScrollToTopButton = () => {
   return (
     <motion.button
       onClick={scrollToTop}
-      // --> MEJORA: Posición responsiva (más cerca del borde en móvil, más alejado en escritorio).
-      className="btn-premium btn-premium-surface fixed bottom-4 right-4 md:bottom-8 md:right-8 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center cursor-pointer z-50 shadow-lg p-0"
+      className="btn-premium btn-premium-surface fixed bottom-4 right-4 md:bottom-8 md:right-8 w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center cursor-pointer z-50 shadow-lg"
+      style={{ padding: 0 }}
       aria-label={t("scrollToTop.label") || "Scroll to top"}
       initial={{ scale: 0, opacity: 0 }}
       animate={isVisible ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
@@ -41,7 +41,7 @@ const ScrollToTopButton = () => {
       whileHover={{ scale: 1.1, rotate: -5 }}
       whileTap={{ scale: 0.9 }}
     >
-      <ChevronUp size={28} />
+      <ChevronUp size={24} className="shrink-0" />
     </motion.button>
   );
 };

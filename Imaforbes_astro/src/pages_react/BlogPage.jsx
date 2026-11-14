@@ -427,6 +427,9 @@ const BlogPage = () => {
     );
   }, [posts, filter, normalizedSearch]);
 
+  const showNewspaperHero =
+    filter === "all" && !isArchiveView && !normalizedSearch && posts.length >= 3;
+
   // Hero / Left / Right newspaper selection for the main homepage view
   const { heroPost, leftColumnPosts, mostPopularPosts, feedPosts } = useMemo(() => {
     const allSortedByDate = [...posts].sort(
@@ -444,6 +447,10 @@ const BlogPage = () => {
     const withoutImages = remainingByDate.filter((p) => !p.image_url);
     const leftStories = [...withImages, ...withoutImages].slice(0, 2);
 
+    const heroShownIds = new Set(
+      [featured?.id, ...leftStories.map((p) => p.id)].filter(Boolean)
+    );
+
     // Most Popular sidebar: sorted by engagement (likes + views)
     const popular = [...posts]
       .sort(
@@ -454,8 +461,13 @@ const BlogPage = () => {
       )
       .slice(0, 5);
 
-    // Feed list (sorted by latest or top)
-    const listSource = [...categoryFilteredPosts].sort((a, b) => {
+    // Feed list (sorted by latest or top; avoid repeating top 3 hero stories on main latest view)
+    const baseFeedSource =
+      showNewspaperHero && sortBy === "latest"
+        ? categoryFilteredPosts.filter((p) => !heroShownIds.has(p.id))
+        : categoryFilteredPosts;
+
+    const listSource = [...baseFeedSource].sort((a, b) => {
       if (sortBy === "top") {
         return (
           (b.likes_count || 0) * 4 +
@@ -472,26 +484,21 @@ const BlogPage = () => {
       mostPopularPosts: popular,
       feedPosts: listSource,
     };
-  }, [posts, categoryFilteredPosts, sortBy]);
+  }, [posts, categoryFilteredPosts, sortBy, showNewspaperHero]);
 
   // Group feed posts by Month + Year when viewing archive or sorted by latest
   const groupedFeedPosts = useMemo(() => {
     const groups = [];
-    let currentLabel = null;
     for (const post of feedPosts) {
       const label = sortBy === "latest" ? formatMonthYear(post.created_at) : null;
       if (!groups.length || groups[groups.length - 1].label !== label) {
         groups.push({ label, items: [post] });
-        currentLabel = label;
       } else {
         groups[groups.length - 1].items.push(post);
       }
     }
     return groups;
   }, [feedPosts, sortBy, i18n.language]);
-
-  const showNewspaperHero =
-    filter === "all" && !isArchiveView && !normalizedSearch && posts.length >= 3;
 
   const renderEngagementRow = (post, centered = false) => {
     const isLiked = likedPosts.has(post.id);
@@ -576,7 +583,7 @@ const BlogPage = () => {
       const isCopied = copiedPostId === selectedPost.id;
 
       return (
-        <section className="projects-section" style={{ minHeight: "100svh", paddingTop: "2.5rem" }}>
+        <section className="projects-section" style={{ minHeight: "100svh", paddingTop: "1rem" }}>
           <article
             className="substack-shell"
             style={{ maxInlineSize: "740px", marginInline: "auto", paddingBottom: "4rem" }}
@@ -588,8 +595,8 @@ const BlogPage = () => {
                 alignItems: "center",
                 justifyContent: "space-between",
                 gap: "1rem",
-                paddingBlockEnd: "1.25rem",
-                marginBlockEnd: "2.25rem",
+                paddingBlockEnd: "1rem",
+                marginBlockEnd: "2rem",
                 borderBlockEnd: "1px solid var(--color-border)",
               }}
             >
@@ -603,31 +610,16 @@ const BlogPage = () => {
                 <span>{t("blog.back", "Volver")}</span>
               </button>
 
-              <button
-                type="button"
-                onClick={closePost}
+              <span
                 style={{
                   fontFamily: "var(--font-editorial-serif)",
-                  fontSize: "1.25rem",
+                  fontSize: "1.1rem",
                   fontWeight: 600,
-                  color: "var(--color-text)",
-                  background: "transparent",
-                  border: "none",
-                  cursor: "pointer",
+                  color: "var(--color-text-muted)",
                 }}
               >
                 {t("blog.title")}
-              </button>
-
-              <button
-                type="button"
-                onClick={(e) => handleSharePost(e, selectedPost)}
-                className="substack-action-pill"
-                style={{ padding: "0.45rem 0.95rem", fontSize: "0.8rem" }}
-              >
-                {isCopied ? <Check size={14} /> : <Share2 size={14} />}
-                <span>{isCopied ? t("blog.copied-link", "Copiado") : t("blog.share", "Compartir")}</span>
-              </button>
+              </span>
             </header>
 
             {/* Article Header */}
@@ -639,7 +631,7 @@ const BlogPage = () => {
               <h1
                 className="substack-serif-title"
                 style={{
-                  fontSize: "clamp(2rem, 5vw, 3.1rem)",
+                  fontSize: "clamp(1.85rem, 4.8vw, 3rem)",
                   lineHeight: 1.15,
                   marginBlockEnd: "1.5rem",
                   wordBreak: "break-word",
@@ -674,6 +666,7 @@ const BlogPage = () => {
                       fontFamily: "var(--font-editorial-serif)",
                       fontWeight: 700,
                       fontSize: "1rem",
+                      flexShrink: 0,
                     }}
                   >
                     I
@@ -746,12 +739,14 @@ const BlogPage = () => {
 
             {/* Featured Article Image */}
             {selectedPost.image_url && (
-              <figure style={{ margin: "0 0 2.5rem", borderRadius: "8px", overflow: "clip", border: "1px solid var(--color-border)" }}>
+              <figure
+                className="substack-hero-media"
+                style={{ margin: "0 0 2.25rem", maxBlockSize: "460px" }}
+              >
                 <ProtectedImage
                   src={getImageUrl(selectedPost.image_url)}
                   alt={selectedPost.title}
                   priority
-                  style={{ inlineSize: "100%", blockSize: "auto", maxBlockSize: "520px", objectFit: "cover", display: "block" }}
                 />
               </figure>
             )}
@@ -810,7 +805,7 @@ const BlogPage = () => {
             </div>
 
             {/* --- COMMENTS SECTION --- */}
-            <section id="comments-section" style={{ marginBlockStart: "3rem" }}>
+            <section id="comments-section" style={{ marginBlockStart: "3rem", scrollMarginTop: "6.5rem" }}>
               <div style={{ marginBlockEnd: "1.5rem" }}>
                 <h2
                   className="substack-serif-title"
@@ -1083,9 +1078,12 @@ const BlogPage = () => {
   // ============================================================================
   // SUBSTACK NEWSPAPER / MAGAZINE HOME & ARCHIVE VIEW
   // ============================================================================
+  const hasArticles = posts.some((p) => p.type === "article");
   const navTabs = [
     { id: "home", label: t("blog.filter-all", "Todos"), filterValue: "all", archive: false },
-    { id: "article", label: t("blog.filter-articles", "Artículos"), filterValue: "article", archive: false },
+    ...(hasArticles
+      ? [{ id: "article", label: t("blog.filter-articles", "Artículos"), filterValue: "article", archive: false }]
+      : []),
     { id: "letter", label: t("blog.filter-letters", "Cartas"), filterValue: "letter", archive: false },
     { id: "poem", label: t("blog.filter-poems", "Poemas"), filterValue: "poem", archive: false },
     { id: "archive", label: t("blog.archive", "Archivo"), filterValue: "all", archive: true },
@@ -1093,86 +1091,28 @@ const BlogPage = () => {
 
   const activeTabId = isArchiveView ? "archive" : filter === "all" ? "home" : filter;
 
+  const availableSections = [
+    ...(hasArticles ? [{ id: "article", title: t("blog.filter-articles", "Artículos") }] : []),
+    { id: "letter", title: t("blog.filter-letters", "Cartas") },
+    { id: "poem", title: t("blog.filter-poems", "Poemas") },
+  ];
+
   return (
-    <section className="projects-section" style={{ minHeight: "100svh", paddingTop: "2rem" }}>
+    <section className="projects-section" style={{ minHeight: "100svh", paddingTop: "0.75rem" }}>
       <div className="substack-shell">
         {/* 1. Top Publication Masthead */}
         <header className="substack-masthead">
-          <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-            <button
-              type="button"
-              onClick={() => {
-                setFilter("all");
-                setIsArchiveView(false);
-                setSearchTerm("");
-              }}
-              aria-label={t("blog.title")}
-              style={{
-                inlineSize: "38px",
-                blockSize: "38px",
-                borderRadius: "8px",
-                background: "var(--color-text)",
-                color: "var(--color-bg)",
-                border: "none",
-                display: "grid",
-                placeItems: "center",
-                fontFamily: "var(--font-editorial-serif)",
-                fontSize: "1.15rem",
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              I
-            </button>
-          </div>
-
-          <div style={{ textAlign: "center" }}>
-            <h1 className="substack-pub-title">{t("blog.title")}</h1>
-            <p
-              style={{
-                margin: "0.35rem 0 0",
-                fontSize: "0.88rem",
-                color: "var(--color-text-muted)",
-                fontFamily: "var(--font-sans)",
-              }}
-            >
-              {t("blog.subtitle")}
-            </p>
-          </div>
-
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.5rem" }}>
-            <button
-              type="button"
-              onClick={() => setSearchOpen((prev) => !prev)}
-              className="substack-action-pill"
-              aria-expanded={searchOpen}
-              aria-controls="blog-search-region"
-              aria-label={t("blog.search-label")}
-              style={{ padding: "0.45rem 0.7rem" }}
-            >
-              {searchOpen ? <X size={16} /> : <Search size={16} />}
-            </button>
-
-            <a
-              href="/contact"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.4rem",
-                padding: "0.45rem 1rem",
-                borderRadius: "9999px",
-                background: "var(--color-editorial-accent)",
-                color: "#ffffff",
-                fontFamily: "var(--font-sans)",
-                fontSize: "0.78rem",
-                fontWeight: 600,
-                textDecoration: "none",
-                whiteSpace: "nowrap",
-              }}
-            >
-              <span>{t("contact.title", "Contacto")}</span>
-            </a>
-          </div>
+          <h1 className="substack-pub-title">{t("blog.title")}</h1>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "0.92rem",
+              color: "var(--color-text-muted)",
+              fontFamily: "var(--font-sans)",
+            }}
+          >
+            {t("blog.subtitle")}
+          </p>
         </header>
 
         {/* 2. Substack Navigation Tabs Bar */}
@@ -1193,6 +1133,18 @@ const BlogPage = () => {
               </li>
             ))}
           </ul>
+
+          <button
+            type="button"
+            onClick={() => setSearchOpen((prev) => !prev)}
+            className="substack-action-pill substack-nav-search-btn"
+            aria-expanded={searchOpen}
+            aria-controls="blog-search-region"
+            aria-label={t("blog.search-label")}
+            style={{ padding: "0.4rem 0.65rem", flexShrink: 0 }}
+          >
+            {searchOpen ? <X size={15} /> : <Search size={15} />}
+          </button>
         </nav>
 
         {/* Expandable Semantic <search> Region */}
@@ -1258,7 +1210,7 @@ const BlogPage = () => {
         {showNewspaperHero && heroPost && (
           <div className="substack-hero-grid">
             {/* LEFT COLUMN (~25%): Stacked Secondary Stories */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.85rem" }}>
+            <div className="substack-hero-left" style={{ display: "flex", flexDirection: "column", gap: "1.85rem" }}>
               {leftColumnPosts.map((post, idx) => (
                 <article
                   key={post.id}
@@ -1270,27 +1222,19 @@ const BlogPage = () => {
                         : "none",
                   }}
                 >
-                  <button
-                    type="button"
-                    onClick={() => openPost(post.id)}
+                  <a
+                    href={`?post=${post.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openPost(post.id);
+                    }}
                     className="substack-story-trigger"
                   >
                     {post.image_url && (
-                      <div
-                        style={{
-                          inlineSize: "100%",
-                          aspectRatio: "16 / 10",
-                          borderRadius: "8px",
-                          overflow: "clip",
-                          marginBlockEnd: "0.75rem",
-                          border: "1px solid var(--color-border)",
-                          background: "var(--color-faint)",
-                        }}
-                      >
+                      <div className="substack-card-media">
                         <ProtectedImage
                           src={getImageUrl(post.image_url)}
                           alt={post.title}
-                          style={{ inlineSize: "100%", blockSize: "100%", objectFit: "cover" }}
                         />
                       </div>
                     )}
@@ -1317,7 +1261,7 @@ const BlogPage = () => {
                     >
                       {getExcerpt(post.content)}
                     </p>
-                  </button>
+                  </a>
 
                   <div className="substack-meta">
                     <time dateTime={toIsoDate(post.created_at)}>
@@ -1331,30 +1275,22 @@ const BlogPage = () => {
             </div>
 
             {/* CENTER COLUMN (~50%): Featured Hero Cover Story */}
-            <article style={{ textAlign: "center" }}>
-              <button
-                type="button"
-                onClick={() => openPost(heroPost.id)}
+            <article className="substack-hero-center" style={{ textAlign: "center" }}>
+              <a
+                href={`?post=${heroPost.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  openPost(heroPost.id);
+                }}
                 className="substack-story-trigger"
                 style={{ textAlign: "center" }}
               >
                 {heroPost.image_url && (
-                  <div
-                    style={{
-                      inlineSize: "100%",
-                      aspectRatio: "16 / 10",
-                      borderRadius: "8px",
-                      overflow: "clip",
-                      marginBlockEnd: "1.25rem",
-                      border: "1px solid var(--color-border)",
-                      background: "var(--color-faint)",
-                    }}
-                  >
+                  <div className="substack-hero-media">
                     <ProtectedImage
                       src={getImageUrl(heroPost.image_url)}
                       alt={heroPost.title}
                       priority
-                      style={{ inlineSize: "100%", blockSize: "100%", objectFit: "cover" }}
                     />
                   </div>
                 )}
@@ -1387,7 +1323,7 @@ const BlogPage = () => {
                 >
                   {getExcerpt(heroPost.content)}
                 </p>
-              </button>
+              </a>
 
               <div className="substack-meta" style={{ justifyContent: "center" }}>
                 <time dateTime={toIsoDate(heroPost.created_at)}>
@@ -1455,9 +1391,12 @@ const BlogPage = () => {
                     }}
                   >
                     <div style={{ flex: "1 1 auto", minInlineSize: 0 }}>
-                      <button
-                        type="button"
-                        onClick={() => openPost(post.id)}
+                      <a
+                        href={`?post=${post.id}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openPost(post.id);
+                        }}
                         className="substack-story-trigger"
                       >
                         <h3
@@ -1466,7 +1405,7 @@ const BlogPage = () => {
                         >
                           {post.title}
                         </h3>
-                      </button>
+                      </a>
                       <div className="substack-meta">
                         <time dateTime={toIsoDate(post.created_at)}>
                           {formatShortDate(post.created_at)}
@@ -1477,28 +1416,20 @@ const BlogPage = () => {
                     </div>
 
                     {post.image_url && (
-                      <button
-                        type="button"
-                        onClick={() => openPost(post.id)}
-                        aria-label={post.title}
-                        style={{
-                          flex: "0 0 64px",
-                          inlineSize: "64px",
-                          blockSize: "64px",
-                          borderRadius: "8px",
-                          overflow: "clip",
-                          border: "1px solid var(--color-border)",
-                          padding: 0,
-                          background: "var(--color-faint)",
-                          cursor: "pointer",
+                      <a
+                        href={`?post=${post.id}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openPost(post.id);
                         }}
+                        aria-label={post.title}
+                        className="substack-popular-thumb"
                       >
                         <ProtectedImage
                           src={getImageUrl(post.image_url)}
                           alt={post.title}
-                          style={{ inlineSize: "100%", blockSize: "100%", objectFit: "cover" }}
                         />
-                      </button>
+                      </a>
                     )}
                   </article>
                 ))}
@@ -1518,7 +1449,7 @@ const BlogPage = () => {
         >
           {/* Left Publication Directory Column (visible on main newspaper view) */}
           {showNewspaperHero && (
-            <aside style={{ position: "sticky", top: "6.5rem" }}>
+            <aside className="substack-feed-sidebar">
               <h2
                 className="substack-serif-title"
                 style={{
@@ -1532,11 +1463,7 @@ const BlogPage = () => {
               </h2>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginBlockEnd: "2rem" }}>
-                {[
-                  { id: "article", title: t("blog.filter-articles", "Artículos") },
-                  { id: "letter", title: t("blog.filter-letters", "Cartas") },
-                  { id: "poem", title: t("blog.filter-poems", "Poemas") },
-                ].map((sec) => {
+                {availableSections.map((sec) => {
                   const count = posts.filter((p) => p.type === sec.id).length;
                   return (
                     <button
@@ -1545,6 +1472,7 @@ const BlogPage = () => {
                       onClick={() => {
                         setFilter(sec.id);
                         setIsArchiveView(false);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
                       className="substack-story-trigger"
                       style={{
@@ -1583,8 +1511,8 @@ const BlogPage = () => {
           )}
 
           {/* Right / Main Chronological Feed Column */}
-          <div>
-            {/* Feed Header with Segmented [Latest | Top] Control & Search */}
+          <div className="substack-feed-main">
+            {/* Feed Header with Segmented [Latest | Top] Control */}
             <div
               style={{
                 display: "flex",
@@ -1621,16 +1549,6 @@ const BlogPage = () => {
                     {t("blog.sort-top", "Populares")}
                   </button>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => setSearchOpen((prev) => !prev)}
-                  className="substack-action-pill"
-                  aria-label={t("blog.search-label")}
-                  style={{ padding: "0.4rem 0.6rem" }}
-                >
-                  <Search size={15} />
-                </button>
               </div>
             </div>
 
@@ -1644,9 +1562,12 @@ const BlogPage = () => {
                     {group.items.map((post) => (
                       <article key={post.id} className="substack-row-card">
                         <div className="substack-row-body">
-                          <button
-                            type="button"
-                            onClick={() => openPost(post.id)}
+                          <a
+                            href={`?post=${post.id}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              openPost(post.id);
+                            }}
                             className="substack-story-trigger"
                           >
                             <div className="substack-kicker" style={{ marginBlockEnd: "0.3rem" }}>
@@ -1656,7 +1577,7 @@ const BlogPage = () => {
                             <h3
                               className="substack-serif-title"
                               style={{
-                                fontSize: "clamp(1.2rem, 2.2vw, 1.45rem)",
+                                fontSize: "clamp(1.15rem, 2.2vw, 1.4rem)",
                                 marginBlockEnd: "0.4rem",
                               }}
                             >
@@ -1666,7 +1587,7 @@ const BlogPage = () => {
                             <p
                               className="substack-clamp-2"
                               style={{
-                                fontSize: "0.95rem",
+                                fontSize: "0.94rem",
                                 lineHeight: 1.55,
                                 color: "var(--color-text-muted)",
                                 margin: "0 0 0.65rem",
@@ -1674,7 +1595,7 @@ const BlogPage = () => {
                             >
                               {getExcerpt(post.content)}
                             </p>
-                          </button>
+                          </a>
 
                           <div className="substack-meta">
                             <time dateTime={toIsoDate(post.created_at)}>
@@ -1688,19 +1609,20 @@ const BlogPage = () => {
                         </div>
 
                         {post.image_url && (
-                          <button
-                            type="button"
-                            onClick={() => openPost(post.id)}
+                          <a
+                            href={`?post=${post.id}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              openPost(post.id);
+                            }}
                             className="substack-row-thumb"
                             aria-label={post.title}
-                            style={{ padding: 0, cursor: "pointer" }}
                           >
                             <ProtectedImage
                               src={getImageUrl(post.image_url)}
                               alt={post.title}
-                              style={{ inlineSize: "100%", blockSize: "100%", objectFit: "cover" }}
                             />
-                          </button>
+                          </a>
                         )}
                       </article>
                     ))}

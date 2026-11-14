@@ -136,27 +136,16 @@ const Header = memo(({ currentPath }) => {
           </ul>
 
           {/* Desktop Language Switcher */}
-          <div className="hidden lg:flex" style={{ alignItems: 'center', gap: '0.5rem' }}>
+          <div className="nav-desktop-actions">
             <LanguageToggle />
           </div>
 
           {/* Mobile Menu Button */}
           <button
+            type="button"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden"
-            style={{
-              background: isMenuOpen ? 'var(--color-text)' : 'var(--color-faint)',
-              color: isMenuOpen ? 'var(--color-bg)' : 'var(--color-text)',
-              border: '1px solid var(--color-border)',
-              borderRadius: '999px',
-              width: '38px',
-              height: '38px',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              transition: 'all 0.18s ease',
-            }}
+            className={`nav-mobile-toggle ${isMenuOpen ? 'active' : ''}`}
+            aria-expanded={isMenuOpen}
             aria-label={isMenuOpen ? t("header.close-menu", "Cerrar menú") : t("header.open-menu", "Abrir menú")}
           >
             {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -172,7 +161,7 @@ const Header = memo(({ currentPath }) => {
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
               style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.28)', backdropFilter: 'blur(6px)', zIndex: 90 }}
-              className="lg:hidden"
+              className="nav-mobile-overlay"
             />
 
             <motion.nav
@@ -190,7 +179,7 @@ const Header = memo(({ currentPath }) => {
                 maxHeight: 'calc(100vh - 5.5rem)',
                 overflowY: 'auto',
               }}
-              className="lg:hidden"
+              className="nav-mobile-overlay"
               onTouchMove={(e) => e.stopPropagation()}
             >
               <div style={{ display: 'flex', flexDirection: 'column', padding: '1rem' }}>

@@ -2,7 +2,7 @@
 import React, { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const ProtectedImage = ({ src, alt, className, priority = false, ...props }) => {
+const ProtectedImage = ({ src, alt, className, priority = false, style, ...props }) => {
   const imageRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -76,8 +76,11 @@ const ProtectedImage = ({ src, alt, className, priority = false, ...props }) => 
   return (
     <motion.div
       ref={containerRef}
-      className={`protected-image-container relative ${className || ''}`}
+      className={`protected-image-container relative w-full h-full ${className || ''}`}
       style={{
+        width: '100%',
+        height: '100%',
+        display: 'block',
         userSelect: 'none',
         WebkitUserSelect: 'none',
         MozUserSelect: 'none',
@@ -94,7 +97,7 @@ const ProtectedImage = ({ src, alt, className, priority = false, ...props }) => 
         style={{
           background: 'transparent',
           pointerEvents: 'auto',
-          cursor: 'default',
+          cursor: 'inherit',
         }}
         onContextMenu={(e) => e.preventDefault()}
         onDragStart={(e) => e.preventDefault()}
@@ -115,6 +118,10 @@ const ProtectedImage = ({ src, alt, className, priority = false, ...props }) => 
         alt={alt}
         className={`protected-image w-full h-full object-cover ${(className && className.includes && className.includes('rounded')) ? (className.match(/rounded-\w+/)?.[0] || '') : ''}`}
         style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          display: 'block',
           pointerEvents: 'none',
           userSelect: 'none',
           WebkitUserSelect: 'none',
@@ -125,6 +132,7 @@ const ProtectedImage = ({ src, alt, className, priority = false, ...props }) => 
           userDrag: 'none',
           touchAction: 'none',
           WebkitTouchCallout: 'none',
+          ...style,
         }}
         {...(priority ? { fetchPriority: "high" } : { loading: "lazy" })}
         decoding="async"
