@@ -20,7 +20,11 @@
     "skills-filter-devops": "DevOps",
     "skills-filter-frontend": "Frontend",
     "skills-filter-tools": "Herramientas",
-    "skills-title": "Habilidades"
+    "skills-title": "Habilidades",
+    "prev-image": "Anterior imagen",
+    "next-image": "Siguiente imagen",
+    "view-photo": "Ver foto {{index}}",
+    "stack-label": "Stack"
   },
   "blog": {
     "back": "Volver",
@@ -78,7 +82,9 @@
     "sections-desc": "Ensayos breves, cartas personales, poemas y notas sobre ingeniería de software, diseño y reflexiones cotidianas.",
     "share": "Compartir",
     "copied-link": "Enlace copiado",
-    "author-byline": "Imanol Pérez Arteaga"
+    "author-byline": "Imanol Pérez Arteaga",
+    "clear-search": "Limpiar búsqueda",
+    "sort-aria": "Ordenar publicaciones"
   },
   "breadcrumbs": {
     "home": "Inicio"
@@ -111,7 +117,8 @@
     "privacy-title": "Política de Privacidad",
     "send": "Enviar mensaje",
     "sending": "Enviando...",
-    "title": "Contacto"
+    "title": "Contacto",
+    "dismiss": "Cerrar notificación"
   },
   "footer": {
     "copyright": "Todos los derechos reservados",
@@ -119,13 +126,15 @@
     "get-in-touch": "Contacto",
     "made-with": "Creado con conocimiento en programación",
     "navigation": "Navegación",
-    "response-time": "Tiempo de respuesta estimado: menos de 24 horas"
+    "response-time": "Tiempo de respuesta estimado: menos de 24 horas",
+    "location-tag": "CDMX · FULL STACK & UI"
   },
   "errorBoundary": {
     "home": "Ir al inicio",
     "message": "Ha ocurrido un error inesperado. Por favor, intenta recargar la página.",
     "reload": "Recargar página",
-    "title": "¡Oops! Algo salió mal"
+    "title": "¡Oops! Algo salió mal",
+    "details": "Detalles del error (solo en desarrollo)"
   },
   "header": {
     "home": "Inicio",
@@ -147,7 +156,8 @@
     "change": "(Cambiar)",
     "format-question": "Descarga mi currículum en tu formato preferido:",
     "markdown": "Markdown",
-    "pdf": "PDF"
+    "pdf": "PDF",
+    "close": "Cerrar ventana"
   },
   "cvPage": {
     "title": "Curriculum Vitae — Markdown",

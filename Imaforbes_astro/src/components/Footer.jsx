@@ -61,7 +61,7 @@ const Footer = memo(({ currentPath }) => {
               {t("footer.description") || "Building digital experiences with passion and precision."}
             </p>
             <span className="section-label" style={{ marginBottom: 0 }}>
-              CDMX · FULL STACK & UI
+              {t("footer.location-tag", "CDMX · FULL STACK & UI")}
             </span>
           </motion.div>
 

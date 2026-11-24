@@ -135,21 +135,19 @@ const Header = memo(({ currentPath }) => {
             ))}
           </ul>
 
-          {/* Desktop Language Switcher */}
-          <div className="nav-desktop-actions">
+          {/* Language Switcher & Mobile Menu Toggle */}
+          <div className="nav-header-actions">
             <LanguageToggle />
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className={`nav-mobile-toggle ${isMenuOpen ? 'active' : ''}`}
+              aria-expanded={isMenuOpen}
+              aria-label={isMenuOpen ? t("header.close-menu", "Cerrar menú") : t("header.open-menu", "Abrir menú")}
+            >
+              {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`nav-mobile-toggle ${isMenuOpen ? 'active' : ''}`}
-            aria-expanded={isMenuOpen}
-            aria-label={isMenuOpen ? t("header.close-menu", "Cerrar menú") : t("header.open-menu", "Abrir menú")}
-          >
-            {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
-          </button>
         </nav>
       </header>
 

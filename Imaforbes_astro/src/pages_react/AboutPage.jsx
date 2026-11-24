@@ -447,7 +447,7 @@ const AboutPage = () => {
                   {/* Navigation Arrows */}
                   <button 
                     onClick={prevImage}
-                    aria-label="Anterior imagen"
+                    aria-label={t("about.prev-image", "Anterior imagen")}
                     style={{
                       position: 'absolute',
                       top: '50%',
@@ -474,7 +474,7 @@ const AboutPage = () => {
 
                   <button 
                     onClick={nextImage}
-                    aria-label="Siguiente imagen"
+                    aria-label={t("about.next-image", "Siguiente imagen")}
                     style={{
                       position: 'absolute',
                       top: '50%',
@@ -517,7 +517,7 @@ const AboutPage = () => {
                       <button
                         key={idx}
                         type="button"
-                        aria-label={`Ver foto ${idx + 1}`}
+                        aria-label={t("about.view-photo", { index: idx + 1, defaultValue: `Ver foto ${idx + 1}` })}
                         onClick={(e) => {
                           e.stopPropagation();
                           setCurrentImageIndex(idx);
@@ -563,7 +563,7 @@ const AboutPage = () => {
                   <FaReact size={16} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Stack</span>
+                  <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{t("about.stack-label", "Stack")}</span>
                   <span style={{ fontSize: '0.82rem', color: 'var(--color-text)', fontWeight: 600, whiteSpace: 'nowrap' }}>MERN / PHP</span>
                 </div>
               </motion.div>
@@ -665,7 +665,7 @@ const AboutPage = () => {
               gap: '0.5rem',
               marginBottom: '2.5rem',
               padding: '0.5rem',
-              borderRadius: '999px',
+              borderRadius: '24px',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface)',
               width: 'fit-content',

@@ -74,7 +74,8 @@ const DynamicText = ({ texts }) => {
           style={{
             gridArea: '1 / 1',
             display: 'inline-block',
-            whiteSpace: 'nowrap',
+            whiteSpace: 'normal',
+            textAlign: 'center',
             color: 'var(--color-text)',
           }}
         >

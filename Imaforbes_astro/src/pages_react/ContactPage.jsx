@@ -158,7 +158,7 @@ const ContactPage = () => {
                 </h3>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+              <div className="contact-info-grid">
                 <a href="mailto:imanol@imaforbes.com" className="card-premium" style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1.35rem 1.5rem', textDecoration: 'none' }}>
                   <span className="ecosystem-icon">
                     <FiMail size={18} />

@@ -7,6 +7,7 @@ import { API_CONFIG } from "../config/api.js";
 import ProtectedImage from "../components/ProtectedImage.jsx";
 import BlogPostSkeleton from "../components/BlogPostSkeleton.jsx";
 import { validateComment, checkCommentCooldown, recordCommentTimestamp } from "../utils/commentModeration.js";
+import { localizeBlogPost } from "../utils/blogLocalization.js";
 import {
   FileText,
   Heart,
@@ -369,7 +370,8 @@ const BlogPage = () => {
   const formatDate = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    const locale = i18n.language === "en" ? "en-US" : "es-ES";
+    const isEn = String(i18n.language || "es").toLowerCase().startsWith("en");
+    const locale = isEn ? "en-US" : "es-ES";
     return date.toLocaleDateString(locale, {
       year: "numeric",
       month: "long",
@@ -380,7 +382,8 @@ const BlogPage = () => {
   const formatShortDate = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    const locale = i18n.language === "en" ? "en-US" : "es-ES";
+    const isEn = String(i18n.language || "es").toLowerCase().startsWith("en");
+    const locale = isEn ? "en-US" : "es-ES";
     return date
       .toLocaleDateString(locale, {
         month: "short",
@@ -393,7 +396,8 @@ const BlogPage = () => {
   const formatMonthYear = (dateString) => {
     if (!dateString) return "";
     const date = new Date(dateString);
-    const locale = i18n.language === "en" ? "en-US" : "es-ES";
+    const isEn = String(i18n.language || "es").toLowerCase().startsWith("en");
+    const locale = isEn ? "en-US" : "es-ES";
     return date
       .toLocaleDateString(locale, {
         month: "long",
@@ -413,26 +417,32 @@ const BlogPage = () => {
     return content.replace(/\s+/g, " ").trim();
   };
 
+  // Localize all posts dynamically to Spanish or English
+  const localizedPosts = useMemo(
+    () => posts.map((post) => localizeBlogPost(post, i18n.language)),
+    [posts, i18n.language]
+  );
+
   const normalizedSearch = searchTerm.trim().toLocaleLowerCase();
 
   // Filter posts by category & search query
   const categoryFilteredPosts = useMemo(() => {
     const byCategory =
-      filter === "all" ? posts : posts.filter((p) => p.type === filter);
+      filter === "all" ? localizedPosts : localizedPosts.filter((p) => p.type === filter);
     if (!normalizedSearch) return byCategory;
     return byCategory.filter((post) =>
       `${post.title || ""} ${post.content || ""}`
         .toLocaleLowerCase()
         .includes(normalizedSearch)
     );
-  }, [posts, filter, normalizedSearch]);
+  }, [localizedPosts, filter, normalizedSearch]);
 
   const showNewspaperHero =
-    filter === "all" && !isArchiveView && !normalizedSearch && posts.length >= 3;
+    filter === "all" && !isArchiveView && !normalizedSearch && localizedPosts.length >= 3;
 
   // Hero / Left / Right newspaper selection for the main homepage view
   const { heroPost, leftColumnPosts, mostPopularPosts, feedPosts } = useMemo(() => {
-    const allSortedByDate = [...posts].sort(
+    const allSortedByDate = [...localizedPosts].sort(
       (a, b) => new Date(b.created_at) - new Date(a.created_at)
     );
     // Prefer the newest post that has an image as the central newspaper cover story
@@ -452,7 +462,7 @@ const BlogPage = () => {
     );
 
     // Most Popular sidebar: sorted by engagement (likes + views)
-    const popular = [...posts]
+    const popular = [...localizedPosts]
       .sort(
         (a, b) =>
           (b.likes_count || 0) * 4 +
@@ -484,7 +494,7 @@ const BlogPage = () => {
       mostPopularPosts: popular,
       feedPosts: listSource,
     };
-  }, [posts, categoryFilteredPosts, sortBy, showNewspaperHero]);
+  }, [localizedPosts, categoryFilteredPosts, sortBy, showNewspaperHero]);
 
   // Group feed posts by Month + Year when viewing archive or sorted by latest
   const groupedFeedPosts = useMemo(() => {
@@ -573,7 +583,7 @@ const BlogPage = () => {
   // INDIVIDUAL POST READER VIEW (Substack Article Layout)
   // ============================================================================
   if (selectedPostId) {
-    const selectedPost = posts.find((p) => p.id == selectedPostId);
+    const selectedPost = localizedPosts.find((p) => p.id == selectedPostId);
     if (selectedPost) {
       const wordCount = selectedPost.content
         ? selectedPost.content.trim().split(/\s+/).length
@@ -1195,7 +1205,7 @@ const BlogPage = () => {
                       onClick={() => setSearchTerm("")}
                       className="substack-action-pill"
                       style={{ border: "none", padding: "0.25rem" }}
-                      aria-label="Clear search"
+                      aria-label={t("blog.clear-search", "Limpiar búsqueda")}
                     >
                       <X size={14} />
                     </button>
@@ -1533,7 +1543,7 @@ const BlogPage = () => {
               </h2>
 
               <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-                <div className="substack-segmented" role="group" aria-label="Sort posts">
+                <div className="substack-segmented" role="group" aria-label={t("blog.sort-aria", "Ordenar publicaciones")}>
                   <button
                     type="button"
                     onClick={() => setSortBy("latest")}

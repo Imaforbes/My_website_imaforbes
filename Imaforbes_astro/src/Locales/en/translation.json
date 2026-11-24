@@ -20,7 +20,11 @@
     "skills-filter-devops": "DevOps",
     "skills-filter-frontend": "Frontend",
     "skills-filter-tools": "Tools",
-    "skills-title": "Skills"
+    "skills-title": "Skills",
+    "prev-image": "Previous image",
+    "next-image": "Next image",
+    "view-photo": "View photo {{index}}",
+    "stack-label": "Stack"
   },
   "blog": {
     "back": "Back",
@@ -78,7 +82,9 @@
     "sections-desc": "Short essays, personal letters, poems, and notes on software engineering, design, and everyday reflections.",
     "share": "Share",
     "copied-link": "Link copied",
-    "author-byline": "Imanol Pérez Arteaga"
+    "author-byline": "Imanol Pérez Arteaga",
+    "clear-search": "Clear search",
+    "sort-aria": "Sort posts"
   },
   "breadcrumbs": {
     "home": "Home"
@@ -111,7 +117,8 @@
     "privacy-title": "Privacy Policy",
     "send": "Send Message",
     "sending": "Sending...",
-    "title": "Contact"
+    "title": "Contact",
+    "dismiss": "Dismiss notification"
   },
   "footer": {
     "copyright": "All rights reserved",
@@ -119,13 +126,15 @@
     "get-in-touch": "Get in touch",
     "made-with": "Made with programming knowledge",
     "navigation": "Navigation",
-    "response-time": "Estimated response time: less than 24 hours"
+    "response-time": "Estimated response time: less than 24 hours",
+    "location-tag": "MEXICO CITY · FULL STACK & UI"
   },
   "errorBoundary": {
     "home": "Go home",
     "message": "An unexpected error occurred. Please try reloading the page.",
     "reload": "Reload page",
-    "title": "Oops! Something went wrong"
+    "title": "Oops! Something went wrong",
+    "details": "Error details (development only)"
   },
   "header": {
     "home": "Home",
@@ -147,7 +156,8 @@
     "change": "(Change)",
     "format-question": "Download my curriculum vitae in your preferred format:",
     "markdown": "Markdown",
-    "pdf": "PDF"
+    "pdf": "PDF",
+    "close": "Close modal"
   },
   "cvPage": {
     "title": "Curriculum Vitae — Markdown",
