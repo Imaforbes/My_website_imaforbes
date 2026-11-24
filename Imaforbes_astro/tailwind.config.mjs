@@ -5,9 +5,10 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Geist Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        display: ['Plus Jakarta Sans', 'Geist Sans', '-apple-system', 'sans-serif'],
-        mono: ['Geist Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+        sans: ['"SF Pro Text"', '"SF Pro Icons"', '-apple-system', 'BlinkMacSystemFont', '"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
+        display: ['"SF Pro Display"', '"SF Pro Icons"', '-apple-system', 'BlinkMacSystemFont', '"Helvetica Neue"', 'Helvetica', 'Arial', 'sans-serif'],
+        mono: ['"SF Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+        serif: ['ui-serif', '"New York"', '-apple-system-ui-serif', '"Iowan Old Style"', 'Georgia', 'serif'],
       },
       colors: {
         background: 'var(--color-bg)',
