@@ -1,12 +1,19 @@
 # ======================================================================
-# HOSTINGER / APACHE PERFORMANCE OPTIMIZATIONS
+# HOSTINGER / APACHE PERFORMANCE & SECURITY OPTIMIZATIONS
 # ======================================================================
 
-# 1. GZIP / BROTLI COMPRESSION
-# Reduces the size of files sent to the browser
+# 1. SECURITY HEADERS
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# 2. GZIP / DEFLATE COMPRESSION
 <IfModule mod_deflate.c>
-    # Compress HTML, CSS, JavaScript, Text, XML and fonts
     AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
     AddOutputFilterByType DEFLATE application/rss+xml
     AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
     AddOutputFilterByType DEFLATE application/x-font
@@ -20,6 +27,8 @@
     AddOutputFilterByType DEFLATE font/opentype
     AddOutputFilterByType DEFLATE font/otf
     AddOutputFilterByType DEFLATE font/ttf
+    AddOutputFilterByType DEFLATE font/woff
+    AddOutputFilterByType DEFLATE font/woff2
     AddOutputFilterByType DEFLATE image/svg+xml
     AddOutputFilterByType DEFLATE image/x-icon
     AddOutputFilterByType DEFLATE text/css
@@ -28,15 +37,10 @@
     AddOutputFilterByType DEFLATE text/plain
     AddOutputFilterByType DEFLATE text/xml
 
-    # Remove browser bugs (only needed for really old browsers)
-    BrowserMatch ^Mozilla/4 gzip-only-text/html
-    BrowserMatch ^Mozilla/4\.0[678] no-gzip
-    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
     Header append Vary User-Agent
 </IfModule>
 
-# 2. BROWSER CACHING (EXPIRES CACHING)
-# Tells the browser to keep files in memory to load instantly on next pages
+# 3. BROWSER CACHING (EXPIRES CACHING)
 <IfModule mod_expires.c>
     ExpiresActive On
     
@@ -53,43 +57,40 @@
     ExpiresByType video/mpeg "access plus 1 year"
     
     # CSS, JavaScript
-    ExpiresByType text/css "access plus 1 month"
-    ExpiresByType text/javascript "access plus 1 month"
-    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
     
     # Fonts
     ExpiresByType application/x-font-ttf "access plus 1 year"
     ExpiresByType font/opentype "access plus 1 year"
     ExpiresByType application/x-font-woff "access plus 1 year"
     ExpiresByType application/font-woff2 "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
     
     # Others
     ExpiresByType application/pdf "access plus 1 month"
-    ExpiresByType text/x-javascript "access plus 1 month"
+    ExpiresByType text/x-javascript "access plus 1 year"
     ExpiresDefault "access plus 2 days"
 </IfModule>
 
-# 3. CACHE-CONTROL HEADERS
+# 4. CACHE-CONTROL HEADERS
 <IfModule mod_headers.c>
-    <FilesMatch "\.(ico|jpe?g|png|gif|swf|svg|webp)$">
+    <FilesMatch "\.(ico|jpe?g|png|gif|swf|svg|webp|woff2?|ttf|otf)$">
+        Header set Cache-Control "max-age=31536000, public, immutable"
+    </FilesMatch>
+    <FilesMatch "\.(css|js)$">
         Header set Cache-Control "max-age=31536000, public"
-    </FilesMatch>
-    <FilesMatch "\.(css)$">
-        Header set Cache-Control "max-age=2592000, public"
-    </FilesMatch>
-    <FilesMatch "\.(js)$">
-        Header set Cache-Control "max-age=2592000, private"
     </FilesMatch>
     <FilesMatch "\.(x?html?|php)$">
         Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
     </FilesMatch>
 </IfModule>
 
-# 4. ASTRO STATIC ROUTING (Optional, helps with trailing slashes)
+# 5. ASTRO STATIC ROUTING
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    # If a directory is requested without a trailing slash, redirect to the trailing slash
-    # (Astro usually generates folders with index.html inside)
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^(.*[^/])$ /$1/ [L,R=301]
 </IfModule>

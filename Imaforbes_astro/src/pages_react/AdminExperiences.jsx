@@ -3,6 +3,7 @@ import withProviders from '../components/withProviders.jsx';
 import React, { useState, useEffect, useCallback } from "react";
 
 import { api } from "../services/api.js";
+import { useAdminAuth } from "../hooks/useAdminAuth.js";
 import {
   LogOut,
   Trash2,
@@ -30,6 +31,7 @@ const HeroBackground = () => (
 );
 
 const AdminExperiences = () => {
+  const { isCheckingAuth, isAuthenticated, logout: handleLogout } = useAdminAuth();
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -86,8 +88,10 @@ const AdminExperiences = () => {
   }, [statusFilter]);
 
   useEffect(() => {
-    fetchExperiences();
-  }, [fetchExperiences]);
+    if (isAuthenticated) {
+      fetchExperiences();
+    }
+  }, [isAuthenticated, fetchExperiences]);
 
   const handleCreateNew = () => {
     setEditingExperience(null);
@@ -216,17 +220,7 @@ const AdminExperiences = () => {
     });
   };
 
-  const handleLogout = async () => {
-    try {
-      await api.auth.logout();
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout error:", error);
-      navigate("/login");
-    }
-  };
-
-  if (loading) {
+  if (isCheckingAuth || !isAuthenticated || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-surface dark:bg-[#0a0a0a]">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-strong dark:border-white"></div>
@@ -264,7 +258,7 @@ const AdminExperiences = () => {
               <div className="flex items-center gap-2">
                 <motion.button
                   onClick={handleCreateNew}
-                  className="group flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-background dark:bg-surface text-text dark:text-text text-xs sm:text-sm font-light rounded-2xl transition-all duration-300 hover:bg-background dark:hover:bg-surface"
+                  className="btn-premium btn-premium-solid flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-2xl cursor-pointer"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 }}
@@ -275,7 +269,7 @@ const AdminExperiences = () => {
                 </motion.button>
                 <motion.button
                   onClick={handleLogout}
-                  className="group flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-red-600 hover:bg-red-700 text-text text-xs sm:text-sm font-light rounded-2xl shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95"
+                  className="btn-premium btn-premium-surface flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-2xl cursor-pointer"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
@@ -317,8 +311,8 @@ const AdminExperiences = () => {
                   onClick={() => setStatusFilter(status)}
                   className={`px-3 py-1.5 text-xs sm:text-sm rounded-2xl font-light transition-colors ${
                     statusFilter === status
-                      ? "bg-background dark:bg-surface text-text dark:text-text"
-                      : "bg-surface dark:bg-[#151515] text-text dark:text-text-muted hover:bg-surface dark:hover:bg-[#202020]"
+                      ? "bg-text text-bg dark:bg-white dark:text-black font-medium shadow-sm"
+                      : "bg-surface dark:bg-[#151515] border border-strong text-text dark:text-text-muted hover:bg-gray-50 dark:hover:bg-[#202020]"
                   }`}
                 >
                   {status === "all"
@@ -662,7 +656,7 @@ const AdminExperiences = () => {
                   </button>
                   <button
                     onClick={handleSave}
-                    className="px-6 py-2 bg-background dark:bg-surface hover:bg-background dark:hover:bg-surface rounded-2xl transition-colors text-text dark:text-text flex items-center gap-2 font-light"
+                    className="btn-premium btn-premium-solid px-6 py-2 rounded-2xl flex items-center gap-2 font-medium cursor-pointer"
                   >
                     <Save size={16} />
                     Guardar
@@ -708,7 +702,7 @@ const AdminExperiences = () => {
                 </button>
                 <button
                   onClick={confirmDelete}
-                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-2xl bg-red-600 hover:bg-red-700 transition-colors font-light text-text text-sm sm:text-base order-1 sm:order-2"
+                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-2xl bg-red-600 hover:bg-red-700 transition-colors font-medium text-white text-sm sm:text-base order-1 sm:order-2 cursor-pointer"
                 >
                   Sí, eliminar
                 </button>

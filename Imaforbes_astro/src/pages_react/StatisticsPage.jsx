@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import { motion } from "framer-motion";
 import { api } from "../services/api.js";
+import { useAdminAuth } from "../hooks/useAdminAuth.js";
 import {
   ArrowLeft,
   BarChart3,
@@ -25,6 +26,7 @@ const HeroBackground = () => (
 );
 
 const StatisticsPage = () => {
+  const { isCheckingAuth, isAuthenticated } = useAdminAuth();
   const [stats, setStats] = useState({
     totalMessages: 0,
     newMessages: 0,
@@ -112,6 +114,7 @@ const StatisticsPage = () => {
   }, []);
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     let cancelled = false;
     setLoading(true);
 
@@ -126,9 +129,9 @@ const StatisticsPage = () => {
     return () => {
       cancelled = true;
     };
-  }, [fetchBlogStatistics, fetchStatistics]);
+  }, [isAuthenticated, fetchBlogStatistics, fetchStatistics]);
 
-  if (loading) {
+  if (isCheckingAuth || !isAuthenticated || loading) {
     return (
       <div className="min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center text-text dark:text-text">
         <p className="font-light">Cargando estadísticas...</p>
@@ -302,9 +305,9 @@ const StatisticsPage = () => {
                     <div key={item.month} className="flex items-center justify-between">
                       <span className="text-text dark:text-text-muted font-light">{item.month}</span>
                       <div className="flex items-center gap-2">
-                        <div className="w-32 bg-surface dark:bg-background rounded-full h-2">
+                        <div className="w-32 bg-background border border-strong rounded-full h-2.5 overflow-hidden">
                           <div
-                            className="bg-background dark:bg-surface h-2 rounded-full transition-all duration-500"
+                            className="bg-text h-full rounded-full transition-all duration-500"
                             style={{
                               width: `${(item.count / Math.max(...stats.messagesByMonth.map(m => m.count))) * 100}%`,
                             }}

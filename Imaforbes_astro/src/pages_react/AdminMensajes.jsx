@@ -3,8 +3,7 @@ import withProviders from '../components/withProviders.jsx';
 import React, { useState, useEffect } from "react";
 
 import { api } from "../services/api.js";
-import { supabase } from "../services/supabase.js";
-import { safeLocalStorage } from "../utils/storage.js";
+import { useAdminAuth } from "../hooks/useAdminAuth.js";
 // --> CAMBIO CLAVE: Se importan los iconos desde 'lucide-react' para mantener la consistencia del proyecto.
 import {
   LogOut,
@@ -30,6 +29,7 @@ const HeroBackground = () => (
 );
 
 const AdminMensajes = () => {
+  const { isCheckingAuth, isAuthenticated, logout: handleLogout } = useAdminAuth();
   const [mensajes, setMensajes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -43,6 +43,7 @@ const AdminMensajes = () => {
    * Handles authentication checks, pagination extraction, and sorting.
    */
   useEffect(() => {
+    if (!isAuthenticated) return;
     const fetchMensajes = async () => {
       try {
         const result = await api.admin.getMessages(1, 200);
@@ -56,35 +57,27 @@ const AdminMensajes = () => {
           messages.sort((a, b) => parseInt(b.id) - parseInt(a.id));
           setMensajes(messages);
         } else if (result.error) {
+          const errorStr = typeof result.error === "string"
+            ? result.error
+            : result.error?.message || "Error al cargar los mensajes";
           if (
-            result.error.includes("Access denied") ||
-            result.error.includes("login")
+            errorStr.toLowerCase().includes("access denied") ||
+            errorStr.toLowerCase().includes("login") ||
+            errorStr.toLowerCase().includes("jwt")
           ) {
             navigate("/login");
           } else {
-            setError(result.error);
+            setError(errorStr);
           }
         }
       } catch (error) {
-        setError(error.message);
+        setError(error?.message || "Error de conexión");
       } finally {
         setLoading(false);
       }
     };
     fetchMensajes();
-  }, []);
-
-  const handleLogout = async () => {
-    try {
-      await supabase.auth.signOut();
-      safeLocalStorage.removeItem("auth_token");
-      safeLocalStorage.removeItem("user_session");
-    } catch (err) {
-      console.error("Logout error:", err);
-    } finally {
-      navigate("/login");
-    }
-  };
+  }, [isAuthenticated]);
 
   const handleDeleteClick = (id) => {
     setMessageToDelete(id);
@@ -139,7 +132,7 @@ const AdminMensajes = () => {
     });
   };
 
-  if (loading)
+  if (isCheckingAuth || !isAuthenticated || loading)
     return (
       <div className="min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center text-text dark:text-text">
         <p className="font-light">Cargando mensajes...</p>
@@ -228,7 +221,7 @@ const AdminMensajes = () => {
                   <span className="text-lg font-light text-text dark:text-text">
                     {mensajes.length > 0
                       ? formatDate(
-                          mensajes.sort(
+                          [...mensajes].sort(
                             (a, b) =>
                               new Date(b.created_at || b.fecha) -
                               new Date(a.created_at || a.fecha)
@@ -617,7 +610,7 @@ const AdminMensajes = () => {
                 </button>
                 <button
                   onClick={confirmDelete}
-                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-2xl bg-background dark:bg-surface text-text dark:text-text hover:bg-background dark:hover:bg-surface transition-colors font-light text-sm sm:text-base order-1 sm:order-2"
+                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-2xl bg-red-600 hover:bg-red-700 text-white transition-colors font-medium text-sm sm:text-base order-1 sm:order-2 cursor-pointer"
                 >
                   Sí, eliminar
                 </button>

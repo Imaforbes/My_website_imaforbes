@@ -11,9 +11,9 @@ const cvData = {
 **SOFTWARE ENGINEER | FULL-STACK DEVELOPER**
 
 📍 Mexico City, Mexico  
-✉️ Imanol@imaforbes.com  
+✉️ imanol@imaforbes.com  
 🌐 https://www.imaforbes.com  
-💼 https://www.linkedin.com/in/imanol-perez  
+💼 https://www.linkedin.com/in/imanol-pérez-arteaga-a72a08235  
 💻 https://github.com/Imaforbes  
 
 ---
@@ -91,71 +91,80 @@ Software Engineer with experience building robust web and business applications,
   es: `# IMANOL PEREZ ARTEAGA
 **INGENIERO EN SISTEMAS | SOFTWARE ENGINEER**
 
-📍 CDMX, México  
-✉️ Imanol@imaforbes.com  
+📍 Ciudad de México, México  
+✉️ imanol@imaforbes.com  
 🌐 https://www.imaforbes.com  
-💼 https://www.linkedin.com/in/imanol-perez  
+💼 https://www.linkedin.com/in/imanol-pérez-arteaga-a72a08235  
 💻 https://github.com/Imaforbes  
 
 ---
 
-## 🚀 SOBRE MÍ
-Ingeniero de software con formación en marketing y enfoque humano en la tecnología.  
-Diseño soluciones que equilibran lógica, creatividad y propósito.  
-Creo en la tecnología como puente entre necesidades reales y experiencias significativas.  
-Combino pensamiento analítico con sensibilidad estratégica.  
-Mi código busca dejar huella, más allá de la pantalla.
+## 🚀 RESUMEN PROFESIONAL
+Ingeniero de Software con experiencia construyendo aplicaciones web y empresariales robustas, con formación en Ingeniería en Sistemas Computacionales y Maestría en Mercadotecnia. Experiencia en desarrollo full-stack, ingeniería backend, diseño de bases de datos, arquitectura de sistemas, automatización de procesos, sistemas financieros, gestión de flujos de trabajo e infraestructura TI. Dominio de Python, FastAPI, React, JavaScript, SQL, PHP y despliegue en la nube. Capacidad comprobada para traducir requerimientos operativos complejos en soluciones de software seguras y escalables que digitalizan procesos manuales, centralizan información de negocio y mejoran la eficiencia operativa.
+
+---
+
+## 🛠️ HABILIDADES TÉCNICAS
+- **Lenguajes de Programación:** Python, JavaScript, PHP, C++
+- **Desarrollo Frontend:** React, Astro, HTML5, CSS3, Tailwind CSS, Diseño Web Responsivo
+- **Backend y APIs:** FastAPI, Flask, Node.js, REST APIs, Desarrollo Backend
+- **Bases de Datos:** SQL, MySQL, PostgreSQL, MongoDB, Supabase, Diseño y Administración de Bases de Datos
+- **Nube y Despliegue:** Vercel, Microsoft Azure, Supabase
+- **Ingeniería de Software:** Desarrollo Full-Stack, Arquitectura e Integración de Sistemas, Automatización de Procesos y Flujos de Trabajo
+- **Sistemas e Infraestructura:** Linux, Bash, Arquitectura de Redes, VLANs, Diagnóstico de Sistemas
+- **Herramientas y Automatización:** Git, GitHub, Terminal, FFmpeg, Google AI Studio / Gemini API
 
 ---
 
 ## 💼 EXPERIENCIA PROFESIONAL
 
-### **Allegro San Ángel Inn — Software Engineer**
-*Septiembre 2025 … Actualmente*
-- Contribución al desarrollo de un sistema de gestión financiera para una notaría, diseñando soluciones de software personalizadas para optimizar las operaciones y los reportes.
-- Apoyo en la implementación e integración de nuevas tecnologías para modernizar los procesos internos y mejorar la eficiencia digital de la empresa.
+### **ALLEGRO SAN ÁNGEL INN / GRUPO CORPORATIVO**
+**Lead Software Engineer** | *Septiembre 2025 – Presente*
+- Lidero el desarrollo integral de un sistema CRM y de gestión operativa y financiera a medida para modernizar flujos de trabajo legales y administrativos. Diseñé una arquitectura robusta con seguimiento automatizado de prospectos, envío inteligente de correos y redacción asistida por IA con Google Gemini. Construí un frontend responsivo de alto rendimiento con animaciones dinámicas, integrado con un backend seguro en Python y base de datos relacional para gestionar portafolios jurídicos, operaciones inmobiliarias y control financiero.
+- **Tecnologías:** React, JavaScript, Vite, CSS / Bootstrap, Framer Motion, Python, Flask, Google Gemini AI, MySQL, Linux Shell, REST APIs, SMTP
 
-### **Microsoft — Full Stack Developer**
-*Septiembre 2023 - Noviembre 2023*
-- Programa de formación de desarrolladores Full-Stack por Launch-X.
-- Tecnologías utilizadas: FrontEnd (HTML, CSS, JAVASCRIPT, VUE JS, Nodejs), BackEnd (Mysql, Mongodb, Azure).
+### **PROYECTOS INDEPENDIENTES Y CONSULTORÍA**
+**Full-Stack Developer & Technical IT Project Manager** | *Mayo 2026 – Presente*
+- **Quiniela Mundial FIFA 2026:** Lanzamiento en producción de una aplicación web interactiva para pronósticos del Mundial 2026, desarrollando el frontend con React, backend y base de datos en tiempo real con Supabase, y despliegue continuo en Vercel.
+- **Procesamiento Automatizado de Capacitaciones con IA:** Automatización del procesamiento de sesiones de capacitación de software, extrayendo audio mediante scripts de FFmpeg/Linux y generando resúmenes ejecutivos consolidados con Google AI Studio API.
+- **Consultoría TI para Cine Independiente:** Evaluación técnica y financiera de soluciones de infraestructura, taquilla (POS), dulcería y operación para operadores independientes.
 
-### **Accenture / JA México — Full Stack Developer**
-*Agosto 2022 - Diciembre 2022*
-- Objetivo del programa: Generar un proyecto de aplicación tecnológica móvil (una App), mediante la aplicación de herramientas especializadas que fundamenten la creación de este, para que el participante conozca y comprenda el proceso y los elementos que se deben considerar para la elaboración de un proyecto integral.
+### **EXPERIENCIA PROFESIONAL TEMPRANA**
 
-### **JA México — Developer**
-*Abril 2022 - Julio 2022*
-- En este programa se retomaron temas y tecnologías para elaborar un sitio web, se apoyó a los diferentes compañeros en la creación de sus primeras páginas web tomando como base las tecnologías más básicas para iniciar HTML, CSS y JavaScript.
+#### **JA MÉXICO**
+**Full-Stack Developer** | *Septiembre 2023 – Noviembre 2023*
+- Apoyé a los participantes en el lanzamiento de sus primeras páginas web operativas, brindando mentoría práctica en desarrollo, depuración e implementación con HTML, CSS y JavaScript.
 
----
+#### **MICROSOFT — PROGRAMA LAUNCH-X**
+**Full-Stack Developer** | *Agosto 2022 – Diciembre 2022*
+- Desarrollé un proyecto de aplicación full-stack integrando componentes de frontend, backend, bases de datos y nube con JavaScript, Vue.js, Node.js, MySQL, MongoDB y Microsoft Azure.
 
-## 🎓 ESTUDIOS Y CERTIFICACIONES
-
-### **Estudios Universitarios & Posgrado**
-- **Universidad Icel CDMX** — Maestría en Mercadotecnia | *Mayo 2022 - Abril 2023*
-- **Universidad Icel CDMX** — Ingeniería en Sistemas Computacionales | *Septiembre 2017 - Agosto 2020*
-- **Future Learning Ireland, Dublin** — Curso intensivo de inglés nivel B1, Trinity ISE | *Octubre 2024 - Mayo 2025*
-
-### **Certificaciones**
-- **Desarrollo Web** por GOOGLE (02/10/2022)
-- **Creación de Filtros Faciales para Instagram con SPARK AR** por PLATZI (18/01/2022)
-- **Introducción a la Ciberseguridad** por CISCO (22/10/2021)
-- **NDG LINUX ESSENTIAL** por CISCO (17/05/2021)
+#### **ACCENTURE / JA MÉXICO**
+**Developer** | *Abril 2022 – Julio 2022*
+- Desarrollé un prototipo funcional de tecnología móvil aplicando herramientas de ingeniería de software y metodologías de diseño de producto durante todo el ciclo de vida del proyecto.
 
 ---
 
-## 🛠️ HABILIDADES
+## 🎓 EDUCACIÓN
 
-- **Lenguajes & Tecnologías:** HTML, CSS, JavaScript, React, Python, PHP, C++, Linux Shell, Spark AR.
-- **Habilidades Blandas:** Trabajo en equipo, Liderazgo, Autodidacta, Comunicación efectiva.
+### **UNIVERSIDAD ICEL**
+- **Maestría en Mercadotecnia** | *Mayo 2022 – Abril 2023*
+- **Ingeniería en Sistemas Computacionales** | *Septiembre 2017 – Agosto 2020*
+
+---
+
+## 📜 CERTIFICACIONES Y DESARROLLO PROFESIONAL
+- **Intensive English Course — Trinity ISE** | Future Learning Ireland, Dublín | *Octubre 2024 – Mayo 2025*
+- **Desarrollo Web** | Google | *Octubre 2022*
+- **Creación de Filtros Faciales para Instagram con Spark AR** | Platzi | *Enero 2022*
+- **Introducción a la Ciberseguridad** | Cisco | *Octubre 2021*
+- **NDG Linux Essentials** | Cisco | *Mayo 2021*
 
 ---
 
 ## 🌍 IDIOMAS
-
 - **Español:** Nativo
-- **Inglés:** Nivel B1 (Moderado)
+- **Inglés:** B2 — Intermedio-Alto (Upper-Intermediate)
 `
 };
 

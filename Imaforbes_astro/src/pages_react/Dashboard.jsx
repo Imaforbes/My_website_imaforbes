@@ -1,71 +1,52 @@
 import withProviders from '../components/withProviders.jsx';
-// src/pages/Dashboard.jsx
-/**
- * Dashboard - Minimalist & Deluxe Design
- * 
- * DESIGN CHANGES:
- * - Removed animated blob backgrounds
- * - Changed from colorful gradient backgrounds to clean white/dark
- * - Updated stats cards: minimalist white/dark cards with neutral icons
- * - Changed dashboard items: removed colorful backgrounds, using clean borders
- * - Updated buttons: minimalist black/white or border-only styles
- * - Added text reflection effect to title
- * - Simplified all animations for cleaner feel
- * - Changed typography to font-light throughout
- */
+// src/pages_react/Dashboard.jsx
 import React, { useState, useEffect, useCallback } from "react";
-
 import { motion } from "framer-motion";
-import { API_CONFIG } from "../config/api.js";
 import { api } from "../services/api.js";
-import { safeLocalStorage } from "../utils/storage.js";
+import { useAdminAuth } from "../hooks/useAdminAuth.js";
 import {
   LogOut,
   MessageSquare,
-  Users,
   Settings,
   BarChart3,
   Mail,
   Eye,
+  Heart,
   Calendar,
   FileText,
   Briefcase,
 } from "lucide-react";
 
-// Modern animated background
 const HeroBackground = () => (
   <div className="absolute inset-0 -z-10 overflow-hidden">
-    {/* Modern gradient background */}
-    <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-[#0a0a0a] dark:via-[#0f0f0f] dark:to-[#0a0a0a]"></div>
-    {/* Subtle animated grid pattern */}
-    <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px] opacity-60"></div>
+    <div className="absolute inset-0 bg-background"></div>
   </div>
 );
 
 const Dashboard = () => {
+  const { isCheckingAuth, isAuthenticated, logout } = useAdminAuth();
   const [stats, setStats] = useState({
+    totalPosts: 0,
+    totalViews: 0,
+    totalLikes: 0,
     totalMessages: 0,
-    newMessages: 0,
-    totalUsers: 1,
     totalComments: 0,
   });
   const [loading, setLoading] = useState(true);
-  const navigate = (path) => { window.location.href = path; };
+  const navigate = (path) => {
+    window.location.href = path;
+  };
 
   const fetchStats = useCallback(async () => {
-    const authToken = safeLocalStorage.getItem('auth_token');
-    if (!authToken) {
-      navigate("/login");
-      return;
-    }
-
+    if (!isAuthenticated) return;
     try {
       const result = await api.admin.getStats();
       if (result.success && result.data) {
         setStats({
+          totalPosts: result.data.total_posts || 0,
+          totalViews: result.data.total_views || 0,
+          totalLikes: result.data.total_likes || 0,
           totalMessages: result.data.total_messages || 0,
-          newMessages: result.data.total_messages || 0,
-          totalUsers: 1,
           totalComments: result.data.total_comments || 0,
         });
       }
@@ -76,38 +57,28 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
-    fetchStats();
-  }, [fetchStats]);
-
-    const handleLogout = async () => {
-    try {
-      const { supabase } = await import('../services/supabase.js');
-      await supabase.auth.signOut();
-    } catch (err) {
-      console.error(err);
+    if (isAuthenticated) {
+      fetchStats();
     }
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user');
-    window.location.href = '/login';
-  };
+  }, [isAuthenticated, fetchStats]);
 
   const dashboardItems = [
     {
       title: "Mensajes",
-      description: "Gestionar mensajes de contacto",
-      icon: MessageSquare,
+      description: "Gestionar mensajes de contacto recibidos",
+      icon: Mail,
       path: "/admin/mensajes",
       stats: `${stats.totalMessages} mensajes`,
     },
     {
       title: "Mi Blog",
-      description: "Gestionar poemas y cartas",
+      description: "Crear, editar y publicar poemas, cartas y artículos",
       icon: FileText,
       path: "/admin/blog",
-      stats: "Poemas y cartas",
+      stats: `${stats.totalPosts} publicaciones`,
     },
     {
       title: "Comentarios",
@@ -118,201 +89,181 @@ const Dashboard = () => {
     },
     {
       title: "Experiencias",
-      description: "Gestionar experiencias laborales",
+      description: "Gestionar trayectoria y experiencias laborales",
       icon: Briefcase,
       path: "/admin/experiences",
-      stats: "Experiencias laborales",
+      stats: "Trayectoria profesional",
     },
     {
       title: "Estadísticas",
-      description: "Ver estadísticas del sitio",
+      description: "Métricas de lectura, likes y actividad del sitio",
       icon: BarChart3,
       path: "/admin/stats",
-      stats: `${stats.newMessages} nuevos`,
+      stats: `${stats.totalViews} vistas · ${stats.totalLikes} likes`,
     },
     {
       title: "Configuración",
-      description: "Configurar el sistema",
+      description: "Ajustes generales, apariencia y estado del sistema",
       icon: Settings,
       path: "/admin/settings",
-      stats: "Próximamente",
+      stats: "Sistema y apariencia",
     },
   ];
 
-  if (loading) {
+  if (isCheckingAuth || !isAuthenticated || loading) {
     return (
-      <div className="min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center text-text dark:text-text">
-        <p className="text-text dark:text-text-muted font-light">Cargando dashboard...</p>
+      <div className="min-h-screen bg-background flex items-center justify-center text-text">
+        <p className="text-text-muted font-light">Cargando panel de administración...</p>
       </div>
     );
   }
 
   return (
-    <>
-      <div className="relative min-h-screen bg-surface dark:bg-[#0a0a0a] text-text dark:text-text p-4 sm:p-8">
-        <HeroBackground />
-        <div className="relative z-10 container mx-auto max-w-7xl">
-          {/* Page Title Section */}
-          <div className="mb-8 sm:mb-10">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <motion.h1
-                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight text-text dark:text-text text-reflection"
-                data-text="Panel de Administración"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                Panel de Administración
-              </motion.h1>
+    <div className="relative min-h-screen bg-background text-text p-4 sm:p-8">
+      <HeroBackground />
+      <div className="relative z-10 container mx-auto max-w-7xl">
+        {/* Page Title Section */}
+        <div className="mb-8 sm:mb-10">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <motion.h1
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight text-text"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              Panel de Administración
+            </motion.h1>
 
+            <motion.button
+              onClick={logout}
+              className="btn-premium btn-premium-surface flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-medium cursor-pointer"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <LogOut size={16} />
+              <span>Cerrar Sesión</span>
+            </motion.button>
+          </div>
+        </div>
+
+        {/* Summary KPI Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+          <div className="bg-surface p-5 sm:p-6 rounded-2xl border border-strong shadow-sm">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 bg-background rounded-2xl border border-strong flex-shrink-0">
+                <FileText className="text-text w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-text-muted text-xs sm:text-sm font-light mb-1">Publicaciones</p>
+                <p className="text-2xl sm:text-3xl font-semibold text-text">{stats.totalPosts}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-surface p-5 sm:p-6 rounded-2xl border border-strong shadow-sm">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 bg-background rounded-2xl border border-strong flex-shrink-0">
+                <Eye className="text-text w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-text-muted text-xs sm:text-sm font-light mb-1">Total Vistas</p>
+                <p className="text-2xl sm:text-3xl font-semibold text-text">{stats.totalViews}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-surface p-5 sm:p-6 rounded-2xl border border-strong shadow-sm">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 bg-background rounded-2xl border border-strong flex-shrink-0">
+                <Heart className="text-text w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-text-muted text-xs sm:text-sm font-light mb-1">Total Likes</p>
+                <p className="text-2xl sm:text-3xl font-semibold text-text">{stats.totalLikes}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-surface p-5 sm:p-6 rounded-2xl border border-strong shadow-sm">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 bg-background rounded-2xl border border-strong flex-shrink-0">
+                <Mail className="text-text w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-text-muted text-xs sm:text-sm font-light mb-1">Mensajes</p>
+                <p className="text-2xl sm:text-3xl font-semibold text-text">{stats.totalMessages}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Dashboard Navigation Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          {dashboardItems.map((item, index) => {
+            const IconComponent = item.icon;
+            return (
               <motion.button
-                onClick={handleLogout}
-                className="group flex items-center justify-center gap-2 px-6 py-3 border border-strong dark:border-white text-text dark:text-text text-sm font-medium tracking-wide transition-all duration-300 hover:bg-background hover:text-text dark:hover:bg-surface dark:hover:text-text rounded-2xl modern-shadow-md hover:modern-shadow-lg modern-hover"
-                initial={{ opacity: 0, y: -20 }}
+                key={item.title}
+                onClick={() => navigate(item.path)}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
+                transition={{ duration: 0.4, delay: 0.05 * (index + 1) }}
+                className="bg-surface p-5 sm:p-6 rounded-2xl border border-strong shadow-sm text-left group hover:border-text transition-all duration-200 cursor-pointer"
+                whileHover={{ y: -4 }}
+                whileTap={{ scale: 0.99 }}
               >
-                <LogOut size={16} />
-                <span>Cerrar Sesión</span>
+                <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
+                  <div className="p-3 bg-background border border-strong rounded-2xl group-hover:scale-105 transition-transform duration-200 flex-shrink-0">
+                    <IconComponent size={20} className="sm:w-6 sm:h-6 text-text" />
+                  </div>
+                  <h2 className="text-lg sm:text-xl font-medium text-text">{item.title}</h2>
+                </div>
+                <p className="text-text-muted text-xs sm:text-sm mb-3 font-light">
+                  {item.description}
+                </p>
+                <p className="text-text text-xs font-medium">{item.stats}</p>
               </motion.button>
-            </div>
-          </div>
+            );
+          })}
+        </div>
 
-          {/* Stats Cards - Enhanced Modern Design */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="group bg-surface/80 dark:bg-[#0f0f0f]/80 backdrop-blur-sm p-5 sm:p-6 modern-border modern-shadow-md modern-card modern-hover border border-strong/50 dark:border-strong/50"
+        {/* Quick Actions */}
+        <div className="mt-8 bg-surface p-5 sm:p-6 rounded-2xl border border-strong shadow-sm">
+          <h2 className="text-lg sm:text-xl font-light text-text mb-4">Acciones Rápidas</h2>
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3">
+            <button
+              onClick={() => navigate("/admin/blog")}
+              className="btn-premium btn-premium-solid flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-medium cursor-pointer"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3 sm:gap-4 flex-1">
-                  <div className="p-3 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/20 modern-border modern-shadow rounded-2xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                    <Mail className="text-blue-600 dark:text-blue-400 w-5 h-5 sm:w-6 sm:h-6" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-text dark:text-text-muted text-xs sm:text-sm font-medium mb-1">Total Mensajes</p>
-                    <p className="text-2xl sm:text-3xl font-semibold text-text dark:text-text">
-                      {stats.totalMessages}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="group bg-surface/80 dark:bg-[#0f0f0f]/80 backdrop-blur-sm p-5 sm:p-6 modern-border modern-shadow-md modern-card modern-hover border border-strong/50 dark:border-strong/50"
+              <FileText size={15} />
+              <span>Gestionar Blog</span>
+            </button>
+            <button
+              onClick={() => navigate("/admin/mensajes")}
+              className="btn-premium btn-premium-surface flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-medium cursor-pointer"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3 sm:gap-4 flex-1">
-                  <div className="p-3 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/20 modern-border modern-shadow rounded-2xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                    <Eye className="text-green-600 dark:text-green-400 w-5 h-5 sm:w-6 sm:h-6" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-text dark:text-text-muted text-xs sm:text-sm font-medium mb-1">Nuevos Mensajes</p>
-                    <p className="text-2xl sm:text-3xl font-semibold text-text dark:text-text">
-                      {stats.newMessages}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="group bg-surface/80 dark:bg-[#0f0f0f]/80 backdrop-blur-sm p-5 sm:p-6 modern-border modern-shadow-md modern-card modern-hover sm:col-span-2 md:col-span-1 border border-strong/50 dark:border-strong/50"
+              <MessageSquare size={15} />
+              <span>Ver Mensajes</span>
+            </button>
+            <button
+              onClick={() => navigate("/blog")}
+              className="btn-premium btn-premium-surface flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-medium cursor-pointer"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3 sm:gap-4 flex-1">
-                  <div className="p-3 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/20 modern-border modern-shadow rounded-2xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                    <Users className="text-purple-600 dark:text-purple-400 w-5 h-5 sm:w-6 sm:h-6" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-text dark:text-text-muted text-xs sm:text-sm font-medium mb-1">Usuarios Admin</p>
-                    <p className="text-2xl sm:text-3xl font-semibold text-text dark:text-text">
-                      {stats.totalUsers}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+              <Eye size={15} />
+              <span>Ver Blog Público</span>
+            </button>
+            <button
+              onClick={() => navigate("/")}
+              className="btn-premium btn-premium-surface flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-medium cursor-pointer"
+            >
+              <Calendar size={15} />
+              <span>Ir al Portafolio</span>
+            </button>
           </div>
-
-          {/* Dashboard Items - Responsive grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {dashboardItems.map((item, index) => {
-              const IconComponent = item.icon;
-              return (
-                <motion.button
-                  key={item.title}
-                  onClick={() => navigate(item.path)}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.1 * (index + 1) }}
-                  className="bg-surface/80 dark:bg-[#0f0f0f]/80 backdrop-blur-sm p-5 sm:p-6 modern-border modern-shadow-md modern-card modern-hover text-left group border border-strong/50 dark:border-strong/50"
-                  whileHover={{ y: -6, scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div className="p-3 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 modern-border modern-shadow rounded-2xl group-hover:modern-shadow-md group-hover:scale-110 transition-all duration-300 flex-shrink-0">
-                      <IconComponent size={20} className="sm:w-6 sm:h-6 text-text dark:text-text-muted" />
-                    </div>
-                    <h3 className="text-lg sm:text-xl font-light text-text dark:text-text">
-                      {item.title}
-                    </h3>
-                  </div>
-                  <p className="text-text dark:text-text-muted text-xs sm:text-sm mb-2 font-light">
-                    {item.description}
-                  </p>
-                  <p className="text-text dark:text-text text-[10px] xs:text-xs font-light">{item.stats}</p>
-                </motion.button>
-              );
-            })}
-          </div>
-
-          {/* Quick Actions - Responsive button layout */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="mt-6 sm:mt-8 bg-surface dark:bg-[#0f0f0f] p-4 sm:p-6 modern-border modern-shadow-md modern-card"
-          >
-            <h3 className="text-lg sm:text-xl font-light text-text dark:text-text mb-3 sm:mb-4">
-              Acciones Rápidas
-            </h3>
-            <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
-              <button
-                onClick={() => navigate("/admin/mensajes")}
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-background dark:bg-surface text-text dark:text-text text-xs sm:text-sm font-medium tracking-wide transition-all duration-300 hover:bg-background dark:hover:bg-surface rounded-2xl modern-shadow-md hover:modern-shadow-lg modern-hover"
-              >
-                <MessageSquare size={14} className="sm:w-4 sm:h-4" />
-                Ver Mensajes
-              </button>
-              <button
-                onClick={() => navigate("/contact")}
-                className="flex items-center justify-center gap-2 px-4 py-2 border border-strong dark:border-white text-text dark:text-text text-xs sm:text-sm font-medium tracking-wide transition-all duration-300 hover:bg-background hover:text-text dark:hover:bg-surface dark:hover:text-text rounded-2xl modern-shadow-md hover:modern-shadow-lg modern-hover"
-              >
-                <Eye size={14} className="sm:w-4 sm:h-4" />
-                Ver Contacto
-              </button>
-              <button
-                onClick={() => navigate("/")}
-                className="flex items-center justify-center gap-2 px-4 py-2 border border-strong dark:border-white text-text dark:text-text text-xs sm:text-sm font-medium tracking-wide transition-all duration-300 hover:bg-background hover:text-text dark:hover:bg-surface dark:hover:text-text rounded-2xl modern-shadow-md hover:modern-shadow-lg modern-hover"
-              >
-                <Calendar size={14} className="sm:w-4 sm:h-4" />
-                Ver Portfolio
-              </button>
-            </div>
-          </motion.div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

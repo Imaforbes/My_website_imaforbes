@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import { API_CONFIG } from "../config/api.js";
 import { api } from "../services/api.js";
+import { useAdminAuth } from "../hooks/useAdminAuth.js";
 import {
   LogOut,
   Trash2,
@@ -38,6 +39,7 @@ const HeroBackground = () => (
 );
 
 const AdminBlog = () => {
+  const { isCheckingAuth, isAuthenticated, logout: handleLogout } = useAdminAuth();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -122,6 +124,7 @@ const AdminBlog = () => {
   }, []);
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       if (params.get("tab") === "comments") {
@@ -130,7 +133,7 @@ const AdminBlog = () => {
     }
     fetchPosts();
     fetchAllComments();
-  }, [fetchPosts, fetchAllComments]);
+  }, [isAuthenticated, fetchPosts, fetchAllComments]);
 
   const handleDeleteComment = async (commentId) => {
     if (!window.confirm("¿Estás seguro de que deseas eliminar este comentario permanentemente?")) {
@@ -147,18 +150,6 @@ const AdminBlog = () => {
       console.error("Error deleting comment:", err);
       alert("Error al eliminar el comentario.");
     }
-  };
-
-  const handleLogout = async () => {
-    try {
-      const { supabase } = await import("../services/supabase.js");
-      await supabase.auth.signOut();
-    } catch (err) {
-      console.error(err);
-    }
-    localStorage.removeItem("auth_token");
-    localStorage.removeItem("user");
-    navigate("/login");
   };
 
   const handleCreateNew = () => {
@@ -412,7 +403,7 @@ const AdminBlog = () => {
     });
   };
 
-  if (loading)
+  if (isCheckingAuth || !isAuthenticated || loading)
     return (
       <div className="min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center text-text dark:text-text">
         <p className="font-light">Cargando posts...</p>
@@ -456,7 +447,7 @@ const AdminBlog = () => {
               <div className="flex items-center gap-2">
                 <motion.button
                   onClick={handleCreateNew}
-                  className="group flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-background dark:bg-surface text-text dark:text-text text-xs sm:text-sm font-light rounded-2xl transition-all duration-300 hover:bg-background dark:hover:bg-surface"
+                  className="btn-premium btn-premium-solid flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-2xl cursor-pointer"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 }}
@@ -467,7 +458,7 @@ const AdminBlog = () => {
                 </motion.button>
                 <motion.button
                   onClick={handleLogout}
-                  className="group flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text text-xs sm:text-sm font-light rounded-2xl transition-all duration-300 hover:bg-gray-50 dark:hover:bg-[#151515]"
+                  className="btn-premium btn-premium-surface flex items-center justify-center gap-2 px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-2xl cursor-pointer"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
@@ -526,7 +517,7 @@ const AdminBlog = () => {
                   onClick={() => setStatusFilter("all")}
                   className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 ${
                     statusFilter === "all"
-                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      ? "bg-text text-bg dark:bg-white dark:text-black font-medium shadow-sm"
                       : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
@@ -536,7 +527,7 @@ const AdminBlog = () => {
                   onClick={() => setStatusFilter("published")}
                   className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
                     statusFilter === "published"
-                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      ? "bg-text text-bg dark:bg-white dark:text-black font-medium shadow-sm"
                       : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
@@ -547,7 +538,7 @@ const AdminBlog = () => {
                   onClick={() => setStatusFilter("draft")}
                   className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
                     statusFilter === "draft"
-                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      ? "bg-text text-bg dark:bg-white dark:text-black font-medium shadow-sm"
                       : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
@@ -558,7 +549,7 @@ const AdminBlog = () => {
                   onClick={() => setStatusFilter("archived")}
                   className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
                     statusFilter === "archived"
-                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      ? "bg-text text-bg dark:bg-white dark:text-black font-medium shadow-sm"
                       : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
@@ -577,7 +568,7 @@ const AdminBlog = () => {
                   onClick={() => setTypeFilter("all")}
                   className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 ${
                     typeFilter === "all"
-                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      ? "bg-text text-bg dark:bg-white dark:text-black font-medium shadow-sm"
                       : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
@@ -587,7 +578,7 @@ const AdminBlog = () => {
                   onClick={() => setTypeFilter("poem")}
                   className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
                     typeFilter === "poem"
-                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      ? "bg-text text-bg dark:bg-white dark:text-black font-medium shadow-sm"
                       : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
@@ -598,7 +589,7 @@ const AdminBlog = () => {
                   onClick={() => setTypeFilter("letter")}
                   className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
                     typeFilter === "letter"
-                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      ? "bg-text text-bg dark:bg-white dark:text-black font-medium shadow-sm"
                       : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
@@ -609,7 +600,7 @@ const AdminBlog = () => {
                   onClick={() => setTypeFilter("article")}
                   className={`px-4 py-2 rounded-2xl text-sm font-light transition-all duration-200 flex items-center gap-2 ${
                     typeFilter === "article"
-                      ? "bg-background dark:bg-surface text-text dark:text-text"
+                      ? "bg-text text-bg dark:bg-white dark:text-black font-medium shadow-sm"
                       : "bg-surface dark:bg-[#0f0f0f] border border-strong dark:border-strong text-text dark:text-text hover:bg-gray-50 dark:hover:bg-[#151515]"
                   }`}
                 >
@@ -818,7 +809,7 @@ const AdminBlog = () => {
                   </button>
                   <button
                     onClick={handleSave}
-                    className="px-4 sm:px-6 py-2 bg-background dark:bg-surface text-text dark:text-text hover:bg-background dark:hover:bg-surface rounded-2xl transition-colors flex items-center gap-2 font-light text-sm"
+                    className="btn-premium btn-premium-solid px-4 sm:px-6 py-2 rounded-2xl flex items-center gap-2 font-medium text-sm cursor-pointer"
                   >
                     <Save size={16} />
                     Guardar
@@ -1068,7 +1059,7 @@ const AdminBlog = () => {
                 </button>
                 <button
                   onClick={confirmDelete}
-                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-2xl bg-background dark:bg-surface text-text dark:text-text hover:bg-background dark:hover:bg-surface transition-colors font-light text-sm sm:text-base order-1 sm:order-2"
+                  className="px-4 sm:px-6 md:px-8 py-2 sm:py-3 rounded-2xl bg-red-600 hover:bg-red-700 text-white transition-colors font-medium text-sm sm:text-base order-1 sm:order-2 cursor-pointer"
                 >
                   Sí, eliminar
                 </button>

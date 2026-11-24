@@ -1,5 +1,5 @@
 // src/utils/inputValidation.js
-// Client-side input validation utilities
+// Client-side input validation utilities (bilingual ES/EN)
 
 /**
  * Validates an email address
@@ -21,7 +21,6 @@ export const validateName = (name) => {
   if (!name || typeof name !== 'string') return false;
   const trimmed = name.trim();
   if (trimmed.length < 2 || trimmed.length > 200) return false;
-  // Allow letters, numbers, spaces, and common punctuation
   const nameRegex = /^[a-zA-Z0-9\s\u00C0-\u017F.,'-]+$/;
   return nameRegex.test(trimmed);
 };
@@ -46,38 +45,43 @@ export const sanitizeString = (str) => {
   if (!str || typeof str !== 'string') return '';
   return str
     .trim()
-    .replace(/[<>]/g, '') // Remove < and > to prevent HTML injection
-    .replace(/javascript:/gi, '') // Remove javascript: protocol
-    .replace(/on\w+=/gi, ''); // Remove event handlers like onclick=
+    .replace(/[<>]/g, '')
+    .replace(/javascript:/gi, '')
+    .replace(/on\w+=/gi, '');
 };
 
 /**
- * Validates contact form data
+ * Validates contact form data with bilingual support
  * @param {Object} formData - Form data to validate
+ * @param {string} [lang='es'] - Active language ('es' or 'en')
  * @returns {Object} - { isValid: boolean, errors: Object }
  */
-export const validateContactForm = (formData) => {
+export const validateContactForm = (formData, lang = 'es') => {
+  const isEs = String(lang || 'es').toLowerCase().startsWith('es');
   const errors = {};
 
-  // Validate name
   if (!formData.name || !formData.name.trim()) {
-    errors.name = 'Name is required';
+    errors.name = isEs ? 'El nombre es obligatorio' : 'Name is required';
   } else if (!validateName(formData.name)) {
-    errors.name = 'Name must be between 2 and 200 characters and contain only letters, numbers, and spaces';
+    errors.name = isEs
+      ? 'El nombre debe tener entre 2 y 200 caracteres válidos'
+      : 'Name must be between 2 and 200 valid characters';
   }
 
-  // Validate email
   if (!formData.email || !formData.email.trim()) {
-    errors.email = 'Email is required';
+    errors.email = isEs ? 'El correo electrónico es obligatorio' : 'Email is required';
   } else if (!validateEmail(formData.email)) {
-    errors.email = 'Please enter a valid email address';
+    errors.email = isEs
+      ? 'Por favor ingresa un correo electrónico válido'
+      : 'Please enter a valid email address';
   }
 
-  // Validate message
   if (!formData.message || !formData.message.trim()) {
-    errors.message = 'Message is required';
+    errors.message = isEs ? 'El mensaje es obligatorio' : 'Message is required';
   } else if (!validateMessage(formData.message)) {
-    errors.message = 'Message must be between 10 and 2000 characters';
+    errors.message = isEs
+      ? 'El mensaje debe tener entre 10 y 2000 caracteres'
+      : 'Message must be between 10 and 2000 characters';
   }
 
   return {

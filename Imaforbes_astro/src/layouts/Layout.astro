@@ -25,34 +25,115 @@ import '../styles/index.css';
 import { ClientRouter } from 'astro:transitions';
 import '../i18n.js';
 
-const { title = "Imaforbes | Portafolio", description = "Portafolio profesional de Imaforbes - Desarrollo web y diseño", image = '/img/Logo.png', url = '', isAdmin = false } = Astro.props;
+const {
+  title = "Imaforbes | Portafolio",
+  description = "Portafolio profesional de Imanol Pérez Arteaga (Imaforbes) — Ingeniería de Software y Desarrollo Web Full Stack",
+  image = '/img/Logo.png',
+  url = '',
+  isAdmin = false
+} = Astro.props;
+
+const siteOrigin = Astro.site ? Astro.site.toString().replace(/\/$/, '') : 'https://www.imaforbes.com';
+const canonicalUrl = url || new URL(Astro.url.pathname, siteOrigin).toString();
+const ogImageUrl = image.startsWith('http') ? image : new URL(image, siteOrigin).toString();
+
+const structuredData = !isAdmin ? JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${siteOrigin}/#person`,
+      "name": "Imanol Pérez Arteaga",
+      "alternateName": "Imaforbes",
+      "url": siteOrigin,
+      "image": ogImageUrl,
+      "jobTitle": "Software Engineer & Full-Stack Developer",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Mexico City",
+        "addressCountry": "MX"
+      },
+      "sameAs": [
+        "https://github.com/Imaforbes",
+        "https://www.linkedin.com/in/imanol-pérez-arteaga-a72a08235",
+        "https://twitter.com/imaforbes"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteOrigin}/#website`,
+      "url": siteOrigin,
+      "name": "Imaforbes",
+      "description": description,
+      "publisher": { "@id": `${siteOrigin}/#person` },
+      "inLanguage": ["es-MX", "en-US"]
+    }
+  ]
+}) : null;
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#07080a" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf9f5" />
     <meta name="description" content={description} />
     <meta name="robots" content={isAdmin ? "noindex, nofollow" : "index, follow"} />
     <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
-    <meta property="og:url" content={url || Astro.url} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Imaforbes" />
     <meta property="og:locale" content="es_MX" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter / X Cards -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
     <!-- Favicons and App Icons -->
     <link rel="icon" type="image/png" href="/img/Logo.png?v=2" />
     <link rel="shortcut icon" type="image/png" href="/img/Logo.png?v=2" />
     <link rel="apple-touch-icon" href="/img/Logo.png?v=2" />
     <meta name="apple-mobile-web-app-title" content="Imaforbes" />
     <title>{title}</title>
+
+    {structuredData && <script type="application/ld+json" set:html={structuredData} />}
+
+    <!-- Synchronous theme & language initialization to prevent FOUC across initial load and View Transitions -->
+    <script is:inline>
+      (function () {
+        function applySavedPreferences() {
+          try {
+            var root = document.documentElement;
+            var savedTheme = localStorage.getItem('app_theme') || 'dark';
+            var resolvedTheme = savedTheme;
+            if (savedTheme === 'auto') {
+              resolvedTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            root.classList.remove('light', 'dark');
+            root.classList.add(resolvedTheme === 'light' ? 'light' : 'dark');
+
+            var savedLang = localStorage.getItem('app_language');
+            if (savedLang) {
+              root.lang = savedLang.indexOf('en') === 0 ? 'en' : 'es';
+            }
+          } catch (e) {}
+        }
+        applySavedPreferences();
+        document.addEventListener('astro:after-swap', applySavedPreferences);
+      })();
+    </script>
     <ClientRouter />
   </head>
   <body>

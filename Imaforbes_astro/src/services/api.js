@@ -9,12 +9,56 @@ import experienceFallback from '../data/experienceFallback.js';
  * @returns {Object} Formatted error object
  */
 export const handleApiError = (error, fallbackMessage = 'An error occurred') => {
+    if (typeof error === 'string') {
+        return { type: 'UNKNOWN', message: error };
+    }
     return { type: 'UNKNOWN', message: error?.message || fallbackMessage };
+};
+
+const CONTACT_RATE_LIMIT_KEY = 'imaforbes_contact_timestamps';
+const CONTACT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+const CONTACT_MAX_ATTEMPTS = 3;
+
+const checkContactRateLimit = () => {
+    if (typeof window === 'undefined') return { allowed: true };
+    try {
+        const now = Date.now();
+        const raw = JSON.parse(localStorage.getItem(CONTACT_RATE_LIMIT_KEY) || '[]');
+        const recent = Array.isArray(raw) ? raw.filter(ts => now - Number(ts) < CONTACT_WINDOW_MS) : [];
+        if (recent.length >= CONTACT_MAX_ATTEMPTS) {
+            const retryMinutes = Math.max(1, Math.ceil((CONTACT_WINDOW_MS - (now - recent[0])) / 60000));
+            return {
+                allowed: false,
+                error: `Has alcanzado el límite de mensajes (máx. ${CONTACT_MAX_ATTEMPTS} cada 10 min). Intenta de nuevo en ${retryMinutes} min.`
+            };
+        }
+        return { allowed: true, recent };
+    } catch {
+        return { allowed: true, recent: [] };
+    }
+};
+
+const recordContactAttempt = (recent = []) => {
+    if (typeof window === 'undefined') return;
+    try {
+        const updated = [...recent, Date.now()].slice(-CONTACT_MAX_ATTEMPTS);
+        localStorage.setItem(CONTACT_RATE_LIMIT_KEY, JSON.stringify(updated));
+    } catch {
+        // ignore storage errors
+    }
+};
+
+const normalizeExperienceRecord = (exp) => {
+    if (!exp || typeof exp !== 'object') return exp;
+    return {
+        ...exp,
+        title: String(exp.title || '').replace(/Enginner/gi, 'Engineer'),
+        description: String(exp.description || '').replace(/Your key contributions/g, 'Key contributions')
+    };
 };
 
 /**
  * Centralized API client interacting with Supabase Backend-as-a-Service (BaaS).
- * Replaces legacy PHP endpoints with direct modern database calls.
  * Equipped with a Resilient Fallback Layer to guarantee 100% uptime even if Supabase free tier pauses.
  */
 export const api = {
@@ -24,28 +68,13 @@ export const api = {
     // ==========================================
     projects: {
         /**
-         * Fetches all projects ordered by sort_order.
+         * Returns static portfolio projects (managed directly in ProjectsPage).
          */
         getAll: async () => {
-            try {
-                const { data, error } = await supabase.from('projects').select('*').order('sort_order', { ascending: true });
-                if (!error && Array.isArray(data) && data.length > 0) return { success: true, data };
-            } catch (err) {
-                // fall through
-            }
             return { success: true, data: [] };
         },
-        /**
-         * Fetches a specific project by ID.
-         */
         getById: async (id) => {
-            try {
-                const { data, error } = await supabase.from('projects').select('*').eq('id', id).single();
-                if (!error && data) return { success: true, data };
-            } catch (err) {
-                // fall through
-            }
-            return { success: false, error: 'Project not found' };
+            return { success: false, error: `Project ${id} not found` };
         }
     },
 
@@ -87,7 +116,7 @@ export const api = {
             try {
                 const { data, error } = await supabase.from('blog_posts').select('*').eq('id', id).single();
                 if (!error && data) return { success: true, data };
-            } catch (err) {
+            } catch {
                 // fall through
             }
             const found = blogFallback.find(p => p.id == id);
@@ -95,15 +124,15 @@ export const api = {
         },
         create: async (data) => {
             const { error } = await supabase.from('blog_posts').insert([data]);
-            return error ? { success: false, error } : { success: true };
+            return error ? { success: false, error: error.message || error } : { success: true };
         },
         update: async (id, data) => {
             const { error } = await supabase.from('blog_posts').update(data).eq('id', id);
-            return error ? { success: false, error } : { success: true };
+            return error ? { success: false, error: error.message || error } : { success: true };
         },
         delete: async (id) => {
             const { error } = await supabase.from('blog_posts').delete().eq('id', id);
-            return error ? { success: false, error } : { success: true };
+            return error ? { success: false, error: error.message || error } : { success: true };
         },
         like: async (postId) => {
             const numericId = Number(postId);
@@ -239,7 +268,7 @@ export const api = {
                 }
             };
         },
-        getStats: async (postId = null) => {
+        getStats: async () => {
             try {
                 const { data: posts, error } = await supabase.from('blog_posts').select('*');
                 const items = !error && Array.isArray(posts) && posts.length > 0 ? posts : blogFallback;
@@ -359,10 +388,13 @@ export const api = {
     settings: {
         get: async () => {
             try {
-                const { data, error } = await supabase.from('portfolio_settings').select('*');
-                const { count: messagesCount } = await supabase
-                    .from('datos')
-                    .select('*', { count: 'exact', head: true });
+                const [settingsResult, messagesCountResult] = await Promise.all([
+                    supabase.from('portfolio_settings').select('*'),
+                    supabase.from('datos').select('*', { count: 'exact', head: true })
+                ]);
+
+                const { data, error } = settingsResult;
+                const messagesCount = messagesCountResult?.count || 0;
 
                 if (!error && Array.isArray(data)) {
                     const flatSettings = {};
@@ -380,7 +412,7 @@ export const api = {
                         database: 'connected',
                         api: 'working',
                         backup: 'completed',
-                        message_count: messagesCount || 0,
+                        message_count: messagesCount,
                         last_check: new Date().toLocaleString('es-ES')
                     };
 
@@ -398,7 +430,7 @@ export const api = {
                         }
                     };
                 }
-            } catch (err) {
+            } catch {
                 // fall through
             }
             return { success: true, data: {} };
@@ -410,24 +442,28 @@ export const api = {
                 }
 
                 const entries = Object.entries(newSettings);
-                for (const [key, rawValue] of entries) {
-                    const serializedValue =
-                        typeof rawValue === 'object' && rawValue !== null
-                            ? JSON.stringify(rawValue)
-                            : String(rawValue ?? '');
+                const nowIso = new Date().toISOString();
 
-                    const { error } = await supabase
-                        .from('portfolio_settings')
-                        .update({
-                            setting_value: serializedValue,
-                            updated_at: new Date().toISOString()
-                        })
-                        .eq('setting_key', key);
+                await Promise.all(
+                    entries.map(async ([key, rawValue]) => {
+                        const serializedValue =
+                            typeof rawValue === 'object' && rawValue !== null
+                                ? JSON.stringify(rawValue)
+                                : String(rawValue ?? '');
 
-                    if (error) {
-                        return { success: false, error: error.message || error };
-                    }
-                }
+                        const { error: updateError } = await supabase
+                            .from('portfolio_settings')
+                            .update({
+                                setting_value: serializedValue,
+                                updated_at: nowIso
+                            })
+                            .eq('setting_key', key);
+
+                        if (updateError) {
+                            throw new Error(updateError.message || String(updateError));
+                        }
+                    })
+                );
 
                 return { success: true };
             } catch (err) {
@@ -450,7 +486,7 @@ export const api = {
                 
                 const { data, error } = await query;
                 if (!error && Array.isArray(data) && data.length > 0) {
-                    return { success: true, data };
+                    return { success: true, data: data.map(normalizeExperienceRecord) };
                 }
                 if (error && import.meta.env.DEV) {
                     console.warn('[Experiences API] Database query failed, using static fallback:', error.message || error);
@@ -462,7 +498,7 @@ export const api = {
             }
 
             // High-resilience fallback
-            let fallback = [...experienceFallback];
+            let fallback = [...experienceFallback].map(normalizeExperienceRecord);
             if (status && status !== 'all') fallback = fallback.filter(e => e.status === status);
             return { success: true, data: fallback };
         },
@@ -486,15 +522,28 @@ export const api = {
     contact: {
         send: async (data) => {
             try {
+                // Honeypot check (if bots fill hidden website field)
+                if (data?.website && String(data.website).trim() !== '') {
+                    return { success: true };
+                }
+
+                // Rate limit check (max 3 submissions per 10 minutes)
+                const rateCheck = checkContactRateLimit();
+                if (!rateCheck.allowed) {
+                    return { success: false, error: rateCheck.error };
+                }
+
                 const { error } = await supabase.from('datos').insert([{
                     nombre: data.name,
                     email: data.email,
                     mensaje: data.message,
                     fecha: new Date().toISOString().split('T')[0],
                     ip_address: 'anon',
-                    user_agent: typeof navigator !== 'undefined' ? (navigator.userAgent || 'unknown') : 'unknown'
+                    user_agent: typeof navigator !== 'undefined' ? (navigator.userAgent || 'unknown').slice(0, 250) : 'unknown'
                 }]);
                 if (error) return { success: false, error: error.message || 'No se pudo enviar el mensaje' };
+
+                recordContactAttempt(rateCheck.recent);
                 return { success: true };
             } catch (err) {
                 return { success: false, error: err?.message || 'Error de conexión al enviar el mensaje' };
@@ -509,7 +558,7 @@ export const api = {
         login: async (credentials) => {
             try {
                 const { data, error } = await supabase.auth.signInWithPassword({
-                    email: credentials?.email || credentials?.username,
+                    email: (credentials?.email || credentials?.username || '').trim(),
                     password: credentials?.password
                 });
                 if (error) return { success: false, error: error.message };
@@ -558,30 +607,32 @@ export const api = {
     admin: {
         getStats: async () => {
             try {
-                const { count: postsCount } = await supabase.from('blog_posts').select('*', { count: 'exact', head: true });
-                const { count: messagesCount } = await supabase.from('datos').select('*', { count: 'exact', head: true });
-                const { data: viewsData } = await supabase.from('blog_views').select('id');
-                const { data: likesData } = await supabase.from('blog_likes').select('id');
-                let commentsCount = 0;
-                try {
-                    const { count } = await supabase.from('blog_comments').select('*', { count: 'exact', head: true });
-                    commentsCount = count || 0;
-                } catch {
-                    // ignore if blog_comments table is not yet initialized
-                }
-                
+                const [postsResult, messagesResult, commentsResult] = await Promise.all([
+                    supabase.from('blog_posts').select('id, views_count, likes_count'),
+                    supabase.from('datos').select('*', { count: 'exact', head: true }),
+                    supabase.from('blog_comments').select('*', { count: 'exact', head: true }).then(r => r).catch(() => ({ count: 0 }))
+                ]);
+
+                const posts = Array.isArray(postsResult?.data) && postsResult.data.length > 0
+                    ? postsResult.data
+                    : blogFallback;
+
+                const totalPosts = posts.length;
+                const totalViews = posts.reduce((sum, p) => sum + (parseInt(p.views_count) || 0), 0);
+                const totalLikes = posts.reduce((sum, p) => sum + (parseInt(p.likes_count) || 0), 0);
+
                 return {
                     success: true,
                     data: {
-                        total_posts: postsCount || 0,
-                        total_messages: messagesCount || 0,
-                        total_views: viewsData ? viewsData.length : 0,
-                        total_likes: likesData ? likesData.length : 0,
-                        total_comments: commentsCount
+                        total_posts: totalPosts,
+                        total_messages: messagesResult?.count || 0,
+                        total_views: totalViews,
+                        total_likes: totalLikes,
+                        total_comments: commentsResult?.count || 0
                     }
                 };
             } catch (error) {
-                return { success: false, error };
+                return { success: false, error: error?.message || String(error) };
             }
         },
         getMessages: async (page = 1, limit = 10) => {
@@ -593,12 +644,12 @@ export const api = {
                 .order('id', { ascending: false })
                 .range(from, to);
                 
-            if (error) return { success: false, error };
-            return { success: true, data: { items: data, total: count, page, limit } };
+            if (error) return { success: false, error: error.message || String(error) };
+            return { success: true, data: { items: data || [], total: count || 0, page, limit } };
         },
         deleteMessage: async (id) => {
             const { error } = await supabase.from('datos').delete().eq('id', id);
-            if (error) return { success: false, error };
+            if (error) return { success: false, error: error.message || String(error) };
             return { success: true };
         },
         getAllComments: async () => {
@@ -631,7 +682,6 @@ export const api = {
             try {
                 const { error } = await supabase.from('blog_comments').delete().eq('id', id);
                 if (!error) {
-                    // Also remove from localStorage if present
                     if (typeof window !== 'undefined') {
                         try {
                             const local = JSON.parse(localStorage.getItem('imaforbes_local_comments') || '[]');
@@ -664,15 +714,40 @@ export const api = {
     // ==========================================
     upload: {
         image: async (file) => {
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Math.random()}.${fileExt}`;
+            if (!file) {
+                return { success: false, error: 'No se seleccionó ningún archivo' };
+            }
+
+            const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            const allowedExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            const rawExt = (file.name?.split('.').pop() || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            const fileExt = allowedExts.includes(rawExt) ? rawExt : 'jpg';
+
+            if (!allowedMimeTypes.includes(file.type)) {
+                return { success: false, error: 'Formato de imagen no permitido (solo JPG, PNG, WebP o GIF)' };
+            }
+
+            const maxSizeBytes = 20 * 1024 * 1024;
+            if (file.size > maxSizeBytes) {
+                return { success: false, error: 'La imagen excede el tamaño máximo permitido (20 MB)' };
+            }
+
+            const uniqueId =
+                typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+                    ? crypto.randomUUID().replace(/-/g, '')
+                    : `${Date.now()}_${Math.random().toString(36).substring(2, 12)}`;
+            const fileName = `${uniqueId}_${Math.floor(Date.now() / 1000)}.${fileExt}`;
             const filePath = `images/${fileName}`;
             
-            const { error: uploadError } = await supabase.storage.from('portfolio').upload(filePath, file);
-            if (uploadError) return { success: false, error: uploadError };
+            const { error: uploadError } = await supabase.storage.from('portfolio').upload(filePath, file, {
+                cacheControl: '31536000',
+                upsert: false,
+                contentType: file.type
+            });
+            if (uploadError) return { success: false, error: uploadError.message || String(uploadError) };
             
             const { data } = supabase.storage.from('portfolio').getPublicUrl(filePath);
-            return { success: true, data: { url: data.publicUrl } };
+            return { success: true, data: { url: data.publicUrl, filename: fileName } };
         }
     }
 };

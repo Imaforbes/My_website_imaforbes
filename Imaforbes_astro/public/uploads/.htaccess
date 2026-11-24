@@ -1,0 +1,33 @@
+# Image Protection - Prevent Direct Access
+# This file helps protect uploaded images from direct linking
+
+# Disable directory browsing
+Options -Indexes
+
+# Prevent direct access to images (optional - uncomment if you want to require authentication)
+# <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+#   Order Deny,Allow
+#   Deny from all
+#   Allow from env=REDIRECT_status
+# </FilesMatch>
+
+# Set cache headers (images can be cached but not hotlinked)
+<IfModule mod_headers.c>
+  # Prevent hotlinking
+  SetEnvIfNoCase Referer "^$" local_ref=1
+  SetEnvIfNoCase Referer "^https?://(www\.)?(localhost|127\.0\.0\.1|imaforbes\.com)" local_ref=1
+  
+  # Set cache control
+  <FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    Header set Cache-Control "public, max-age=31536000"
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+  </FilesMatch>
+</IfModule>
+
+# Prevent access to sensitive files
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql)$">
+  Order Allow,Deny
+  Deny from all
+</FilesMatch>
+

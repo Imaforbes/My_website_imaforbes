@@ -1,6 +1,7 @@
 import React from 'react';
 import { MotionConfig } from 'framer-motion';
 import { SettingsProvider, useSettings } from '../contexts/SettingsContext.jsx';
+import ErrorBoundary from './ErrorBoundary.jsx';
 import '../i18n.js';
 
 function LanguageAwareConsumer({ Component, componentProps }) {
@@ -12,9 +13,11 @@ export default function withProviders(Component) {
   return function WrappedComponent(props) {
     return (
       <SettingsProvider>
-        <MotionConfig reducedMotion="user">
-          <LanguageAwareConsumer Component={Component} componentProps={props} />
-        </MotionConfig>
+        <ErrorBoundary>
+          <MotionConfig reducedMotion="user">
+            <LanguageAwareConsumer Component={Component} componentProps={props} />
+          </MotionConfig>
+        </ErrorBoundary>
       </SettingsProvider>
     );
   };

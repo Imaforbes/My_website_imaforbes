@@ -5,6 +5,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { api } from "../services/api.js";
 import { useSettings } from "../contexts/SettingsContext.jsx";
+import { useAdminAuth } from "../hooks/useAdminAuth.js";
 import {
   ArrowLeft,
   Settings,
@@ -28,6 +29,7 @@ const HeroBackground = () => (
 );
 
 const ConfigurationPage = () => {
+  const { isCheckingAuth, isAuthenticated } = useAdminAuth();
   const { theme, language, updateTheme, updateLanguage } = useSettings();
   const [settings, setSettings] = useState({
     site_name: "IMAFORBES",
@@ -133,10 +135,10 @@ const ConfigurationPage = () => {
           const parsedAppearance = mergeNestedSetting('appearance', defaultAppearance);
           
           const mergedSettings = {
-            site_name: parseSetting('site_name', settings.site_name) || parseSetting('site_title', settings.site_name),
-            site_description: parseSetting('site_description', settings.site_description),
-            admin_email: parseSetting('admin_email', settings.admin_email),
-            contact_email: parseSetting('contact_email', settings.contact_email),
+            site_name: parseSetting('site_name', "IMAFORBES") || parseSetting('site_title', "IMAFORBES"),
+            site_description: parseSetting('site_description', "Portfolio Personal"),
+            admin_email: parseSetting('admin_email', "imanol@imaforbes.com"),
+            contact_email: parseSetting('contact_email', "imanol@imaforbes.com"),
             notifications: mergeNestedSetting('notifications', defaultNotifications),
             security: mergeNestedSetting('security', defaultSecurity),
             appearance: parsedAppearance,
@@ -165,19 +167,16 @@ const ConfigurationPage = () => {
     }
   }, [
     language,
-    navigate,
-    settings.admin_email,
-    settings.contact_email,
-    settings.site_description,
-    settings.site_name,
     theme,
     updateLanguage,
     updateTheme,
   ]);
 
   useEffect(() => {
-    fetchSettings();
-  }, [fetchSettings]);
+    if (isAuthenticated) {
+      fetchSettings();
+    }
+  }, [isAuthenticated, fetchSettings]);
 
   const handleSave = async () => {
     setLoading(true);
@@ -442,7 +441,7 @@ const ConfigurationPage = () => {
     },
   ];
 
-  if (initialLoading) {
+  if (isCheckingAuth || !isAuthenticated || initialLoading) {
     return (
       <div className="min-h-screen bg-surface dark:bg-[#0a0a0a] flex items-center justify-center text-text dark:text-text">
         <div className="text-center">
@@ -463,7 +462,7 @@ const ConfigurationPage = () => {
             <div className="flex items-center gap-4">
               <motion.button
                 onClick={() => navigate("/admin")}
-                className="p-2 bg-background hover:bg-background rounded-2xl transition-colors"
+                className="p-2 bg-surface dark:bg-[#0f0f0f] border border-strong hover:bg-gray-50 dark:hover:bg-[#151515] rounded-2xl transition-colors cursor-pointer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -490,10 +489,8 @@ const ConfigurationPage = () => {
             <button
               onClick={handleSave}
               disabled={loading}
-              className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-light transition-all duration-300 ${
-                loading
-                  ? "bg-surface dark:bg-background cursor-not-allowed text-text dark:text-text-muted"
-                  : "bg-background dark:bg-surface text-text dark:text-text hover:bg-background dark:hover:bg-surface"
+              className={`btn-premium btn-premium-solid flex items-center gap-2 px-6 py-3 rounded-2xl font-medium transition-all duration-300 cursor-pointer ${
+                loading ? "opacity-60 cursor-not-allowed" : ""
               }`}
             >
               {loading ? (

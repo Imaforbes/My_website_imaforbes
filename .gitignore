@@ -1,6 +1,6 @@
 # ========================================
 # Sitio_Web_imaforbes - Global .gitignore
-# Applies to both frontend and backend.
+# Applies to frontend, docs, and legacy archives.
 # ========================================
 
 # --- Environment / secrets ---
@@ -8,23 +8,28 @@
 .env.*
 !.env.example
 !.env.*.example
+**/.env
+**/.env.*
+!**/.env.example
 
 # --- Dependencies ---
 **/node_modules/
 **/vendor/
 
-# --- Builds / artifacts ---
+# --- Builds / caches / artifacts ---
 **/dist/
 **/build/
+**/.astro/
 **/.next/
+**/.vercel/
 **/out/
 **/*.log
 
-# --- Uploads / runtime storage ---
-**/uploads/*
+# --- Runtime storage / temp ---
 **/storage/*
 **/tmp/*
 **/cache/*
+**/.well-known/
 
 # --- OS / editor ---
 .DS_Store
@@ -32,10 +37,12 @@
 .vscode/
 .idea/
 
-
-# --- Database Dumps ---
+# --- Database Dumps (except documented migrations in docs/) ---
 *.sql
+!**/docs/*.sql
 
-# --- Legacy / Obsolete folders ---
+# --- Legacy / Obsolete folders (kept locally, never tracked in Git) ---
+_legacy_code/
+api_db/
 Imaforbes_frontend/
 Imaforbes_Api_backend/

@@ -1,9 +1,10 @@
 // src/hooks/useApi.js
-// Custom hooks for API calls with loading states and error handling
+// Custom hooks for API calls with loading states, i18n, and error handling
 
 import { useState, useEffect, useCallback } from 'react';
-import { api, handleApiError } from '../services/api';
-import { validateContactForm, sanitizeString } from '../utils/inputValidation';
+import { useTranslation } from 'react-i18next';
+import { api, handleApiError } from '../services/api.js';
+import { validateContactForm, sanitizeString } from '../utils/inputValidation.js';
 import { safeLocalStorage } from '../utils/storage.js';
 
 // Generic API hook
@@ -49,6 +50,7 @@ export const useApiOnMount = (apiCall) => {
 
 // Contact form hook
 export const useContact = () => {
+  const { i18n } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -66,7 +68,6 @@ export const useContact = () => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
-    // Clear validation error for this field when user starts typing
     if (validationErrors[e.target.name]) {
       setValidationErrors(prev => {
         const newErrors = { ...prev };
@@ -77,20 +78,18 @@ export const useContact = () => {
   }, [validationErrors]);
 
   const sendMessage = useCallback(async (data) => {
-    // SECURITY: Client-side validation before sending to API
-    // Sanitize input data
+    const isEs = String(i18n?.language || 'es').toLowerCase().startsWith('es');
     const sanitizedData = {
       name: sanitizeString(data.name),
       email: sanitizeString(data.email).toLowerCase().trim(),
       message: sanitizeString(data.message),
     };
 
-    // Validate sanitized data
-    const validation = validateContactForm(sanitizedData);
+    const validation = validateContactForm(sanitizedData, isEs ? 'es' : 'en');
     if (!validation.isValid) {
       setValidationErrors(validation.errors);
       setStatus({
-        message: 'Please fix the validation errors',
+        message: isEs ? 'Por favor corrige los errores del formulario' : 'Please fix the validation errors',
         type: 'error',
         sending: false,
       });
@@ -98,51 +97,46 @@ export const useContact = () => {
     }
 
     setValidationErrors({});
-    setStatus({ message: 'Enviando...', type: 'info', sending: true });
+    setStatus({
+      message: isEs ? 'Enviando...' : 'Sending...',
+      type: 'info',
+      sending: true
+    });
 
     try {
       const result = await api.contact.send(sanitizedData);
 
-            if (result.success) {
-                setStatus({
-                    message: '¡Mensaje enviado con éxito!',
-                    type: 'success',
-                    sending: false,
-                });
-                setFormData({ name: '', email: '', message: '' });
-                return { success: true };
-            } else {
-                // Handle validation errors specifically
-                if (result.status === 422 && result.errors) {
-                    const errorMessages = Object.values(result.errors).join(', ');
-                    setStatus({
-                        message: `Error de validación: ${errorMessages}`,
-                        type: 'error',
-                        sending: false,
-                    });
-                } else {
-                    setStatus({
-                        message: `Error: ${typeof result.error === "object" ? (result.error?.message || "Error al enviar el mensaje") : (result.error || "Error al enviar el mensaje")}`,
-                        type: 'error',
-                        sending: false,
-                    });
-                }
-                return { success: false, error: result };
-            }
-        } catch (error) {
-            const apiError = handleApiError(error);
-            setStatus({
-                message: `Error: ${apiError.message}`,
-                type: 'error',
-                sending: false,
-            });
-            return { success: false, error: apiError };
-        }
-    }, []);
+      if (result.success) {
+        setStatus({
+          message: isEs ? '¡Mensaje enviado con éxito!' : 'Message sent successfully!',
+          type: 'success',
+          sending: false,
+        });
+        setFormData({ name: '', email: '', message: '' });
+        return { success: true };
+      } else {
+        const fallbackErr = isEs ? 'Error al enviar el mensaje' : 'Failed to send message';
+        setStatus({
+          message: `Error: ${typeof result.error === 'object' ? (result.error?.message || fallbackErr) : (result.error || fallbackErr)}`,
+          type: 'error',
+          sending: false,
+        });
+        return { success: false, error: result };
+      }
+    } catch (error) {
+      const apiError = handleApiError(error);
+      setStatus({
+        message: `Error: ${apiError.message}`,
+        type: 'error',
+        sending: false,
+      });
+      return { success: false, error: apiError };
+    }
+  }, [i18n?.language]);
 
-    const clearStatus = useCallback(() => {
-        setStatus({ message: '', type: '', sending: false });
-    }, []);
+  const clearStatus = useCallback(() => {
+    setStatus({ message: '', type: '', sending: false });
+  }, []);
 
   return {
     formData,
@@ -155,83 +149,19 @@ export const useContact = () => {
   };
 };
 
-// Projects hook
-export const useProjects = () => {
-    const listApi = useApi(api.projects.getAll);
-    const getByIdApi = useApi(api.projects.getById);
-    const createApi = useApi(api.projects.create);
-    const updateApi = useApi(api.projects.update);
-    const deleteApi = useApi(api.projects.delete);
-
-    const fetchProjects = listApi.execute;
-    const getByIdExecute = getByIdApi.execute;
-    const createExecute = createApi.execute;
-    const updateExecute = updateApi.execute;
-    const deleteExecute = deleteApi.execute;
-
-    const getProject = useCallback(async (id) => {
-        return await getByIdExecute(id);
-    }, [getByIdExecute]);
-
-    const createProject = useCallback(async (projectData) => {
-        const result = await createExecute(projectData);
-        if (result.success) {
-            fetchProjects();
-        }
-        return result;
-    }, [createExecute, fetchProjects]);
-
-    const updateProject = useCallback(async (id, projectData) => {
-        const result = await updateExecute(id, projectData);
-        if (result.success) {
-            fetchProjects();
-        }
-        return result;
-    }, [fetchProjects, updateExecute]);
-
-    const deleteProject = useCallback(async (id) => {
-        const result = await deleteExecute(id);
-        if (result.success) {
-            fetchProjects();
-        }
-        return result;
-    }, [deleteExecute, fetchProjects]);
-
-    return {
-        projects: listApi.data,
-        loading: listApi.loading,
-        error: listApi.error,
-        fetchProjects,
-        getProject,
-        createProject,
-        updateProject,
-        deleteProject,
-    };
-};
-
 // Admin messages hook
 export const useAdminMessages = (page = 1, limit = 10) => {
     const listCall = useCallback(() => api.admin.getMessages(page, limit), [page, limit]);
     const listApi = useApi(listCall);
-    const updateApi = useApi(api.admin.updateMessage);
     const deleteApi = useApi(api.admin.deleteMessage);
 
     const fetchMessages = listApi.execute;
-    const updateExecute = updateApi.execute;
     const deleteExecute = deleteApi.execute;
-
-    const updateMessage = useCallback(async (id, messageData) => {
-        const result = await updateExecute(id, messageData);
-        if (result.success) {
-            fetchMessages(); // Refresh the list
-        }
-        return result;
-    }, [fetchMessages, updateExecute]);
 
     const deleteMessage = useCallback(async (id) => {
         const result = await deleteExecute(id);
         if (result.success) {
-            fetchMessages(); // Refresh the list
+            fetchMessages();
         }
         return result;
     }, [deleteExecute, fetchMessages]);
@@ -241,7 +171,6 @@ export const useAdminMessages = (page = 1, limit = 10) => {
         loading: listApi.loading,
         error: listApi.error,
         fetchMessages,
-        updateMessage,
         deleteMessage,
     };
 };
@@ -251,7 +180,6 @@ export const useAuth = () => {
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
-
 
     const login = useCallback(async (credentials) => {
         setLoading(true);
@@ -342,26 +270,9 @@ export const useFileUpload = () => {
         }
     }, []);
 
-    const uploadDocument = useCallback(async (file) => {
-        setUploading(true);
-        setProgress(0);
-
-        try {
-            const result = await api.upload.document(file);
-            return result;
-        } catch (error) {
-            const apiError = handleApiError(error);
-            return { success: false, error: apiError };
-        } finally {
-            setUploading(false);
-            setProgress(0);
-        }
-    }, []);
-
     return {
         uploading,
         progress,
         uploadImage,
-        uploadDocument,
     };
 };

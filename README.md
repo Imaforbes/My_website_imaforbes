@@ -1,51 +1,79 @@
-# Imaforbes Website (Portfolio v2.0)
+# Imaforbes — Portfolio & Editorial Platform (v2.5)
 
-**IMAFORBES** web portfolio project, updated to its latest version with a performance-oriented architecture (Astro) and a robust PHP backend.
+Sitio web personal, portafolio de ingeniería de software y plataforma editorial tipo periódico/Substack de **Imanol Pérez Arteaga (Imaforbes)** — [`https://www.imaforbes.com`](https://www.imaforbes.com).
 
-## Current Architecture (Updated!)
+---
 
-The project is mainly divided into two active folders:
+## Arquitectura Tecnológica
 
-- **`Imaforbes_astro/` (Active Frontend 🚀)**: The new frontend built with **Astro**, **React**, **Tailwind CSS**, and **Framer Motion**. This folder completely replaces the previous SPA (Single Page Application). By using Astro, the site now supports static rendering and significantly improves SEO and performance. All visual modifications, pages, and components are handled here.
-  
-- **`api_db/` (Active Backend ⚙️)**: The **PHP** backend (REST API). It manages connections to the MySQL database, processing of contact emails (with Anti-Spam measures), session control, blog CRUD operations, image uploads, etc.
+El proyecto está construido bajo una arquitectura moderna **Jamstack con Islas Interactivas** y **Backend-as-a-Service (BaaS)** con capa de alta disponibilidad:
 
-*Note: The legacy `Imaforbes_frontend/` and `Imaforbes_Api_backend/` folders have been untracked from Git to keep the repository clean and focused exclusively on the active modern architecture (`Imaforbes_astro/` and `api_db/`).*
+- **Framework Core:** [Astro 5](https://astro.build/) (Static Site Generation + View Transitions con `ClientRouter` y `prefetchAll`).
+- **UI & Islas Interactivas:** [React 19](https://react.dev/) + [Framer Motion 12](https://www.framer.com/motion/) (con soporte `reducedMotion="user"`).
+- **Sistema de Diseño y Estilos:** [Tailwind CSS 3.4](https://tailwindcss.com/) (`darkMode: 'class'`) + Design Tokens CSS personalizados (`Plus Jakarta Sans`, `Geist Sans`, `Geist Mono`, modos Claro/Oscuro/Auto sin FOUC).
+- **Backend & Base de Datos:** [Supabase](https://supabase.com/) (PostgreSQL con Row Level Security `RLS`, funciones RPC `SECURITY DEFINER`, Supabase Auth JWT y Supabase Storage).
+- **Resiliencia Offline (100% Uptime Fallback):** Capa de respaldo estático en `src/data/` (`blogFallback.js`, `experienceFallback.js`) que garantiza que el blog y la trayectoria profesional siempre se rendericen incluso sin conexión o si el servicio en la nube entra en mantenimiento.
+- **Internacionalización (i18n):** Soporte bilingüe completo **Español (`es`) / Inglés (`en`)** con `i18next` y localización dinámica de trayectoria profesional, proyectos y CV.
 
-## Featured Engineering Projects
+---
 
-The portfolio showcases several advanced full-stack and interactive web applications:
+## Estructura del Repositorio
 
-- **🏨 Safari's Hotel Management System (`Hotel-Safaris`)**: Enterprise-grade resort operations platform built with **PHP 8**, **PDO MySQL**, **Bcrypt Authentication**, and **Dual Role-Based Access Control (RBAC)** for executives and operational staff. Features asynchronous AJAX interactions and an Obsidian Hallmark UI.
-- **🎄 Interactive Grinch Christmas Animation (`grinch_animado`)**: Creative frontend animation experience crafted from scratch using **Pure HTML5**, **CSS3 Keyframe Animations**, and an interactive **JavaScript ES6 Suite** (featuring an interactive 3-size glowing heart, movie quote speech bubbles, and a winter snowfall engine). Includes live interactive demo.
-- **⚖️ CRM/ERP Notary Public No. 73**: Digital workflow and document automation platform with custom fee calculation engines and Aspel SAE integration.
+```text
+My_website_imaforbes/
+├── .gitignore                          # Protección global de variables de entorno, cachés y código legacy
+├── README.md                           # Documentación general del proyecto
+└── Imaforbes_astro/                    # Aplicación principal
+    ├── .env.example                    # Plantilla de variables de entorno de Supabase
+    ├── astro.config.mjs                # Configuración de Astro, integraciones y prefetching
+    ├── package.json                    # Dependencias y scripts de construcción
+    ├── tailwind.config.mjs             # Configuración de Tailwind CSS
+    ├── docs/
+    │   ├── ARCHITECTURE_AND_AUDIT.md   # Reporte técnico de auditoría, seguridad y benchmarks
+    │   └── supabase_schema_and_rls.sql # Script SQL consolidado (Tablas, RPCs y políticas RLS)
+    ├── public/
+    │   ├── .htaccess                   # Cabeceras HTTP de seguridad, compresión GZIP y caché
+    │   ├── img/                        # Activos gráficos del portafolio en formato WebP
+    │   ├── resources/                  # Currículum Vitae descargable en PDF (ES y EN)
+    │   └── uploads/images/             # Fotografías optimizadas de las publicaciones del blog
+    └── src/
+        ├── Locales/                    # Traducciones ES / EN (translation.json)
+        ├── components/                 # Header, Footer, CvModal, ProtectedImage, ErrorBoundary, etc.
+        ├── contexts/                   # SettingsContext (Tema Oscuro/Claro e Idioma sincronizados)
+        ├── data/                       # Datos de respaldo de alta disponibilidad
+        ├── hooks/                      # useApi (datos y contacto) y useAdminAuth (protección JWT)
+        ├── layouts/                    # Layout.astro (SEO, Open Graph, JSON-LD, anti-FOUC)
+        ├── pages/                      # Rutas Astro (/, /about, /trajectory, /projects, /blog, /contact, /cv, /login, /admin/*)
+        ├── pages_react/                # Vistas completas en React 19 (públicas y panel de administración)
+        ├── services/                   # Cliente Supabase (supabase.js) y API unificada (api.js)
+        ├── styles/                     # Sistema de diseño editorial e interfaz tipo Substack (index.css)
+        └── utils/                      # Validación bilingüe, moderación anti-spam y localización
+```
 
+---
 
-## How the Connection Works (Frontend ↔ Backend)
+## Requisitos e Instalación Local
 
-- The **frontend (Astro)** consumes JSON data from the **API (PHP)** located at `api_db/api/`.
-- **In the local development environment**, Astro uses a **Vite proxy** (configured in `Imaforbes_astro/astro.config.mjs`) to avoid CORS issues:
-  - All requests to `/api` are internally redirected to `http://localhost:8888/My_website_imaforbes/api_db`.
-  - Requests to `/uploads` are redirected to `http://localhost:8888/My_website_imaforbes/api_db/uploads`.
+### 1. Prerrequisitos
+- **Node.js** `>= 20.x` y **npm** `>= 10.x`
+- Proyecto activo en **Supabase** (opcional para desarrollo visual gracias a la capa de fallback estático)
 
-## System Requirements
+### 2. Configuración de Variables de Entorno
+Copia el archivo `.env.example` a `.env` dentro de `Imaforbes_astro/`:
 
-- **Node.js + npm** (to run and build the Astro frontend).
-- **PHP** (using **MAMP** on macOS is recommended).
-- **MySQL** (Local database configured on port 8889 by default in MAMP).
+```bash
+cd Imaforbes_astro
+cp .env.example .env
+```
 
-## Run Locally (Development Mode)
+Edita `.env` con las credenciales públicas (`anon`) de tu proyecto en Supabase:
 
-### 1) Backend Environment
+```env
+PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
+PUBLIC_SUPABASE_ANON_KEY=tu-llave-publica-anon
+```
 
-1. Run PHP and MySQL using Docker or your operating system's services; do not rely on MAMP paths.
-2. Keep the project in any Git workspace, such as `Developer/projects`.
-3. Import `portfolio.sql` using the database credentials defined in the local ignored `.env` file.
-4. Configure the server's document root to `api_db/` or expose it through your chosen reverse proxy.
-
-### 2) Frontend Environment (Astro)
-
-Open a terminal, navigate to the active frontend folder, and start the server:
+### 3. Ejecución en Modo Desarrollo
 
 ```bash
 cd Imaforbes_astro
@@ -53,38 +81,28 @@ npm ci
 npm run dev
 ```
 
-The frontend site will load in your browser, usually at the address `http://localhost:4321`.
+El servidor de desarrollo estará disponible en `http://localhost:4321`.
 
-## Frontend Folder Overview (`Imaforbes_astro/`)
+### 4. Compilación para Producción
 
-- **`src/pages/`**: Native Astro routes (`.astro`). Responsible for the main layout and SEO.
-- **`src/pages_react/`**: Complex page components built in React (`.jsx`) that require dynamic state (useState, useEffect, Framer Motion animations).
-- **`src/components/`**: Reusable visual components (Header, Footer, Cards, Modals).
-- **`src/services/` and `src/hooks/`**: API connection logic (`api.js`) and Custom Hooks to manage global state.
-- **`public/`**: Static assets (favicons, local fonts, etc.).
-- **`astro.config.mjs`**: Crucial configuration file where proxy rules and Astro integrations (React, Tailwind) are declared.
-
-## Backend Folder Overview (`api_db/`)
-
-- **`api/`**: `.php` files publicly exposed as endpoints (`blog.php`, `contact.php`, `projects.php`).
-- **`config/`**: Database connection files (`database.php`) and response management (`response.php`).
-- **`utils/`**: Critical backend tools such as CSRF Protection, Rate Limiting (against SPAM), and sending emails via SMTP (`EmailSender.php`).
-- **`uploads/images/`**: Directory where images uploaded via the API are physically stored (e.g., blog thumbnails).
-
-## Deployment & Hosting (Hostinger / Apache)
-
-For production deployment, the frontend must be built statically:
-1. Run `npm run build` inside `Imaforbes_astro/`.
-2. Upload the contents of the newly generated `dist/` folder to the `public_html` directory of your hosting provider (e.g., Hostinger).
-3. **Caching Optimization:** The project includes a highly optimized `.htaccess` file (located in `public/.htaccess` which gets copied to `dist/`). This file is configured to:
-   - Provide GZIP/Brotli compression.
-   - Set aggressive caching for static assets (JS, CSS, Images) for up to a year.
-   - Force `no-cache` and `must-revalidate` for HTML files. This prevents 404 errors during new deployments by ensuring browsers always fetch the latest `.html` file that references the newest JavaScript and CSS chunks.
-
-## Security 🔒
-
-- **Sensitive Files**: Avoid publicly sharing the `api_db/config/database.php` file and any SMTP server configuration.
-- The contact API includes rate limiting by IP, preventing more than 3 requests in 10 minutes to combat spambots.
+```bash
+cd Imaforbes_astro
+npm run build
+npm run preview
+```
 
 ---
-*Documentation generated and updated to reflect the successful migration to the Astro Framework.*
+
+## Seguridad y Base de Datos (Supabase)
+
+El archivo [`Imaforbes_astro/docs/supabase_schema_and_rls.sql`](Imaforbes_astro/docs/supabase_schema_and_rls.sql) contiene toda la configuración de seguridad de la base de datos:
+
+- **Row Level Security (RLS):**
+  - `blog_posts` y `work_experiences`: Los visitantes anónimos (`anon`) solo pueden consultar registros con `status = 'published'`. La creación, edición y eliminación están restringidas a usuarios autenticados (`authenticated`).
+  - `datos` (Mensajes de Contacto): Los visitantes anónimos solo tienen permiso `INSERT` (con validación de longitud, sanitización XSS, honeypot y rate-limiting de máximo 3 mensajes cada 10 minutos). Solo el administrador autenticado puede leer o eliminar mensajes.
+  - `blog_views` y `blog_likes`: Se revoca el permiso `SELECT` al rol `anon` para proteger las direcciones IP y User-Agents de los lectores; los incrementos se realizan mediante funciones RPC `SECURITY DEFINER` (`increment_blog_view`, `increment_blog_like`, `decrement_blog_like`).
+  - `blog_comments`: Moderación inteligente en cliente (`src/utils/commentModeration.js`) contra lenguaje inapropiado (ES/EN), enlaces de spam y flooding (cooldown de 30s), respaldada por restricciones `CHECK` y RLS en PostgreSQL.
+- **Panel de Administración (`/login` y `/admin/*`):**
+  - Todas las rutas administrativas (`/admin`, `/admin/blog`, `/admin/experiences`, `/admin/mensajes`, `/admin/stats`, `/admin/settings`) están protegidas por el guardia `useAdminAuth.js`, que verifica la sesión JWT activa contra Supabase Auth antes de renderizar la interfaz.
+
+Para más detalles sobre la auditoría técnica y los benchmarks de rendimiento, consulta [`Imaforbes_astro/docs/ARCHITECTURE_AND_AUDIT.md`](Imaforbes_astro/docs/ARCHITECTURE_AND_AUDIT.md).
