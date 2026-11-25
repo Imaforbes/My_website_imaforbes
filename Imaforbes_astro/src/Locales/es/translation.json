@@ -65,7 +65,7 @@
     "search-label": "Buscar publicaciones",
     "search-placeholder": "Buscar por título o contenido...",
     "subtitle": "Pensamientos, artículos y poesía",
-    "title": "Blog",
+    "title": "Escritos",
     "type-article": "Artículo",
     "type-letter": "Carta",
     "type-poem": "Poema",
@@ -139,7 +139,7 @@
   "header": {
     "home": "Inicio",
     "about-me": "Sobre mí",
-    "blog": "Blog",
+    "blog": "Escritos",
     "close-menu": "Cerrar menú",
     "contact": "Contacto",
     "open-menu": "Abrir menú",

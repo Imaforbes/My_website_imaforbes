@@ -21,7 +21,7 @@ const Breadcrumbs = ({ currentPath }) => {
       about: t("header.about-me") || "About",
       trajectory: t("header.trajectory") || "Trajectory",
       projects: t("header.projects") || "Projects",
-      blog: t("header.blog") || "Blog",
+      blog: t("header.blog") || "Escritos",
       contact: t("header.contact") || "Contact",
     };
 
