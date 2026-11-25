@@ -27,7 +27,7 @@ const TrajectoryPage = () => {
       try {
         const result = await api.experiences.getAll('published');
         if (result?.success && Array.isArray(result.data) && result.data.length > 0) {
-          setExperiences([...result.data].sort((a, b) => {
+          setExperiences(result.data.toSorted((a, b) => {
             if (a.sort_order !== b.sort_order) return a.sort_order - b.sort_order;
             return new Date(b.created_at) - new Date(a.created_at);
           }));

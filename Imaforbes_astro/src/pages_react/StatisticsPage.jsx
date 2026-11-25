@@ -75,8 +75,8 @@ const StatisticsPage = () => {
         }, {});
 
         // Recent activity (last 5 messages)
-        const recentActivity = [...messages]
-          .sort((a, b) => new Date(b.created_at || b.fecha) - new Date(a.created_at || a.fecha))
+        const recentActivity = messages
+          .toSorted((a, b) => new Date(b.created_at || b.fecha) - new Date(a.created_at || a.fecha))
           .slice(0, 5);
 
         setStats({

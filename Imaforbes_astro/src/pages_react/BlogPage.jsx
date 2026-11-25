@@ -451,7 +451,7 @@ const BlogPage = () => {
 
   // Hero / Left / Right newspaper selection for the main homepage view
   const { heroPost, leftColumnPosts, mostPopularPosts, feedPosts } = useMemo(() => {
-    const allSortedByDate = [...localizedPosts].sort(
+    const allSortedByDate = localizedPosts.toSorted(
       (a, b) => new Date(b.created_at) - new Date(a.created_at)
     );
     // Prefer the newest post that has an image as the central newspaper cover story
@@ -471,8 +471,8 @@ const BlogPage = () => {
     );
 
     // Most Popular sidebar: sorted by engagement (likes + views)
-    const popular = [...localizedPosts]
-      .sort(
+    const popular = localizedPosts
+      .toSorted(
         (a, b) =>
           (b.likes_count || 0) * 4 +
           (b.views_count || 0) -
@@ -486,7 +486,7 @@ const BlogPage = () => {
         ? categoryFilteredPosts.filter((p) => !heroShownIds.has(p.id))
         : categoryFilteredPosts;
 
-    const listSource = [...baseFeedSource].sort((a, b) => {
+    const listSource = baseFeedSource.toSorted((a, b) => {
       if (sortBy === "top") {
         return (
           (b.likes_count || 0) * 4 +

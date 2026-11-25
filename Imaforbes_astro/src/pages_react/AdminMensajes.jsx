@@ -221,7 +221,7 @@ const AdminMensajes = () => {
                   <span className="text-lg font-light text-text dark:text-text">
                     {mensajes.length > 0
                       ? formatDate(
-                          [...mensajes].sort(
+                          mensajes.toSorted(
                             (a, b) =>
                               new Date(b.created_at || b.fecha) -
                               new Date(a.created_at || a.fecha)

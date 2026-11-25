@@ -96,7 +96,7 @@ const AdminBlog = () => {
           : Array.isArray(result.data?.data)
           ? result.data.data
           : [];
-        setPosts([...postsData].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+        setPosts(postsData.toSorted((a, b) => new Date(b.created_at) - new Date(a.created_at)));
         setError(null);
       } else {
         setError("Failed to load blog posts");

@@ -105,7 +105,7 @@ const AboutPage = () => {
         
         // Check if result is successful and has data
         if (result.success && Array.isArray(result.data) && result.data.length > 0) {
-          const sorted = [...result.data].sort((a, b) => {
+          const sorted = result.data.toSorted((a, b) => {
             if (a.sort_order !== b.sort_order) {
               return a.sort_order - b.sort_order;
             }

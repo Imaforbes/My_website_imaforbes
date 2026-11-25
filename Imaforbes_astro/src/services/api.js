@@ -277,8 +277,8 @@ export const api = {
                 const draftPosts = items.filter(p => p.status === 'draft').length;
                 const totalViews = items.reduce((sum, p) => sum + (parseInt(p.views_count) || 0), 0);
                 const totalLikes = items.reduce((sum, p) => sum + (parseInt(p.likes_count) || 0), 0);
-                const mostViewed = [...items].sort((a, b) => (parseInt(b.views_count) || 0) - (parseInt(a.views_count) || 0)).slice(0, 5);
-                const mostLiked = [...items].sort((a, b) => (parseInt(b.likes_count) || 0) - (parseInt(a.likes_count) || 0)).slice(0, 5);
+                const mostViewed = items.toSorted((a, b) => (parseInt(b.views_count) || 0) - (parseInt(a.views_count) || 0)).slice(0, 5);
+                const mostLiked = items.toSorted((a, b) => (parseInt(b.likes_count) || 0) - (parseInt(a.likes_count) || 0)).slice(0, 5);
 
                 return {
                     success: true,
