@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { api } from "../services/api.js";
 import { API_CONFIG } from "../config/api.js";
+import blogFallback from "../data/blogFallback.js";
 import ProtectedImage from "../components/ProtectedImage.jsx";
 import BlogPostSkeleton from "../components/BlogPostSkeleton.jsx";
 import { validateComment, checkCommentCooldown, recordCommentTimestamp } from "../utils/commentModeration.js";
@@ -22,10 +23,19 @@ import {
   X,
 } from "lucide-react";
 
+const INITIAL_BLOG_POSTS = [...blogFallback]
+  .filter((post) => post.status === "published")
+  .map((post) => ({
+    ...post,
+    likes_count: parseInt(post.likes_count) || 0,
+    views_count: parseInt(post.views_count) || 0,
+  }))
+  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
 const BlogPage = () => {
   const { t, i18n } = useTranslation();
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState(INITIAL_BLOG_POSTS);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState("all"); // 'all' | 'article' | 'letter' | 'poem'
   const [isArchiveView, setIsArchiveView] = useState(false);
@@ -152,7 +162,6 @@ const BlogPage = () => {
 
   const fetchPosts = useCallback(async () => {
     try {
-      setLoading(true);
       setError(null);
       const result = await api.blog.getAll(null, "published");
 
@@ -165,23 +174,23 @@ const BlogPage = () => {
           postsData = result.data.data;
         }
 
-        postsData = postsData.map((post) => ({
-          ...post,
-          likes_count: parseInt(post.likes_count) || 0,
-          views_count: parseInt(post.views_count) || 0,
-        }));
+        if (postsData.length > 0) {
+          postsData = postsData.map((post) => ({
+            ...post,
+            likes_count: parseInt(post.likes_count) || 0,
+            views_count: parseInt(post.views_count) || 0,
+          }));
 
-        setPosts(postsData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+          setPosts(postsData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)));
+        }
         setError(null);
-      } else {
-        setError(t("blog.failed-load"));
       }
     } catch {
-      setError(t("blog.failed-load"));
+      // Keep INITIAL_BLOG_POSTS rendered seamlessly if network fails
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, []);
 
   useEffect(() => {
     fetchPosts();

@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { Briefcase, Calendar, MapPin, ChevronRight, ChevronLeft, Grid, LayoutTemplate, Server, Database, Cloud, Wrench } from "lucide-react";
 import { openCvModal } from "../utils/cvModal.js";
 import { api } from "../services/api.js";
+import experienceFallback from "../data/experienceFallback.js";
 import { localizeExperience } from "../utils/experienceLocalization.js";
 import {
   FaHtml5,
@@ -83,10 +84,14 @@ const HeroBackground = () => (
   </div>
 );
 
+const INITIAL_EXPERIENCES = [...experienceFallback]
+  .filter((e) => e.status === "published")
+  .sort((a, b) => (a.sort_order !== b.sort_order ? a.sort_order - b.sort_order : new Date(b.created_at) - new Date(a.created_at)));
+
 const AboutPage = () => {
   const { t, i18n } = useTranslation();
-  const [experiences, setExperiences] = useState([]);
-  const [loadingExperiences, setLoadingExperiences] = useState(true);
+  const [experiences, setExperiences] = useState(INITIAL_EXPERIENCES);
+  const [loadingExperiences, setLoadingExperiences] = useState(false);
 
   const localizedExperiences = experiences.map((exp) =>
     localizeExperience(exp, i18n.language, t)
@@ -96,11 +101,10 @@ const AboutPage = () => {
   useEffect(() => {
     const fetchExperiences = async () => {
       try {
-        setLoadingExperiences(true);
         const result = await api.experiences.getAll('published');
         
         // Check if result is successful and has data
-        if (result.success && Array.isArray(result.data)) {
+        if (result.success && Array.isArray(result.data) && result.data.length > 0) {
           const sorted = [...result.data].sort((a, b) => {
             if (a.sort_order !== b.sort_order) {
               return a.sort_order - b.sort_order;
@@ -108,24 +112,16 @@ const AboutPage = () => {
             return new Date(b.created_at) - new Date(a.created_at);
           });
           setExperiences(sorted);
-        } else {
-          setExperiences([]);
         }
       } catch (error) {
         console.error("Error fetching experiences:", error);
-        const fallbackExperiences = t("about.experience", { returnObjects: true });
-        if (Array.isArray(fallbackExperiences)) {
-          setExperiences(fallbackExperiences);
-        } else {
-          setExperiences([]);
-        }
       } finally {
         setLoadingExperiences(false);
       }
     };
 
     fetchExperiences();
-  }, [t]);
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },

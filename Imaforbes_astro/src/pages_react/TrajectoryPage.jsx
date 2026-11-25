@@ -5,12 +5,17 @@ import { ArrowUpRight, BriefcaseBusiness, Download, MapPin } from 'lucide-react'
 import { useTranslation } from 'react-i18next';
 import { openCvModal } from '../utils/cvModal.js';
 import { api } from '../services/api.js';
+import experienceFallback from '../data/experienceFallback.js';
 import { localizeExperience } from '../utils/experienceLocalization.js';
+
+const INITIAL_EXPERIENCES = [...experienceFallback]
+  .filter((e) => e.status === 'published')
+  .sort((a, b) => (a.sort_order !== b.sort_order ? a.sort_order - b.sort_order : new Date(b.created_at) - new Date(a.created_at)));
 
 const TrajectoryPage = () => {
   const { t, i18n } = useTranslation();
-  const [experiences, setExperiences] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [experiences, setExperiences] = useState(INITIAL_EXPERIENCES);
+  const [isLoading, setIsLoading] = useState(false);
 
   const localizedExperiences = useMemo(
     () => experiences.map((exp) => localizeExperience(exp, i18n.language, t)),
@@ -21,14 +26,12 @@ const TrajectoryPage = () => {
     const loadExperiences = async () => {
       try {
         const result = await api.experiences.getAll('published');
-        const items = result?.success && Array.isArray(result.data)
-          ? result.data
-          : [];
-
-        setExperiences(items.sort((a, b) => {
-          if (a.sort_order !== b.sort_order) return a.sort_order - b.sort_order;
-          return new Date(b.created_at) - new Date(a.created_at);
-        }));
+        if (result?.success && Array.isArray(result.data) && result.data.length > 0) {
+          setExperiences([...result.data].sort((a, b) => {
+            if (a.sort_order !== b.sort_order) return a.sort_order - b.sort_order;
+            return new Date(b.created_at) - new Date(a.created_at);
+          }));
+        }
       } catch (error) {
         if (import.meta.env.DEV) console.error('Unable to load trajectory:', error);
       } finally {
